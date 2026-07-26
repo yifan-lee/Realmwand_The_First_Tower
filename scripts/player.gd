@@ -24,9 +24,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		move_one_tile(direction)
 
 func move_one_tile(direction: Vector2) -> void:
+	var motion := direction * GRID_SIZE
+	if test_move(global_transform, motion):
+		return
 	is_moving = true
 
-	var target_position := position + direction * GRID_SIZE
+	var target_position := position + motion
 	var tween := create_tween()
 	tween.tween_property(self, "position", target_position, MOVE_DURATION)
 
