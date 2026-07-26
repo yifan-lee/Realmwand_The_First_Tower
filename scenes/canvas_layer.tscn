@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://km2p83ut3fws"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1158568077]
+
+[node name="PickupMessage" type="Label" parent="." unique_id=68486323]
+custom_minimum_size = Vector2(16, 0)
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 20
+
+[node name="PickupMessageTimer" type="Timer" parent="." unique_id=925025401]
+wait_time = 2.0
+one_shot = true

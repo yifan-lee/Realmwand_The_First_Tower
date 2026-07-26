@@ -1,9 +1,14 @@
+class_name Player
 extends CharacterBody2D
+
+signal item_added(item_name: String)
 
 const GRID_SIZE: int = 32
 const MOVE_DURATION: float = 0.15
 
 var is_moving: bool = false
+
+var inventory: Array[String] = []
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -35,3 +40,8 @@ func move_one_tile(direction: Vector2) -> void:
 
 	await tween.finished
 	is_moving = false
+
+func add_item(new_item_name: String) -> void:
+	inventory.append(new_item_name)
+	item_added.emit(new_item_name)
+	print("Inventory: ", inventory)
