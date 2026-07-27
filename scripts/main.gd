@@ -10,11 +10,22 @@ extends Node2D
 ]
 @onready var door: Door = $Door
 @onready var exit_stairs: ExitStairs = $ExitStairs
+@onready var world_enemies: Array[WorldEnemy] = [
+	$WorldEnemy1,
+	$WorldEnemy2,
+]
+@onready var battle_layer: CanvasLayer = $BattleLayer
 
 const CORRECT_SEQUENCE: Array[int] = [2, 1, 3]
+const BATTLE_SCENE: PackedScene = preload(
+	"res://scenes/battle/battle.tscn"
+)
 
 var current_sequence_index: int = 0
 var puzzle_solved: bool = false
+
+var active_battle: Battle
+var active_enemy: WorldEnemy
 
 
 func _ready() -> void:
@@ -23,6 +34,10 @@ func _ready() -> void:
 	for tower_switch in tower_switches:
 		tower_switch.state_changed.connect(_on_switch_state_changed)
 	exit_stairs.reached.connect(_on_exit_stairs_reached)
+	for world_enemy in world_enemies:
+		world_enemy.battle_requested.connect(_on_battle_requested)
+	player.rewards_received.connect(_on_rewards_received)
+	player.leveled_up.connect(_on_player_leveled_up)
 
 
 func _on_player_item_added(item_name: String) -> void:
@@ -75,3 +90,54 @@ func _on_exit_stairs_reached() -> void:
 	pickup_message.text = "Floor 1 Complete!"
 
 	print("Floor 1 complete.")
+
+func _on_battle_requested(enemy: WorldEnemy) -> void:
+	if active_battle != null:
+		return
+
+	active_enemy = enemy
+	player.set_process_unhandled_input(false)
+	_start_battle()
+
+func _start_battle() -> void:
+	active_battle = BATTLE_SCENE.instantiate() as Battle
+	active_battle.setup(
+		player.max_health,
+		player.attack_power
+	)
+	battle_layer.add_child(active_battle)
+	active_battle.battle_finished.connect(_on_battle_finished)
+
+func _on_battle_finished(
+	victory: bool,
+	experience_reward: int,
+	gold_reward: int
+) -> void:
+	active_battle.queue_free()
+	active_battle = null
+
+	if victory:
+		player.add_battle_rewards(
+			experience_reward,
+			gold_reward
+		)
+		active_enemy.queue_free()
+		active_enemy = null
+		player.set_process_unhandled_input(true)
+	else:
+		await get_tree().process_frame
+		_start_battle()
+
+func _on_rewards_received(
+	experience_gained: int,
+	gold_gained: int
+) -> void:
+	pickup_message.text = (
+		"Gained %d EXP and %d Gold"
+		% [experience_gained, gold_gained]
+	)
+	pickup_message_timer.start()
+
+func _on_player_leveled_up(new_level: int) -> void:
+	pickup_message.text = "Level Up! Level %d" % new_level
+	pickup_message_timer.start()

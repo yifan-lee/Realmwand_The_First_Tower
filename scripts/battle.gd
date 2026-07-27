@@ -1,7 +1,11 @@
 class_name Battle
 extends Control
 
-signal battle_finished(victory: bool)
+signal battle_finished(
+	victory: bool,
+	experience_reward: int,
+	gold_reward: int,
+)
 
 @onready var player_atb: ProgressBar = $PlayerPanel/PlayerInfo/PlayerATB
 @onready var enemy_atb: ProgressBar = $EnemyPanel/EnemyInfo/EnemyATB
@@ -12,18 +16,24 @@ signal battle_finished(victory: bool)
 @onready var item_button: Button = $ActionPanel/Actions/ItemButton
 @onready var result_button: Button = $ActionPanel/Actions/ResultButton
 
-const PLAYER_ATB_SPEED: float = 35.0
-const ENEMY_ATB_SPEED: float = 25.0
-const PLAYER_ATTACK_DAMAGE: float = 30.0
-const ENEMY_ATTACK_DAMAGE: float = 30.0
+const PLAYER_ATB_SPEED: float = 50.0
+const ENEMY_ATB_SPEED: float = 40.0
+const ENEMY_ATTACK_DAMAGE: float = 50.0
+const EXPERIENCE_REWARD: int = 40
+const GOLD_REWARD: int = 1
+var player_max_health: float = 100.0
+var player_attack_damage: float = 50.0
 
 var battle_active: bool = true
 var player_won: bool = false
 
 func _ready() -> void:
+	player_hp.max_value = player_max_health
+	player_hp.value = player_max_health
 	attack_button.disabled = true
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	result_button.pressed.connect(_on_result_button_pressed)
+	
 
 func _process(delta: float) -> void:
 	if not battle_active:
@@ -45,6 +55,13 @@ func _process(delta: float) -> void:
 	if enemy_atb.value >= enemy_atb.max_value:
 		_enemy_attack()
 
+func setup(
+	max_health: int,
+	attack_power: int
+) -> void:
+	player_max_health = float(max_health)
+	player_attack_damage = float(attack_power)
+
 func _on_attack_button_pressed() -> void:
 	if not battle_active:
 		return
@@ -56,10 +73,10 @@ func _on_attack_button_pressed() -> void:
 	attack_button.disabled = true
 
 	enemy_hp.value = max(
-		enemy_hp.value - PLAYER_ATTACK_DAMAGE,
+		enemy_hp.value - player_attack_damage,
 		enemy_hp.min_value
 	)
-	battle_message.text = "Hero deals %.0f damage!" % PLAYER_ATTACK_DAMAGE
+	battle_message.text = "Hero deals %.0f damage!" % player_attack_damage
 
 	if enemy_hp.value <= enemy_hp.min_value:
 		_end_battle_victory()
@@ -104,5 +121,15 @@ func _end_battle_defeated() -> void:
 	result_button.visible = true
 
 func _on_result_button_pressed() -> void:
-	battle_finished.emit(player_won)
-	print("Battle finished. Victory: ", player_won)
+	if player_won:
+		battle_finished.emit(
+			true,
+			EXPERIENCE_REWARD,
+			GOLD_REWARD,
+		)
+	else:
+		battle_finished.emit(
+			false,
+			0,
+			0,
+		)
