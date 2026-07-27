@@ -41,7 +41,7 @@ func _on_switch_state_changed(
 	var expected_switch_id := CORRECT_SEQUENCE[current_sequence_index]
 
 	if not is_active or switch_id != expected_switch_id:
-		_reset_switch_puzzlee()
+		_reset_switch_puzzle()
 		return
 
 	current_sequence_index += 1
@@ -50,7 +50,8 @@ func _on_switch_state_changed(
 	if current_sequence_index == CORRECT_SEQUENCE.size():
 		_complete_switch_puzzle()
 
-func _reset_switch_puzzlee() -> void:
+func _reset_switch_puzzle() -> void:
+	current_sequence_index = 0
 	for tower_switch in tower_switches:
 		tower_switch.reset_switch()
 
