@@ -9,6 +9,7 @@ extends Node2D
 	$Switch3,
 ]
 @onready var door: Door = $Door
+@onready var exit_stairs: ExitStairs = $ExitStairs
 
 const CORRECT_SEQUENCE: Array[int] = [2, 1, 3]
 
@@ -21,6 +22,7 @@ func _ready() -> void:
 	pickup_message_timer.timeout.connect(_on_pickup_message_timer_timeout)
 	for tower_switch in tower_switches:
 		tower_switch.state_changed.connect(_on_switch_state_changed)
+	exit_stairs.reached.connect(_on_exit_stairs_reached)
 
 
 func _on_player_item_added(item_name: String) -> void:
@@ -66,3 +68,10 @@ func _complete_switch_puzzle() -> void:
 		tower_switch.lock()
 
 	print("Puzzle solved.")
+
+func _on_exit_stairs_reached() -> void:
+	player.set_process_unhandled_input(false)
+	pickup_message_timer.stop()
+	pickup_message.text = "Floor 1 Complete!"
+
+	print("Floor 1 complete.")

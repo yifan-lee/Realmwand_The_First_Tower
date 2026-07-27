@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="4_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://km2p83ut3fws" path="res://scenes/canvas_layer.tscn" id="5_tefeu"]
 [ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="6_tefeu"]
+[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/exit_stairs.tscn" id="8_tipki"]
 
 [node name="Main" type="Node2D" unique_id=1557596140]
 script = ExtResource("1_tbgi4")
@@ -75,3 +76,6 @@ switch_id = 2
 [node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
 position = Vector2(96, 64)
 switch_id = 3
+
+[node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
+position = Vector2(128, 192)
