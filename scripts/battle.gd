@@ -26,6 +26,11 @@ var player_attack_damage: float = 50.0
 
 var battle_active: bool = true
 var player_won: bool = false
+var player_data: Player
+
+const SMALL_POTION_HEALING: float = 50.0
+
+
 
 func _ready() -> void:
 	player_hp.max_value = player_max_health
@@ -33,6 +38,7 @@ func _ready() -> void:
 	attack_button.disabled = true
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	result_button.pressed.connect(_on_result_button_pressed)
+	item_button.pressed.connect(_on_item_button_pressed)
 	
 
 func _process(delta: float) -> void:
@@ -51,16 +57,22 @@ func _process(delta: float) -> void:
 
 	if player_atb.value >= player_atb.max_value:
 		attack_button.disabled = false
+		var has_small_potion := (
+			player_data != null
+			and player_data.has_item("Small Potion")
+		)
+		item_button.disabled = (
+			not has_small_potion
+			or player_hp.value >= player_hp.max_value
+		)
 
 	if enemy_atb.value >= enemy_atb.max_value:
 		_enemy_attack()
 
-func setup(
-	max_health: int,
-	attack_power: int
-) -> void:
-	player_max_health = float(max_health)
-	player_attack_damage = float(attack_power)
+func setup(player: Player) -> void:
+	player_data = player
+	player_max_health = float(player.max_health)
+	player_attack_damage = float(player.attack_power)
 
 func _on_attack_button_pressed() -> void:
 	if not battle_active:
@@ -133,3 +145,33 @@ func _on_result_button_pressed() -> void:
 			0,
 			0,
 		)
+
+func _on_item_button_pressed() -> void:
+	if not battle_active:
+		return
+
+	if player_atb.value < player_atb.max_value:
+		return
+
+	if player_data == null:
+		return
+
+	if not player_data.has_item("Small Potion"):
+		return
+
+	if player_hp.value >= player_hp.max_value:
+		return
+
+	player_atb.value = 0.0
+	attack_button.disabled = true
+	item_button.disabled = true
+
+	if not player_data.consume_item("Small Potion"):
+		return
+
+	player_hp.value = min(
+		player_hp.value + SMALL_POTION_HEALING,
+		player_hp.max_value
+	)
+
+	battle_message.text = "Hero uses Small Potion!"

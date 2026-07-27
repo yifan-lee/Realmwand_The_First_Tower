@@ -140,3 +140,18 @@ func _check_for_level_up() -> void:
 		print("Level up! Level: ", level)
 		print("Max health: ", max_health)
 		print("Attack power: ", attack_power)
+
+func has_item(item_name: String) -> bool:
+	return inventory.has(item_name)
+
+
+func consume_item(item_name: String) -> bool:
+	var item_index := inventory.find(item_name)
+
+	if item_index == -1:
+		return false
+
+	inventory.remove_at(item_index)
+	print("Consumed: ", item_name)
+	print("Inventory: ", inventory)
+	return true

@@ -102,10 +102,7 @@ func _on_battle_requested(enemy: WorldEnemy) -> void:
 
 func _start_battle() -> void:
 	active_battle = BATTLE_SCENE.instantiate() as Battle
-	active_battle.setup(
-		player.max_health,
-		player.attack_power
-	)
+	active_battle.setup(player)
 	battle_layer.add_child(active_battle)
 	active_battle.battle_finished.connect(_on_battle_finished)
 
