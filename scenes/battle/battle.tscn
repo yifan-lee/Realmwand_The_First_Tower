@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://bdjya4pl3jx5m"]
+
+[ext_resource type="Script" uid="uid://bqi75peflxqfy" path="res://scripts/battle.gd" id="1_7gynk"]
+
+[node name="Battle" type="Control" unique_id=549339133]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+script = ExtResource("1_7gynk")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1031443908]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.19434929, 0.19434926, 0.19434926, 1)
+
+[node name="EnemyPanel" type="PanelContainer" parent="." unique_id=723663111]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 50.0
+offset_right = 443.0
+offset_bottom = 112.0
+
+[node name="EnemyInfo" type="VBoxContainer" parent="EnemyPanel" unique_id=1691214919]
+layout_mode = 2
+
+[node name="EnemyName" type="Label" parent="EnemyPanel/EnemyInfo" unique_id=1612511414]
+layout_mode = 2
+text = "Slime"
+
+[node name="EnemyHP" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=1590713710]
+layout_mode = 2
+value = 100.0
+
+[node name="EnemyATB" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=316025293]
+layout_mode = 2
+show_percentage = false
+
+[node name="PlayerPanel" type="PanelContainer" parent="." unique_id=1750587645]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 190.0
+offset_right = 80.0
+offset_bottom = 275.0
+
+[node name="PlayerInfo" type="VBoxContainer" parent="PlayerPanel" unique_id=785357023]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="PlayerPanel/PlayerInfo" unique_id=906685808]
+layout_mode = 2
+text = "Hero"
+
+[node name="PlayerHP" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1734631920]
+layout_mode = 2
+value = 100.0
+
+[node name="PlayerATB" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1280584688]
+layout_mode = 2
+show_percentage = false
+
+[node name="ActionPanel" type="PanelContainer" parent="." unique_id=2025652640]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 240.0
+offset_right = 466.0
+offset_bottom = 325.0
+
+[node name="Actions" type="HBoxContainer" parent="ActionPanel" unique_id=2028659940]
+layout_mode = 2
+
+[node name="AttackButton" type="Button" parent="ActionPanel/Actions" unique_id=355636496]
+layout_mode = 2
+text = "Attack"
+
+[node name="ItemButton" type="Button" parent="ActionPanel/Actions" unique_id=328725931]
+layout_mode = 2
+disabled = true
+text = "Item"
+
+[node name="ResultButton" type="Button" parent="ActionPanel/Actions" unique_id=2075569573]
+visible = false
+layout_mode = 2
+text = "Continue"
+
+[node name="BattleMessage" type="Label" parent="." unique_id=1930228769]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 159.0
+offset_bottom = 43.0
+text = "A slime appeared!"
