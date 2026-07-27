@@ -7,6 +7,10 @@ signal rewards_received(
 	gold_gained: int
 )
 signal leveled_up(new_level: int)
+signal weapon_equipped(
+	weapon_name: String,
+	total_attack_power: int
+)
 
 @onready var interaction_ray: RayCast2D = $InteractionRay
 
@@ -22,7 +26,13 @@ var gold: int = 0
 var level: int = 1
 var experience_to_next_level: int = BASE_EXPERIENCE_REQUIREMENT
 var max_health: int = 100
-var attack_power: int = 50
+var base_attack_power: int = 50
+var equipment_attack_bonus: int = 0
+var equipped_weapon_name: String = ""
+
+var attack_power: int:
+	get:
+		return base_attack_power + equipment_attack_bonus
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_moving:
@@ -61,10 +71,30 @@ func move_one_tile(direction: Vector2) -> void:
 	await tween.finished
 	is_moving = false
 
-func add_item(new_item_name: String) -> void:
+func add_item(
+	new_item_name: String,
+	attack_bonus: int = 0
+) -> void:
 	inventory.append(new_item_name)
 	item_added.emit(new_item_name)
+	if attack_bonus > 0:
+		equip_weapon(new_item_name, attack_bonus)
 	print("Inventory: ", inventory)
+
+func equip_weapon(
+	weapon_name: String,
+	attack_bonus: int
+) -> void:
+	equipped_weapon_name = weapon_name
+	equipment_attack_bonus = attack_bonus
+
+	weapon_equipped.emit(
+		weapon_name,
+		attack_power
+	)
+
+	print("Equipped: ", equipped_weapon_name)
+	print("Attack power: ", attack_power)
 
 func try_interact() -> void:
 	interaction_ray.force_raycast_update()
@@ -99,7 +129,7 @@ func _check_for_level_up() -> void:
 		level += 1
 
 		max_health += 10
-		attack_power += 5
+		base_attack_power += 5
 
 		experience_to_next_level = (
 			BASE_EXPERIENCE_REQUIREMENT * level

@@ -38,7 +38,7 @@ position = Vector2(160, 64)
 position = Vector2(160, 96)
 
 [node name="TestWall6" parent="Walls" unique_id=2098726956 instance=ExtResource("2_0wfyh")]
-position = Vector2(192, 128)
+position = Vector2(160, 128)
 
 [node name="TestWall7" parent="Walls" unique_id=103373365 instance=ExtResource("2_0wfyh")]
 position = Vector2(160, 160)
@@ -55,13 +55,14 @@ position = Vector2(64, 128)
 [node name="TestWall12" parent="Walls" unique_id=588703254 instance=ExtResource("2_0wfyh")]
 position = Vector2(64, 96)
 
-[node name="Pickup" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
+[node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
 position = Vector2(128, 128)
 item_name = "Small Potion"
 
-[node name="Pickup2" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
+[node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
 position = Vector2(96, 128)
 item_name = "Sword"
+attack_bonus = 10
 
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
 offset = Vector2(16, 16)
@@ -80,12 +81,12 @@ position = Vector2(96, 64)
 switch_id = 3
 
 [node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
-position = Vector2(128, 192)
+position = Vector2(128, 224)
 
 [node name="WorldEnemy1" parent="." unique_id=1359354295 instance=ExtResource("9_85g3d")]
 position = Vector2(128, 96)
 
 [node name="WorldEnemy2" parent="." unique_id=1395840544 instance=ExtResource("9_85g3d")]
-position = Vector2(160, 128)
+position = Vector2(128, 192)
 
 [node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]

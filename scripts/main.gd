@@ -38,6 +38,7 @@ func _ready() -> void:
 		world_enemy.battle_requested.connect(_on_battle_requested)
 	player.rewards_received.connect(_on_rewards_received)
 	player.leveled_up.connect(_on_player_leveled_up)
+	player.weapon_equipped.connect(_on_weapon_equipped)
 
 
 func _on_player_item_added(item_name: String) -> void:
@@ -140,4 +141,14 @@ func _on_rewards_received(
 
 func _on_player_leveled_up(new_level: int) -> void:
 	pickup_message.text = "Level Up! Level %d" % new_level
+	pickup_message_timer.start()
+
+func _on_weapon_equipped(
+	weapon_name: String,
+	total_attack_power: int
+) -> void:
+	pickup_message.text = (
+		"Equipped %s - Attack %d"
+		% [weapon_name, total_attack_power]
+	)
 	pickup_message_timer.start()
