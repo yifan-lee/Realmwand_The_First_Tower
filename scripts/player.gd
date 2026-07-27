@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal item_added(item_name: String)
 
+@onready var interaction_ray: RayCast2D = $InteractionRay
+
 const GRID_SIZE: int = 32
 const MOVE_DURATION: float = 0.15
 
@@ -10,10 +12,17 @@ var is_moving: bool = false
 
 var inventory: Array[String] = []
 
+var facing_direction: Vector2 = Vector2.DOWN
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_moving:
 		return
+
+	if event.is_action_pressed("interact"):
+		try_interact()
+		return
+
 	var direction := Vector2.ZERO
 
 	if event.is_action_pressed("move_up"):
@@ -26,6 +35,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		direction = Vector2.RIGHT
 
 	if direction != Vector2.ZERO:
+		facing_direction = direction
+		interaction_ray.target_position = facing_direction * GRID_SIZE
 		move_one_tile(direction)
 
 func move_one_tile(direction: Vector2) -> void:
@@ -45,3 +56,14 @@ func add_item(new_item_name: String) -> void:
 	inventory.append(new_item_name)
 	item_added.emit(new_item_name)
 	print("Inventory: ", inventory)
+
+func try_interact() -> void:
+	interaction_ray.force_raycast_update()
+
+	if not interaction_ray.is_colliding():
+		return
+
+	var target: Object = interaction_ray.get_collider()
+
+	if target.has_method("interact"):
+		target.call("interact")

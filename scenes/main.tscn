@@ -4,10 +4,15 @@
 [ext_resource type="Script" uid="uid://cli46ma0bo83n" path="res://scripts/main.gd" id="1_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://ch4mt231neydh" path="res://scenes/test_wall.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="4_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://km2p83ut3fws" path="res://scenes/canvas_layer.tscn" id="5_tefeu"]
+[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="6_tefeu"]
 
 [node name="Main" type="Node2D" unique_id=1557596140]
 script = ExtResource("1_tbgi4")
+
+[node name="Door" parent="." unique_id=2030626556 instance=ExtResource("4_o6xl0")]
+position = Vector2(128, 160)
 
 [node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
 position = Vector2(96, 96)
@@ -35,9 +40,6 @@ position = Vector2(160, 128)
 [node name="TestWall7" parent="Walls" unique_id=103373365 instance=ExtResource("2_0wfyh")]
 position = Vector2(160, 160)
 
-[node name="TestWall8" parent="Walls" unique_id=1323481277 instance=ExtResource("2_0wfyh")]
-position = Vector2(128, 160)
-
 [node name="TestWall9" parent="Walls" unique_id=1887080660 instance=ExtResource("2_0wfyh")]
 position = Vector2(96, 160)
 
@@ -61,3 +63,15 @@ item_name = "Sword"
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
 offset = Vector2(16, 16)
 transform = Transform2D(1, 0, 0, 1, 16, 16)
+
+[node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
+position = Vector2(160, 96)
+switch_id = 1
+
+[node name="Switch2" parent="." unique_id=1036974647 instance=ExtResource("6_tefeu")]
+position = Vector2(128, 64)
+switch_id = 2
+
+[node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
+position = Vector2(96, 64)
+switch_id = 3

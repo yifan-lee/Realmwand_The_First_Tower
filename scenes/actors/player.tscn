@@ -15,3 +15,9 @@ texture = ExtResource("1_15tap")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447536532]
 shape = SubResource("RectangleShape2D_k3a8i")
+
+[node name="InteractionRay" type="RayCast2D" parent="." unique_id=1775540173]
+target_position = Vector2(0, 32)
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
