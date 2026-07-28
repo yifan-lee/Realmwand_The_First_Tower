@@ -74,6 +74,10 @@ func _ready() -> void:
 	attack_button.disabled = true
 	item_button.disabled = true
 	attack_button.pressed.connect(_on_attack_button_pressed)
+	attack_button.focus_entered.connect(_on_attack_button_focused)
+	attack_button.mouse_entered.connect(_on_attack_button_focused)
+	item_button.focus_entered.connect(_on_item_button_focused)
+	item_button.mouse_entered.connect(_on_item_button_focused)
 	result_button.pressed.connect(_on_result_button_pressed)
 	# item_button.pressed.connect(_on_item_button_pressed)
 
@@ -173,12 +177,35 @@ func _on_attack_button_pressed() -> void:
 	if not waiting_for_player_action:
 		return
 
-	action_panel.visible = false
+	if not skill_menu.visible:
+		_show_skill_menu(false)
 
+	action_panel.visible = false
+	skill_menu.grab_first_skill_focus()
+
+
+func _on_attack_button_focused() -> void:
+	if not battle_active or not waiting_for_player_action:
+		return
+
+	_show_skill_menu(false)
+
+
+func _on_item_button_focused() -> void:
+	if not battle_active or not waiting_for_player_action:
+		return
+
+	skill_menu.close()
+	player_status_panel.clear_preview()
+	enemy_status_panel.clear_preview()
+
+
+func _show_skill_menu(focus_first_skill: bool) -> void:
 	skill_menu.open(
 		player_data.learned_skills,
 		player_data.current_mp,
-		player_skill_cooldowns
+		player_skill_cooldowns,
+		focus_first_skill
 	)
 
 func _on_skill_menu_cancelled() -> void:

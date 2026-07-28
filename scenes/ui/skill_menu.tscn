@@ -3,36 +3,36 @@
 [ext_resource type="Script" uid="uid://dypce1fwr1lvk" path="res://scripts/skill_menu.gd" id="1_m0sk2"]
 
 [sub_resource type="Theme" id="Theme_compact_skills"]
-default_font_size = 10
+default_font_size = 30
 
 [node name="SkillMenu" type="PanelContainer" unique_id=1585392262]
 visible = false
 texture_filter = 2
-custom_minimum_size = Vector2(180, 204)
-offset_right = 180.0
-offset_bottom = 204.0
+custom_minimum_size = Vector2(540, 450)
+offset_right = 540.0
+offset_bottom = 450.0
 theme = SubResource("Theme_compact_skills")
 script = ExtResource("1_m0sk2")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1163533143]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
 [node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=439811185]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 18
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/Content" unique_id=8674583]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 40
 text = "Skills"
 horizontal_alignment = 1
 
 [node name="SkillScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=894135320]
-custom_minimum_size = Vector2(0, 124)
+custom_minimum_size = Vector2(0, 210)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -41,6 +41,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CancelButton" type="Button" parent="MarginContainer/Content" unique_id=738057561]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 text = "Back"

@@ -13,6 +13,8 @@ signal skill_focused(skill: SkillData)
 	$MarginContainer/Content/CancelButton
 )
 
+var first_available_button: Button
+
 
 func _ready() -> void:
 	cancel_button.pressed.connect(_on_cancel_button_pressed)
@@ -21,16 +23,17 @@ func _ready() -> void:
 func open(
 	skills: Array[SkillData],
 	current_mp: float,
-	cooldowns: Dictionary
+	cooldowns: Dictionary,
+	focus_first_skill: bool = true
 ) -> void:
 	_clear_skill_buttons()
 
-	var first_available_button: Button = null
+	first_available_button = null
 
 	for skill in skills:
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(0.0, 24.0)
-		button.add_theme_font_size_override("font_size", 10)
+		button.custom_minimum_size = Vector2(0.0, 72.0)
+		button.add_theme_font_size_override("font_size", 30)
 		var remaining_cd := float(
 			cooldowns.get(skill.id, 0.0)
 		)
@@ -63,7 +66,12 @@ func open(
 
 	visible = true
 
-	if first_available_button != null:
+	if focus_first_skill:
+		grab_first_skill_focus()
+
+
+func grab_first_skill_focus() -> void:
+	if is_instance_valid(first_available_button):
 		first_available_button.call_deferred("grab_focus")
 	else:
 		cancel_button.call_deferred("grab_focus")

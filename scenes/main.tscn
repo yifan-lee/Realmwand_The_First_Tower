@@ -43,8 +43,7 @@ item_data = ExtResource("6_eb6dy")
 item_data = ExtResource("7_trceg")
 
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
-offset = Vector2(16, 16)
-transform = Transform2D(1, 0, 0, 1, 16, 16)
+offset = Vector2(0, 0)
 
 [node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
 switch_id = 1

@@ -17,8 +17,8 @@ region = Rect2(0, 32, 32, 32)
 texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
-offset_right = 640.0
-offset_bottom = 360.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 script = ExtResource("1_7gynk")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1031443908]
@@ -32,103 +32,106 @@ color = Color(0.19434929, 0.19434926, 0.19434926, 1)
 
 [node name="SharedATB" type="Control" parent="." unique_id=1457893546]
 anchors_preset = 0
-offset_left = 160.0
-offset_top = 36.0
-offset_right = 480.0
-offset_bottom = 118.0
+offset_left = 480.0
+offset_top = 108.0
+offset_right = 1440.0
+offset_bottom = 354.0
 
 [node name="ATBLabel" type="Label" parent="SharedATB"]
 layout_mode = 0
-offset_right = 320.0
-offset_bottom = 20.0
-theme_override_font_sizes/font_size = 15
+offset_right = 960.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 44
 text = "ATB"
 horizontal_alignment = 1
 
 [node name="Track" type="ProgressBar" parent="SharedATB" unique_id=632552647]
 layout_mode = 0
-offset_left = 12.0
-offset_top = 48.0
-offset_right = 308.0
-offset_bottom = 58.0
+offset_left = 36.0
+offset_top = 144.0
+offset_right = 924.0
+offset_bottom = 174.0
 show_percentage = false
 
 [node name="PlayerPoint" type="TextureRect" parent="SharedATB" unique_id=757166207]
 texture_filter = 1
 layout_mode = 0
-offset_top = 58.0
-offset_right = 24.0
-offset_bottom = 82.0
+offset_top = 174.0
+offset_right = 72.0
+offset_bottom = 246.0
 texture = SubResource("AtlasTexture_7gynk")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="EnemyPoint" type="TextureRect" parent="SharedATB" unique_id=1879707769]
 layout_mode = 0
-offset_top = 22.0
-offset_right = 24.0
-offset_bottom = 46.0
+offset_top = 66.0
+offset_right = 72.0
+offset_bottom = 138.0
 texture = SubResource("AtlasTexture_ffvsa")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="EnemyStatusPanel" parent="." unique_id=1501288195 instance=ExtResource("3_0yh6x")]
 layout_mode = 0
-offset_left = 436.0
-offset_top = 128.0
-offset_right = 624.0
-offset_bottom = 344.0
+offset_left = 1308.0
+offset_top = 384.0
+offset_right = 1872.0
+offset_bottom = 1032.0
 
 [node name="PlayerStatusPanel" parent="." unique_id=1198063999 instance=ExtResource("3_0yh6x")]
 layout_mode = 0
-offset_left = 16.0
-offset_top = 128.0
-offset_right = 204.0
-offset_bottom = 344.0
+offset_left = 48.0
+offset_top = 384.0
+offset_right = 612.0
+offset_bottom = 1032.0
 
 [node name="ActionPanel" type="PanelContainer" parent="." unique_id=2025652640]
 layout_mode = 0
-offset_left = 242.0
-offset_top = 286.0
-offset_right = 398.0
-offset_bottom = 340.0
+offset_left = 726.0
+offset_top = 858.0
+offset_right = 1194.0
+offset_bottom = 1020.0
 
 [node name="Actions" type="HBoxContainer" parent="ActionPanel" unique_id=2028659940]
 layout_mode = 2
 alignment = 1
-theme_override_constants/separation = 8
+theme_override_constants/separation = 24
 
 [node name="AttackButton" type="Button" parent="ActionPanel/Actions" unique_id=355636496]
-custom_minimum_size = Vector2(70, 36)
+custom_minimum_size = Vector2(210, 108)
 layout_mode = 2
+theme_override_font_sizes/font_size = 34
 text = "Attack"
 
 [node name="ItemButton" type="Button" parent="ActionPanel/Actions" unique_id=328725931]
-custom_minimum_size = Vector2(62, 36)
+custom_minimum_size = Vector2(186, 108)
 layout_mode = 2
+theme_override_font_sizes/font_size = 34
 disabled = true
 text = "Item"
 
 [node name="ResultButton" type="Button" parent="ActionPanel/Actions" unique_id=2075569573]
 visible = false
-custom_minimum_size = Vector2(132, 36)
+custom_minimum_size = Vector2(396, 108)
 layout_mode = 2
+theme_override_font_sizes/font_size = 34
 text = "Continue"
 
 [node name="SkillMenu" parent="." unique_id=1585392262 instance=ExtResource("3_xd4uy")]
 layout_mode = 0
-offset_left = 230.0
-offset_top = 134.0
-offset_right = 410.0
-offset_bottom = 338.0
+offset_left = 690.0
+offset_top = 402.0
+offset_right = 1230.0
+offset_bottom = 852.0
 
 [node name="BattleMessage" type="Label" parent="." unique_id=1930228769]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 8.0
-offset_right = 520.0
-offset_bottom = 32.0
-theme_override_font_sizes/font_size = 16
+offset_left = 360.0
+offset_top = 24.0
+offset_right = 1560.0
+offset_bottom = 96.0
+theme_override_font_sizes/font_size = 46
 text = "A slime appeared!"
 horizontal_alignment = 1
 vertical_alignment = 1
