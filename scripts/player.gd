@@ -19,13 +19,14 @@ const MOVE_DURATION: float = 0.15
 const BASE_EXPERIENCE_REQUIREMENT: int = 40
 
 var is_moving: bool = false
-var inventory: Array[String] = []
+var inventory: Array[ItemData] = []
 var facing_direction: Vector2 = Vector2.DOWN
 var experience: int = 0
 var gold: int = 0
 var level: int = 1
 var experience_to_next_level: int = BASE_EXPERIENCE_REQUIREMENT
 var max_health: int = 100
+var current_health: int = 100
 var base_attack_power: int = 50
 var equipment_attack_bonus: int = 0
 var equipped_weapon_name: String = ""
@@ -72,14 +73,17 @@ func move_one_tile(direction: Vector2) -> void:
 	is_moving = false
 
 func add_item(
-	new_item_name: String,
-	attack_bonus: int = 0
+	new_item: ItemData
 ) -> void:
-	inventory.append(new_item_name)
-	item_added.emit(new_item_name)
-	if attack_bonus > 0:
-		equip_weapon(new_item_name, attack_bonus)
-	print("Inventory: ", inventory)
+	inventory.append(new_item)
+	item_added.emit(new_item.display_name)
+	if new_item.item_type == ItemData.ItemType.WEAPON:
+		equip_weapon(
+			new_item.display_name,
+			new_item.attack_bonus
+		)
+	print("Added item: ", new_item.display_name)
+	print("Inventory size: ", inventory.size())
 
 func equip_weapon(
 	weapon_name: String,
@@ -129,6 +133,7 @@ func _check_for_level_up() -> void:
 		level += 1
 
 		max_health += 10
+		current_health += 10
 		base_attack_power += 5
 
 		experience_to_next_level = (
@@ -141,17 +146,39 @@ func _check_for_level_up() -> void:
 		print("Max health: ", max_health)
 		print("Attack power: ", attack_power)
 
-func has_item(item_name: String) -> bool:
-	return inventory.has(item_name)
+func find_item(item_id: StringName) -> ItemData:
+	for item in inventory:
+		if item.id == item_id:
+			return item
+
+	return null
+
+func has_item(item_id: StringName) -> bool:
+	return find_item(item_id) != null
+
+func consume_item(item_id: StringName) -> ItemData:
+	for item_index in range(inventory.size()):
+		var item := inventory[item_index]
+		if item.id == item_id:
+			inventory.remove_at(item_index)
+			print("Consumed: ", item.display_name)
+			print("Inventory size: ", inventory.size())
+			return item
+	return null
+
+func take_damage(damage: int) -> void:
+	current_health = max(
+		current_health - damage,
+		0
+	)
 
 
-func consume_item(item_name: String) -> bool:
-	var item_index := inventory.find(item_name)
+func heal(amount: int) -> void:
+	current_health = min(
+		current_health + amount,
+		max_health
+	)
 
-	if item_index == -1:
-		return false
 
-	inventory.remove_at(item_index)
-	print("Consumed: ", item_name)
-	print("Inventory: ", inventory)
-	return true
+func restore_full_health() -> void:
+	current_health = max_health

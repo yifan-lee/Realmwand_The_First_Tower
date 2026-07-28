@@ -102,7 +102,7 @@ func _on_battle_requested(enemy: WorldEnemy) -> void:
 
 func _start_battle() -> void:
 	active_battle = BATTLE_SCENE.instantiate() as Battle
-	active_battle.setup(player)
+	active_battle.setup(player, active_enemy.enemy_data)
 	battle_layer.add_child(active_battle)
 	active_battle.battle_finished.connect(_on_battle_finished)
 
@@ -123,6 +123,7 @@ func _on_battle_finished(
 		active_enemy = null
 		player.set_process_unhandled_input(true)
 	else:
+		player.restore_full_health()
 		await get_tree().process_frame
 		_start_battle()
 

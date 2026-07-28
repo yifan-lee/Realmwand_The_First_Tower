@@ -15,26 +15,44 @@ signal battle_finished(
 @onready var player_hp: ProgressBar = $PlayerPanel/PlayerInfo/PlayerHP
 @onready var item_button: Button = $ActionPanel/Actions/ItemButton
 @onready var result_button: Button = $ActionPanel/Actions/ResultButton
+@onready var enemy_name: Label = $EnemyPanel/EnemyInfo/EnemyName
 
 const PLAYER_ATB_SPEED: float = 50.0
-const ENEMY_ATB_SPEED: float = 40.0
-const ENEMY_ATTACK_DAMAGE: float = 50.0
-const EXPERIENCE_REWARD: int = 40
-const GOLD_REWARD: int = 1
-var player_max_health: float = 100.0
 var player_attack_damage: float = 50.0
 
 var battle_active: bool = true
 var player_won: bool = false
 var player_data: Player
+var enemy_data: EnemyData
 
-const SMALL_POTION_HEALING: float = 50.0
+const SMALL_POTION: ItemData = preload(
+	"res://resources/items/small_potion.tres"
+)
 
 
 
 func _ready() -> void:
-	player_hp.max_value = player_max_health
-	player_hp.value = player_max_health
+	if player_data == null:
+		push_error("Battle.setup() 没有收到 Player")
+		set_process(false)
+		return
+
+	if enemy_data == null:
+		push_error("Battle.setup() 没有收到 Enemy")
+		set_process(false)
+		return
+
+	player_hp.max_value = player_data.max_health
+	player_hp.value = player_data.current_health
+
+	enemy_name.text = enemy_data.display_name
+	enemy_hp.max_value = enemy_data.max_health
+	enemy_hp.value = enemy_data.max_health
+
+	battle_message.text = (
+		"%s appeared!" % enemy_data.display_name
+	)
+
 	attack_button.disabled = true
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	result_button.pressed.connect(_on_result_button_pressed)
@@ -51,7 +69,7 @@ func _process(delta: float) -> void:
 	)
 
 	enemy_atb.value = min(
-		enemy_atb.value + ENEMY_ATB_SPEED * delta,
+		enemy_atb.value + enemy_data.atb_speed * delta,
 		enemy_atb.max_value
 	)
 
@@ -59,20 +77,23 @@ func _process(delta: float) -> void:
 		attack_button.disabled = false
 		var has_small_potion := (
 			player_data != null
-			and player_data.has_item("Small Potion")
+			and player_data.has_item(SMALL_POTION.id)
 		)
 		item_button.disabled = (
 			not has_small_potion
-			or player_hp.value >= player_hp.max_value
+			or player_data.current_health >= player_data.max_health
 		)
 
 	if enemy_atb.value >= enemy_atb.max_value:
 		_enemy_attack()
 
-func setup(player: Player) -> void:
+func setup(
+	player: Player,
+	enemy: EnemyData
+) -> void:
 	player_data = player
-	player_max_health = float(player.max_health)
 	player_attack_damage = float(player.attack_power)
+	enemy_data = enemy
 
 func _on_attack_button_pressed() -> void:
 	if not battle_active:
@@ -98,7 +119,10 @@ func _end_battle_victory() -> void:
 	attack_button.disabled = true
 	player_atb.value = 0.0
 	enemy_atb.value = 0.0
-	battle_message.text = "Slime defeated!"
+	battle_message.text = (
+		"%s defeated!" 
+		% enemy_data.display_name
+	)
 
 	player_won = true
 	attack_button.visible = false
@@ -111,13 +135,17 @@ func _enemy_attack() -> void:
 		return
 	enemy_atb.value = 0.0
 
-	player_hp.value = max(
-		player_hp.value - ENEMY_ATTACK_DAMAGE,
-		player_hp.min_value
+	player_data.take_damage(int(enemy_data.attack_damage))
+	player_hp.value = player_data.current_health
+	battle_message.text = (
+		"%s deals %.0f damage!" 
+		% [
+			enemy_data.display_name,
+			enemy_data.attack_damage,
+		]
 	)
-	battle_message.text = "Slime deals %.0f damage!" % ENEMY_ATTACK_DAMAGE
 
-	if player_hp.value <= player_hp.min_value:
+	if player_data.current_health <= 0:
 		_end_battle_defeated()
 
 func _end_battle_defeated() -> void:
@@ -136,8 +164,8 @@ func _on_result_button_pressed() -> void:
 	if player_won:
 		battle_finished.emit(
 			true,
-			EXPERIENCE_REWARD,
-			GOLD_REWARD,
+			enemy_data.experience_reward,
+			enemy_data.gold_reward,
 		)
 	else:
 		battle_finished.emit(
@@ -156,22 +184,22 @@ func _on_item_button_pressed() -> void:
 	if player_data == null:
 		return
 
-	if not player_data.has_item("Small Potion"):
+	if player_data.current_health >= player_data.max_value:
 		return
 
-	if player_hp.value >= player_hp.max_value:
+	var used_item := player_data.consume_item(
+		SMALL_POTION.id
+	)
+
+	if used_item == null:
 		return
 
 	player_atb.value = 0.0
 	attack_button.disabled = true
 	item_button.disabled = true
 
-	if not player_data.consume_item("Small Potion"):
-		return
 
-	player_hp.value = min(
-		player_hp.value + SMALL_POTION_HEALING,
-		player_hp.max_value
-	)
+	player_data.heal(used_item.healing_amount)
+	player_hp.value = player_data.current_health
 
-	battle_message.text = "Hero uses Small Potion!"
+	battle_message.text = "Hero uses %s!" % used_item.display_name
