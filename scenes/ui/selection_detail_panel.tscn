@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c6decfs1fp4ml"]
+
+[ext_resource type="Script" uid="uid://d4lmb7pjds5lk" path="res://scenes/ui/selection_detail_panel.gd" id="1_5mm58"]
+
+[sub_resource type="Theme" id="Theme_wxab6"]
+default_font_size = 28
+
+[node name="SelectionDetailPanel" type="PanelContainer" unique_id=1134355588]
+visible = false
+custom_minimum_size = Vector2(420, 450)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_wxab6")
+script = ExtResource("1_5mm58")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1867538967]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1103781750]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content" unique_id=777142440]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+
+[node name="DescriptionLabel" type="Label" parent="MarginContainer/Content" unique_id=884568926]
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+
+[node name="Separator" type="HSeparator" parent="MarginContainer/Content" unique_id=2097033110]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PropertyList" type="VBoxContainer" parent="MarginContainer/Content" unique_id=611222299]
+layout_mode = 2
+
+[node name="WarningLabel" type="Label" parent="MarginContainer/Content" unique_id=1396321474]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3944329, 1, 1)
+theme_override_font_sizes/font_size = 26
+autowrap_mode = 3

@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player_menu.gd" id="1_player_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combatant_status_panel.tscn" id="2_status"]
+[ext_resource type="PackedScene" path="res://scenes/ui/skill_menu.tscn" id="3_skills"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_menu.tscn" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/ui/selection_detail_panel.tscn" id="5_detail"]
+
+[node name="PlayerMenu" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_player_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.035, 0.045, 0.06, 0.96)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 1872.0
+offset_bottom = 96.0
+theme_override_font_sizes/font_size = 44
+text = "Menu"
+horizontal_alignment = 1
+
+[node name="PlayerStatusPanel" parent="." instance=ExtResource("2_status")]
+custom_minimum_size = Vector2(420, 648)
+layout_mode = 0
+offset_left = 48.0
+offset_top = 180.0
+offset_right = 468.0
+offset_bottom = 828.0
+
+[node name="ActionPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 120.0
+offset_right = 1488.0
+offset_bottom = 246.0
+
+[node name="Actions" type="HBoxContainer" parent="ActionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="SkillsButton" type="Button" parent="ActionPanel/Actions"]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Skills"
+
+[node name="InventoryButton" type="Button" parent="ActionPanel/Actions"]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Inventory"
+
+[node name="SystemButton" type="Button" parent="ActionPanel/Actions"]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "System"
+
+[node name="SkillMenu" parent="." instance=ExtResource("3_skills")]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 282.0
+offset_right = 960.0
+offset_bottom = 732.0
+
+[node name="InventoryMenu" parent="." instance=ExtResource("4_inventory")]
+custom_minimum_size = Vector2(516, 450)
+layout_mode = 0
+offset_left = 492.0
+offset_top = 282.0
+offset_right = 1008.0
+offset_bottom = 732.0
+
+[node name="SelectionDetailPanel" parent="." instance=ExtResource("5_detail")]
+layout_mode = 0
+offset_left = 1032.0
+offset_top = 282.0
+offset_right = 1488.0
+offset_bottom = 732.0
+
+[node name="HelpLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 774.0
+offset_right = 1488.0
+offset_bottom = 828.0
+theme_override_colors/font_color = Color(0.7, 0.75, 0.82, 1)
+theme_override_font_sizes/font_size = 26
+text = "Arrow keys: Navigate    Enter: Select    Esc: Back / Close"
+horizontal_alignment = 1

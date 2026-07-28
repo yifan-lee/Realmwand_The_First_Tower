@@ -6,6 +6,8 @@
 script = ExtResource("1_h0edt")
 id = &"sword"
 display_name = "Sword"
+description = "A simple sword that increases attack."
 item_type = 1
+consumed_on_use = false
 attack_bonus = 10
 metadata/_custom_type_script = "uid://dsk841x7iejq4"

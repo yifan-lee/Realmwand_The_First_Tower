@@ -6,5 +6,6 @@
 script = ExtResource("1_lyfvt")
 id = &"small_potion"
 display_name = "Small Potion"
+description = "Restores a small amount of HP."
 healing_amount = 50
 metadata/_custom_type_script = "uid://dsk841x7iejq4"

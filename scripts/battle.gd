@@ -16,11 +16,15 @@ signal battle_finished(
 @onready var result_button: Button = $ActionPanel/Actions/ResultButton
 @onready var action_panel: PanelContainer = $ActionPanel
 @onready var skill_menu: SkillMenu = $SkillMenu
+@onready var inventory_menu: InventoryMenu = $InventoryMenu
 @onready var player_status_panel: CombatantStatusPanel = (
 	$PlayerStatusPanel
 )
 @onready var enemy_status_panel: CombatantStatusPanel = (
 	$EnemyStatusPanel
+)
+@onready var selection_detail_panel: SelectionDetailPanel = (
+	$SelectionDetailPanel
 )
 
 const BATTLE_BALANCE: BattleBalanceConfig = preload(
@@ -39,22 +43,11 @@ const ATB_MAX: float = 100.0
 var player_atb: float = 0.0
 var enemy_atb: float = 0.0
 
-
-
-
 var player_won: bool = false
 
 var enemy_current_hp: float
 var enemy_current_mp: float
 var enemy_minimum_hp: float = 0.0
-
-
-
-# const SMALL_POTION: ItemData = preload(
-# 	"res://resources/items/small_potion.tres"
-# )
-
-
 
 func _ready() -> void:
 	if player_data == null:
@@ -78,8 +71,8 @@ func _ready() -> void:
 	attack_button.mouse_entered.connect(_on_attack_button_focused)
 	item_button.focus_entered.connect(_on_item_button_focused)
 	item_button.mouse_entered.connect(_on_item_button_focused)
+	item_button.pressed.connect(_on_item_button_pressed)
 	result_button.pressed.connect(_on_result_button_pressed)
-	# item_button.pressed.connect(_on_item_button_pressed)
 
 	skill_menu.skill_selected.connect(
 		_on_skill_selected
@@ -100,6 +93,21 @@ func _ready() -> void:
 
 	skill_menu.skill_focused.connect(
 		_on_skill_focused
+	)
+	skill_menu.skill_focus_cleared.connect(
+		_clear_selection_preview
+	)
+	inventory_menu.item_selected.connect(
+		_on_item_selected
+	)
+	inventory_menu.cancelled.connect(
+		_on_inventory_menu_cancelled
+	)
+	inventory_menu.item_focused.connect(
+		_on_item_focused
+	)
+	inventory_menu.item_focus_cleared.connect(
+		_clear_selection_preview
 	)
 
 
@@ -129,7 +137,6 @@ func _process(delta: float) -> void:
 	if player_atb >= ATB_MAX:
 		_enable_player_actions()
 		return
-		
 
 	if enemy_atb >= ATB_MAX:
 		_enemy_attack()
@@ -158,17 +165,8 @@ func _update_atb_points() -> void:
 func _enable_player_actions() -> void:
 	waiting_for_player_action = true
 	attack_button.disabled = false
+	item_button.disabled = false
 	attack_button.grab_focus()
-
-	# var has_small_potion := (
-	# 	player_data != null
-	# 	and player_data.has_item(SMALL_POTION.id)
-	# )
-
-	# item_button.disabled = (
-	# 	not has_small_potion
-	# 	or player_data.current_hp >= player_data.max_hp
-	# )
 
 func _on_attack_button_pressed() -> void:
 	if not battle_active:
@@ -180,6 +178,7 @@ func _on_attack_button_pressed() -> void:
 	if not skill_menu.visible:
 		_show_skill_menu(false)
 
+	inventory_menu.close()
 	action_panel.visible = false
 	skill_menu.grab_first_skill_focus()
 
@@ -188,6 +187,7 @@ func _on_attack_button_focused() -> void:
 	if not battle_active or not waiting_for_player_action:
 		return
 
+	inventory_menu.close()
 	_show_skill_menu(false)
 
 
@@ -196,8 +196,21 @@ func _on_item_button_focused() -> void:
 		return
 
 	skill_menu.close()
-	player_status_panel.clear_preview()
-	enemy_status_panel.clear_preview()
+	_clear_selection_preview()
+	_show_inventory_menu(false)
+
+
+func _on_item_button_pressed() -> void:
+	if not battle_active or not waiting_for_player_action:
+		return
+
+	skill_menu.close()
+
+	if not inventory_menu.visible:
+		_show_inventory_menu(false)
+
+	action_panel.visible = false
+	inventory_menu.grab_first_category_focus()
 
 
 func _show_skill_menu(focus_first_skill: bool) -> void:
@@ -208,13 +221,28 @@ func _show_skill_menu(focus_first_skill: bool) -> void:
 		focus_first_skill
 	)
 
+
+func _show_inventory_menu(
+	focus_first_category: bool
+) -> void:
+	inventory_menu.open(
+		player_data.inventory,
+		focus_first_category
+	)
+
 func _on_skill_menu_cancelled() -> void:
-	player_status_panel.clear_preview()
-	enemy_status_panel.clear_preview()
+	_clear_selection_preview()
 
 	skill_menu.close()
 	action_panel.visible = true
 	attack_button.grab_focus()
+
+
+func _on_inventory_menu_cancelled() -> void:
+	_clear_selection_preview()
+	inventory_menu.close()
+	action_panel.visible = true
+	item_button.grab_focus()
 
 func _on_skill_selected(
 	skill: SkillData
@@ -232,8 +260,7 @@ func _on_skill_selected(
 	if player_data.current_mp < skill.mp_cost:
 		return
 
-	player_status_panel.clear_preview()
-	enemy_status_panel.clear_preview()
+	_clear_selection_preview()
 
 	player_data.current_mp -= skill.mp_cost
 
@@ -264,16 +291,40 @@ func _on_skill_selected(
 		_end_battle_victory()
 
 
+func _on_item_selected(item: ItemData) -> void:
+	if not waiting_for_player_action:
+		return
+
+	if not ItemUseService.use(item, player_data, true):
+		return
+
+	battle_message.text = (
+		"%s uses %s!"
+		% [
+			player_data.display_name,
+			item.display_name,
+		]
+	)
+
+	_clear_selection_preview()
+	_commit_player_action()
+	_refresh_status_panels()
+
+
 
 func _commit_player_action(
 	used_skill: SkillData = null
 ) -> void:
-	if used_skill.cooldown_seconds > 0.0:
+	if (
+		used_skill != null
+		and used_skill.cooldown_seconds > 0.0
+	):
 		player_skill_cooldowns[used_skill.id] = (
 			used_skill.cooldown_seconds
 		)
 
 	skill_menu.close()
+	inventory_menu.close()
 	action_panel.visible = true
 	_finish_player_action()
 
@@ -336,6 +387,9 @@ func _end_battle_victory() -> void:
 	result_button.text = "Continue"
 	result_button.visible = true
 	result_button.grab_focus()
+	skill_menu.close()
+	inventory_menu.close()
+	_clear_selection_preview()
 
 
 func _end_battle_defeated() -> void:
@@ -352,6 +406,9 @@ func _end_battle_defeated() -> void:
 	result_button.text = "Retry"
 	result_button.visible = true
 	result_button.grab_focus()
+	skill_menu.close()
+	inventory_menu.close()
+	_clear_selection_preview()
 
 func _on_result_button_pressed() -> void:
 	if player_won:
@@ -366,36 +423,6 @@ func _on_result_button_pressed() -> void:
 			0,
 			0,
 		)
-
-# func _on_item_button_pressed() -> void:
-# 	if not battle_active:
-# 		return
-
-# 	if not waiting_for_player_action:
-# 		return
-
-# 	if player_data == null:
-# 		return
-
-# 	if player_data.current_hp >= player_data.max_hp:
-# 		return
-
-# 	var used_item := player_data.consume_item(
-# 		SMALL_POTION.id
-# 	)
-
-# 	if used_item == null:
-# 		return
-
-# 	_finish_player_action()
-
-# 	player_data.heal(used_item.healing_amount)
-# 	player_hp.value = player_data.current_hp
-
-# 	battle_message.text = "Hero uses %s!" % used_item.display_name
-
-
-
 
 func _update_player_skill_cooldowns(
 	delta: float
@@ -414,34 +441,14 @@ func _update_player_skill_cooldowns(
 
 
 func _create_player_status_data() -> CombatantStatusViewData:
-	var data := CombatantStatusViewData.new()
-
-	data.display_name = player_data.display_name
-	data.portrait = player_data.portrait
-	data.current_hp = player_data.current_hp
-	data.max_hp = player_data.max_hp
-	data.current_mp = player_data.current_mp
-	data.max_mp = player_data.max_mp
-	data.atk = player_data.total_atk
-	data.def = player_data.total_def
-	data.spd = player_data.total_spd
-
-	return data
+	return CombatantStatusViewData.from_player(player_data)
 
 func _create_enemy_status_data() -> CombatantStatusViewData:
-	var data := CombatantStatusViewData.new()
-
-	data.display_name = enemy_data.display_name
-	data.portrait = enemy_data.portrait
-	data.current_hp = enemy_current_hp
-	data.max_hp = enemy_data.max_hp
-	data.current_mp = enemy_current_mp
-	data.max_mp = enemy_data.max_mp
-	data.atk = enemy_data.atk
-	data.def = enemy_data.def
-	data.spd = enemy_data.spd
-
-	return data
+	return CombatantStatusViewData.from_enemy(
+		enemy_data,
+		enemy_current_hp,
+		enemy_current_mp
+	)
 
 func _refresh_status_panels() -> void:
 	player_status_panel.set_data(
@@ -455,51 +462,49 @@ func _refresh_status_panels() -> void:
 func _on_skill_focused(
 	skill: SkillData
 ) -> void:
-	var player_preview := CombatantPreviewData.new()
-	var enemy_preview := CombatantPreviewData.new()
-
-	player_preview.mp_delta = -skill.mp_cost
-
-	if skill.target_type == SkillData.TargetType.ENEMY:
-		var predicted_damage := (
-			BATTLE_BALANCE.calculate_damage(
-				player_data.total_atk,
-				enemy_data.def,
-				skill.skill_power
-			)
-		)
-
-		enemy_preview.hp_delta = -predicted_damage
-
-	_apply_effects_to_preview(
+	var remaining_cd := float(
+		player_skill_cooldowns.get(skill.id, 0.0)
+	)
+	var detail := SelectionDetailBuilder.from_skill(
 		skill,
-		player_preview,
-		enemy_preview
+		player_data.current_mp,
+		remaining_cd
+	)
+
+	selection_detail_panel.show_detail(detail)
+
+	var previews := SkillPreviewBuilder.build(
+		skill,
+		player_data,
+		enemy_data,
+		BATTLE_BALANCE
+	)
+	var player_preview := (
+		previews["player"] as CombatantPreviewData
+	)
+	var enemy_preview := (
+		previews["enemy"] as CombatantPreviewData
 	)
 
 	player_status_panel.show_preview(player_preview)
 	enemy_status_panel.show_preview(enemy_preview)
 
-func _apply_effects_to_preview(
-	skill: SkillData,
-	player_preview: CombatantPreviewData,
-	enemy_preview: CombatantPreviewData
-) -> void:
-	for effect in skill.effects:
-		var target_preview := enemy_preview
 
-		if (
-			effect.target_type
-			== SkillEffectData.TargetType.SELF
-		):
-			target_preview = player_preview
+func _on_item_focused(item: ItemData) -> void:
+	var detail := SelectionDetailBuilder.from_item(
+		item,
+		player_data,
+		true
+	)
+	var player_preview := ItemPreviewBuilder.for_player(
+		item,
+		player_data
+	)
 
-		match effect.effect_type:
-			SkillEffectData.EffectType.ATK:
-				target_preview.atk_delta += effect.value
-
-			SkillEffectData.EffectType.DEF:
-				target_preview.def_delta += effect.value
-
-			SkillEffectData.EffectType.SPD:
-				target_preview.spd_delta += effect.value
+	selection_detail_panel.show_detail(detail)
+	player_status_panel.show_preview(player_preview)
+	enemy_status_panel.clear_preview()
+func _clear_selection_preview() -> void:
+	selection_detail_panel.clear_detail()
+	player_status_panel.clear_preview()
+	enemy_status_panel.clear_preview()

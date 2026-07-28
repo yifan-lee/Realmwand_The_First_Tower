@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://bvtr3eli4t2ss" path="res://assets/sprites/gameplay_sprites_32.png" id="2_ffvsa"]
 [ext_resource type="PackedScene" uid="uid://4sb7s3m75aw5" path="res://scenes/ui/combatant_status_panel.tscn" id="3_0yh6x"]
 [ext_resource type="PackedScene" uid="uid://bk2c7nmscq15o" path="res://scenes/ui/skill_menu.tscn" id="3_xd4uy"]
+[ext_resource type="PackedScene" uid="uid://c6decfs1fp4ml" path="res://scenes/ui/selection_detail_panel.tscn" id="5_h0kxc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_menu.tscn" id="6_inventory"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7gynk"]
 atlas = ExtResource("2_ffvsa")
@@ -37,7 +39,7 @@ offset_top = 108.0
 offset_right = 1440.0
 offset_bottom = 354.0
 
-[node name="ATBLabel" type="Label" parent="SharedATB"]
+[node name="ATBLabel" type="Label" parent="SharedATB" unique_id=1998074057]
 layout_mode = 0
 offset_right = 960.0
 offset_bottom = 60.0
@@ -73,17 +75,19 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="EnemyStatusPanel" parent="." unique_id=1501288195 instance=ExtResource("3_0yh6x")]
+custom_minimum_size = Vector2(420, 648)
 layout_mode = 0
-offset_left = 1308.0
+offset_left = 1464.0
 offset_top = 384.0
-offset_right = 1872.0
+offset_right = 1884.0
 offset_bottom = 1032.0
 
 [node name="PlayerStatusPanel" parent="." unique_id=1198063999 instance=ExtResource("3_0yh6x")]
+custom_minimum_size = Vector2(420, 648)
 layout_mode = 0
-offset_left = 48.0
+offset_left = 36.0
 offset_top = 384.0
-offset_right = 612.0
+offset_right = 456.0
 offset_bottom = 1032.0
 
 [node name="ActionPanel" type="PanelContainer" parent="." unique_id=2025652640]
@@ -95,8 +99,8 @@ offset_bottom = 1020.0
 
 [node name="Actions" type="HBoxContainer" parent="ActionPanel" unique_id=2028659940]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 24
+alignment = 1
 
 [node name="AttackButton" type="Button" parent="ActionPanel/Actions" unique_id=355636496]
 custom_minimum_size = Vector2(210, 108)
@@ -105,11 +109,11 @@ theme_override_font_sizes/font_size = 34
 text = "Attack"
 
 [node name="ItemButton" type="Button" parent="ActionPanel/Actions" unique_id=328725931]
-custom_minimum_size = Vector2(186, 108)
+custom_minimum_size = Vector2(210, 108)
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 disabled = true
-text = "Item"
+text = "Inventory"
 
 [node name="ResultButton" type="Button" parent="ActionPanel/Actions" unique_id=2075569573]
 visible = false
@@ -120,9 +124,17 @@ text = "Continue"
 
 [node name="SkillMenu" parent="." unique_id=1585392262 instance=ExtResource("3_xd4uy")]
 layout_mode = 0
-offset_left = 690.0
+offset_left = 576.0
 offset_top = 402.0
-offset_right = 1230.0
+offset_right = 996.0
+offset_bottom = 852.0
+
+[node name="InventoryMenu" parent="." instance=ExtResource("6_inventory")]
+custom_minimum_size = Vector2(516, 450)
+layout_mode = 0
+offset_left = 480.0
+offset_top = 402.0
+offset_right = 996.0
 offset_bottom = 852.0
 
 [node name="BattleMessage" type="Label" parent="." unique_id=1930228769]
@@ -136,3 +148,10 @@ text = "A slime appeared!"
 horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
+
+[node name="SelectionDetailPanel" parent="." unique_id=1134355588 instance=ExtResource("5_h0kxc")]
+layout_mode = 0
+offset_left = 1020.0
+offset_top = 402.0
+offset_right = 1440.0
+offset_bottom = 852.0

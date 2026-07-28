@@ -15,6 +15,7 @@ extends Node2D
 	$WorldEnemy2,
 ]
 @onready var battle_layer: CanvasLayer = $BattleLayer
+@onready var player_menu: PlayerMenu = $MenuLayer/PlayerMenu
 @onready var level_label: Label = (
 	$UI/StatsPanel/Stat/LevelLabel
 )
@@ -51,7 +52,27 @@ func _ready() -> void:
 	player.rewards_received.connect(_on_rewards_received)
 	player.leveled_up.connect(_on_player_leveled_up)
 	player.weapon_equipped.connect(_on_weapon_equipped)
+	player_menu.closed.connect(_on_player_menu_closed)
 	_update_player_hud()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		not event.is_action_pressed("ui_cancel")
+		or active_battle != null
+		or player_menu.visible
+	):
+		return
+
+	player.set_process_unhandled_input(false)
+	player_menu.open(player)
+	get_viewport().set_input_as_handled()
+
+
+func _on_player_menu_closed() -> void:
+	if active_battle == null:
+		player.set_process_unhandled_input(true)
+		_update_player_hud()
 
 
 func _on_player_item_added(item_name: String) -> void:

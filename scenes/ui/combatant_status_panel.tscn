@@ -5,6 +5,22 @@
 [sub_resource type="Theme" id="Theme_compact_status"]
 default_font_size = 32
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bar"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
+bg_color = Color(0.12, 0.72, 0.25, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mp"]
+bg_color = Color(0.12, 0.42, 0.9, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="CombatantStatusPanel" type="PanelContainer" unique_id=1501288195]
 texture_filter = 2
 custom_minimum_size = Vector2(564, 648)
@@ -54,9 +70,43 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_alignment = 2
 
-[node name="HPBar" type="ProgressBar" parent="MarginContainer/Content/HPSection" unique_id=510654771]
+[node name="HPBarContainer" type="Control" parent="MarginContainer/Content/HPSection"]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+
+[node name="Background" type="ColorRect" parent="MarginContainer/Content/HPSection/HPBarContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.055, 0.065, 0.075, 1)
+
+[node name="HPPreviewBar" type="ProgressBar" parent="MarginContainer/Content/HPSection/HPBarContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_bar")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp")
+show_percentage = false
+
+[node name="HPBar" type="ProgressBar" parent="MarginContainer/Content/HPSection/HPBarContainer" unique_id=510654771]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_bar")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp")
 show_percentage = false
 
 [node name="MPSection" type="VBoxContainer" parent="MarginContainer/Content" unique_id=549030656]
@@ -75,9 +125,43 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_alignment = 2
 
-[node name="MPBar" type="ProgressBar" parent="MarginContainer/Content/MPSection" unique_id=1576476579]
+[node name="MPBarContainer" type="Control" parent="MarginContainer/Content/MPSection"]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+
+[node name="Background" type="ColorRect" parent="MarginContainer/Content/MPSection/MPBarContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.055, 0.065, 0.075, 1)
+
+[node name="MPPreviewBar" type="ProgressBar" parent="MarginContainer/Content/MPSection/MPBarContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_bar")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mp")
+show_percentage = false
+
+[node name="MPBar" type="ProgressBar" parent="MarginContainer/Content/MPSection/MPBarContainer" unique_id=1576476579]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_bar")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mp")
 show_percentage = false
 
 [node name="Stats" type="GridContainer" parent="MarginContainer/Content" unique_id=1110717907]

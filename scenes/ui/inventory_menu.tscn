@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory_menu.gd" id="1_inventory"]
+
+[sub_resource type="Theme" id="Theme_inventory"]
+default_font_size = 28
+
+[node name="InventoryMenu" type="PanelContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(516, 450)
+offset_right = 516.0
+offset_bottom = 450.0
+theme = SubResource("Theme_inventory")
+script = ExtResource("1_inventory")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="MarginContainer/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="CategoryList" type="VBoxContainer" parent="MarginContainer/Content/Columns"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Divider" type="VSeparator" parent="MarginContainer/Content/Columns"]
+layout_mode = 2
+
+[node name="ItemScroll" type="ScrollContainer" parent="MarginContainer/Content/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/Content/Columns/ItemScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8

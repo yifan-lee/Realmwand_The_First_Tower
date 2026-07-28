@@ -8,8 +8,8 @@ default_font_size = 30
 [node name="SkillMenu" type="PanelContainer" unique_id=1585392262]
 visible = false
 texture_filter = 2
-custom_minimum_size = Vector2(540, 450)
-offset_right = 540.0
+custom_minimum_size = Vector2(420, 450)
+offset_right = 420.0
 offset_bottom = 450.0
 theme = SubResource("Theme_compact_skills")
 script = ExtResource("1_m0sk2")
@@ -41,6 +41,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CancelButton" type="Button" parent="MarginContainer/Content" unique_id=738057561]
+visible = false
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 text = "Back"

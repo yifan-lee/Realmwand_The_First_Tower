@@ -39,15 +39,15 @@ var equipped_weapon_name: String = ""
 
 var total_atk: float:
 	get:
-		return base_atk
+		return base_atk + equipment_atk_bonus
 
 var total_def: float:
 	get:
-		return base_def
+		return base_def + equipment_def_bonus
 
 var total_spd: float:
 	get:
-		return base_spd
+		return base_spd + equipment_spd_bonus
 
 @export var learned_skills: Array[SkillData] = []
 @export var display_name: String = "TooTwo"
@@ -96,10 +96,7 @@ func add_item(
 	inventory.append(new_item)
 	item_added.emit(new_item.display_name)
 	if new_item.item_type == ItemData.ItemType.WEAPON:
-		equip_weapon(
-			new_item.display_name,
-			new_item.attack_bonus
-		)
+		equip_item(new_item)
 	print("Added item: ", new_item.display_name)
 	print("Inventory size: ", inventory.size())
 
@@ -117,6 +114,21 @@ func equip_weapon(
 
 	print("Equipped: ", equipped_weapon_name)
 	print("Attack power: ", total_atk)
+
+
+func equip_item(item: ItemData) -> void:
+	if item == null or item.item_type != ItemData.ItemType.WEAPON:
+		return
+
+	equipped_weapon_name = item.display_name
+	equipment_atk_bonus = item.attack_bonus
+	equipment_def_bonus = item.defense_bonus
+	equipment_spd_bonus = item.speed_bonus
+
+	weapon_equipped.emit(
+		item.display_name,
+		total_atk
+	)
 
 func try_interact() -> void:
 	interaction_ray.force_raycast_update()
@@ -195,6 +207,13 @@ func heal(amount: int) -> void:
 	current_hp = min(
 		current_hp + amount,
 		max_hp
+	)
+
+
+func restore_mp(amount: int) -> void:
+	current_mp = min(
+		current_mp + amount,
+		max_mp
 	)
 
 

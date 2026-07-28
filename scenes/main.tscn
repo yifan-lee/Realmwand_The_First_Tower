@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/slime.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dpvwubclw3iww" path="res://scenes/battle_layer.tscn" id="10_choun"]
 [ext_resource type="Resource" uid="uid://c04hib5kth66g" path="res://resources/enemies/slime.tres" id="12_trceg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/player_menu.tscn" id="13_player_menu"]
 
 [node name="Main" type="Node2D" unique_id=1557596140]
 texture_filter = 1
@@ -64,3 +65,8 @@ enemy_data = ExtResource("12_trceg")
 enemy_data = ExtResource("12_trceg")
 
 [node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]
+
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 8
+
+[node name="PlayerMenu" parent="MenuLayer" instance=ExtResource("13_player_menu")]
