@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqi75peflxqfy" path="res://scripts/battle.gd" id="1_7gynk"]
 [ext_resource type="Texture2D" uid="uid://bvtr3eli4t2ss" path="res://assets/sprites/gameplay_sprites_32.png" id="2_ffvsa"]
+[ext_resource type="PackedScene" uid="uid://bk2c7nmscq15o" path="res://scenes/ui/skill_menu.tscn" id="3_xd4uy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7gynk"]
 atlas = ExtResource("2_ffvsa")
@@ -131,6 +132,13 @@ text = "Item"
 visible = false
 layout_mode = 2
 text = "Continue"
+
+[node name="SkillMenu" parent="." unique_id=1585392262 instance=ExtResource("3_xd4uy")]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 240.0
+offset_right = 600.0
+offset_bottom = 400.0
 
 [node name="BattleMessage" type="Label" parent="." unique_id=1930228769]
 layout_mode = 0

@@ -49,6 +49,8 @@ var total_spd: float:
 	get:
 		return base_spd
 
+@export var learned_skills: Array[SkillData] = []
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_moving:
 		return

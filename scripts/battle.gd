@@ -19,6 +19,8 @@ signal battle_finished(
 @onready var item_button: Button = $ActionPanel/Actions/ItemButton
 @onready var result_button: Button = $ActionPanel/Actions/ResultButton
 @onready var enemy_name: Label = $EnemyPanel/EnemyInfo/EnemyName
+@onready var action_panel: PanelContainer = $ActionPanel
+@onready var skill_menu: SkillMenu = $SkillMenu
 
 const BATTLE_BALANCE: BattleBalanceConfig = preload(
 	"res://resources/battle/battle_balance.tres"
@@ -35,6 +37,8 @@ var battle_active: bool = true
 var player_won: bool = false
 var player_data: Player
 var enemy_data: EnemyData
+
+var player_skill_cooldowns: Dictionary = {}
 
 const SMALL_POTION: ItemData = preload(
 	"res://resources/items/small_potion.tres"
@@ -77,6 +81,14 @@ func _ready() -> void:
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	result_button.pressed.connect(_on_result_button_pressed)
 	item_button.pressed.connect(_on_item_button_pressed)
+
+	skill_menu.skill_selected.connect(
+		_on_skill_selected
+	)
+
+	skill_menu.cancelled.connect(
+		_on_skill_menu_cancelled
+	)
 	
 
 func _process(delta: float) -> void:
@@ -85,6 +97,8 @@ func _process(delta: float) -> void:
 	
 	if waiting_for_player_action:
 		return
+
+	_update_player_skill_cooldowns(delta)
 
 	if player_atb < ATB_MAX:
 		player_atb = min(
@@ -160,25 +174,17 @@ func _on_attack_button_pressed() -> void:
 	if not battle_active:
 		return
 
-	if player_atb < ATB_MAX:
+	if not waiting_for_player_action:
 		return
 
-	_finish_player_action()
+	action_panel.visible = false
 
-	var damage := BATTLE_BALANCE.calculate_damage(
-		player_data.total_atk,
-		enemy_data.def,
-		BATTLE_BALANCE.basic_attack_power
+	skill_menu.open(
+		player_data.learned_skills,
+		player_data.current_mp,
+		player_skill_cooldowns
 	)
 
-	enemy_hp.value = max(
-		enemy_hp.value - damage,
-		enemy_hp.min_value
-	)
-	battle_message.text = "Hero deals %.0f damage!" % damage
-
-	if enemy_hp.value <= enemy_hp.min_value:
-		_end_battle_victory()
 
 func _enemy_attack() -> void:
 	if not battle_active:
@@ -281,3 +287,81 @@ func _on_item_button_pressed() -> void:
 	player_hp.value = player_data.current_hp
 
 	battle_message.text = "Hero uses %s!" % used_item.display_name
+
+func _on_skill_menu_cancelled() -> void:
+	skill_menu.close()
+	action_panel.visible = true
+	attack_button.grab_focus()
+
+func _on_skill_selected(
+	skill: SkillData
+) -> void:
+	if not waiting_for_player_action:
+		return
+
+	var remaining_cd := float(
+		player_skill_cooldowns.get(skill.id, 0.0)
+	)
+
+	if remaining_cd > 0:
+		return
+
+	if player_data.current_mp < skill.mp_cost:
+		return
+
+	player_data.current_mp -= skill.mp_cost
+	player_mp.value = player_data.current_mp
+
+	var damage := BATTLE_BALANCE.calculate_damage(
+		player_data.total_atk,
+		enemy_data.def,
+		skill.skill_power
+	)
+
+	enemy_hp.value = max(
+		enemy_hp.value - damage,
+		enemy_hp.min_value
+	)
+
+	battle_message.text = (
+		"Hero uses %s and deals %d damage!"
+		% [
+			skill.display_name,
+			damage,
+		]
+	)
+
+	_commit_player_action(skill)
+
+	if enemy_hp.value <= enemy_hp.min_value:
+		_end_battle_victory()
+
+
+
+func _commit_player_action(
+	used_skill: SkillData = null
+) -> void:
+	if used_skill.cooldown_seconds > 0.0:
+		player_skill_cooldowns[used_skill.id] = (
+			used_skill.cooldown_seconds
+		)
+
+	skill_menu.close()
+	action_panel.visible = true
+	_finish_player_action()
+
+
+func _update_player_skill_cooldowns(
+	delta: float
+) -> void:
+	for skill_id in player_skill_cooldowns.keys():
+		var remaining := float(
+			player_skill_cooldowns[skill_id]
+		)
+
+		remaining = maxf(remaining - delta, 0.0)
+
+		if remaining <= 0.0:
+			player_skill_cooldowns.erase(skill_id)
+		else:
+			player_skill_cooldowns[skill_id] = remaining
