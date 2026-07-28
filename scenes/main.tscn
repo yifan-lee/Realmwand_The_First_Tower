@@ -36,6 +36,7 @@ tile_set = ExtResource("2_a8y0u")
 position = Vector2(0, -128)
 
 [node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
+position = Vector2(0, -160)
 item_data = ExtResource("6_eb6dy")
 
 [node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]

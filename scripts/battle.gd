@@ -126,6 +126,7 @@ func _update_atb_points() -> void:
 func _enable_player_actions() -> void:
 	waiting_for_player_action = true
 	attack_button.disabled = false
+	attack_button.grab_focus()
 
 	var has_small_potion := (
 		player_data != null
@@ -143,6 +144,9 @@ func _finish_player_action() -> void:
 	attack_button.disabled = true
 	item_button.disabled = true
 	_update_atb_points()
+
+	attack_button.release_focus()
+	item_button.release_focus()
 
 func setup(
 	player: Player,
@@ -219,6 +223,7 @@ func _end_battle_victory() -> void:
 	item_button.visible = false
 	result_button.text = "Continue"
 	result_button.visible = true
+	result_button.grab_focus()
 
 
 func _end_battle_defeated() -> void:
@@ -234,6 +239,7 @@ func _end_battle_defeated() -> void:
 	item_button.visible = false
 	result_button.text = "Retry"
 	result_button.visible = true
+	result_button.grab_focus()
 
 func _on_result_button_pressed() -> void:
 	if player_won:
