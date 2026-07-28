@@ -50,6 +50,8 @@ var total_spd: float:
 		return base_spd
 
 @export var learned_skills: Array[SkillData] = []
+@export var display_name: String = "TooTwo"
+@export var portrait: Texture2D
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_moving:

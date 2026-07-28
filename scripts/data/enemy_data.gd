@@ -12,3 +12,4 @@ extends Resource
 @export var spd: float = 10.0
 @export var experience_reward: int = 0
 @export var gold_reward: int = 0
+@export var portrait: Texture2D

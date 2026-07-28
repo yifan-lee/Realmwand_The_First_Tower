@@ -6,12 +6,17 @@
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_8y416"]
 [ext_resource type="Resource" uid="uid://rq8yovmh8ihu" path="res://resources/skills/power_strike.tres" id="4_7860b"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_player_portrait"]
+atlas = ExtResource("2_ru62r")
+region = Rect2(0, 0, 32, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
 size = Vector2(24, 24)
 
 [node name="Player" type="CharacterBody2D" unique_id=1231103014 groups=["player"]]
 script = ExtResource("1_ru62r")
 learned_skills = Array[ExtResource("2_oomub")]([ExtResource("3_8y416"), ExtResource("4_7860b")])
+portrait = SubResource("AtlasTexture_player_portrait")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1997796568]
 texture_filter = 1

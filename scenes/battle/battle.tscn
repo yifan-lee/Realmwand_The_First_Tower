@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqi75peflxqfy" path="res://scripts/battle.gd" id="1_7gynk"]
 [ext_resource type="Texture2D" uid="uid://bvtr3eli4t2ss" path="res://assets/sprites/gameplay_sprites_32.png" id="2_ffvsa"]
+[ext_resource type="PackedScene" uid="uid://4sb7s3m75aw5" path="res://scenes/ui/combatant_status_panel.tscn" id="3_0yh6x"]
 [ext_resource type="PackedScene" uid="uid://bk2c7nmscq15o" path="res://scenes/ui/skill_menu.tscn" id="3_xd4uy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7gynk"]
@@ -13,6 +14,7 @@ atlas = ExtResource("2_ffvsa")
 region = Rect2(0, 32, 32, 32)
 
 [node name="Battle" type="Control" unique_id=549339133]
+texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
 offset_right = 640.0
@@ -31,119 +33,103 @@ color = Color(0.19434929, 0.19434926, 0.19434926, 1)
 [node name="SharedATB" type="Control" parent="." unique_id=1457893546]
 anchors_preset = 0
 offset_left = 160.0
-offset_top = 40.0
+offset_top = 36.0
 offset_right = 480.0
-offset_bottom = 112.0
+offset_bottom = 118.0
+
+[node name="ATBLabel" type="Label" parent="SharedATB"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 15
+text = "ATB"
+horizontal_alignment = 1
 
 [node name="Track" type="ProgressBar" parent="SharedATB" unique_id=632552647]
 layout_mode = 0
 offset_left = 12.0
-offset_top = 32.0
+offset_top = 48.0
 offset_right = 308.0
-offset_bottom = 40.0
+offset_bottom = 58.0
 show_percentage = false
 
 [node name="PlayerPoint" type="TextureRect" parent="SharedATB" unique_id=757166207]
 texture_filter = 1
 layout_mode = 0
-offset_top = 8.0
+offset_top = 58.0
 offset_right = 24.0
-offset_bottom = 32.0
+offset_bottom = 82.0
 texture = SubResource("AtlasTexture_7gynk")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="EnemyPoint" type="TextureRect" parent="SharedATB" unique_id=1879707769]
 layout_mode = 0
-offset_top = -8.0
+offset_top = 22.0
 offset_right = 24.0
-offset_bottom = 16.0
+offset_bottom = 46.0
 texture = SubResource("AtlasTexture_ffvsa")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnemyPanel" type="PanelContainer" parent="." unique_id=723663111]
+[node name="EnemyStatusPanel" parent="." unique_id=1501288195 instance=ExtResource("3_0yh6x")]
 layout_mode = 0
-offset_left = 400.0
-offset_top = 50.0
-offset_right = 443.0
-offset_bottom = 112.0
+offset_left = 436.0
+offset_top = 128.0
+offset_right = 624.0
+offset_bottom = 344.0
 
-[node name="EnemyInfo" type="VBoxContainer" parent="EnemyPanel" unique_id=1691214919]
-layout_mode = 2
-
-[node name="EnemyName" type="Label" parent="EnemyPanel/EnemyInfo" unique_id=1612511414]
-layout_mode = 2
-text = "Slime"
-
-[node name="EnemyHP" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=1590713710]
-layout_mode = 2
-value = 100.0
-show_percentage = false
-
-[node name="EnemyMP" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=262379230]
-layout_mode = 2
-show_percentage = false
-
-[node name="PlayerPanel" type="PanelContainer" parent="." unique_id=1750587645]
+[node name="PlayerStatusPanel" parent="." unique_id=1198063999 instance=ExtResource("3_0yh6x")]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 190.0
-offset_right = 80.0
-offset_bottom = 275.0
-
-[node name="PlayerInfo" type="VBoxContainer" parent="PlayerPanel" unique_id=785357023]
-layout_mode = 2
-
-[node name="PlayerName" type="Label" parent="PlayerPanel/PlayerInfo" unique_id=906685808]
-layout_mode = 2
-text = "Hero"
-
-[node name="PlayerHP" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1734631920]
-layout_mode = 2
-value = 100.0
-show_percentage = false
-
-[node name="PlayerMP" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1280584688]
-layout_mode = 2
-value = 100.0
-show_percentage = false
+offset_left = 16.0
+offset_top = 128.0
+offset_right = 204.0
+offset_bottom = 344.0
 
 [node name="ActionPanel" type="PanelContainer" parent="." unique_id=2025652640]
 layout_mode = 0
-offset_left = 360.0
-offset_top = 240.0
-offset_right = 466.0
-offset_bottom = 325.0
+offset_left = 242.0
+offset_top = 286.0
+offset_right = 398.0
+offset_bottom = 340.0
 
 [node name="Actions" type="HBoxContainer" parent="ActionPanel" unique_id=2028659940]
 layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
 
 [node name="AttackButton" type="Button" parent="ActionPanel/Actions" unique_id=355636496]
+custom_minimum_size = Vector2(70, 36)
 layout_mode = 2
 text = "Attack"
 
 [node name="ItemButton" type="Button" parent="ActionPanel/Actions" unique_id=328725931]
+custom_minimum_size = Vector2(62, 36)
 layout_mode = 2
 disabled = true
 text = "Item"
 
 [node name="ResultButton" type="Button" parent="ActionPanel/Actions" unique_id=2075569573]
 visible = false
+custom_minimum_size = Vector2(132, 36)
 layout_mode = 2
 text = "Continue"
 
 [node name="SkillMenu" parent="." unique_id=1585392262 instance=ExtResource("3_xd4uy")]
 layout_mode = 0
-offset_left = 360.0
-offset_top = 240.0
-offset_right = 600.0
-offset_bottom = 400.0
+offset_left = 230.0
+offset_top = 134.0
+offset_right = 410.0
+offset_bottom = 338.0
 
 [node name="BattleMessage" type="Label" parent="." unique_id=1930228769]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 159.0
-offset_bottom = 43.0
+offset_left = 120.0
+offset_top = 8.0
+offset_right = 520.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 16
 text = "A slime appeared!"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
