@@ -15,6 +15,18 @@ extends Node2D
 	$WorldEnemy2,
 ]
 @onready var battle_layer: CanvasLayer = $BattleLayer
+@onready var level_label: Label = (
+	$UI/StatsPanel/Stat/LevelLabel
+)
+@onready var health_label: Label = (
+	$UI/StatsPanel/Stat/HealthLabel
+)
+@onready var experience_label: Label = (
+	$UI/StatsPanel/Stat/ExperienceLabel
+)
+@onready var gold_label: Label = (
+	$UI/StatsPanel/Stat/GoldLabel
+)
 
 const CORRECT_SEQUENCE: Array[int] = [2, 1, 3]
 const BATTLE_SCENE: PackedScene = preload(
@@ -39,6 +51,7 @@ func _ready() -> void:
 	player.rewards_received.connect(_on_rewards_received)
 	player.leveled_up.connect(_on_player_leveled_up)
 	player.weapon_equipped.connect(_on_weapon_equipped)
+	_update_player_hud()
 
 
 func _on_player_item_added(item_name: String) -> void:
@@ -124,6 +137,7 @@ func _on_battle_finished(
 		player.set_process_unhandled_input(true)
 	else:
 		player.restore_full_health()
+		_update_player_hud()
 		await get_tree().process_frame
 		_start_battle()
 
@@ -136,10 +150,12 @@ func _on_rewards_received(
 		% [experience_gained, gold_gained]
 	)
 	pickup_message_timer.start()
+	_update_player_hud()
 
 func _on_player_leveled_up(new_level: int) -> void:
 	pickup_message.text = "Level Up! Level %d" % new_level
 	pickup_message_timer.start()
+	_update_player_hud()
 
 func _on_weapon_equipped(
 	weapon_name: String,
@@ -150,3 +166,24 @@ func _on_weapon_equipped(
 		% [weapon_name, total_attack_power]
 	)
 	pickup_message_timer.start()
+
+func _update_player_hud() -> void:
+	level_label.text = "Level: %d" % player.level
+
+	health_label.text = (
+		"HP: %d / %d"
+		% [
+			player.current_health,
+			player.max_health,
+		]
+	)
+
+	experience_label.text = (
+		"EXP: %d / %d"
+		% [
+			player.experience,
+			player.experience_to_next_level,
+		]
+	)
+
+	gold_label.text = "Gold: %d" % player.gold

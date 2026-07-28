@@ -184,7 +184,7 @@ func _on_item_button_pressed() -> void:
 	if player_data == null:
 		return
 
-	if player_data.current_health >= player_data.max_value:
+	if player_data.current_health >= player_data.max_health:
 		return
 
 	var used_item := player_data.consume_item(
