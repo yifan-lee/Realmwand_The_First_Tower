@@ -6,6 +6,9 @@
 script = ExtResource("1_6pnpc")
 id = &"slime"
 display_name = "Slime"
-attack_damage = 50
+max_hp = 40.0
+cur_hp = 40.0
+max_mp = 10.0
+cur_mp = 10.0
 experience_reward = 40
 gold_reward = 1

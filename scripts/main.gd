@@ -11,7 +11,7 @@ extends Node2D
 @onready var door: Door = $Door
 @onready var exit_stairs: ExitStairs = $ExitStairs
 @onready var world_enemies: Array[WorldEnemy] = [
-	$WorldEnemy1,
+	$Slime,
 	$WorldEnemy2,
 ]
 @onready var battle_layer: CanvasLayer = $BattleLayer
@@ -173,8 +173,8 @@ func _update_player_hud() -> void:
 	health_label.text = (
 		"HP: %d / %d"
 		% [
-			player.current_health,
-			player.max_health,
+			player.current_hp,
+			player.max_hp,
 		]
 	)
 

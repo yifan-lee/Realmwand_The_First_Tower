@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://bdjya4pl3jx5m"]
 
 [ext_resource type="Script" uid="uid://bqi75peflxqfy" path="res://scripts/battle.gd" id="1_7gynk"]
+[ext_resource type="Texture2D" uid="uid://bvtr3eli4t2ss" path="res://assets/sprites/gameplay_sprites_32.png" id="2_ffvsa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7gynk"]
+atlas = ExtResource("2_ffvsa")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffvsa"]
+atlas = ExtResource("2_ffvsa")
+region = Rect2(0, 32, 32, 32)
 
 [node name="Battle" type="Control" unique_id=549339133]
 layout_mode = 3
@@ -17,6 +26,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.19434929, 0.19434926, 0.19434926, 1)
+
+[node name="SharedATB" type="Control" parent="." unique_id=1457893546]
+anchors_preset = 0
+offset_left = 160.0
+offset_top = 40.0
+offset_right = 480.0
+offset_bottom = 112.0
+
+[node name="Track" type="ProgressBar" parent="SharedATB" unique_id=632552647]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 32.0
+offset_right = 308.0
+offset_bottom = 40.0
+show_percentage = false
+
+[node name="PlayerPoint" type="TextureRect" parent="SharedATB" unique_id=757166207]
+texture_filter = 1
+layout_mode = 0
+offset_top = 8.0
+offset_right = 24.0
+offset_bottom = 32.0
+texture = SubResource("AtlasTexture_7gynk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnemyPoint" type="TextureRect" parent="SharedATB" unique_id=1879707769]
+layout_mode = 0
+offset_top = -8.0
+offset_right = 24.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_ffvsa")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="EnemyPanel" type="PanelContainer" parent="." unique_id=723663111]
 layout_mode = 0
@@ -35,8 +78,9 @@ text = "Slime"
 [node name="EnemyHP" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=1590713710]
 layout_mode = 2
 value = 100.0
+show_percentage = false
 
-[node name="EnemyATB" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=316025293]
+[node name="EnemyMP" type="ProgressBar" parent="EnemyPanel/EnemyInfo" unique_id=262379230]
 layout_mode = 2
 show_percentage = false
 
@@ -57,9 +101,11 @@ text = "Hero"
 [node name="PlayerHP" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1734631920]
 layout_mode = 2
 value = 100.0
+show_percentage = false
 
-[node name="PlayerATB" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1280584688]
+[node name="PlayerMP" type="ProgressBar" parent="PlayerPanel/PlayerInfo" unique_id=1280584688]
 layout_mode = 2
+value = 100.0
 show_percentage = false
 
 [node name="ActionPanel" type="PanelContainer" parent="." unique_id=2025652640]

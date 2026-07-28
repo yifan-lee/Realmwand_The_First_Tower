@@ -10,11 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="6_tefeu"]
 [ext_resource type="Resource" uid="uid://dpsu2l7g283fl" path="res://resources/items/sword.tres" id="7_trceg"]
 [ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/exit_stairs.tscn" id="8_tipki"]
-[ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/world_enemy.tscn" id="9_85g3d"]
+[ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/slime.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dpvwubclw3iww" path="res://scenes/battle_layer.tscn" id="10_choun"]
 [ext_resource type="Resource" uid="uid://c04hib5kth66g" path="res://resources/enemies/slime.tres" id="12_trceg"]
 
 [node name="Main" type="Node2D" unique_id=1557596140]
+texture_filter = 1
 script = ExtResource("1_tbgi4")
 
 [node name="Map" type="Node2D" parent="." unique_id=456509750]
@@ -22,25 +23,22 @@ position = Vector2(-16, -16)
 
 [node name="Ground" type="TileMapLayer" parent="Map" unique_id=1445315833]
 texture_filter = 1
-tile_map_data = PackedByteArray("AAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAPz/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPn/AAAAAAAAAAABAPn/AAAAAAAAAAACAPn/AAAAAAAAAAADAPn/AAAAAAAAAAAEAPn/AAAAAAAAAAABAPr/AAAAAAAAAAACAPr/AAAAAAAAAAADAPr/AAAAAAAAAAAEAPr/AAAAAAAAAAABAPv/AAAAAAAAAAACAPv/AAAAAAAAAAADAPv/AAAAAAAAAAAEAPv/AAAAAAAAAAABAPz/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAACAPf/AAAAAAAAAAACAPb/AAAAAAAAAAACAPX/AAAAAAAAAAACAPT/AAAAAAAAAAADAPT/AAAAAAAAAAAEAPT/AAAAAAAAAAAFAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAGAPH/AAAAAAAAAAAGAPL/AAAAAAAAAAAGAPP/AAAAAAAAAAAHAPH/AAAAAAAAAAAIAPH/AAAAAAAAAAAJAPH/AAAAAAAAAAABAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD///T/AAAAAAAAAAD+//T/AAAAAAAAAAD+//P/AAAAAAAAAAD+//L/AAAAAAAAAAD+//H/AAAAAAAAAAD9//H/AAAAAAAAAAD8//H/AAAAAAAAAAD7//H/AAAAAAAAAAA=")
 tile_set = ExtResource("2_a8y0u")
 
 [node name="Walls" type="TileMapLayer" parent="Map" unique_id=1749324428]
-tile_map_data = PackedByteArray("AAACAAEAAAAAAAEAAAADAAEAAAAAAAEAAAAEAAEAAAAAAAEAAAAFAAEAAAAAAAEAAAAGAAEAAAAAAAEAAAAHAAEAAAACAAEAAFAHAAIAAAAAAAEAAFAHAAMAAAAAAAEAAFAHAAQAAAAAAAEAAFABAAQAAAAAAAEAAGABAAMAAAAAAAEAAGABAAIAAAAAAAEAAGABAAUAAAACAAEAAGACAAUAAAAAAAEAADADAAUAAAAAAAEAADAFAAUAAAAAAAEAADAGAAUAAAAAAAEAADABAAEAAAACAAEAAAAHAAUAAAACAAEAADA=")
+tile_map_data = PackedByteArray("AAD///3/AAAAAAEAAAAAAP3/AAAAAAEAAAABAP3/AAAAAAEAAAACAP3/AAAAAAEAAAADAP3/AAAAAAEAAAAEAP3/AAAAAAEAAAAFAP3/AAAAAAEAAAAFAPz/AAAAAAEAAAAFAPv/AAAAAAEAAAAFAPr/AAAAAAEAAAAFAPn/AAAAAAEAAAAFAPj/AAAAAAEAAAAEAPj/AAAAAAEAAAADAPj/AAAAAAEAAAABAPj/AAAAAAEAAAAAAPj/AAAAAAEAAAD///j/AAAAAAEAAAD///n/AAAAAAEAAAD///r/AAAAAAEAAAD///v/AAAAAAEAAAD///z/AAAAAAEAAAABAPf/AAAAAAEAAAABAPb/AAAAAAEAAAABAPX/AAAAAAEAAAADAPX/AAAAAAEAAAADAPb/AAAAAAEAAAADAPf/AAAAAAEAAAAEAPX/AAAAAAEAAAAFAPX/AAAAAAEAAAAGAPX/AAAAAAEAAAAHAPX/AAAAAAEAAAAHAPT/AAAAAAEAAAAHAPP/AAAAAAEAAAAHAPL/AAAAAAEAAAAIAPL/AAAAAAEAAAAJAPL/AAAAAAEAAAAKAPL/AAAAAAEAAAAKAPH/AAAAAAEAAAAKAPD/AAAAAAEAAAAJAPD/AAAAAAEAAAAIAPD/AAAAAAEAAAAHAPD/AAAAAAEAAAAGAPD/AAAAAAEAAAAFAPD/AAAAAAEAAAAFAPH/AAAAAAEAAAAFAPL/AAAAAAEAAAAFAPP/AAAAAAEAAAAEAPP/AAAAAAEAAAADAPP/AAAAAAEAAAACAPP/AAAAAAEAAAABAPP/AAAAAAEAAAAAAPP/AAAAAAEAAAD///P/AAAAAAEAAAD///L/AAAAAAEAAAD///H/AAAAAAEAAAD///D/AAAAAAEAAAD+//D/AAAAAAEAAAD9//D/AAAAAAEAAAD8//D/AAAAAAEAAAD7//D/AAAAAAEAAAD6//D/AAAAAAEAAAD6//H/AAAAAAEAAAD6//L/AAAAAAEAAAD7//L/AAAAAAEAAAD8//L/AAAAAAEAAAD9//L/AAAAAAEAAAD9//P/AAAAAAEAAAD9//T/AAAAAAEAAAD9//X/AAAAAAEAAAD+//X/AAAAAAEAAAD///X/AAAAAAEAAAAAAPX/AAAAAAEAAAAAAPb/AAAAAAEAAAAAAPf/AAAAAAEAAAA=")
 tile_set = ExtResource("2_a8y0u")
 
 [node name="Door" parent="." unique_id=2030626556 instance=ExtResource("4_o6xl0")]
-position = Vector2(128, 160)
 
 [node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
-position = Vector2(96, 96)
+position = Vector2(0, -128)
 
 [node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
-position = Vector2(128, 128)
 item_data = ExtResource("6_eb6dy")
 
 [node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
-position = Vector2(96, 128)
 item_data = ExtResource("7_trceg")
 
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
@@ -48,26 +46,21 @@ offset = Vector2(16, 16)
 transform = Transform2D(1, 0, 0, 1, 16, 16)
 
 [node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
-position = Vector2(224, 96)
 switch_id = 1
 
 [node name="Switch2" parent="." unique_id=1036974647 instance=ExtResource("6_tefeu")]
-position = Vector2(128, 32)
 switch_id = 2
 
 [node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
-position = Vector2(96, 32)
 switch_id = 3
 
 [node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
-position = Vector2(128, 224)
 
-[node name="WorldEnemy1" parent="." unique_id=1359354295 instance=ExtResource("9_85g3d")]
-position = Vector2(128, 96)
+[node name="Slime" parent="." unique_id=1359354295 instance=ExtResource("9_85g3d")]
+position = Vector2(64, -224)
 enemy_data = ExtResource("12_trceg")
 
 [node name="WorldEnemy2" parent="." unique_id=1395840544 instance=ExtResource("9_85g3d")]
-position = Vector2(128, 192)
 enemy_data = ExtResource("12_trceg")
 
 [node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]

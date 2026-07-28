@@ -9,7 +9,7 @@ signal rewards_received(
 signal leveled_up(new_level: int)
 signal weapon_equipped(
 	weapon_name: String,
-	total_attack_power: int
+	total_total_atk: int
 )
 
 @onready var interaction_ray: RayCast2D = $InteractionRay
@@ -25,15 +25,29 @@ var experience: int = 0
 var gold: int = 0
 var level: int = 1
 var experience_to_next_level: int = BASE_EXPERIENCE_REQUIREMENT
-var max_health: int = 100
-var current_health: int = 100
-var base_attack_power: int = 50
-var equipment_attack_bonus: int = 0
+var max_hp: float = 200.0
+var current_hp: float = 200.0
+var max_mp: float = 100.0
+var current_mp: float = 100.0
+var base_atk: float = 20.0
+var base_def: float = 20.0
+var base_spd: float = 20.0
+var equipment_atk_bonus: float = 0.0
+var equipment_def_bonus: float = 0.0
+var equipment_spd_bonus: float = 0.0
 var equipped_weapon_name: String = ""
 
-var attack_power: int:
+var total_atk: float:
 	get:
-		return base_attack_power + equipment_attack_bonus
+		return base_atk
+
+var total_def: float:
+	get:
+		return base_def
+
+var total_spd: float:
+	get:
+		return base_spd
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_moving:
@@ -90,15 +104,15 @@ func equip_weapon(
 	attack_bonus: int
 ) -> void:
 	equipped_weapon_name = weapon_name
-	equipment_attack_bonus = attack_bonus
+	equipment_atk_bonus = attack_bonus
 
 	weapon_equipped.emit(
 		weapon_name,
-		attack_power
+		total_atk
 	)
 
 	print("Equipped: ", equipped_weapon_name)
-	print("Attack power: ", attack_power)
+	print("Attack power: ", total_atk)
 
 func try_interact() -> void:
 	interaction_ray.force_raycast_update()
@@ -132,9 +146,9 @@ func _check_for_level_up() -> void:
 		experience -= experience_to_next_level
 		level += 1
 
-		max_health += 10
-		current_health += 10
-		base_attack_power += 5
+		max_hp += 10
+		current_hp += 10
+		base_atk += 5
 
 		experience_to_next_level = (
 			BASE_EXPERIENCE_REQUIREMENT * level
@@ -143,8 +157,8 @@ func _check_for_level_up() -> void:
 		leveled_up.emit(level)
 
 		print("Level up! Level: ", level)
-		print("Max health: ", max_health)
-		print("Attack power: ", attack_power)
+		print("Max health: ", max_hp)
+		print("Attack power: ", total_atk)
 
 func find_item(item_id: StringName) -> ItemData:
 	for item in inventory:
@@ -167,18 +181,18 @@ func consume_item(item_id: StringName) -> ItemData:
 	return null
 
 func take_damage(damage: int) -> void:
-	current_health = max(
-		current_health - damage,
+	current_hp = max(
+		current_hp - damage,
 		0
 	)
 
 
 func heal(amount: int) -> void:
-	current_health = min(
-		current_health + amount,
-		max_health
+	current_hp = min(
+		current_hp + amount,
+		max_hp
 	)
 
 
 func restore_full_health() -> void:
-	current_health = max_health
+	current_hp = max_hp
