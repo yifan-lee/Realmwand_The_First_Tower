@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://cgtpywfdgxmdk"]
+[gd_scene format=4 uid="uid://cgtpywfdgxmdk"]
 
 [ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cli46ma0bo83n" path="res://scripts/main.gd" id="1_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://ch4mt231neydh" path="res://scenes/test_wall.tscn" id="2_0wfyh"]
+[ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="4_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://km2p83ut3fws" path="res://scenes/canvas_layer.tscn" id="5_tefeu"]
@@ -17,46 +17,23 @@
 [node name="Main" type="Node2D" unique_id=1557596140]
 script = ExtResource("1_tbgi4")
 
+[node name="Map" type="Node2D" parent="." unique_id=456509750]
+position = Vector2(-16, -16)
+
+[node name="Ground" type="TileMapLayer" parent="Map" unique_id=1445315833]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAA=")
+tile_set = ExtResource("2_a8y0u")
+
+[node name="Walls" type="TileMapLayer" parent="Map" unique_id=1749324428]
+tile_map_data = PackedByteArray("AAACAAEAAAAAAAEAAAADAAEAAAAAAAEAAAAEAAEAAAAAAAEAAAAFAAEAAAAAAAEAAAAGAAEAAAAAAAEAAAAHAAEAAAACAAEAAFAHAAIAAAAAAAEAAFAHAAMAAAAAAAEAAFAHAAQAAAAAAAEAAFABAAQAAAAAAAEAAGABAAMAAAAAAAEAAGABAAIAAAAAAAEAAGABAAUAAAACAAEAAGACAAUAAAAAAAEAADADAAUAAAAAAAEAADAFAAUAAAAAAAEAADAGAAUAAAAAAAEAADABAAEAAAACAAEAAAAHAAUAAAACAAEAADA=")
+tile_set = ExtResource("2_a8y0u")
+
 [node name="Door" parent="." unique_id=2030626556 instance=ExtResource("4_o6xl0")]
 position = Vector2(128, 160)
 
 [node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
 position = Vector2(96, 96)
-
-[node name="Walls" type="Node2D" parent="." unique_id=2085152469]
-
-[node name="TestWall1" parent="Walls" unique_id=305751969 instance=ExtResource("2_0wfyh")]
-position = Vector2(64, 64)
-
-[node name="TestWall2" parent="Walls" unique_id=1663871748 instance=ExtResource("2_0wfyh")]
-position = Vector2(96, 64)
-
-[node name="TestWall3" parent="Walls" unique_id=1190744521 instance=ExtResource("2_0wfyh")]
-position = Vector2(128, 64)
-
-[node name="TestWall4" parent="Walls" unique_id=1323613831 instance=ExtResource("2_0wfyh")]
-position = Vector2(160, 64)
-
-[node name="TestWall5" parent="Walls" unique_id=505822411 instance=ExtResource("2_0wfyh")]
-position = Vector2(160, 96)
-
-[node name="TestWall6" parent="Walls" unique_id=2098726956 instance=ExtResource("2_0wfyh")]
-position = Vector2(160, 128)
-
-[node name="TestWall7" parent="Walls" unique_id=103373365 instance=ExtResource("2_0wfyh")]
-position = Vector2(160, 160)
-
-[node name="TestWall9" parent="Walls" unique_id=1887080660 instance=ExtResource("2_0wfyh")]
-position = Vector2(96, 160)
-
-[node name="TestWall10" parent="Walls" unique_id=1342186614 instance=ExtResource("2_0wfyh")]
-position = Vector2(64, 160)
-
-[node name="TestWall11" parent="Walls" unique_id=692512058 instance=ExtResource("2_0wfyh")]
-position = Vector2(64, 128)
-
-[node name="TestWall12" parent="Walls" unique_id=588703254 instance=ExtResource("2_0wfyh")]
-position = Vector2(64, 96)
 
 [node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
 position = Vector2(128, 128)
@@ -71,15 +48,15 @@ offset = Vector2(16, 16)
 transform = Transform2D(1, 0, 0, 1, 16, 16)
 
 [node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
-position = Vector2(160, 96)
+position = Vector2(224, 96)
 switch_id = 1
 
 [node name="Switch2" parent="." unique_id=1036974647 instance=ExtResource("6_tefeu")]
-position = Vector2(128, 64)
+position = Vector2(128, 32)
 switch_id = 2
 
 [node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
-position = Vector2(96, 64)
+position = Vector2(96, 32)
 switch_id = 3
 
 [node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
