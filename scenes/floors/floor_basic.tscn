@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dim8ycailr35w"]
+
+[ext_resource type="Script" uid="uid://bfshwpbovbpod" path="res://scripts/floors/floor.gd" id="1_avmlg"]
+[ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="1_md8po"]
+[ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="2_5umwi"]
+[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/stairs.tscn" id="3_g4wsc"]
+[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="4_uecmb"]
+[ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="5_uecmb"]
+[ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/enemy_first.tscn" id="6_avmlg"]
+
+[node name="Floor" type="Node2D" unique_id=883540653]
+script = ExtResource("1_avmlg")
+
+[node name="Map" type="Node2D" parent="." unique_id=2026495523]
+
+[node name="Floor" type="TileMapLayer" parent="Map" unique_id=1505410644]
+tile_set = ExtResource("1_md8po")
+
+[node name="Ground" type="TileMapLayer" parent="Map" unique_id=311383277]
+tile_set = ExtResource("1_md8po")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=29649953]
+
+[node name="GameStart" type="Marker2D" parent="SpawnPoints" unique_id=1969312571]
+
+[node name="Interactables" type="Node2D" parent="." unique_id=946042389]
+
+[node name="Door" parent="Interactables" unique_id=2030626556 instance=ExtResource("2_5umwi")]
+
+[node name="ExitStairs" parent="Interactables" unique_id=394026365 instance=ExtResource("3_g4wsc")]
+
+[node name="Switch" parent="Interactables" unique_id=1354980094 instance=ExtResource("4_uecmb")]
+
+[node name="Pickups" type="Node2D" parent="." unique_id=1528281116]
+
+[node name="Pickup" parent="Pickups" unique_id=833630625 instance=ExtResource("5_uecmb")]
+
+[node name="Enemise" type="Node2D" parent="." unique_id=1876848085]
+
+[node name="EnemyFirst" parent="Enemise" unique_id=1359354295 instance=ExtResource("6_avmlg")]

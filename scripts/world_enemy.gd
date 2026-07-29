@@ -2,6 +2,7 @@ class_name WorldEnemy
 extends Area2D
 
 @export var enemy_data: EnemyData
+@export var persistent_id: StringName
 
 signal battle_requested(enemy: WorldEnemy)
 
@@ -28,3 +29,23 @@ func _on_body_entered(body: Node2D) -> void:
 	encounter_started = true
 	set_deferred("monitoring", false)
 	battle_requested.emit(self)
+
+
+func get_floor_state_id() -> StringName:
+	if persistent_id != &"":
+		return persistent_id
+
+	return StringName(name)
+
+
+func save_floor_state() -> Dictionary:
+	return {
+		"removed": false,
+	}
+
+
+func restore_floor_state(
+	_state: Dictionary
+) -> void:
+	encounter_started = false
+	set_deferred("monitoring", true)

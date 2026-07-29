@@ -1,3 +1,81 @@
 [mcp_servers.godot-mcp-pro]
 command = "node"
 args = ["./resources/godot-mcp-pro-server/server/build/index.js"]
+
+[mcp_servers.godot-mcp-pro.tools.get_project_info]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.open_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_tree]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.move_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.save_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.validate_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_editor_errors]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.execute_editor_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.clear_output]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_output_log]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.attach_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.delete_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.rename_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.update_property]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.reload_project]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_exports]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.edit_resource]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.play_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.wait_for_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.execute_game_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_action]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.stop_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_scene_tree]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.run_test_scenario]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_screenshot]
+approval_mode = "approve"

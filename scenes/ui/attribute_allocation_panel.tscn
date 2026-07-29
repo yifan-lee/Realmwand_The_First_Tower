@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://ca31fm2utob41"]
+
+[ext_resource type="Script" path="res://scripts/attribute_allocation_panel.gd" id="1_vnmsq"]
+
+[node name="AttributeAllocationPanel" type="Control" unique_id=1546074515]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vnmsq")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=162154632]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -360.0
+offset_right = 420.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=806956718]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 30
+
+[node name="Content" type="VBoxContainer" parent="Panel/Margin" unique_id=2101542880]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Panel/Margin/Content" unique_id=1170078317]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Attribute Allocation"
+horizontal_alignment = 1
+
+[node name="PointsLabel" type="Label" parent="Panel/Margin/Content" unique_id=1313125452]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Available Points: 0"
+horizontal_alignment = 1
+
+[node name="Rows" type="VBoxContainer" parent="Panel/Margin/Content" unique_id=1316623704]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="HPRow" type="HBoxContainer" parent="Panel/Margin/Content/Rows" unique_id=1059416657]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NameLabel" type="Label" parent="Panel/Margin/Content/Rows/HPRow" unique_id=433112983]
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "HP  (+10)"
+
+[node name="ValueLabel" type="Label" parent="Panel/Margin/Content/Rows/HPRow" unique_id=521366720]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "200 / 200"
+vertical_alignment = 1
+
+[node name="AddButton" type="Button" parent="Panel/Margin/Content/Rows/HPRow" unique_id=1858692571]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "+10 HP"
+
+[node name="MPRow" type="HBoxContainer" parent="Panel/Margin/Content/Rows" unique_id=1978946556]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NameLabel" type="Label" parent="Panel/Margin/Content/Rows/MPRow" unique_id=679936320]
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "MP  (+5)"
+
+[node name="ValueLabel" type="Label" parent="Panel/Margin/Content/Rows/MPRow" unique_id=381181374]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "100 / 100"
+vertical_alignment = 1
+
+[node name="AddButton" type="Button" parent="Panel/Margin/Content/Rows/MPRow" unique_id=1001154066]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "+5 MP"
+
+[node name="ATKRow" type="HBoxContainer" parent="Panel/Margin/Content/Rows" unique_id=879420681]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NameLabel" type="Label" parent="Panel/Margin/Content/Rows/ATKRow" unique_id=2024887044]
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "ATK  (+1)"
+
+[node name="ValueLabel" type="Label" parent="Panel/Margin/Content/Rows/ATKRow" unique_id=1791552693]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "20"
+vertical_alignment = 1
+
+[node name="AddButton" type="Button" parent="Panel/Margin/Content/Rows/ATKRow" unique_id=1746366618]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "+1 ATK"
+
+[node name="DEFRow" type="HBoxContainer" parent="Panel/Margin/Content/Rows" unique_id=2121775439]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NameLabel" type="Label" parent="Panel/Margin/Content/Rows/DEFRow" unique_id=234018546]
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "DEF  (+2)"
+
+[node name="ValueLabel" type="Label" parent="Panel/Margin/Content/Rows/DEFRow" unique_id=507617365]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "20"
+vertical_alignment = 1
+
+[node name="AddButton" type="Button" parent="Panel/Margin/Content/Rows/DEFRow" unique_id=2090014354]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "+2 DEF"
+
+[node name="SPDRow" type="HBoxContainer" parent="Panel/Margin/Content/Rows" unique_id=618097520]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NameLabel" type="Label" parent="Panel/Margin/Content/Rows/SPDRow" unique_id=253210363]
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "SPD  (+5)"
+
+[node name="ValueLabel" type="Label" parent="Panel/Margin/Content/Rows/SPDRow" unique_id=165383704]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "20"
+vertical_alignment = 1
+
+[node name="AddButton" type="Button" parent="Panel/Margin/Content/Rows/SPDRow" unique_id=1624636976]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "+5 SPD"
+
+[node name="HelpLabel" type="Label" parent="Panel/Margin/Content" unique_id=1518287576]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Each level automatically improves every attribute once, then grants 5 free points."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="Panel/Margin/Content" unique_id=488611083]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Back"

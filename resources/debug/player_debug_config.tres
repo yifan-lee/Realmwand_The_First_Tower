@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PlayerDebugConfig" format=3 uid="uid://wwwh131r3tlh"]
+
+[ext_resource type="Script" uid="uid://dsk841x7iejq4" path="res://scripts/data/item_data.gd" id="1_34enn"]
+[ext_resource type="Script" uid="uid://cy0j2jgwlo72s" path="res://scripts/data/player_debug_config.gd" id="2_toln0"]
+[ext_resource type="Script" uid="uid://d2iv5s27ccg1q" path="res://scripts/data/skill_data.gd" id="3_0goll"]
+
+[resource]
+script = ExtResource("2_toln0")

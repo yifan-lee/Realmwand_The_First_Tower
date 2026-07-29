@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FloorCatalog" format=3 uid="uid://b1n6teedmbiwp"]
+
+[ext_resource type="Script" uid="uid://bqvwutbcrd5ml" path="res://scripts/data/floor_definition.gd" id="1_dc3yw"]
+[ext_resource type="Script" uid="uid://y7jnphvp6req" path="res://scripts/data/floor_catalog.gd" id="2_467d0"]
+[ext_resource type="Resource" uid="uid://bl6p0nhtd3uov" path="res://resources/floors/floor_1.tres" id="2_jmepp"]
+[ext_resource type="Resource" uid="uid://b6qhrxgwduwol" path="res://resources/floors/floor_2.tres" id="3_o21hd"]
+
+[resource]
+script = ExtResource("2_467d0")
+floors = Array[ExtResource("1_dc3yw")]([ExtResource("2_jmepp"), ExtResource("3_o21hd")])

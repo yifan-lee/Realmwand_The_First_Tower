@@ -1,68 +1,26 @@
-[gd_scene format=4 uid="uid://cgtpywfdgxmdk"]
+[gd_scene format=3 uid="uid://cgtpywfdgxmdk"]
 
 [ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cli46ma0bo83n" path="res://scripts/main.gd" id="1_tbgi4"]
-[ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_a8y0u"]
-[ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="3_sugp2"]
-[ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="4_o6xl0"]
+[ext_resource type="Script" path="res://scripts/floors/floor_manager.gd" id="2_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://km2p83ut3fws" path="res://scenes/canvas_layer.tscn" id="5_tefeu"]
-[ext_resource type="Resource" uid="uid://c5ia12due8vcu" path="res://resources/items/small_potion.tres" id="6_eb6dy"]
-[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="6_tefeu"]
-[ext_resource type="Resource" uid="uid://dpsu2l7g283fl" path="res://resources/items/sword.tres" id="7_trceg"]
-[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/exit_stairs.tscn" id="8_tipki"]
-[ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/slime.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dpvwubclw3iww" path="res://scenes/battle_layer.tscn" id="10_choun"]
-[ext_resource type="Resource" uid="uid://c04hib5kth66g" path="res://resources/enemies/slime.tres" id="12_trceg"]
-[ext_resource type="PackedScene" path="res://scenes/ui/player_menu.tscn" id="13_player_menu"]
+[ext_resource type="PackedScene" uid="uid://ciiteyffy0o22" path="res://scenes/ui/player_menu.tscn" id="13_player_menu"]
+[ext_resource type="PackedScene" uid="uid://dq5eeoylp08n6" path="res://scenes/ui/level_up_allocation_panel.tscn" id="15_dp3eg"]
 
 [node name="Main" type="Node2D" unique_id=1557596140]
 texture_filter = 1
 script = ExtResource("1_tbgi4")
 
-[node name="Map" type="Node2D" parent="." unique_id=456509750]
-position = Vector2(-16, -16)
+[node name="FloorContainer" type="Node2D" parent="." unique_id=707772586]
 
-[node name="Ground" type="TileMapLayer" parent="Map" unique_id=1445315833]
-texture_filter = 1
-tile_map_data = PackedByteArray("AAAAAPz/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPn/AAAAAAAAAAABAPn/AAAAAAAAAAACAPn/AAAAAAAAAAADAPn/AAAAAAAAAAAEAPn/AAAAAAAAAAABAPr/AAAAAAAAAAACAPr/AAAAAAAAAAADAPr/AAAAAAAAAAAEAPr/AAAAAAAAAAABAPv/AAAAAAAAAAACAPv/AAAAAAAAAAADAPv/AAAAAAAAAAAEAPv/AAAAAAAAAAABAPz/AAAAAAAAAAACAPz/AAAAAAAAAAADAPz/AAAAAAAAAAAEAPz/AAAAAAAAAAACAPf/AAAAAAAAAAACAPb/AAAAAAAAAAACAPX/AAAAAAAAAAACAPT/AAAAAAAAAAADAPT/AAAAAAAAAAAEAPT/AAAAAAAAAAAFAPT/AAAAAAAAAAAGAPT/AAAAAAAAAAAGAPH/AAAAAAAAAAAGAPL/AAAAAAAAAAAGAPP/AAAAAAAAAAAHAPH/AAAAAAAAAAAIAPH/AAAAAAAAAAAJAPH/AAAAAAAAAAABAPT/AAAAAAAAAAAAAPT/AAAAAAAAAAD///T/AAAAAAAAAAD+//T/AAAAAAAAAAD+//P/AAAAAAAAAAD+//L/AAAAAAAAAAD+//H/AAAAAAAAAAD9//H/AAAAAAAAAAD8//H/AAAAAAAAAAD7//H/AAAAAAAAAAA=")
-tile_set = ExtResource("2_a8y0u")
-
-[node name="Walls" type="TileMapLayer" parent="Map" unique_id=1749324428]
-tile_map_data = PackedByteArray("AAD///3/AAAAAAEAAAAAAP3/AAAAAAEAAAABAP3/AAAAAAEAAAACAP3/AAAAAAEAAAADAP3/AAAAAAEAAAAEAP3/AAAAAAEAAAAFAP3/AAAAAAEAAAAFAPz/AAAAAAEAAAAFAPv/AAAAAAEAAAAFAPr/AAAAAAEAAAAFAPn/AAAAAAEAAAAFAPj/AAAAAAEAAAAEAPj/AAAAAAEAAAADAPj/AAAAAAEAAAABAPj/AAAAAAEAAAAAAPj/AAAAAAEAAAD///j/AAAAAAEAAAD///n/AAAAAAEAAAD///r/AAAAAAEAAAD///v/AAAAAAEAAAD///z/AAAAAAEAAAABAPf/AAAAAAEAAAABAPb/AAAAAAEAAAABAPX/AAAAAAEAAAADAPX/AAAAAAEAAAADAPb/AAAAAAEAAAADAPf/AAAAAAEAAAAEAPX/AAAAAAEAAAAFAPX/AAAAAAEAAAAGAPX/AAAAAAEAAAAHAPX/AAAAAAEAAAAHAPT/AAAAAAEAAAAHAPP/AAAAAAEAAAAHAPL/AAAAAAEAAAAIAPL/AAAAAAEAAAAJAPL/AAAAAAEAAAAKAPL/AAAAAAEAAAAKAPH/AAAAAAEAAAAKAPD/AAAAAAEAAAAJAPD/AAAAAAEAAAAIAPD/AAAAAAEAAAAHAPD/AAAAAAEAAAAGAPD/AAAAAAEAAAAFAPD/AAAAAAEAAAAFAPH/AAAAAAEAAAAFAPL/AAAAAAEAAAAFAPP/AAAAAAEAAAAEAPP/AAAAAAEAAAADAPP/AAAAAAEAAAACAPP/AAAAAAEAAAABAPP/AAAAAAEAAAAAAPP/AAAAAAEAAAD///P/AAAAAAEAAAD///L/AAAAAAEAAAD///H/AAAAAAEAAAD///D/AAAAAAEAAAD+//D/AAAAAAEAAAD9//D/AAAAAAEAAAD8//D/AAAAAAEAAAD7//D/AAAAAAEAAAD6//D/AAAAAAEAAAD6//H/AAAAAAEAAAD6//L/AAAAAAEAAAD7//L/AAAAAAEAAAD8//L/AAAAAAEAAAD9//L/AAAAAAEAAAD9//P/AAAAAAEAAAD9//T/AAAAAAEAAAD9//X/AAAAAAEAAAD+//X/AAAAAAEAAAD///X/AAAAAAEAAAAAAPX/AAAAAAEAAAAAAPb/AAAAAAEAAAAAAPf/AAAAAAEAAAA=")
-tile_set = ExtResource("2_a8y0u")
-
-[node name="Door" parent="." unique_id=2030626556 instance=ExtResource("4_o6xl0")]
+[node name="FloorManager" type="Node2D" parent="." unique_id=1998003023]
+script = ExtResource("2_o6xl0")
 
 [node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
 position = Vector2(0, -128)
 
-[node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
-position = Vector2(0, -160)
-item_data = ExtResource("6_eb6dy")
-
-[node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
-position = Vector2(0, -224)
-item_data = ExtResource("7_trceg")
-
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
-
-[node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
-switch_id = 1
-
-[node name="Switch2" parent="." unique_id=1036974647 instance=ExtResource("6_tefeu")]
-switch_id = 2
-
-[node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
-switch_id = 3
-
-[node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
-
-[node name="Slime" parent="." unique_id=1359354295 instance=ExtResource("9_85g3d")]
-position = Vector2(64, -224)
-enemy_data = ExtResource("12_trceg")
-
-[node name="WorldEnemy2" parent="." unique_id=1395840544 instance=ExtResource("9_85g3d")]
-enemy_data = ExtResource("12_trceg")
 
 [node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]
 
@@ -70,3 +28,5 @@ enemy_data = ExtResource("12_trceg")
 layer = 8
 
 [node name="PlayerMenu" parent="MenuLayer" unique_id=1226560284 instance=ExtResource("13_player_menu")]
+
+[node name="LevelUpAllocationPanel" parent="MenuLayer" unique_id=379999276 instance=ExtResource("15_dp3eg")]

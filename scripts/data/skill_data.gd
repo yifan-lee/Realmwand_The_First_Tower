@@ -10,6 +10,7 @@ enum TargetType {
 @export var display_name: String
 @export_multiline var description: String
 @export var icon: Texture2D
+@export_range(1, 99, 1) var unlock_level: int = 1
 
 @export_group("Usage")
 @export var mp_cost: float = 0.0

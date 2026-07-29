@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c04hib5kth66g"]
+
+[ext_resource type="Texture2D" uid="uid://c7f3oswiwswie" path="res://assets/portraits/slime_portrait.png" id="1_akgum"]
+[ext_resource type="Script" uid="uid://idl544nofh28" path="res://scripts/data/enemy_data.gd" id="2_1oap3"]
+
+[resource]
+script = ExtResource("2_1oap3")
+id = &"enemy_first"
+display_name = "Enemy First "
+max_hp = 40.0
+cur_hp = 40.0
+max_mp = 5.0
+cur_mp = 5.0
+atk = 7.0
+def = 3.0
+gold_reward = 1
+portrait = ExtResource("1_akgum")

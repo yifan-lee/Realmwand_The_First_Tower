@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FloorDefinition" format=3 uid="uid://b6qhrxgwduwol"]
+
+[ext_resource type="Script" uid="uid://bqvwutbcrd5ml" path="res://scripts/data/floor_definition.gd" id="1_300bc"]
+[ext_resource type="PackedScene" uid="uid://b4ekhbhq6buw7" path="res://scenes/floors/floor_2.tscn" id="1_jxk2p"]
+
+[resource]
+script = ExtResource("1_300bc")
+floor_id = &"floor_2"
+display_name = "Floor 2: 速度"
+scene = ExtResource("1_jxk2p")
+default_spawn_id = "FromFloor1Stairs"
+metadata/_custom_type_script = "uid://bqvwutbcrd5ml"

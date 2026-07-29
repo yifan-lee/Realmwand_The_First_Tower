@@ -489,7 +489,9 @@ func _on_result_button_pressed() -> void:
 	if player_won:
 		battle_finished.emit(
 			true,
-			enemy_data.experience_reward,
+			enemy_data.get_experience_reward(
+				BATTLE_BALANCE
+			),
 			enemy_data.gold_reward,
 		)
 	else:

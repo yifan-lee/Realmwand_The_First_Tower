@@ -8,5 +8,6 @@ script = ExtResource("2_mei1n")
 id = &"power_strike"
 display_name = "Power Strike"
 description = "A powerful strike."
+unlock_level = 2
 cooldown_seconds = 3.0
 skill_power = 40.0

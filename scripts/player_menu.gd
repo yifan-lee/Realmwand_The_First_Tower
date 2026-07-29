@@ -27,7 +27,6 @@ signal closed
 @onready var equipment_slots_panel: EquipmentSlotsPanel = (
 	$EquipmentSlotsPanel
 )
-
 var player_data: Player
 var pending_equipment: EquipmentData
 
@@ -196,9 +195,7 @@ func _on_system_button_focused() -> void:
 
 	var detail := SelectionDetailData.new()
 	detail.title = "System"
-	detail.description = (
-		"System options will be added here later."
-	)
+	detail.description = "System options will be added here later."
 	detail_panel.show_detail(detail)
 
 
