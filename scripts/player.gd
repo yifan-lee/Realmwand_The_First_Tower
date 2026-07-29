@@ -2,6 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 signal item_added(item_name: String)
+signal inventory_changed
 signal rewards_received(
 	experience_gained: int,
 	gold_gained: int
@@ -28,6 +29,7 @@ const BATTLE_BALANCE: BattleBalanceConfig = preload(
 )
 
 var is_moving: bool = false
+var last_stable_position: Vector2
 var inventory: Array[ItemData] = []
 var facing_direction: Vector2 = Vector2.DOWN
 var experience: int = 0
@@ -91,6 +93,7 @@ var total_spd: float:
 func _ready() -> void:
 	_learn_available_skills(false)
 	_apply_debug_config()
+	last_stable_position = global_position
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -122,6 +125,7 @@ func move_one_tile(direction: Vector2) -> void:
 	if test_move(global_transform, motion):
 		return
 	is_moving = true
+	last_stable_position = global_position
 
 	var target_position := position + motion
 	var tween := create_tween()
@@ -129,6 +133,7 @@ func move_one_tile(direction: Vector2) -> void:
 
 	await tween.finished
 	is_moving = false
+	last_stable_position = global_position
 
 
 func wait_for_current_movement() -> void:
@@ -136,11 +141,69 @@ func wait_for_current_movement() -> void:
 		await get_tree().process_frame
 
 
+func capture_battle_state() -> Dictionary:
+	return {
+		"current_hp": current_hp,
+		"current_mp": current_mp,
+		"inventory": inventory.duplicate(),
+		"equipment": equipment_manager.capture_state(),
+		"global_position": last_stable_position,
+		"facing_direction": facing_direction,
+	}
+
+
+func restore_battle_state(state: Dictionary) -> void:
+	current_hp = clampf(
+		float(state.get("current_hp", max_hp)),
+		0.0,
+		max_hp
+	)
+	current_mp = clampf(
+		float(state.get("current_mp", max_mp)),
+		0.0,
+		max_mp
+	)
+
+	inventory.clear()
+	var saved_inventory: Array = state.get(
+		"inventory",
+		[]
+	)
+
+	for item: ItemData in saved_inventory:
+		if item != null:
+			inventory.append(item)
+
+	var saved_equipment: Dictionary = state.get(
+		"equipment",
+		{}
+	)
+	equipment_manager.restore_state(saved_equipment)
+
+	global_position = state.get(
+		"global_position",
+		global_position
+	)
+	last_stable_position = global_position
+	facing_direction = state.get(
+		"facing_direction",
+		facing_direction
+	)
+	interaction_ray.target_position = (
+		facing_direction * GRID_SIZE
+	)
+	velocity = Vector2.ZERO
+	is_moving = false
+	inventory_changed.emit()
+	attributes_changed.emit()
+
+
 func add_item(
 	new_item: ItemData
 ) -> void:
 	inventory.append(new_item)
 	item_added.emit(new_item.display_name)
+	inventory_changed.emit()
 	print("Added item: ", new_item.display_name)
 	print("Inventory size: ", inventory.size())
 
@@ -171,6 +234,7 @@ func equip_item(
 	for displaced_item in displaced_items:
 		inventory.append(displaced_item)
 
+	inventory_changed.emit()
 	_emit_equipment_change(item)
 	return true
 
@@ -196,6 +260,7 @@ func unequip_item(
 		inventory.append(item)
 		current_hp = minf(current_hp, max_hp)
 		current_mp = minf(current_mp, max_mp)
+		inventory_changed.emit()
 		equipment_changed.emit(item.display_name, total_atk)
 
 	return item
@@ -476,6 +541,7 @@ func consume_item(item_id: StringName) -> ItemData:
 		var item := inventory[item_index]
 		if item.id == item_id:
 			inventory.remove_at(item_index)
+			inventory_changed.emit()
 			print("Consumed: ", item.display_name)
 			print("Inventory size: ", inventory.size())
 			return item

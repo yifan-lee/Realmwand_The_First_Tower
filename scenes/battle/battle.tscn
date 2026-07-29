@@ -116,13 +116,6 @@ theme_override_font_sizes/font_size = 34
 disabled = true
 text = "Inventory"
 
-[node name="ResultButton" type="Button" parent="ActionPanel/Actions" unique_id=2075569573]
-visible = false
-custom_minimum_size = Vector2(396, 108)
-layout_mode = 2
-theme_override_font_sizes/font_size = 34
-text = "Continue"
-
 [node name="SkillMenu" parent="." unique_id=1585392262 instance=ExtResource("3_xd4uy")]
 layout_mode = 0
 offset_left = 576.0
@@ -130,8 +123,7 @@ offset_top = 402.0
 offset_right = 996.0
 offset_bottom = 852.0
 
-[node name="InventoryMenu" parent="." instance=ExtResource("6_inventory")]
-custom_minimum_size = Vector2(516, 450)
+[node name="InventoryMenu" parent="." unique_id=1595462813 instance=ExtResource("6_inventory")]
 layout_mode = 0
 offset_left = 480.0
 offset_top = 402.0
@@ -157,9 +149,54 @@ offset_top = 402.0
 offset_right = 1440.0
 offset_bottom = 852.0
 
-[node name="EquipmentSlotPicker" parent="." instance=ExtResource("7_slot_picker")]
+[node name="EquipmentSlotPicker" parent="." unique_id=1479677596 instance=ExtResource("7_slot_picker")]
 layout_mode = 0
 offset_left = 720.0
 offset_top = 570.0
 offset_right = 1200.0
 offset_bottom = 810.0
+
+[node name="ResultCloseTimer" type="Timer" parent="." unique_id=123148]
+wait_time = 3.5
+one_shot = true
+
+[node name="ResultPanel" type="PanelContainer" parent="." unique_id=49143983]
+visible = false
+layout_mode = 0
+offset_left = 480.0
+offset_top = 288.0
+offset_right = 1440.0
+offset_bottom = 792.0
+
+[node name="MarginContainer" type="MarginContainer" parent="ResultPanel" unique_id=194668636]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 48
+
+[node name="Content" type="VBoxContainer" parent="ResultPanel/MarginContainer" unique_id=445344332]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="ResultPanel/MarginContainer/Content" unique_id=26777114]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Victory"
+horizontal_alignment = 1
+
+[node name="DetailLabel" type="Label" parent="ResultPanel/MarginContainer/Content" unique_id=1793080945]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 36
+text = "Rewards"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HintLabel" type="Label" parent="ResultPanel/MarginContainer/Content" unique_id=2101586810]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Press any key to continue"
+horizontal_alignment = 1

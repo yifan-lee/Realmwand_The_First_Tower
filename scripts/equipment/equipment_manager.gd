@@ -32,6 +32,19 @@ func get_item(slot: EquipmentSlot) -> EquipmentData:
 	return equipped_items.get(slot) as EquipmentData
 
 
+func capture_state() -> Dictionary:
+	return equipped_items.duplicate()
+
+
+func restore_state(state: Dictionary) -> void:
+	for slot: int in EquipmentSlot.values():
+		equipped_items[slot] = (
+			state.get(slot) as EquipmentData
+		)
+
+	equipment_changed.emit()
+
+
 func get_default_slot(item: EquipmentData) -> int:
 	if item == null:
 		return INVALID_SLOT

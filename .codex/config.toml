@@ -91,3 +91,27 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_scene_file_content]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.batch_add_nodes]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.create_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.setup_control]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.delete_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_scene_instance]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_auto_dismiss]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.assert_screen_text]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_test_report]
+approval_mode = "approve"

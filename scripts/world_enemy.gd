@@ -69,6 +69,21 @@ func save_floor_state() -> Dictionary:
 	}
 
 
+func capture_encounter_state() -> Dictionary:
+	return {
+		"global_position": global_position,
+	}
+
+
+func restore_encounter_state(state: Dictionary) -> void:
+	global_position = state.get(
+		"global_position",
+		global_position
+	)
+	encounter_started = false
+	set_deferred("monitoring", true)
+
+
 func restore_floor_state(
 	_state: Dictionary
 ) -> void:

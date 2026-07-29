@@ -9,17 +9,11 @@ extends Node2D
 @onready var level_up_allocation_panel: LevelUpAllocationPanel = (
 	$MenuLayer/LevelUpAllocationPanel
 )
-@onready var level_label: Label = (
-	$UI/StatsPanel/Stat/LevelLabel
+@onready var player_status_panel: CombatantStatusPanel = (
+	$UI/PlayerStatusPanel
 )
-@onready var health_label: Label = (
-	$UI/StatsPanel/Stat/HealthLabel
-)
-@onready var experience_label: Label = (
-	$UI/StatsPanel/Stat/ExperienceLabel
-)
-@onready var gold_label: Label = (
-	$UI/StatsPanel/Stat/GoldLabel
+@onready var tracked_inventory_hud: TrackedInventoryHud = (
+	$UI/TrackedInventoryHud
 )
 
 const BATTLE_SCENE: PackedScene = preload(
@@ -28,10 +22,13 @@ const BATTLE_SCENE: PackedScene = preload(
 
 var active_battle: Battle
 var active_enemy: WorldEnemy
+var player_encounter_state: Dictionary = {}
+var enemy_encounter_state: Dictionary = {}
 
 
 func _ready() -> void:
 	player.item_added.connect(_on_player_item_added)
+	player.inventory_changed.connect(_update_inventory_hud)
 	pickup_message_timer.timeout.connect(_on_pickup_message_timer_timeout)
 	floor_manager.battle_requested.connect(
 		_on_battle_requested
@@ -49,6 +46,7 @@ func _ready() -> void:
 		_on_level_up_allocation_completed
 	)
 	_update_player_hud()
+	_update_inventory_hud()
 	await floor_manager.initialize()
 
 
@@ -89,11 +87,18 @@ func _on_floor_changed(
 	pickup_message_timer.start()
 
 func _on_battle_requested(enemy: WorldEnemy) -> void:
-	if active_battle != null:
+	if active_battle != null or active_enemy != null:
 		return
 
 	active_enemy = enemy
+	player_encounter_state = (
+		player.capture_battle_state()
+	)
+	enemy_encounter_state = (
+		active_enemy.capture_encounter_state()
+	)
 	player.set_process_unhandled_input(false)
+	await player.wait_for_current_movement()
 	_start_battle()
 
 func _start_battle() -> void:
@@ -120,13 +125,26 @@ func _on_battle_finished(
 		)
 		active_enemy.queue_free()
 		active_enemy = null
+		_clear_encounter_state()
 		if not level_up_allocation_panel.visible:
 			player.set_process_unhandled_input(true)
 	else:
-		player.restore_full_health()
+		player.restore_battle_state(
+			player_encounter_state
+		)
+		active_enemy.restore_encounter_state(
+			enemy_encounter_state
+		)
+		active_enemy = null
+		_clear_encounter_state()
 		_update_player_hud()
-		await get_tree().process_frame
-		_start_battle()
+		await get_tree().physics_frame
+		player.set_process_unhandled_input(true)
+
+
+func _clear_encounter_state() -> void:
+	player_encounter_state.clear()
+	enemy_encounter_state.clear()
 
 func _on_rewards_received(
 	experience_gained: int,
@@ -177,28 +195,10 @@ func _on_equipment_changed(
 	_update_player_hud()
 
 func _update_player_hud() -> void:
-	level_label.text = (
-		"Level: %d    AP: %d"
-		% [
-			player.level,
-			player.unspent_attribute_points,
-		]
+	player_status_panel.set_data(
+		CombatantStatusViewData.from_player(player)
 	)
 
-	health_label.text = (
-		"HP: %d / %d"
-		% [
-			player.current_hp,
-			player.max_hp,
-		]
-	)
 
-	experience_label.text = (
-		"EXP: %d / %d"
-		% [
-			player.experience,
-			player.experience_to_next_level,
-		]
-	)
-
-	gold_label.text = "Gold: %d" % player.gold
+func _update_inventory_hud() -> void:
+	tracked_inventory_hud.set_inventory(player.inventory)

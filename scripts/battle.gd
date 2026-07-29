@@ -13,7 +13,6 @@ signal battle_finished(
 @onready var attack_button: Button = $ActionPanel/Actions/AttackButton
 @onready var battle_message: Label = $BattleMessage
 @onready var item_button: Button = $ActionPanel/Actions/ItemButton
-@onready var result_button: Button = $ActionPanel/Actions/ResultButton
 @onready var action_panel: PanelContainer = $ActionPanel
 @onready var skill_menu: SkillMenu = $SkillMenu
 @onready var inventory_menu: InventoryMenu = $InventoryMenu
@@ -28,6 +27,16 @@ signal battle_finished(
 )
 @onready var selection_detail_panel: SelectionDetailPanel = (
 	$SelectionDetailPanel
+)
+@onready var result_panel: PanelContainer = $ResultPanel
+@onready var result_title: Label = (
+	$ResultPanel/MarginContainer/Content/TitleLabel
+)
+@onready var result_detail: Label = (
+	$ResultPanel/MarginContainer/Content/DetailLabel
+)
+@onready var result_close_timer: Timer = (
+	$ResultCloseTimer
 )
 
 const BATTLE_BALANCE: BattleBalanceConfig = preload(
@@ -46,7 +55,8 @@ const ATB_MAX: float = 100.0
 var player_atb: float = 0.0
 var enemy_atb: float = 0.0
 
-var player_won: bool = false
+var result_pending: bool = false
+var result_victory: bool = false
 
 var enemy_current_hp: float
 var enemy_current_mp: float
@@ -76,7 +86,9 @@ func _ready() -> void:
 	item_button.focus_entered.connect(_on_item_button_focused)
 	item_button.mouse_entered.connect(_on_item_button_focused)
 	item_button.pressed.connect(_on_item_button_pressed)
-	result_button.pressed.connect(_on_result_button_pressed)
+	result_close_timer.timeout.connect(
+		_finish_battle_result
+	)
 
 	skill_menu.skill_selected.connect(
 		_on_skill_selected
@@ -122,6 +134,31 @@ func _ready() -> void:
 	equipment_slot_picker.cancelled.connect(
 		_on_equipment_slot_cancelled
 	)
+
+
+func _input(event: InputEvent) -> void:
+	if not result_pending:
+		return
+
+	var key_event := event as InputEventKey
+	var controller_event := (
+		event as InputEventJoypadButton
+	)
+	var pressed_key := (
+		key_event != null
+		and key_event.is_pressed()
+		and not key_event.is_echo()
+	)
+	var pressed_controller_button := (
+		controller_event != null
+		and controller_event.is_pressed()
+	)
+
+	if not pressed_key and not pressed_controller_button:
+		return
+
+	_finish_battle_result()
+	get_viewport().set_input_as_handled()
 
 
 func _process(delta: float) -> void:
@@ -445,48 +482,77 @@ func _enemy_attack() -> void:
 
 
 func _end_battle_victory() -> void:
-	battle_active = false
-	waiting_for_player_action = false
-	attack_button.disabled = true
-	player_atb = 0.0
-	enemy_atb = 0.0
-	_update_atb_points()
-	battle_message.text = (
-		"%s defeated!" 
-		% enemy_data.display_name
+	var experience_reward := (
+		enemy_data.get_experience_reward(
+			BATTLE_BALANCE
+		)
+	)
+	var gold_reward := enemy_data.gold_reward
+	var detail_text := (
+		"%s defeated!\n\nRewards\nEXP: %d\nGold: %d"
+		% [
+			enemy_data.display_name,
+			experience_reward,
+			gold_reward,
+		]
 	)
 
-	player_won = true
-	attack_button.visible = false
-	item_button.visible = false
-	result_button.text = "Continue"
-	result_button.visible = true
-	result_button.grab_focus()
-	skill_menu.close()
-	inventory_menu.close()
-	_clear_selection_preview()
+	_show_battle_result(
+		true,
+		"Victory",
+		detail_text
+	)
 
 
 func _end_battle_defeated() -> void:
+	_show_battle_result(
+		false,
+		"Defeat",
+		"Your party was defeated.\n\n"
+		+ "Battle changes will be restored."
+	)
+
+
+func _show_battle_result(
+	victory: bool,
+	title: String,
+	detail: String
+) -> void:
 	battle_active = false
 	waiting_for_player_action = false
+	result_pending = true
+	result_victory = victory
 	attack_button.disabled = true
+	item_button.disabled = true
 	player_atb = 0.0
 	enemy_atb = 0.0
 	_update_atb_points()
-	battle_message.text = "Hero defeated!"
-	player_won = false
-	attack_button.visible = false
-	item_button.visible = false
-	result_button.text = "Retry"
-	result_button.visible = true
-	result_button.grab_focus()
+
 	skill_menu.close()
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	action_panel.visible = false
+	$SharedATB.visible = false
+	player_status_panel.visible = false
+	enemy_status_panel.visible = false
+	selection_detail_panel.visible = false
+	battle_message.visible = false
 	_clear_selection_preview()
 
-func _on_result_button_pressed() -> void:
-	if player_won:
+	result_title.text = title
+	result_detail.text = detail
+	result_panel.visible = true
+	result_close_timer.start()
+
+
+func _finish_battle_result() -> void:
+	if not result_pending:
+		return
+
+	result_pending = false
+	result_close_timer.stop()
+
+	if result_victory:
 		battle_finished.emit(
 			true,
 			enemy_data.get_experience_reward(

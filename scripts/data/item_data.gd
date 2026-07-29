@@ -13,6 +13,9 @@ enum ItemType {
 @export var icon: Texture2D
 @export var item_type: ItemType
 
+@export_group("HUD")
+@export var show_count_in_hud: bool = false
+
 @export_group("Usage")
 @export var usable_in_battle: bool = true
 @export var consumed_on_use: bool = true

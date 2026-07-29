@@ -1,0 +1,78 @@
+{
+  "suite": "basic_regression",
+  "started_at": "2026-07-29T12:49:18-04:00",
+  "finished_at": "2026-07-29T12:49:40-04:00",
+  "project_root": "/Users/yifanli/Github/game/Realmwand_The_First_Tower",
+  "run_dir": "tmp/tests/run-20260729-124918",
+  "summary": {
+    "status": "failed",
+    "passed": 7,
+    "failed": 1,
+    "total": 8
+  },
+  "checks": [
+    {
+      "id": "BR-001",
+      "name": "Godot MCP Pro is reachable",
+      "status": "passed",
+      "details": "project info succeeded",
+      "evidence": {}
+    },
+    {
+      "id": "BR-002",
+      "name": "Project metadata is readable",
+      "status": "passed",
+      "details": "Realmwand_The_First_Tower / 4.7-stable (official) / uid://cgtpywfdgxmdk",
+      "evidence": {
+        "main_scene": "uid://cgtpywfdgxmdk"
+      }
+    },
+    {
+      "id": "BR-003",
+      "name": "Editor has no errors",
+      "status": "failed",
+      "details": "editor reported 1 error(s)",
+      "evidence": {}
+    },
+    {
+      "id": "BR-004",
+      "name": "Main scene starts",
+      "status": "passed",
+      "details": "started uid://cgtpywfdgxmdk",
+      "evidence": {}
+    },
+    {
+      "id": "BR-005",
+      "name": "Main scene screenshot is captured",
+      "status": "passed",
+      "details": "Saved screenshot to tmp/tests/run-20260729-124918/screenshots/main_scene.png",
+      "evidence": {
+        "path": "tmp/tests/run-20260729-124918/screenshots/main_scene.png",
+        "width": 1920,
+        "height": 1080,
+        "format": "png"
+      }
+    },
+    {
+      "id": "BR-006",
+      "name": "Runtime scene tree is readable",
+      "status": "passed",
+      "details": "root: Main",
+      "evidence": {}
+    },
+    {
+      "id": "BR-007",
+      "name": "MCP autoloads exist",
+      "status": "passed",
+      "details": "MCPGameInspector, MCPInputService, MCPScreenshot",
+      "evidence": {}
+    },
+    {
+      "id": "BR-008",
+      "name": "Scene stops cleanly",
+      "status": "passed",
+      "details": "stopped and 0 editor errors",
+      "evidence": {}
+    }
+  ]
+}
