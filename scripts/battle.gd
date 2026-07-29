@@ -491,7 +491,7 @@ func _end_battle_victory() -> void:
 	var detail_text := (
 		"%s defeated!\n\nRewards\nEXP: %d\nGold: %d"
 		% [
-			enemy_data.display_name,
+			enemy_data.display_name.strip_edges(),
 			experience_reward,
 			gold_reward,
 		]
