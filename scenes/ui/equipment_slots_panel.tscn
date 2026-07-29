@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/equipment_slots_panel.gd" id="1_slots"]
+
+[sub_resource type="Theme" id="Theme_slots"]
+default_font_size = 24
+
+[node name="EquipmentSlotsPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(360, 450)
+offset_right = 360.0
+offset_bottom = 450.0
+theme = SubResource("Theme_slots")
+script = ExtResource("1_slots")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Equipment Slots"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="MarginContainer/Content"]
+layout_mode = 2
+
+[node name="SlotGrid" type="GridContainer" parent="MarginContainer/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 10
+columns = 2

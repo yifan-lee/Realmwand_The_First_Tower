@@ -11,6 +11,10 @@ signal weapon_equipped(
 	weapon_name: String,
 	total_total_atk: int
 )
+signal equipment_changed(
+	equipment_name: String,
+	total_attack: float
+)
 
 @onready var interaction_ray: RayCast2D = $InteractionRay
 
@@ -25,29 +29,49 @@ var experience: int = 0
 var gold: int = 0
 var level: int = 1
 var experience_to_next_level: int = BASE_EXPERIENCE_REQUIREMENT
-var max_hp: float = 200.0
+var base_max_hp: float = 200.0
 var current_hp: float = 200.0
-var max_mp: float = 100.0
+var base_max_mp: float = 100.0
 var current_mp: float = 100.0
 var base_atk: float = 20.0
 var base_def: float = 20.0
 var base_spd: float = 20.0
-var equipment_atk_bonus: float = 0.0
-var equipment_def_bonus: float = 0.0
-var equipment_spd_bonus: float = 0.0
-var equipped_weapon_name: String = ""
+var equipment_manager := EquipmentManager.new()
+
+var max_hp: float:
+	get:
+		return (
+			base_max_hp
+			+ equipment_manager.get_total_bonus(&"max_hp")
+		)
+
+var max_mp: float:
+	get:
+		return (
+			base_max_mp
+			+ equipment_manager.get_total_bonus(&"max_mp")
+		)
 
 var total_atk: float:
 	get:
-		return base_atk + equipment_atk_bonus
+		return (
+			base_atk
+			+ equipment_manager.get_total_bonus(&"atk")
+		)
 
 var total_def: float:
 	get:
-		return base_def + equipment_def_bonus
+		return (
+			base_def
+			+ equipment_manager.get_total_bonus(&"def")
+		)
 
 var total_spd: float:
 	get:
-		return base_spd + equipment_spd_bonus
+		return (
+			base_spd
+			+ equipment_manager.get_total_bonus(&"spd")
+		)
 
 @export var learned_skills: Array[SkillData] = []
 @export var display_name: String = "TooTwo"
@@ -95,40 +119,64 @@ func add_item(
 ) -> void:
 	inventory.append(new_item)
 	item_added.emit(new_item.display_name)
-	if new_item.item_type == ItemData.ItemType.WEAPON:
-		equip_item(new_item)
 	print("Added item: ", new_item.display_name)
 	print("Inventory size: ", inventory.size())
 
-func equip_weapon(
-	weapon_name: String,
-	attack_bonus: int
-) -> void:
-	equipped_weapon_name = weapon_name
-	equipment_atk_bonus = attack_bonus
+func equip_item(
+	item: EquipmentData,
+	target_slot: int = EquipmentManager.INVALID_SLOT
+) -> bool:
+	if item == null:
+		return false
 
-	weapon_equipped.emit(
-		weapon_name,
-		total_atk
+	var inventory_index := inventory.find(item)
+
+	if inventory_index < 0:
+		return false
+
+	var displaced_items := (
+		equipment_manager.get_displaced_items(
+			item,
+			target_slot
+		)
 	)
+	inventory.remove_at(inventory_index)
 
-	print("Equipped: ", equipped_weapon_name)
-	print("Attack power: ", total_atk)
+	if not equipment_manager.equip(item, target_slot):
+		inventory.insert(inventory_index, item)
+		return false
+
+	for displaced_item in displaced_items:
+		inventory.append(displaced_item)
+
+	_emit_equipment_change(item)
+	return true
 
 
-func equip_item(item: ItemData) -> void:
-	if item == null or item.item_type != ItemData.ItemType.WEAPON:
-		return
+func _emit_equipment_change(item: EquipmentData) -> void:
+	current_hp = minf(current_hp, max_hp)
+	current_mp = minf(current_mp, max_mp)
+	equipment_changed.emit(item.display_name, total_atk)
 
-	equipped_weapon_name = item.display_name
-	equipment_atk_bonus = item.attack_bonus
-	equipment_def_bonus = item.defense_bonus
-	equipment_spd_bonus = item.speed_bonus
+	if item.is_hand_equipment():
+		weapon_equipped.emit(
+			item.display_name,
+			total_atk
+		)
 
-	weapon_equipped.emit(
-		item.display_name,
-		total_atk
-	)
+
+func unequip_item(
+	slot: EquipmentManager.EquipmentSlot
+) -> EquipmentData:
+	var item := equipment_manager.unequip(slot)
+
+	if item != null:
+		inventory.append(item)
+		current_hp = minf(current_hp, max_hp)
+		current_mp = minf(current_mp, max_mp)
+		equipment_changed.emit(item.display_name, total_atk)
+
+	return item
 
 func try_interact() -> void:
 	interaction_ray.force_raycast_update()
@@ -162,7 +210,7 @@ func _check_for_level_up() -> void:
 		experience -= experience_to_next_level
 		level += 1
 
-		max_hp += 10
+		base_max_hp += 10
 		current_hp += 10
 		base_atk += 5
 

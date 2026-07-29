@@ -15,14 +15,21 @@ signal closed
 )
 @onready var skill_menu: SkillMenu = $SkillMenu
 @onready var inventory_menu: InventoryMenu = $InventoryMenu
+@onready var equipment_slot_picker: EquipmentSlotPicker = (
+	$EquipmentSlotPicker
+)
 @onready var detail_panel: SelectionDetailPanel = (
 	$SelectionDetailPanel
 )
 @onready var status_panel: CombatantStatusPanel = (
 	$PlayerStatusPanel
 )
+@onready var equipment_slots_panel: EquipmentSlotsPanel = (
+	$EquipmentSlotsPanel
+)
 
 var player_data: Player
+var pending_equipment: EquipmentData
 
 
 func _ready() -> void:
@@ -78,6 +85,15 @@ func _ready() -> void:
 	inventory_menu.cancelled.connect(
 		_on_inventory_menu_cancelled
 	)
+	equipment_slot_picker.slot_selected.connect(
+		_on_equipment_slot_selected
+	)
+	equipment_slot_picker.slot_focused.connect(
+		_on_equipment_slot_focused
+	)
+	equipment_slot_picker.cancelled.connect(
+		_on_equipment_slot_cancelled
+	)
 
 
 func open(player: Player) -> void:
@@ -85,6 +101,9 @@ func open(player: Player) -> void:
 	visible = true
 	action_panel.visible = true
 	_refresh_status()
+	equipment_slots_panel.set_equipment_manager(
+		player_data.equipment_manager
+	)
 	_clear_selection_preview()
 	skills_button.call_deferred("grab_focus")
 
@@ -95,6 +114,8 @@ func close() -> void:
 
 	skill_menu.close()
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_clear_selection_preview()
 	action_panel.visible = true
 	visible = false
@@ -106,6 +127,8 @@ func _on_skills_button_focused() -> void:
 		return
 
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_show_skill_menu(false)
 
 
@@ -114,6 +137,8 @@ func _on_skills_button_pressed() -> void:
 		return
 
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_show_skill_menu(false)
 	action_panel.visible = false
 	skill_menu.grab_first_skill_focus()
@@ -133,6 +158,8 @@ func _on_inventory_button_focused() -> void:
 		return
 
 	skill_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_clear_selection_preview()
 	_show_inventory_menu(false)
 
@@ -152,7 +179,8 @@ func _show_inventory_menu(
 ) -> void:
 	inventory_menu.open(
 		player_data.inventory,
-		focus_first_category
+		focus_first_category,
+		player_data.equipment_manager
 	)
 
 
@@ -162,6 +190,8 @@ func _on_system_button_focused() -> void:
 
 	skill_menu.close()
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_clear_selection_preview()
 
 	var detail := SelectionDetailData.new()
@@ -205,6 +235,13 @@ func _on_skill_focused(skill: SkillData) -> void:
 
 
 func _on_item_focused(item: ItemData) -> void:
+	_show_item_preview(item)
+
+
+func _show_item_preview(
+	item: ItemData,
+	target_slot: int = EquipmentManager.INVALID_SLOT
+) -> void:
 	var detail := SelectionDetailBuilder.from_item(
 		item,
 		player_data,
@@ -212,7 +249,8 @@ func _on_item_focused(item: ItemData) -> void:
 	)
 	var preview := ItemPreviewBuilder.for_player(
 		item,
-		player_data
+		player_data,
+		target_slot
 	)
 
 	detail_panel.show_detail(detail)
@@ -220,12 +258,66 @@ func _on_item_focused(item: ItemData) -> void:
 
 
 func _on_item_selected(item: ItemData) -> void:
-	if not ItemUseService.use(item, player_data, false):
-		return
+	if item is EquipmentData:
+		var equipment := item as EquipmentData
+
+		if (
+			player_data.equipment_manager
+			.requires_hand_selection(equipment)
+		):
+			pending_equipment = equipment
+			action_panel.visible = false
+			inventory_menu.visible = false
+			equipment_slot_picker.open(equipment)
+			return
+
+	_use_item(item)
+
+
+func _use_item(
+	item: ItemData,
+	target_slot: int = EquipmentManager.INVALID_SLOT
+) -> bool:
+	if not ItemUseService.use(
+		item,
+		player_data,
+		false,
+		target_slot
+	):
+		inventory_menu.visible = true
+		inventory_menu.grab_first_item_focus()
+		return false
 
 	_refresh_status()
+	equipment_slots_panel.refresh()
 	_clear_selection_preview()
 	_show_inventory_menu(true)
+	return true
+
+
+func _on_equipment_slot_selected(slot: int) -> void:
+	if pending_equipment == null:
+		return
+
+	var equipment := pending_equipment
+	pending_equipment = null
+	equipment_slot_picker.close()
+	_use_item(equipment, slot)
+
+
+func _on_equipment_slot_focused(slot: int) -> void:
+	if pending_equipment == null:
+		return
+
+	_show_item_preview(pending_equipment, slot)
+
+
+func _on_equipment_slot_cancelled() -> void:
+	pending_equipment = null
+	equipment_slot_picker.close()
+	_clear_selection_preview()
+	inventory_menu.visible = true
+	inventory_menu.grab_first_item_focus()
 
 
 func _refresh_status() -> void:

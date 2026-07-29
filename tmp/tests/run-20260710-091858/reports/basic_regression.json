@@ -1,0 +1,73 @@
+{
+  "suite": "basic_regression",
+  "started_at": "2026-07-10T09:18:58+08:00",
+  "finished_at": "2026-07-10T09:20:00+08:00",
+  "project_root": "C:\\Users\\Maxddd\\Documents\\my_projects\\untitled",
+  "run_dir": "tmp/tests/run-20260710-091858",
+  "summary": {
+    "status": "failed",
+    "passed": 0,
+    "failed": 8,
+    "total": 8
+  },
+  "checks": [
+    {
+      "id": "BR-001",
+      "name": "Godot MCP Pro is reachable",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-002",
+      "name": "Project metadata is readable",
+      "status": "failed",
+      "details": "project info was not available",
+      "evidence": {}
+    },
+    {
+      "id": "BR-003",
+      "name": "Editor has no errors",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-004",
+      "name": "Main scene starts",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {
+        "main_scene": "main"
+      }
+    },
+    {
+      "id": "BR-005",
+      "name": "Main scene screenshot is captured",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-006",
+      "name": "Runtime scene tree is readable",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-007",
+      "name": "MCP autoloads exist",
+      "status": "failed",
+      "details": "project info was not available",
+      "evidence": {}
+    },
+    {
+      "id": "BR-008",
+      "name": "Scene stops cleanly",
+      "status": "failed",
+      "details": "Waiting for Godot on port 6510... Godot plugin did not connect within 10s. Make sure the Godot editor is running with the MCP plugin enabled.",
+      "evidence": {}
+    }
+  ]
+}

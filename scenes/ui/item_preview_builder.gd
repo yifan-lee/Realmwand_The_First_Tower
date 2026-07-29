@@ -4,7 +4,8 @@ extends RefCounted
 
 static func for_player(
 	item: ItemData,
-	player: Player
+	player: Player,
+	target_slot: int = EquipmentManager.INVALID_SLOT
 ) -> CombatantPreviewData:
 	var preview := CombatantPreviewData.new()
 
@@ -17,18 +18,27 @@ static func for_player(
 		player.max_mp - player.current_mp
 	)
 
-	if item.item_type == ItemData.ItemType.WEAPON:
-		preview.atk_delta = (
-			item.attack_bonus
-			- player.equipment_atk_bonus
+	if item is EquipmentData:
+		var equipment := item as EquipmentData
+		var deltas := player.equipment_manager.get_bonus_delta(
+			equipment,
+			target_slot
 		)
-		preview.def_delta = (
-			item.defense_bonus
-			- player.equipment_def_bonus
+
+		preview.max_hp_delta = float(
+			deltas.get(&"max_hp", 0.0)
 		)
-		preview.spd_delta = (
-			item.speed_bonus
-			- player.equipment_spd_bonus
+		preview.max_mp_delta = float(
+			deltas.get(&"max_mp", 0.0)
+		)
+		preview.atk_delta = float(
+			deltas.get(&"atk", 0.0)
+		)
+		preview.def_delta = float(
+			deltas.get(&"def", 0.0)
+		)
+		preview.spd_delta = float(
+			deltas.get(&"spd", 0.0)
 		)
 
 	return preview

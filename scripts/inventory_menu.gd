@@ -8,7 +8,7 @@ signal cancelled
 
 const CATEGORIES: Array[ItemData.ItemType] = [
 	ItemData.ItemType.CONSUMABLE,
-	ItemData.ItemType.WEAPON,
+	ItemData.ItemType.EQUIPMENT,
 	ItemData.ItemType.SPECIAL,
 ]
 
@@ -25,13 +25,16 @@ var active_category: ItemData.ItemType = ItemData.ItemType.CONSUMABLE
 var active_category_button: Button
 var first_item_button: Button
 var hovered_item_button: Button
+var equipment_manager: EquipmentManager
 
 
 func open(
 	source_items: Array[ItemData],
-	focus_first_category: bool = false
+	focus_first_category: bool = false,
+	source_equipment_manager: EquipmentManager = null
 ) -> void:
 	items = source_items
+	equipment_manager = source_equipment_manager
 	_build_categories()
 	_select_category(active_category)
 	visible = true
@@ -53,6 +56,10 @@ func grab_first_category_focus() -> void:
 
 	if is_instance_valid(first_button):
 		first_button.call_deferred("grab_focus")
+
+
+func grab_first_item_focus() -> void:
+	_focus_first_item()
 
 
 func _build_categories() -> void:
@@ -110,6 +117,16 @@ func _select_category(category: ItemData.ItemType) -> void:
 		if count > 1:
 			button.text += "  x%d" % count
 
+		if item is EquipmentData and equipment_manager != null:
+			var equipped_text := (
+				equipment_manager.get_equipped_slot_text(
+					item as EquipmentData
+				)
+			)
+
+			if not equipped_text.is_empty():
+				button.text += "  [%s]" % equipped_text
+
 		button.pressed.connect(
 			_on_item_button_pressed.bind(item)
 		)
@@ -151,7 +168,7 @@ func _get_category_name(category: ItemData.ItemType) -> String:
 	match category:
 		ItemData.ItemType.CONSUMABLE:
 			return "Potions"
-		ItemData.ItemType.WEAPON:
+		ItemData.ItemType.EQUIPMENT:
 			return "Equipment"
 		ItemData.ItemType.SPECIAL:
 			return "Special"

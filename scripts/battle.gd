@@ -17,6 +17,9 @@ signal battle_finished(
 @onready var action_panel: PanelContainer = $ActionPanel
 @onready var skill_menu: SkillMenu = $SkillMenu
 @onready var inventory_menu: InventoryMenu = $InventoryMenu
+@onready var equipment_slot_picker: EquipmentSlotPicker = (
+	$EquipmentSlotPicker
+)
 @onready var player_status_panel: CombatantStatusPanel = (
 	$PlayerStatusPanel
 )
@@ -48,6 +51,7 @@ var player_won: bool = false
 var enemy_current_hp: float
 var enemy_current_mp: float
 var enemy_minimum_hp: float = 0.0
+var pending_equipment: EquipmentData
 
 func _ready() -> void:
 	if player_data == null:
@@ -108,6 +112,15 @@ func _ready() -> void:
 	)
 	inventory_menu.item_focus_cleared.connect(
 		_clear_selection_preview
+	)
+	equipment_slot_picker.slot_selected.connect(
+		_on_equipment_slot_selected
+	)
+	equipment_slot_picker.slot_focused.connect(
+		_on_equipment_slot_focused
+	)
+	equipment_slot_picker.cancelled.connect(
+		_on_equipment_slot_cancelled
 	)
 
 
@@ -179,6 +192,8 @@ func _on_attack_button_pressed() -> void:
 		_show_skill_menu(false)
 
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	action_panel.visible = false
 	skill_menu.grab_first_skill_focus()
 
@@ -188,6 +203,8 @@ func _on_attack_button_focused() -> void:
 		return
 
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_show_skill_menu(false)
 
 
@@ -196,6 +213,8 @@ func _on_item_button_focused() -> void:
 		return
 
 	skill_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	_clear_selection_preview()
 	_show_inventory_menu(false)
 
@@ -227,7 +246,8 @@ func _show_inventory_menu(
 ) -> void:
 	inventory_menu.open(
 		player_data.inventory,
-		focus_first_category
+		focus_first_category,
+		player_data.equipment_manager
 	)
 
 func _on_skill_menu_cancelled() -> void:
@@ -295,8 +315,35 @@ func _on_item_selected(item: ItemData) -> void:
 	if not waiting_for_player_action:
 		return
 
-	if not ItemUseService.use(item, player_data, true):
-		return
+	if item is EquipmentData:
+		var equipment := item as EquipmentData
+
+		if (
+			player_data.equipment_manager
+			.requires_hand_selection(equipment)
+		):
+			pending_equipment = equipment
+			action_panel.visible = false
+			inventory_menu.visible = false
+			equipment_slot_picker.open(equipment)
+			return
+
+	_use_item(item)
+
+
+func _use_item(
+	item: ItemData,
+	target_slot: int = EquipmentManager.INVALID_SLOT
+) -> bool:
+	if not ItemUseService.use(
+		item,
+		player_data,
+		true,
+		target_slot
+	):
+		inventory_menu.visible = true
+		inventory_menu.grab_first_item_focus()
+		return false
 
 	battle_message.text = (
 		"%s uses %s!"
@@ -309,6 +356,32 @@ func _on_item_selected(item: ItemData) -> void:
 	_clear_selection_preview()
 	_commit_player_action()
 	_refresh_status_panels()
+	return true
+
+
+func _on_equipment_slot_selected(slot: int) -> void:
+	if pending_equipment == null:
+		return
+
+	var equipment := pending_equipment
+	pending_equipment = null
+	equipment_slot_picker.close()
+	_use_item(equipment, slot)
+
+
+func _on_equipment_slot_focused(slot: int) -> void:
+	if pending_equipment == null:
+		return
+
+	_show_item_preview(pending_equipment, slot)
+
+
+func _on_equipment_slot_cancelled() -> void:
+	pending_equipment = null
+	equipment_slot_picker.close()
+	_clear_selection_preview()
+	inventory_menu.visible = true
+	inventory_menu.grab_first_item_focus()
 
 
 
@@ -325,6 +398,8 @@ func _commit_player_action(
 
 	skill_menu.close()
 	inventory_menu.close()
+	equipment_slot_picker.close()
+	pending_equipment = null
 	action_panel.visible = true
 	_finish_player_action()
 
@@ -491,6 +566,13 @@ func _on_skill_focused(
 
 
 func _on_item_focused(item: ItemData) -> void:
+	_show_item_preview(item)
+
+
+func _show_item_preview(
+	item: ItemData,
+	target_slot: int = EquipmentManager.INVALID_SLOT
+) -> void:
 	var detail := SelectionDetailBuilder.from_item(
 		item,
 		player_data,
@@ -498,7 +580,8 @@ func _on_item_focused(item: ItemData) -> void:
 	)
 	var player_preview := ItemPreviewBuilder.for_player(
 		item,
-		player_data
+		player_data,
+		target_slot
 	)
 
 	selection_detail_panel.show_detail(detail)

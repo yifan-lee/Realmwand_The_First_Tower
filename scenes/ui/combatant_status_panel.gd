@@ -93,7 +93,11 @@ func clear_preview() -> void:
 	mp_preview_is_decrease = false
 
 	if current_data != null:
+		hp_bar.max_value = current_data.max_hp
+		hp_preview_bar.max_value = current_data.max_hp
 		hp_bar.value = current_data.current_hp
+		mp_bar.max_value = current_data.max_mp
+		mp_preview_bar.max_value = current_data.max_mp
 		mp_bar.value = current_data.current_mp
 
 
@@ -170,7 +174,10 @@ func _show_preview_values(
 		hp_bar,
 		hp_preview_bar,
 		current_data.current_hp,
-		current_data.max_hp,
+		maxf(
+			current_data.max_hp + preview.max_hp_delta,
+			1.0
+		),
 		preview.hp_delta,
 		HP_PREVIEW_INCREASE_COLOR
 	)
@@ -178,18 +185,23 @@ func _show_preview_values(
 		mp_bar,
 		mp_preview_bar,
 		current_data.current_mp,
-		current_data.max_mp,
+		maxf(
+			current_data.max_mp + preview.max_mp_delta,
+			1.0
+		),
 		preview.mp_delta,
 		MP_PREVIEW_INCREASE_COLOR
 	)
 
-	_set_preview_label(
+	_set_resource_preview_label(
 		hp_preview_label,
-		preview.hp_delta
+		preview.hp_delta,
+		preview.max_hp_delta
 	)
-	_set_preview_label(
+	_set_resource_preview_label(
 		mp_preview_label,
-		preview.mp_delta
+		preview.mp_delta,
+		preview.max_mp_delta
 	)
 	_set_preview_label(
 		atk_preview_label,
@@ -206,6 +218,42 @@ func _show_preview_values(
 
 	if hp_preview_is_decrease or mp_preview_is_decrease:
 		_start_preview_flash()
+
+
+func _set_resource_preview_label(
+	label: Label,
+	current_delta: float,
+	max_delta: float
+) -> void:
+	if not is_zero_approx(max_delta):
+		var parts: Array[String] = []
+
+		if not is_zero_approx(current_delta):
+			parts.append(_format_delta(current_delta))
+
+		parts.append(
+			"Max %s" % _format_delta(max_delta)
+		)
+		label.text = "  ".join(parts)
+
+		var color_value := max_delta
+
+		if not is_zero_approx(current_delta):
+			color_value = current_delta
+
+		if color_value > 0.0:
+			label.add_theme_color_override(
+				"font_color",
+				PREVIEW_INCREASE_COLOR
+			)
+		else:
+			label.add_theme_color_override(
+				"font_color",
+				PREVIEW_DECREASE_COLOR
+			)
+		return
+
+	_set_preview_label(label, current_delta)
 
 
 func _show_bar_preview(

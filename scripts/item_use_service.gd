@@ -24,8 +24,8 @@ static func can_use(
 				or not is_zero_approx(preview.mp_delta)
 			)
 
-		ItemData.ItemType.WEAPON:
-			return true
+		ItemData.ItemType.EQUIPMENT:
+			return item is EquipmentData
 
 		ItemData.ItemType.SPECIAL:
 			return false
@@ -36,7 +36,8 @@ static func can_use(
 static func use(
 	item: ItemData,
 	player: Player,
-	in_battle: bool
+	in_battle: bool,
+	target_slot: int = EquipmentManager.INVALID_SLOT
 ) -> bool:
 	if not can_use(item, player, in_battle):
 		return false
@@ -55,8 +56,11 @@ static func use(
 			player.restore_mp(used_item.mp_recovery_amount)
 			return true
 
-		ItemData.ItemType.WEAPON:
-			player.equip_item(item)
-			return true
+		ItemData.ItemType.EQUIPMENT:
+			var equipment := item as EquipmentData
+			return player.equip_item(
+				equipment,
+				target_slot
+			)
 
 	return false

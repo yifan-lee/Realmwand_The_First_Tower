@@ -41,10 +41,10 @@ position = Vector2(0, -160)
 item_data = ExtResource("6_eb6dy")
 
 [node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
+position = Vector2(0, -224)
 item_data = ExtResource("7_trceg")
 
 [node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
-offset = Vector2(0, 0)
 
 [node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
 switch_id = 1
@@ -66,7 +66,7 @@ enemy_data = ExtResource("12_trceg")
 
 [node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]
 
-[node name="MenuLayer" type="CanvasLayer" parent="."]
+[node name="MenuLayer" type="CanvasLayer" parent="." unique_id=1031546602]
 layer = 8
 
-[node name="PlayerMenu" parent="MenuLayer" instance=ExtResource("13_player_menu")]
+[node name="PlayerMenu" parent="MenuLayer" unique_id=1226560284 instance=ExtResource("13_player_menu")]

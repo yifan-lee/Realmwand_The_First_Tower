@@ -55,23 +55,37 @@ static func from_item(
 			"MP Recovery: %d" % item.mp_recovery_amount
 		)
 
-	if item.attack_bonus != 0:
-		detail.properties.append(
-			"ATK: %+d" % item.attack_bonus
-		)
+	if item is EquipmentData:
+		var equipment := item as EquipmentData
 
-	if item.defense_bonus != 0:
-		detail.properties.append(
-			"DEF: %+d" % item.defense_bonus
-		)
-
-	if item.speed_bonus != 0:
-		detail.properties.append(
-			"SPD: %+d" % item.speed_bonus
-		)
-
-	if item.item_type == ItemData.ItemType.WEAPON:
 		detail.properties.append("Type: Equipment")
+		detail.properties.append(
+			"Slot: %s" % _get_equipment_slot_text(equipment)
+		)
+
+		_append_bonus(
+			detail,
+			"Max HP",
+			equipment.max_hp_bonus
+		)
+		_append_bonus(
+			detail,
+			"Max MP",
+			equipment.max_mp_bonus
+		)
+		_append_bonus(detail, "ATK", equipment.atk_bonus)
+		_append_bonus(detail, "DEF", equipment.def_bonus)
+		_append_bonus(detail, "SPD", equipment.spd_bonus)
+
+		var equipped_slots := (
+			player.equipment_manager
+			.get_equipped_slot_text(equipment)
+		)
+
+		if not equipped_slots.is_empty():
+			detail.properties.append(
+				"Equipped: %s" % equipped_slots
+			)
 	elif item.item_type == ItemData.ItemType.SPECIAL:
 		detail.properties.append("Type: Special")
 
@@ -95,3 +109,54 @@ static func from_item(
 		detail.warning = "MP is already full"
 
 	return detail
+
+
+static func _append_bonus(
+	detail: SelectionDetailData,
+	label: String,
+	value: float
+) -> void:
+	if is_zero_approx(value):
+		return
+
+	detail.properties.append(
+		"%s: %+.0f" % [label, value]
+	)
+
+
+static func _get_equipment_slot_text(
+	equipment: EquipmentData
+) -> String:
+	match equipment.slot_type:
+		EquipmentData.EquipmentSlotType.HEAD:
+			return "Head"
+		EquipmentData.EquipmentSlotType.CHEST:
+			return "Chest"
+		EquipmentData.EquipmentSlotType.HANDS:
+			return "Hands"
+		EquipmentData.EquipmentSlotType.LEGS:
+			return "Legs"
+		EquipmentData.EquipmentSlotType.FEET:
+			return "Feet"
+		EquipmentData.EquipmentSlotType.ACCESSORY:
+			return "Accessory"
+		EquipmentData.EquipmentSlotType.HAND:
+			return _get_hand_rule_text(equipment.hand_rule)
+
+	return "Unknown"
+
+
+static func _get_hand_rule_text(
+	hand_rule: EquipmentData.HandRule
+) -> String:
+	match hand_rule:
+		EquipmentData.HandRule.LEFT_ONLY:
+			return "Left Hand"
+		EquipmentData.HandRule.RIGHT_ONLY:
+			return "Right Hand"
+		EquipmentData.HandRule.EITHER_HAND:
+			return "Either Hand"
+		EquipmentData.HandRule.TWO_HANDED:
+			return "Two-Handed"
+
+	return "Hand"

@@ -1,12 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ciiteyffy0o22"]
 
-[ext_resource type="Script" path="res://scripts/player_menu.gd" id="1_player_menu"]
-[ext_resource type="PackedScene" path="res://scenes/ui/combatant_status_panel.tscn" id="2_status"]
-[ext_resource type="PackedScene" path="res://scenes/ui/skill_menu.tscn" id="3_skills"]
+[ext_resource type="Script" uid="uid://hllxtpkxjedj" path="res://scripts/player_menu.gd" id="1_player_menu"]
+[ext_resource type="PackedScene" uid="uid://4sb7s3m75aw5" path="res://scenes/ui/combatant_status_panel.tscn" id="2_status"]
+[ext_resource type="PackedScene" uid="uid://bk2c7nmscq15o" path="res://scenes/ui/skill_menu.tscn" id="3_skills"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_menu.tscn" id="4_inventory"]
-[ext_resource type="PackedScene" path="res://scenes/ui/selection_detail_panel.tscn" id="5_detail"]
+[ext_resource type="PackedScene" uid="uid://c6decfs1fp4ml" path="res://scenes/ui/selection_detail_panel.tscn" id="5_detail"]
+[ext_resource type="PackedScene" path="res://scenes/ui/equipment_slot_picker.tscn" id="6_slot_picker"]
+[ext_resource type="PackedScene" path="res://scenes/ui/equipment_slots_panel.tscn" id="7_slots_panel"]
 
-[node name="PlayerMenu" type="Control"]
+[node name="PlayerMenu" type="Control" unique_id=1616484278]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -16,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_player_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1796195035]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +28,7 @@ grow_vertical = 2
 mouse_filter = 1
 color = Color(0.035, 0.045, 0.06, 0.96)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=639715128]
 layout_mode = 0
 offset_left = 48.0
 offset_top = 36.0
@@ -36,7 +38,7 @@ theme_override_font_sizes/font_size = 44
 text = "Menu"
 horizontal_alignment = 1
 
-[node name="PlayerStatusPanel" parent="." instance=ExtResource("2_status")]
+[node name="PlayerStatusPanel" parent="." unique_id=180069193 instance=ExtResource("2_status")]
 custom_minimum_size = Vector2(420, 648)
 layout_mode = 0
 offset_left = 48.0
@@ -44,59 +46,72 @@ offset_top = 180.0
 offset_right = 468.0
 offset_bottom = 828.0
 
-[node name="ActionPanel" type="PanelContainer" parent="."]
+[node name="ActionPanel" type="PanelContainer" parent="." unique_id=1915945358]
 layout_mode = 0
 offset_left = 516.0
 offset_top = 120.0
 offset_right = 1488.0
 offset_bottom = 246.0
 
-[node name="Actions" type="HBoxContainer" parent="ActionPanel"]
+[node name="Actions" type="HBoxContainer" parent="ActionPanel" unique_id=1027529230]
 layout_mode = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="SkillsButton" type="Button" parent="ActionPanel/Actions"]
+[node name="SkillsButton" type="Button" parent="ActionPanel/Actions" unique_id=122201218]
 custom_minimum_size = Vector2(270, 96)
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "Skills"
 
-[node name="InventoryButton" type="Button" parent="ActionPanel/Actions"]
+[node name="InventoryButton" type="Button" parent="ActionPanel/Actions" unique_id=569519627]
 custom_minimum_size = Vector2(270, 96)
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "Inventory"
 
-[node name="SystemButton" type="Button" parent="ActionPanel/Actions"]
+[node name="SystemButton" type="Button" parent="ActionPanel/Actions" unique_id=1269710942]
 custom_minimum_size = Vector2(270, 96)
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "System"
 
-[node name="SkillMenu" parent="." instance=ExtResource("3_skills")]
+[node name="SkillMenu" parent="." unique_id=974522788 instance=ExtResource("3_skills")]
 layout_mode = 0
 offset_left = 540.0
 offset_top = 282.0
 offset_right = 960.0
 offset_bottom = 732.0
 
-[node name="InventoryMenu" parent="." instance=ExtResource("4_inventory")]
-custom_minimum_size = Vector2(516, 450)
+[node name="InventoryMenu" parent="." unique_id=672020421 instance=ExtResource("4_inventory")]
 layout_mode = 0
 offset_left = 492.0
 offset_top = 282.0
 offset_right = 1008.0
 offset_bottom = 732.0
 
-[node name="SelectionDetailPanel" parent="." instance=ExtResource("5_detail")]
+[node name="SelectionDetailPanel" parent="." unique_id=1724677576 instance=ExtResource("5_detail")]
 layout_mode = 0
 offset_left = 1032.0
 offset_top = 282.0
 offset_right = 1488.0
 offset_bottom = 732.0
 
-[node name="HelpLabel" type="Label" parent="."]
+[node name="EquipmentSlotPicker" parent="." unique_id=1167266134 instance=ExtResource("6_slot_picker")]
+layout_mode = 0
+offset_left = 720.0
+offset_top = 420.0
+offset_right = 1200.0
+offset_bottom = 660.0
+
+[node name="EquipmentSlotsPanel" parent="." unique_id=162706596 instance=ExtResource("7_slots_panel")]
+layout_mode = 0
+offset_left = 1512.0
+offset_top = 282.0
+offset_right = 1872.0
+offset_bottom = 732.0
+
+[node name="HelpLabel" type="Label" parent="." unique_id=884632719]
 layout_mode = 0
 offset_left = 516.0
 offset_top = 774.0

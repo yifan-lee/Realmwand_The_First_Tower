@@ -1,0 +1,4 @@
+interface:
+  display_name: "Godot MVP Test"
+  short_description: "Run staged Godot validation from early development to MVP."
+  default_prompt: "Use $godot-mvp-test to validate this Godot change before reporting completion."

@@ -51,7 +51,7 @@ func _ready() -> void:
 		world_enemy.battle_requested.connect(_on_battle_requested)
 	player.rewards_received.connect(_on_rewards_received)
 	player.leveled_up.connect(_on_player_leveled_up)
-	player.weapon_equipped.connect(_on_weapon_equipped)
+	player.equipment_changed.connect(_on_equipment_changed)
 	player_menu.closed.connect(_on_player_menu_closed)
 	_update_player_hud()
 
@@ -178,15 +178,16 @@ func _on_player_leveled_up(new_level: int) -> void:
 	pickup_message_timer.start()
 	_update_player_hud()
 
-func _on_weapon_equipped(
-	weapon_name: String,
-	total_attack_power: int
+func _on_equipment_changed(
+	equipment_name: String,
+	total_attack_power: float
 ) -> void:
 	pickup_message.text = (
-		"Equipped %s - Attack %d"
-		% [weapon_name, total_attack_power]
+		"Equipment changed: %s - Attack %.0f"
+		% [equipment_name, total_attack_power]
 	)
 	pickup_message_timer.start()
+	_update_player_hud()
 
 func _update_player_hud() -> void:
 	level_label.text = "Level: %d" % player.level

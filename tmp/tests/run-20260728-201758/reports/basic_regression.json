@@ -1,0 +1,73 @@
+{
+  "suite": "basic_regression",
+  "started_at": "2026-07-28T20:17:58-04:00",
+  "finished_at": "2026-07-28T20:17:58-04:00",
+  "project_root": "/Users/yifanli/Github/game/Realmwand_The_First_Tower",
+  "run_dir": "tmp/tests/run-20260728-201758",
+  "summary": {
+    "status": "failed",
+    "passed": 0,
+    "failed": 8,
+    "total": 8
+  },
+  "checks": [
+    {
+      "id": "BR-001",
+      "name": "Godot MCP Pro is reachable",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-002",
+      "name": "Project metadata is readable",
+      "status": "failed",
+      "details": "project info was not available",
+      "evidence": {}
+    },
+    {
+      "id": "BR-003",
+      "name": "Editor has no errors",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-004",
+      "name": "Main scene starts",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {
+        "main_scene": "main"
+      }
+    },
+    {
+      "id": "BR-005",
+      "name": "Main scene screenshot is captured",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-006",
+      "name": "Runtime scene tree is readable",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {}
+    },
+    {
+      "id": "BR-007",
+      "name": "MCP autoloads exist",
+      "status": "failed",
+      "details": "project info was not available",
+      "evidence": {}
+    },
+    {
+      "id": "BR-008",
+      "name": "Scene stops cleanly",
+      "status": "failed",
+      "details": "No free ports in range 6510-6514. All ports are occupied by MCP server instances.",
+      "evidence": {}
+    }
+  ]
+}

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bk2c7nmscq15o" path="res://scenes/ui/skill_menu.tscn" id="3_xd4uy"]
 [ext_resource type="PackedScene" uid="uid://c6decfs1fp4ml" path="res://scenes/ui/selection_detail_panel.tscn" id="5_h0kxc"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_menu.tscn" id="6_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/ui/equipment_slot_picker.tscn" id="7_slot_picker"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7gynk"]
 atlas = ExtResource("2_ffvsa")
@@ -155,3 +156,10 @@ offset_left = 1020.0
 offset_top = 402.0
 offset_right = 1440.0
 offset_bottom = 852.0
+
+[node name="EquipmentSlotPicker" parent="." instance=ExtResource("7_slot_picker")]
+layout_mode = 0
+offset_left = 720.0
+offset_top = 570.0
+offset_right = 1200.0
+offset_bottom = 810.0

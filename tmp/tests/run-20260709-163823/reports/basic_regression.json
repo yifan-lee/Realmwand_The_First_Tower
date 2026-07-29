@@ -1,0 +1,78 @@
+{
+  "suite": "basic_regression",
+  "started_at": "2026-07-09T16:38:23+08:00",
+  "finished_at": "2026-07-09T16:38:44+08:00",
+  "project_root": "C:\\Users\\Maxddd\\Documents\\my_projects\\untitled",
+  "run_dir": "tmp/tests/run-20260709-163823",
+  "summary": {
+    "status": "passed",
+    "passed": 8,
+    "failed": 0,
+    "total": 8
+  },
+  "checks": [
+    {
+      "id": "BR-001",
+      "name": "Godot MCP Pro is reachable",
+      "status": "passed",
+      "details": "project info succeeded",
+      "evidence": {}
+    },
+    {
+      "id": "BR-002",
+      "name": "Project metadata is readable",
+      "status": "passed",
+      "details": "Untitled / 4.6.1-stable (official) / res://scenes/main.tscn",
+      "evidence": {
+        "main_scene": "res://scenes/main.tscn"
+      }
+    },
+    {
+      "id": "BR-003",
+      "name": "Editor has no errors",
+      "status": "passed",
+      "details": "0 errors",
+      "evidence": {}
+    },
+    {
+      "id": "BR-004",
+      "name": "Main scene starts",
+      "status": "passed",
+      "details": "started res://scenes/main.tscn",
+      "evidence": {}
+    },
+    {
+      "id": "BR-005",
+      "name": "Main scene screenshot is captured",
+      "status": "passed",
+      "details": "Saved screenshot to tmp\\tests\\run-20260709-163823\\screenshots\\main_scene.png",
+      "evidence": {
+        "path": "tmp/tests/run-20260709-163823/screenshots/main_scene.png",
+        "width": 1152,
+        "height": 648,
+        "format": "png"
+      }
+    },
+    {
+      "id": "BR-006",
+      "name": "Runtime scene tree is readable",
+      "status": "passed",
+      "details": "root: Main",
+      "evidence": {}
+    },
+    {
+      "id": "BR-007",
+      "name": "MCP autoloads exist",
+      "status": "passed",
+      "details": "MCPGameInspector, MCPInputService, MCPScreenshot",
+      "evidence": {}
+    },
+    {
+      "id": "BR-008",
+      "name": "Scene stops cleanly",
+      "status": "passed",
+      "details": "stopped and 0 editor errors",
+      "evidence": {}
+    }
+  ]
+}

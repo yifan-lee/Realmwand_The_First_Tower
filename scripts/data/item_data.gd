@@ -3,7 +3,7 @@ extends Resource
 
 enum ItemType {
 	CONSUMABLE,
-	WEAPON,
+	EQUIPMENT,
 	SPECIAL,
 }
 
@@ -21,17 +21,12 @@ enum ItemType {
 @export var healing_amount: int = 0
 @export var mp_recovery_amount: int = 0
 
-@export_group("Equipment")
-@export var attack_bonus: int = 0
-@export var defense_bonus: int = 0
-@export var speed_bonus: int = 0
-
 
 func get_category_name() -> String:
 	match item_type:
 		ItemType.CONSUMABLE:
 			return "Potions"
-		ItemType.WEAPON:
+		ItemType.EQUIPMENT:
 			return "Equipment"
 		ItemType.SPECIAL:
 			return "Special"
