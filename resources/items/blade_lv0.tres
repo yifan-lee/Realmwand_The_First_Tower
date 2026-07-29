@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dpsu2l7g283fl"]
+
+[ext_resource type="Texture2D" uid="uid://ds68eemlm1gda" path="res://assets/concepts/unfinished_world/split/equipment/weapons_v2/one_hand_dao_hp_tier_1.png" id="1_0uqm3"]
+[ext_resource type="Script" uid="uid://baou2wsqkmnm5" path="res://scripts/data/equipment_data.gd" id="2_vgcmt"]
+
+[resource]
+script = ExtResource("2_vgcmt")
+slot_type = 5
+hand_rule = 3
+atk_bonus = 5.0
+id = &"blade_lv0"
+display_name = "Blade LV0"
+description = "A simple blade  that increases attack."
+icon = ExtResource("1_0uqm3")
+item_type = 1
+consumed_on_use = false
+metadata/_custom_type_script = "uid://baou2wsqkmnm5"

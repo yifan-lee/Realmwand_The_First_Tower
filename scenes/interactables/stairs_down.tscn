@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cgyfosxobxjwt"]
+
+[ext_resource type="Script" uid="uid://dr4ivdary7ido" path="res://scripts/exit_stairs.gd" id="1_hvnhd"]
+[ext_resource type="Texture2D" uid="uid://dca65uvhp0yx7" path="res://assets/tiles/unfinished_world_tiles_32.png" id="2_soghw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bh8rs"]
+size = Vector2(24, 24)
+
+[node name="Stairs" type="Area2D" unique_id=394026365]
+collision_layer = 0
+script = ExtResource("1_hvnhd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2022978892]
+modulate = Color(0.8156863, 1, 1, 1)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_soghw")
+hframes = 5
+vframes = 4
+frame = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1980711176]
+shape = SubResource("RectangleShape2D_bh8rs")

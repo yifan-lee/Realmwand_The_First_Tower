@@ -3,7 +3,7 @@
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="1_25khy"]
 [ext_resource type="Script" uid="uid://bfshwpbovbpod" path="res://scripts/floors/floor.gd" id="1_fb648"]
 [ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="2_fb648"]
-[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/stairs.tscn" id="3_ojk1k"]
+[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/stairs_up.tscn" id="3_ojk1k"]
 [ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="4_bc7h7"]
 [ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="5_4kpf7"]
 [ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/enemy_first.tscn" id="6_lp7jv"]
@@ -24,7 +24,7 @@ tile_set = ExtResource("1_25khy")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=29649953]
 
-[node name="FromFloor1Stairs" type="Marker2D" parent="SpawnPoints" unique_id=1969312571]
+[node name="FromDownStair" type="Marker2D" parent="SpawnPoints" unique_id=1969312571]
 position = Vector2(0, 32)
 
 [node name="FromPortal" type="Marker2D" parent="SpawnPoints" unique_id=1376175616]
@@ -38,8 +38,6 @@ persistent_id = "door_01"
 
 [node name="Downstairs" parent="Interactables" unique_id=394026365 instance=ExtResource("3_ojk1k")]
 position = Vector2(0, 32)
-target_floor_id = "floor_1"
-target_spawn_id = "FromFloor2Stairs"
 
 [node name="Switch" parent="Interactables" unique_id=1354980094 instance=ExtResource("4_bc7h7")]
 position = Vector2(96, 0)

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c04hib5kth66g"]
 
-[ext_resource type="Texture2D" uid="uid://c7f3oswiwswie" path="res://assets/portraits/slime_portrait.png" id="1_akgum"]
+[ext_resource type="Texture2D" uid="uid://ceuxdfpejcxdb" path="res://assets/concepts/unfinished_world/split/monsters/balanced_tier_1.png" id="1_akgum"]
 [ext_resource type="Script" uid="uid://idl544nofh28" path="res://scripts/data/enemy_data.gd" id="2_1oap3"]
 
 [resource]

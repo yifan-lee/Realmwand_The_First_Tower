@@ -79,3 +79,15 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_game_screenshot]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_node_properties]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.read_resource]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.read_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_file_content]
+approval_mode = "approve"

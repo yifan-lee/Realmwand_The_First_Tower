@@ -3,12 +3,12 @@
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="1_ubckn"]
 [ext_resource type="Script" uid="uid://bav7thdvv1vwm" path="res://scripts/floors/floor_1.gd" id="1_w57qg"]
 [ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="2_exxqn"]
-[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/stairs.tscn" id="3_rkhaa"]
+[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/stairs_up.tscn" id="3_rkhaa"]
 [ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="4_0shy2"]
 [ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="5_nonbb"]
 [ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/enemy/enemy_first.tscn" id="6_57ux4"]
+[ext_resource type="Resource" uid="uid://dpsu2l7g283fl" path="res://resources/items/blade_lv0.tres" id="6_fv4kh"]
 [ext_resource type="Resource" uid="uid://c5ia12due8vcu" path="res://resources/items/small_potion.tres" id="8_jfbel"]
-[ext_resource type="Resource" uid="uid://dpsu2l7g283fl" path="res://resources/items/sword.tres" id="9_gtbqr"]
 [ext_resource type="Resource" uid="uid://c04hib5kth66g" path="res://resources/enemies/enemy_first.tres" id="16_pdvyd"]
 
 [node name="Floor" type="Node2D" unique_id=626005288]
@@ -20,56 +20,48 @@ position = Vector2(-16, -16)
 
 [node name="Ground" type="TileMapLayer" parent="Map" unique_id=260403769]
 texture_filter = 1
+tile_map_data = PackedByteArray("AAAAAPn/AQAAAAAAAAAAAPr/AQAAAAAAAAAAAPv/AQAAAAAAAAAAAPz/AQAAAAAAAAABAPn/AQAAAAAAAAABAPr/AQAAAAAAAAABAPv/AQAAAAAAAAABAPz/AQAAAAAAAAACAPn/AQAAAAAAAAACAPr/AQAAAAAAAAACAPv/AQAAAAAAAAACAPz/AQAAAAAAAAADAPn/AQAAAAAAAAADAPr/AQAAAAAAAAADAPv/AQAAAAAAAAADAPz/AQAAAAAAAAAEAPn/AQAAAAAAAAAEAPr/AQAAAAAAAAAEAPv/AQAAAAAAAAAEAPz/AQAAAAAAAAACAPT/AQAAAAAAAAACAPX/AQAAAAAAAAACAPb/AQAAAAAAAAACAPf/AQAAAAAAAAACAPj/AQAAAAAAAAD+//T/AQAAAAAAAAD///T/AQAAAAAAAAAAAPT/AQAAAAAAAAABAPT/AQAAAAAAAAADAPT/AQAAAAAAAAAEAPT/AQAAAAAAAAAFAPT/AQAAAAAAAAAGAPT/AQAAAAAAAAAGAPH/AQAAAAAAAAAGAPL/AQAAAAAAAAAGAPP/AQAAAAAAAAAHAPH/AQAAAAAAAAAIAPH/AQAAAAAAAAAJAPH/AQAAAAAAAAD7//H/AQAAAAAAAAD8//H/AQAAAAAAAAD9//H/AQAAAAAAAAD+//H/AQAAAAAAAAD+//L/AQAAAAAAAAD+//P/AQAAAAAAAAA=")
 tile_set = ExtResource("1_ubckn")
 
 [node name="Walls" type="TileMapLayer" parent="Map" unique_id=1549690853]
-tile_map_data = PackedByteArray("AAD///3/AQAAAAEAAAAAAP3/AQAAAAEAAAABAP3/AQAAAAEAAAACAP3/AQAAAAEAAAADAP3/AQAAAAEAAAAEAP3/AQAAAAEAAAAFAP3/AQAAAAEAAAAFAPz/AQAAAAEAAAAFAPv/AQAAAAEAAAAFAPr/AQAAAAEAAAAFAPn/AQAAAAEAAAAFAPj/AQAAAAEAAAAEAPj/AQAAAAEAAAADAPj/AQAAAAEAAAABAPj/AQAAAAEAAAAAAPj/AQAAAAEAAAD///j/AQAAAAEAAAD///n/AQAAAAEAAAD///r/AQAAAAEAAAD///v/AQAAAAEAAAD///z/AQAAAAEAAAABAPf/AAAAAAEAAAABAPb/AAAAAAEAAAABAPX/AAAAAAEAAAADAPX/AAAAAAEAAAADAPb/AAAAAAEAAAADAPf/AAAAAAEAAAAEAPX/AAAAAAEAAAAFAPX/AAAAAAEAAAAGAPX/AAAAAAEAAAAHAPX/AAAAAAEAAAAHAPT/AAAAAAEAAAAHAPP/AAAAAAEAAAAHAPL/AAAAAAEAAAAIAPL/AAAAAAEAAAAJAPL/AAAAAAEAAAAKAPL/AAAAAAEAAAAKAPH/AAAAAAEAAAAKAPD/AAAAAAEAAAAJAPD/AAAAAAEAAAAIAPD/AAAAAAEAAAAHAPD/AAAAAAEAAAAGAPD/AAAAAAEAAAAFAPD/AAAAAAEAAAAFAPH/AAAAAAEAAAAFAPL/AAAAAAEAAAAFAPP/AAAAAAEAAAAEAPP/AAAAAAEAAAADAPP/AAAAAAEAAAACAPP/AAAAAAEAAAABAPP/AAAAAAEAAAAAAPP/AAAAAAEAAAD///P/AAAAAAEAAAD///L/AAAAAAEAAAD///H/AAAAAAEAAAD///D/AAAAAAEAAAD+//D/AAAAAAEAAAD9//D/AAAAAAEAAAD8//D/AAAAAAEAAAD7//D/AAAAAAEAAAD6//D/AAAAAAEAAAD6//H/AAAAAAEAAAD6//L/AAAAAAEAAAD7//L/AAAAAAEAAAD8//L/AAAAAAEAAAD9//L/AAAAAAEAAAD9//P/AAAAAAEAAAD9//T/AAAAAAEAAAD9//X/AAAAAAEAAAD+//X/AAAAAAEAAAD///X/AAAAAAEAAAAAAPX/AAAAAAEAAAAAAPb/AAAAAAEAAAAAAPf/AAAAAAEAAAA=")
+tile_map_data = PackedByteArray("AAD///3/AQAAAAEAAAAAAP3/AQAAAAEAAAABAP3/AQAAAAEAAAACAP3/AQAAAAEAAAADAP3/AQAAAAEAAAAEAP3/AQAAAAEAAAAFAP3/AQAAAAEAAAAFAPz/AQAAAAEAAAAFAPv/AQAAAAEAAAAFAPr/AQAAAAEAAAAFAPn/AQAAAAEAAAAFAPj/AQAAAAEAAAAEAPj/AQAAAAEAAAADAPj/AQAAAAEAAAABAPj/AQAAAAEAAAAAAPj/AQAAAAEAAAD///j/AQAAAAEAAAD///n/AQAAAAEAAAD///r/AQAAAAEAAAD///v/AQAAAAEAAAD///z/AQAAAAEAAAABAPf/AQAAAAEAAAABAPb/AQAAAAEAAAABAPX/AQAAAAEAAAADAPX/AQAAAAEAAAADAPb/AQAAAAEAAAADAPf/AQAAAAEAAAAEAPX/AQAAAAEAAAAFAPX/AQAAAAEAAAAGAPX/AQAAAAEAAAAHAPX/AQAAAAEAAAAHAPT/AQAAAAEAAAAHAPP/AQAAAAEAAAAHAPL/AQAAAAEAAAAIAPL/AQAAAAEAAAAJAPL/AQAAAAEAAAAKAPL/AQAAAAEAAAAKAPH/AQAAAAEAAAAKAPD/AQAAAAEAAAAJAPD/AQAAAAEAAAAIAPD/AQAAAAEAAAAHAPD/AQAAAAEAAAAGAPD/AQAAAAEAAAAFAPD/AQAAAAEAAAAFAPH/AQAAAAEAAAAFAPL/AQAAAAEAAAAFAPP/AQAAAAEAAAAEAPP/AQAAAAEAAAADAPP/AQAAAAEAAAACAPP/AQAAAAEAAAABAPP/AQAAAAEAAAAAAPP/AQAAAAEAAAD///P/AQAAAAEAAAD///L/AQAAAAEAAAD///H/AQAAAAEAAAD///D/AQAAAAEAAAD+//D/AQAAAAEAAAD9//D/AQAAAAEAAAD8//D/AQAAAAEAAAD7//D/AQAAAAEAAAD6//D/AQAAAAEAAAD6//H/AQAAAAEAAAD6//L/AQAAAAEAAAD7//L/AQAAAAEAAAD8//L/AQAAAAEAAAD9//L/AQAAAAEAAAD9//P/AQAAAAEAAAD9//T/AQAAAAEAAAD9//X/AQAAAAEAAAD+//X/AQAAAAEAAAD///X/AQAAAAEAAAAAAPX/AQAAAAEAAAA=")
 tile_set = ExtResource("1_ubckn")
 
 [node name="Door" parent="." unique_id=2030626556 instance=ExtResource("2_exxqn")]
-position = Vector2(-128, -128)
-persistent_id = "door_01"
+position = Vector2(64, -256)
+persistent_id = &"floor_1_door_1"
 
 [node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("5_nonbb")]
 position = Vector2(-128, -128)
 item_data = ExtResource("8_jfbel")
-persistent_id = "small_potion_01"
 
-[node name="Sword" parent="." unique_id=1714038497 instance=ExtResource("5_nonbb")]
-position = Vector2(-128, -128)
-item_data = ExtResource("9_gtbqr")
-persistent_id = "sword_01"
+[node name="BladeLV0" parent="." unique_id=1714038497 instance=ExtResource("5_nonbb")]
+position = Vector2(128, -224)
+item_data = ExtResource("6_fv4kh")
+persistent_id = &"blade_lv0_1"
 
-[node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("4_0shy2")]
+[node name="Switch" parent="." unique_id=1354980094 instance=ExtResource("4_0shy2")]
+position = Vector2(0, -256)
 switch_id = 1
-persistent_id = "switch_01"
-
-[node name="Switch2" parent="." unique_id=145423169 instance=ExtResource("4_0shy2")]
-switch_id = 2
-persistent_id = "switch_02"
-
-[node name="Switch3" parent="." unique_id=1118063636 instance=ExtResource("4_0shy2")]
-switch_id = 3
-persistent_id = "switch_03"
+persistent_id = &"1"
 
 [node name="Upstairs" parent="." unique_id=394026365 instance=ExtResource("3_rkhaa")]
-target_floor_id = "floor_2"
-target_spawn_id = "FromFloor1Stairs"
+position = Vector2(288, -480)
+target_floor_id = &"floor_2"
+target_spawn_id = &"FromDownStair"
 
 [node name="EnemyFirst" parent="." unique_id=1359354295 instance=ExtResource("6_57ux4")]
-position = Vector2(64, -224)
+position = Vector2(0, -224)
 enemy_data = ExtResource("16_pdvyd")
-persistent_id = "enemy_01"
-
-[node name="EnemyFirst2" parent="." unique_id=1466533095 instance=ExtResource("6_57ux4")]
-position = Vector2(96, 0)
-enemy_data = ExtResource("16_pdvyd")
-persistent_id = "enemy_02"
 
 [node name="EnemyFirst3" parent="." unique_id=767531693 instance=ExtResource("6_57ux4")]
-position = Vector2(160, 0)
+position = Vector2(128, -192)
 enemy_data = ExtResource("16_pdvyd")
-persistent_id = "enemy_03"
+
+[node name="EnemyFirst4" parent="." unique_id=1208298208 instance=ExtResource("6_57ux4")]
+position = Vector2(96, -224)
+enemy_data = ExtResource("16_pdvyd")
+persistent_id = &"enemy4"
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=951342271]
 

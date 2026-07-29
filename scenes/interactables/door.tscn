@@ -1,18 +1,21 @@
 [gd_scene format=3 uid="uid://bguxyktnytjmf"]
 
 [ext_resource type="Script" uid="uid://ck8fsad3455ia" path="res://scripts/door.gd" id="1_fnoyy"]
-[ext_resource type="Texture2D" uid="uid://b1l3nybi3og6y" path="res://icon.svg" id="1_qq3h0"]
+[ext_resource type="Texture2D" uid="uid://dca65uvhp0yx7" path="res://assets/tiles/unfinished_world_tiles_32.png" id="2_fnoyy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
 size = Vector2(32, 32)
 
 [node name="Door" type="StaticBody2D" unique_id=2030626556]
 script = ExtResource("1_fnoyy")
+closed_frame_coords = Vector2i(0, 2)
+open_frame_coords = Vector2i(1, 2)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=737374311]
-modulate = Color(0.019607844, 1, 1, 1)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_qq3h0")
+texture = ExtResource("2_fnoyy")
+hframes = 5
+vframes = 4
+frame = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=35992430]
 shape = SubResource("RectangleShape2D_k3a8i")
