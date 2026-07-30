@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bxqe644ey5slk"]
+
+[ext_resource type="Script" uid="uid://kwb4qx2pkaek" path="res://scenes/ui/tracked_inventory_hud.gd" id="1_2rc0y"]
+
+[node name="TrackedInventoryHud" type="PanelContainer" unique_id=1918727888]
+custom_minimum_size = Vector2(300, 0)
+script = ExtResource("1_2rc0y")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=339586821]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=735964835]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content" unique_id=388791602]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "TRACKED ITEMS"
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/Content" unique_id=946992590]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EmptyLabel" type="Label" parent="MarginContainer/Content" unique_id=1612803325]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "No tracked items"
