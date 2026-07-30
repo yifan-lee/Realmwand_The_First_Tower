@@ -1,32 +1,14 @@
 [gd_scene format=3 uid="uid://cgtpywfdgxmdk"]
 
-[ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://cli46ma0bo83n" path="res://scripts/main.gd" id="1_tbgi4"]
-[ext_resource type="Script" uid="uid://c0lk8egs25bnu" path="res://scripts/floors/floor_manager.gd" id="2_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://75deq3hlwxqw" path="res://scenes/ui/game_hud.tscn" id="7_ya4ey"]
-[ext_resource type="PackedScene" uid="uid://dpvwubclw3iww" path="res://scenes/battle_layer.tscn" id="10_choun"]
-[ext_resource type="PackedScene" uid="uid://ciiteyffy0o22" path="res://scenes/ui/player_menu.tscn" id="13_player_menu"]
-[ext_resource type="PackedScene" uid="uid://dq5eeoylp08n6" path="res://scenes/ui/level_up_allocation_panel.tscn" id="15_dp3eg"]
+[ext_resource type="Script" uid="uid://cpdmgcoiwdyuu" path="res://scripts/main.gd" id="1_o5qli"]
 
-[node name="Main" type="Node2D" unique_id=1557596140]
-texture_filter = 1
-script = ExtResource("1_tbgi4")
+[node name="Main" type="Node2D" unique_id=1313419244]
+script = ExtResource("1_o5qli")
 
-[node name="FloorContainer" type="Node2D" parent="." unique_id=707772586]
+[node name="World" type="Node2D" parent="." unique_id=615637697]
 
-[node name="FloorManager" type="Node2D" parent="." unique_id=1998003023]
-script = ExtResource("2_o6xl0")
+[node name="FloorContainer" type="Node2D" parent="World" unique_id=533456458]
 
-[node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
-position = Vector2(0, -128)
+[node name="Systems" type="Node" parent="." unique_id=1391132939]
 
-[node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]
-
-[node name="MenuLayer" type="CanvasLayer" parent="." unique_id=1031546602]
-layer = 8
-
-[node name="PlayerMenu" parent="MenuLayer" unique_id=1226560284 instance=ExtResource("13_player_menu")]
-
-[node name="LevelUpAllocationPanel" parent="MenuLayer" unique_id=379999276 instance=ExtResource("15_dp3eg")]
-
-[node name="UI" parent="." unique_id=169207430 instance=ExtResource("7_ya4ey")]
+[node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]

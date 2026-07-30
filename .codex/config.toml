@@ -127,3 +127,12 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_game_node_properties]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.create_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_project_setting]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_open_scripts]
+approval_mode = "approve"
