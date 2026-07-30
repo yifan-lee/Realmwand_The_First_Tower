@@ -8,9 +8,10 @@ signal floor_changed(
 	spawn_id: StringName
 )
 
-@export var floor_catalog: FloorCatalog = preload(
-	"res://resources/floors/floor_catalog.tres"
+const FLOOR_SCENE_PATH_PATTERN := (
+	"res://scenes/floors/%s.tscn"
 )
+
 @export var initial_floor_id: StringName = &"floor_1"
 @export var initial_spawn_id: StringName = &"GameStart"
 
@@ -51,20 +52,23 @@ func change_floor(
 		departing_floor.queue_free()
 		await departing_floor.tree_exited
 
-	var definition := floor_catalog.get_floor(
+	var floor_scene := _load_floor_scene(
 		target_floor_id
-	)
-	assert(
-		definition != null,
-		"Unknown floor id: %s" % target_floor_id
 	)
 
 	current_floor = (
-		definition.scene.instantiate() as Floor
+		floor_scene.instantiate() as Floor
 	)
 	assert(
 		current_floor != null,
 		"Floor scene root must use Floor or a subclass"
+	)
+	assert(
+		current_floor.floor_id == target_floor_id,
+		(
+			"Floor scene id mismatch: requested %s, scene uses %s"
+			% [target_floor_id, current_floor.floor_id]
+		)
 	)
 
 	current_floor.disarm_transitions()
@@ -109,6 +113,32 @@ func record_enemy_defeated(enemy: WorldEnemy) -> void:
 	current_floor.record_removed_object(
 		enemy.get_floor_state_id()
 	)
+
+
+func _load_floor_scene(
+	floor_id: StringName
+) -> PackedScene:
+	var floor_scene_path := (
+		FLOOR_SCENE_PATH_PATTERN
+		% String(floor_id)
+	)
+	assert(
+		ResourceLoader.exists(
+			floor_scene_path,
+			"PackedScene"
+		),
+		"Unknown floor id: %s" % floor_id
+	)
+
+	var floor_scene := load(
+		floor_scene_path
+	) as PackedScene
+	assert(
+		floor_scene != null,
+		"Failed to load floor scene: %s"
+		% floor_scene_path
+	)
+	return floor_scene
 
 
 func _on_transition_requested(

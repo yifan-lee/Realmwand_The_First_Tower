@@ -9,6 +9,8 @@ signal transition_requested(
 signal battle_requested(enemy: WorldEnemy)
 
 @export var floor_id: StringName
+@export var display_name: String
+@export_multiline var description: String
 
 @onready var spawn_points: Node2D = $SpawnPoints
 
