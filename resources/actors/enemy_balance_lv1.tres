@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dia3blq8yoel2"]
+
+[ext_resource type="Texture2D" uid="uid://dlwpf175gntet" path="res://assets/monsters/balanced_tier_1.png" id="1_64pky"]
+[ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_y3vm6"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_norgi"]
+[ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_norgi"]
+
+[resource]
+script = ExtResource("1_y3vm6")
+skills = Array[ExtResource("2_norgi")]([ExtResource("3_norgi")])
+id = &"enemy_balance_lv1"
+display_name = "1级平衡怪"
+description = "各项属性都比较平衡的生物"
+max_hp = 80.0
+max_mp = 10.0
+atk = 14.0
+def = 6.0
+spd = 20.0
+portrait = ExtResource("1_64pky")

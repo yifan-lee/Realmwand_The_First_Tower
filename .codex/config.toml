@@ -136,3 +136,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_open_scripts]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_filesystem_tree]
+approval_mode = "approve"

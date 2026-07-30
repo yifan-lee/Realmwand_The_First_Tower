@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b4l6caihdn1ku"]
+
+[ext_resource type="Texture2D" uid="uid://dv0cjg1foja53" path="res://assets/items/token/atk_token_tier_1.png" id="1_2f0tt"]
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_x2doi"]
+
+[resource]
+script = ExtResource("1_x2doi")
+id = &"fragment_red_lv1"
+display_name = "1级红色碎片"
+description = "蕴含着攻击力"
+item_type = 3
+icon = ExtResource("1_2f0tt")
+world_texture = ExtResource("1_2f0tt")
