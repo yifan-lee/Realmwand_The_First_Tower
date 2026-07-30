@@ -1,0 +1,1614 @@
+{
+  "icon_count": 100,
+  "icon_size": [
+    343,
+    343
+  ],
+  "categories": {
+    "physical": 32,
+    "magic": 48,
+    "support": 20
+  },
+  "entries": [
+    {
+      "name": "sword_slash_tier_1",
+      "category": "physical",
+      "family": "sword_slash",
+      "tier": 1,
+      "image": "assets/skills/physical/sword_slash_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "greatsword_cleave_tier_1",
+      "category": "physical",
+      "family": "greatsword_cleave",
+      "tier": 1,
+      "image": "assets/skills/physical/greatsword_cleave_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "spear_thrust_tier_1",
+      "category": "physical",
+      "family": "spear_thrust",
+      "tier": 1,
+      "image": "assets/skills/physical/spear_thrust_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "hammer_smash_tier_1",
+      "category": "physical",
+      "family": "hammer_smash",
+      "tier": 1,
+      "image": "assets/skills/physical/hammer_smash_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "sword_slash_tier_2",
+      "category": "physical",
+      "family": "sword_slash",
+      "tier": 2,
+      "image": "assets/skills/physical/sword_slash_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "greatsword_cleave_tier_2",
+      "category": "physical",
+      "family": "greatsword_cleave",
+      "tier": 2,
+      "image": "assets/skills/physical/greatsword_cleave_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "spear_thrust_tier_2",
+      "category": "physical",
+      "family": "spear_thrust",
+      "tier": 2,
+      "image": "assets/skills/physical/spear_thrust_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "hammer_smash_tier_2",
+      "category": "physical",
+      "family": "hammer_smash",
+      "tier": 2,
+      "image": "assets/skills/physical/hammer_smash_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "sword_slash_tier_3",
+      "category": "physical",
+      "family": "sword_slash",
+      "tier": 3,
+      "image": "assets/skills/physical/sword_slash_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "greatsword_cleave_tier_3",
+      "category": "physical",
+      "family": "greatsword_cleave",
+      "tier": 3,
+      "image": "assets/skills/physical/greatsword_cleave_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "spear_thrust_tier_3",
+      "category": "physical",
+      "family": "spear_thrust",
+      "tier": 3,
+      "image": "assets/skills/physical/spear_thrust_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "hammer_smash_tier_3",
+      "category": "physical",
+      "family": "hammer_smash",
+      "tier": 3,
+      "image": "assets/skills/physical/hammer_smash_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "sword_slash_tier_4",
+      "category": "physical",
+      "family": "sword_slash",
+      "tier": 4,
+      "image": "assets/skills/physical/sword_slash_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "greatsword_cleave_tier_4",
+      "category": "physical",
+      "family": "greatsword_cleave",
+      "tier": 4,
+      "image": "assets/skills/physical/greatsword_cleave_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "spear_thrust_tier_4",
+      "category": "physical",
+      "family": "spear_thrust",
+      "tier": 4,
+      "image": "assets/skills/physical/spear_thrust_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "hammer_smash_tier_4",
+      "category": "physical",
+      "family": "hammer_smash",
+      "tier": 4,
+      "image": "assets/skills/physical/hammer_smash_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_weapons_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dagger_stab_tier_1",
+      "category": "physical",
+      "family": "dagger_stab",
+      "tier": 1,
+      "image": "assets/skills/physical/dagger_stab_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dual_blade_slash_tier_1",
+      "category": "physical",
+      "family": "dual_blade_slash",
+      "tier": 1,
+      "image": "assets/skills/physical/dual_blade_slash_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "bow_power_shot_tier_1",
+      "category": "physical",
+      "family": "bow_power_shot",
+      "tier": 1,
+      "image": "assets/skills/physical/bow_power_shot_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fist_punch_tier_1",
+      "category": "physical",
+      "family": "fist_punch",
+      "tier": 1,
+      "image": "assets/skills/physical/fist_punch_tier_1.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dagger_stab_tier_2",
+      "category": "physical",
+      "family": "dagger_stab",
+      "tier": 2,
+      "image": "assets/skills/physical/dagger_stab_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dual_blade_slash_tier_2",
+      "category": "physical",
+      "family": "dual_blade_slash",
+      "tier": 2,
+      "image": "assets/skills/physical/dual_blade_slash_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "bow_power_shot_tier_2",
+      "category": "physical",
+      "family": "bow_power_shot",
+      "tier": 2,
+      "image": "assets/skills/physical/bow_power_shot_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fist_punch_tier_2",
+      "category": "physical",
+      "family": "fist_punch",
+      "tier": 2,
+      "image": "assets/skills/physical/fist_punch_tier_2.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dagger_stab_tier_3",
+      "category": "physical",
+      "family": "dagger_stab",
+      "tier": 3,
+      "image": "assets/skills/physical/dagger_stab_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dual_blade_slash_tier_3",
+      "category": "physical",
+      "family": "dual_blade_slash",
+      "tier": 3,
+      "image": "assets/skills/physical/dual_blade_slash_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "bow_power_shot_tier_3",
+      "category": "physical",
+      "family": "bow_power_shot",
+      "tier": 3,
+      "image": "assets/skills/physical/bow_power_shot_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fist_punch_tier_3",
+      "category": "physical",
+      "family": "fist_punch",
+      "tier": 3,
+      "image": "assets/skills/physical/fist_punch_tier_3.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dagger_stab_tier_4",
+      "category": "physical",
+      "family": "dagger_stab",
+      "tier": 4,
+      "image": "assets/skills/physical/dagger_stab_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "dual_blade_slash_tier_4",
+      "category": "physical",
+      "family": "dual_blade_slash",
+      "tier": 4,
+      "image": "assets/skills/physical/dual_blade_slash_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "bow_power_shot_tier_4",
+      "category": "physical",
+      "family": "bow_power_shot",
+      "tier": 4,
+      "image": "assets/skills/physical/bow_power_shot_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fist_punch_tier_4",
+      "category": "physical",
+      "family": "fist_punch",
+      "tier": 4,
+      "image": "assets/skills/physical/fist_punch_tier_4.png",
+      "source_sheet": "assets/skills/source/physical_agile_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fire_burst_tier_1",
+      "category": "magic",
+      "family": "fire_burst",
+      "tier": 1,
+      "image": "assets/skills/magic/fire_burst_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "ice_shard_tier_1",
+      "category": "magic",
+      "family": "ice_shard",
+      "tier": 1,
+      "image": "assets/skills/magic/ice_shard_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "lightning_orb_tier_1",
+      "category": "magic",
+      "family": "lightning_orb",
+      "tier": 1,
+      "image": "assets/skills/magic/lightning_orb_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "earth_spike_tier_1",
+      "category": "magic",
+      "family": "earth_spike",
+      "tier": 1,
+      "image": "assets/skills/magic/earth_spike_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fire_burst_tier_2",
+      "category": "magic",
+      "family": "fire_burst",
+      "tier": 2,
+      "image": "assets/skills/magic/fire_burst_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "ice_shard_tier_2",
+      "category": "magic",
+      "family": "ice_shard",
+      "tier": 2,
+      "image": "assets/skills/magic/ice_shard_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "lightning_orb_tier_2",
+      "category": "magic",
+      "family": "lightning_orb",
+      "tier": 2,
+      "image": "assets/skills/magic/lightning_orb_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "earth_spike_tier_2",
+      "category": "magic",
+      "family": "earth_spike",
+      "tier": 2,
+      "image": "assets/skills/magic/earth_spike_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fire_burst_tier_3",
+      "category": "magic",
+      "family": "fire_burst",
+      "tier": 3,
+      "image": "assets/skills/magic/fire_burst_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "ice_shard_tier_3",
+      "category": "magic",
+      "family": "ice_shard",
+      "tier": 3,
+      "image": "assets/skills/magic/ice_shard_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "lightning_orb_tier_3",
+      "category": "magic",
+      "family": "lightning_orb",
+      "tier": 3,
+      "image": "assets/skills/magic/lightning_orb_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "earth_spike_tier_3",
+      "category": "magic",
+      "family": "earth_spike",
+      "tier": 3,
+      "image": "assets/skills/magic/earth_spike_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "fire_burst_tier_4",
+      "category": "magic",
+      "family": "fire_burst",
+      "tier": 4,
+      "image": "assets/skills/magic/fire_burst_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "ice_shard_tier_4",
+      "category": "magic",
+      "family": "ice_shard",
+      "tier": 4,
+      "image": "assets/skills/magic/ice_shard_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "lightning_orb_tier_4",
+      "category": "magic",
+      "family": "lightning_orb",
+      "tier": 4,
+      "image": "assets/skills/magic/lightning_orb_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "earth_spike_tier_4",
+      "category": "magic",
+      "family": "earth_spike",
+      "tier": 4,
+      "image": "assets/skills/magic/earth_spike_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_elements_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "wind_vortex_tier_1",
+      "category": "magic",
+      "family": "wind_vortex",
+      "tier": 1,
+      "image": "assets/skills/magic/wind_vortex_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "water_orb_tier_1",
+      "category": "magic",
+      "family": "water_orb",
+      "tier": 1,
+      "image": "assets/skills/magic/water_orb_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "shadow_orb_tier_1",
+      "category": "magic",
+      "family": "shadow_orb",
+      "tier": 1,
+      "image": "assets/skills/magic/shadow_orb_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "holy_ray_tier_1",
+      "category": "magic",
+      "family": "holy_ray",
+      "tier": 1,
+      "image": "assets/skills/magic/holy_ray_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "wind_vortex_tier_2",
+      "category": "magic",
+      "family": "wind_vortex",
+      "tier": 2,
+      "image": "assets/skills/magic/wind_vortex_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "water_orb_tier_2",
+      "category": "magic",
+      "family": "water_orb",
+      "tier": 2,
+      "image": "assets/skills/magic/water_orb_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "shadow_orb_tier_2",
+      "category": "magic",
+      "family": "shadow_orb",
+      "tier": 2,
+      "image": "assets/skills/magic/shadow_orb_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "holy_ray_tier_2",
+      "category": "magic",
+      "family": "holy_ray",
+      "tier": 2,
+      "image": "assets/skills/magic/holy_ray_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "wind_vortex_tier_3",
+      "category": "magic",
+      "family": "wind_vortex",
+      "tier": 3,
+      "image": "assets/skills/magic/wind_vortex_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "water_orb_tier_3",
+      "category": "magic",
+      "family": "water_orb",
+      "tier": 3,
+      "image": "assets/skills/magic/water_orb_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "shadow_orb_tier_3",
+      "category": "magic",
+      "family": "shadow_orb",
+      "tier": 3,
+      "image": "assets/skills/magic/shadow_orb_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "holy_ray_tier_3",
+      "category": "magic",
+      "family": "holy_ray",
+      "tier": 3,
+      "image": "assets/skills/magic/holy_ray_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "wind_vortex_tier_4",
+      "category": "magic",
+      "family": "wind_vortex",
+      "tier": 4,
+      "image": "assets/skills/magic/wind_vortex_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "water_orb_tier_4",
+      "category": "magic",
+      "family": "water_orb",
+      "tier": 4,
+      "image": "assets/skills/magic/water_orb_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "shadow_orb_tier_4",
+      "category": "magic",
+      "family": "shadow_orb",
+      "tier": 4,
+      "image": "assets/skills/magic/shadow_orb_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "holy_ray_tier_4",
+      "category": "magic",
+      "family": "holy_ray",
+      "tier": 4,
+      "image": "assets/skills/magic/holy_ray_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_polarities_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "poison_burst_tier_1",
+      "category": "magic",
+      "family": "poison_burst",
+      "tier": 1,
+      "image": "assets/skills/magic/poison_burst_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "arcane_missile_tier_1",
+      "category": "magic",
+      "family": "arcane_missile",
+      "tier": 1,
+      "image": "assets/skills/magic/arcane_missile_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "gravity_well_tier_1",
+      "category": "magic",
+      "family": "gravity_well",
+      "tier": 1,
+      "image": "assets/skills/magic/gravity_well_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "meteor_fall_tier_1",
+      "category": "magic",
+      "family": "meteor_fall",
+      "tier": 1,
+      "image": "assets/skills/magic/meteor_fall_tier_1.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "poison_burst_tier_2",
+      "category": "magic",
+      "family": "poison_burst",
+      "tier": 2,
+      "image": "assets/skills/magic/poison_burst_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "arcane_missile_tier_2",
+      "category": "magic",
+      "family": "arcane_missile",
+      "tier": 2,
+      "image": "assets/skills/magic/arcane_missile_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "gravity_well_tier_2",
+      "category": "magic",
+      "family": "gravity_well",
+      "tier": 2,
+      "image": "assets/skills/magic/gravity_well_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "meteor_fall_tier_2",
+      "category": "magic",
+      "family": "meteor_fall",
+      "tier": 2,
+      "image": "assets/skills/magic/meteor_fall_tier_2.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "poison_burst_tier_3",
+      "category": "magic",
+      "family": "poison_burst",
+      "tier": 3,
+      "image": "assets/skills/magic/poison_burst_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "arcane_missile_tier_3",
+      "category": "magic",
+      "family": "arcane_missile",
+      "tier": 3,
+      "image": "assets/skills/magic/arcane_missile_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "gravity_well_tier_3",
+      "category": "magic",
+      "family": "gravity_well",
+      "tier": 3,
+      "image": "assets/skills/magic/gravity_well_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "meteor_fall_tier_3",
+      "category": "magic",
+      "family": "meteor_fall",
+      "tier": 3,
+      "image": "assets/skills/magic/meteor_fall_tier_3.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "poison_burst_tier_4",
+      "category": "magic",
+      "family": "poison_burst",
+      "tier": 4,
+      "image": "assets/skills/magic/poison_burst_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "arcane_missile_tier_4",
+      "category": "magic",
+      "family": "arcane_missile",
+      "tier": 4,
+      "image": "assets/skills/magic/arcane_missile_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "gravity_well_tier_4",
+      "category": "magic",
+      "family": "gravity_well",
+      "tier": 4,
+      "image": "assets/skills/magic/gravity_well_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "meteor_fall_tier_4",
+      "category": "magic",
+      "family": "meteor_fall",
+      "tier": 4,
+      "image": "assets/skills/magic/meteor_fall_tier_4.png",
+      "source_sheet": "assets/skills/source/magic_advanced_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_atk_tier_1",
+      "category": "support",
+      "family": "buff_atk",
+      "tier": 1,
+      "image": "assets/skills/support/buff_atk_tier_1.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        0,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_def_tier_1",
+      "category": "support",
+      "family": "buff_def",
+      "tier": 1,
+      "image": "assets/skills/support/buff_def_tier_1.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        1,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_spd_tier_1",
+      "category": "support",
+      "family": "buff_spd",
+      "tier": 1,
+      "image": "assets/skills/support/buff_spd_tier_1.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        2,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_hp_tier_1",
+      "category": "support",
+      "family": "buff_hp",
+      "tier": 1,
+      "image": "assets/skills/support/buff_hp_tier_1.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        3,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_mp_tier_1",
+      "category": "support",
+      "family": "buff_mp",
+      "tier": 1,
+      "image": "assets/skills/support/buff_mp_tier_1.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        4,
+        0
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_atk_tier_2",
+      "category": "support",
+      "family": "buff_atk",
+      "tier": 2,
+      "image": "assets/skills/support/buff_atk_tier_2.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        0,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_def_tier_2",
+      "category": "support",
+      "family": "buff_def",
+      "tier": 2,
+      "image": "assets/skills/support/buff_def_tier_2.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        1,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_spd_tier_2",
+      "category": "support",
+      "family": "buff_spd",
+      "tier": 2,
+      "image": "assets/skills/support/buff_spd_tier_2.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        2,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_hp_tier_2",
+      "category": "support",
+      "family": "buff_hp",
+      "tier": 2,
+      "image": "assets/skills/support/buff_hp_tier_2.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        3,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_mp_tier_2",
+      "category": "support",
+      "family": "buff_mp",
+      "tier": 2,
+      "image": "assets/skills/support/buff_mp_tier_2.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        4,
+        1
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_atk_tier_3",
+      "category": "support",
+      "family": "buff_atk",
+      "tier": 3,
+      "image": "assets/skills/support/buff_atk_tier_3.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        0,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_def_tier_3",
+      "category": "support",
+      "family": "buff_def",
+      "tier": 3,
+      "image": "assets/skills/support/buff_def_tier_3.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        1,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_spd_tier_3",
+      "category": "support",
+      "family": "buff_spd",
+      "tier": 3,
+      "image": "assets/skills/support/buff_spd_tier_3.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        2,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_hp_tier_3",
+      "category": "support",
+      "family": "buff_hp",
+      "tier": 3,
+      "image": "assets/skills/support/buff_hp_tier_3.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        3,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_mp_tier_3",
+      "category": "support",
+      "family": "buff_mp",
+      "tier": 3,
+      "image": "assets/skills/support/buff_mp_tier_3.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        4,
+        2
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_atk_tier_4",
+      "category": "support",
+      "family": "buff_atk",
+      "tier": 4,
+      "image": "assets/skills/support/buff_atk_tier_4.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        0,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_def_tier_4",
+      "category": "support",
+      "family": "buff_def",
+      "tier": 4,
+      "image": "assets/skills/support/buff_def_tier_4.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        1,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_spd_tier_4",
+      "category": "support",
+      "family": "buff_spd",
+      "tier": 4,
+      "image": "assets/skills/support/buff_spd_tier_4.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        2,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_hp_tier_4",
+      "category": "support",
+      "family": "buff_hp",
+      "tier": 4,
+      "image": "assets/skills/support/buff_hp_tier_4.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        3,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    },
+    {
+      "name": "buff_mp_tier_4",
+      "category": "support",
+      "family": "buff_mp",
+      "tier": 4,
+      "image": "assets/skills/support/buff_mp_tier_4.png",
+      "source_sheet": "assets/skills/source/support_stats_sheet.png",
+      "source_coords": [
+        4,
+        3
+      ],
+      "size": [
+        343,
+        343
+      ]
+    }
+  ]
+}
