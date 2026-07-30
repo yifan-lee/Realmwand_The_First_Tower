@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dmpsab2hobft3"]
+
+[node name="Floor" type="Node2D" unique_id=1021498195]
+
+[node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
+unique_name_in_owner = true
+z_index = -10
+
+[node name="WallLayer" type="TileMapLayer" parent="." unique_id=917837273]
+unique_name_in_owner = true
+
+[node name="FeatureLayer" type="TileMapLayer" parent="." unique_id=1361208269]
+unique_name_in_owner = true
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=759900]
+unique_name_in_owner = true
+
+[node name="Interactables" type="Node2D" parent="." unique_id=191277635]
+unique_name_in_owner = true
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
+unique_name_in_owner = true
+
+[node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
+unique_name_in_owner = true
