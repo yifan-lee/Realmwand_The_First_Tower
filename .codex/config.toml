@@ -124,3 +124,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_scene_dependencies]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_node_properties]
+approval_mode = "approve"

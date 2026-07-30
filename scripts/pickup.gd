@@ -1,4 +1,5 @@
 @tool
+class_name ItemPickup
 extends Area2D
 
 
@@ -73,7 +74,7 @@ func _refresh_visual() -> void:
 		return
 
 	sprite.texture = (
-		item_data.icon
+		item_data.get_world_texture()
 		if item_data != null
 		else null
 	)

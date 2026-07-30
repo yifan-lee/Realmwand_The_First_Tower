@@ -9,7 +9,8 @@ signal cancelled
 const CATEGORIES: Array[ItemData.ItemType] = [
 	ItemData.ItemType.CONSUMABLE,
 	ItemData.ItemType.EQUIPMENT,
-	ItemData.ItemType.SPECIAL,
+	ItemData.ItemType.KEY_ITEM,
+	ItemData.ItemType.MATERIAL,
 ]
 
 @onready var category_list: VBoxContainer = (
@@ -170,10 +171,12 @@ func _get_category_name(category: ItemData.ItemType) -> String:
 			return "Potions"
 		ItemData.ItemType.EQUIPMENT:
 			return "Equipment"
-		ItemData.ItemType.SPECIAL:
-			return "Special"
+		ItemData.ItemType.KEY_ITEM:
+			return "Key Items"
+		ItemData.ItemType.MATERIAL:
+			return "Materials"
 
-	return "Special"
+	return "Key Items"
 
 
 func _on_category_focused(

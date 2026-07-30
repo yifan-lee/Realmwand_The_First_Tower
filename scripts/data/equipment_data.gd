@@ -1,3 +1,4 @@
+@tool
 class_name EquipmentData
 extends ItemData
 
@@ -33,6 +34,9 @@ enum HandRule {
 
 func _init() -> void:
 	item_type = ItemType.EQUIPMENT
+	usable_from_inventory = true
+	consumed_on_use = false
+	max_stack = 1
 
 
 func is_hand_equipment() -> bool:

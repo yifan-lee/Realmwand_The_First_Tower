@@ -8,6 +8,7 @@ script = ExtResource("1_1wsv6")
 id = &"red_fragment_lv1"
 display_name = "Red Fragment LV1"
 description = "红色宝石，蕴含着攻击力"
+item_type = 2
 icon = ExtResource("1_mmuyk")
 show_count_in_hud = true
 usable_in_battle = false

@@ -617,18 +617,28 @@ func restore_full_health() -> void:
 func play_interact_animation() -> void:
 	is_acting = true
 
-	animated_sprite.play(
-		_get_animation_name(&"interact")
+	var animation_name := _get_animation_name(&"interact")
+	var frame_count := (
+		animated_sprite.sprite_frames
+		.get_frame_count(animation_name)
 	)
 
-	while animated_sprite.frame < 1:
+	if frame_count <= 0:
+		try_interact()
+		is_acting = false
+		_play_idle_animation()
+		return
+
+	animated_sprite.play(animation_name)
+
+	while animated_sprite.frame < mini(1, frame_count - 1):
 		await animated_sprite.frame_changed
 
 	try_interact()
 
-	await animated_sprite.animation_finished
+	while animated_sprite.frame < frame_count - 1:
+		await animated_sprite.frame_changed
 
 	is_acting = false
 	_play_idle_animation()
-
 

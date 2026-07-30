@@ -10,6 +10,9 @@ static func can_use(
 	if item == null or player == null:
 		return false
 
+	if not item.usable_from_inventory:
+		return false
+
 	if in_battle and not item.usable_in_battle:
 		return false
 
@@ -27,7 +30,10 @@ static func can_use(
 		ItemData.ItemType.EQUIPMENT:
 			return item is EquipmentData
 
-		ItemData.ItemType.SPECIAL:
+		ItemData.ItemType.KEY_ITEM:
+			return false
+
+		ItemData.ItemType.MATERIAL:
 			return false
 
 	return false

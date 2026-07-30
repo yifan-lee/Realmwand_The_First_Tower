@@ -42,7 +42,6 @@ item_data = ExtResource("6_fv4kh")
 persistent_id = &"blade_lv0_1"
 
 [node name="RedFragment" parent="." unique_id=1898905410 instance=ExtResource("5_nonbb")]
-visible = false
 position = Vector2(64, -384)
 item_data = ExtResource("7_n2pbf")
 persistent_id = &"red_fragment_lv1"

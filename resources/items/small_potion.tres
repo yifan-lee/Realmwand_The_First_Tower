@@ -10,5 +10,6 @@ display_name = "Small Potion"
 description = "Restores a small amount of HP."
 icon = ExtResource("1_ijdfx")
 show_count_in_hud = true
+usable_from_inventory = true
 healing_amount = 50
 metadata/_custom_type_script = "uid://dsk841x7iejq4"

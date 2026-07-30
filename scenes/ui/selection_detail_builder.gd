@@ -86,12 +86,14 @@ static func from_item(
 			detail.properties.append(
 				"Equipped: %s" % equipped_slots
 			)
-	elif item.item_type == ItemData.ItemType.SPECIAL:
-		detail.properties.append("Type: Special")
+	elif item.item_type == ItemData.ItemType.KEY_ITEM:
+		detail.properties.append("Type: Key Item")
+	elif item.item_type == ItemData.ItemType.MATERIAL:
+		detail.properties.append("Type: Material")
 
 	if in_battle and not item.usable_in_battle:
 		detail.warning = "Cannot be used in battle"
-	elif item.item_type == ItemData.ItemType.SPECIAL:
+	elif not item.usable_from_inventory:
 		detail.warning = "Cannot be used directly"
 	elif (
 		item.item_type == ItemData.ItemType.CONSUMABLE
