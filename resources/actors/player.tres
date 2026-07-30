@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://busl32dqnk4m7"]
 
 [ext_resource type="Script" uid="uid://culsiafy8tt8n" path="res://scripts/data/player_data.gd" id="1_1rjkp"]
+[ext_resource type="SpriteFrames" uid="uid://rg80tmetdqnu" path="res://resources/actors/player_sprite_frames.tres" id="2_2rsbh"]
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="2_dg3l6"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_2rsbh"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="4_dg3l6"]
 
 [resource]
 script = ExtResource("1_1rjkp")
+sprite_frames = ExtResource("2_2rsbh")
 starting_skills = Array[ExtResource("3_2rsbh")]([ExtResource("4_dg3l6")])
 id = &"player"
 display_name = "TooTwo"
@@ -15,3 +17,4 @@ max_hp = 400.0
 max_mp = 200.0
 atk = 40.0
 def = 40.0
+spd = 40.0

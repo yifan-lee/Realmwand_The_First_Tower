@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cgtpywfdgxmdk"]
 
 [ext_resource type="Script" uid="uid://cpdmgcoiwdyuu" path="res://scripts/main.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="2_0wfyh"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
@@ -8,7 +9,13 @@ script = ExtResource("1_o5qli")
 [node name="World" type="Node2D" parent="." unique_id=615637697]
 
 [node name="FloorContainer" type="Node2D" parent="World" unique_id=533456458]
+unique_name_in_owner = true
+
+[node name="Player" parent="World" unique_id=502328232 instance=ExtResource("2_0wfyh")]
+unique_name_in_owner = true
 
 [node name="Systems" type="Node" parent="." unique_id=1391132939]
+unique_name_in_owner = true
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
+unique_name_in_owner = true
