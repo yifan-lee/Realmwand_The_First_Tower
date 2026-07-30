@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cpdmgcoiwdyuu" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://ddq8reokgkxpy" path="res://scripts/floors/floor_manager.gd" id="3_sugp2"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
@@ -16,6 +17,10 @@ unique_name_in_owner = true
 
 [node name="Systems" type="Node" parent="." unique_id=1391132939]
 unique_name_in_owner = true
+
+[node name="FloorManager" type="Node" parent="Systems" unique_id=1548920082]
+unique_name_in_owner = true
+script = ExtResource("3_sugp2")
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true
