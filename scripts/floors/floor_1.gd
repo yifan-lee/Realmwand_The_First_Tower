@@ -1,4 +1,4 @@
-class_name FloorOne
+# class_name FloorOne
 extends Floor
 
 @onready var floor_switch: TowerSwitch = $Switch

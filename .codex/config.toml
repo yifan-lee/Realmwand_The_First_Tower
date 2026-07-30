@@ -115,3 +115,9 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_test_report]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.search_in_files]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_script_references]
+approval_mode = "approve"

@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ch1jkr7o8hp6h" path="res://scripts/player.gd" id="1_ru62r"]
 [ext_resource type="Script" uid="uid://d2iv5s27ccg1q" path="res://scripts/data/skill_data.gd" id="2_oomub"]
-[ext_resource type="Texture2D" uid="uid://bvtr3eli4t2ss" path="res://assets/sprites/gameplay_sprites_32.png" id="2_ru62r"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_8y416"]
 [ext_resource type="Resource" uid="uid://rq8yovmh8ihu" path="res://resources/skills/power_strike.tres" id="4_7860b"]
 [ext_resource type="Resource" uid="uid://wwwh131r3tlh" path="res://resources/debug/player_debug_config.tres" id="5_7860b"]
 [ext_resource type="Texture2D" uid="uid://f52mvcec8b87" path="res://assets/portraits/player_portrait.png" id="5_portrait"]
+[ext_resource type="SpriteFrames" uid="uid://b4fhnbh3susos" path="res://resources/animations/player_sprite_frames.tres" id="7_7860b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
 size = Vector2(24, 24)
@@ -17,11 +17,11 @@ skill_catalog = Array[ExtResource("2_oomub")]([ExtResource("3_8y416"), ExtResour
 debug_config = ExtResource("5_7860b")
 portrait = ExtResource("5_portrait")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1997796568]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=707108126]
 texture_filter = 1
-texture = ExtResource("2_ru62r")
-hframes = 4
-vframes = 4
+scale = Vector2(0.2, 0.2)
+sprite_frames = ExtResource("7_7860b")
+animation = &"walk_up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447536532]
 shape = SubResource("RectangleShape2D_k3a8i")

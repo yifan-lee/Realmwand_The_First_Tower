@@ -21,6 +21,9 @@ signal equipment_changed(
 )
 
 @onready var interaction_ray: RayCast2D = $InteractionRay
+@onready var animated_sprite: AnimatedSprite2D = (
+	$AnimatedSprite2D
+)
 
 const GRID_SIZE: int = 32
 const MOVE_DURATION: float = 0.15
@@ -29,6 +32,7 @@ const BATTLE_BALANCE: BattleBalanceConfig = preload(
 )
 
 var is_moving: bool = false
+var is_acting: bool = false
 var last_stable_position: Vector2
 var inventory: Array[ItemData] = []
 var facing_direction: Vector2 = Vector2.DOWN
@@ -94,14 +98,15 @@ func _ready() -> void:
 	_learn_available_skills(false)
 	_apply_debug_config()
 	last_stable_position = global_position
+	_play_idle_animation()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_moving:
+	if is_moving or is_acting:
 		return
 
 	if event.is_action_pressed("interact"):
-		try_interact()
+		play_interact_animation()
 		return
 
 	var direction := Vector2.ZERO
@@ -120,12 +125,48 @@ func _unhandled_input(event: InputEvent) -> void:
 		interaction_ray.target_position = facing_direction * GRID_SIZE
 		move_one_tile(direction)
 
+func _get_direction_suffix(
+	direction: Vector2
+) -> String:
+	if direction == Vector2.UP:
+		return "up"
+	if direction == Vector2.DOWN:
+		return "down"
+	if direction == Vector2.LEFT:
+		return "left"
+
+	return "right"
+
+
+func _get_animation_name(
+	action: StringName
+) -> StringName:
+	return StringName(
+		"%s_%s"
+		% [
+			action,
+			_get_direction_suffix(facing_direction),
+		]
+	)
+
+
+func _play_idle_animation() -> void:
+	animated_sprite.play(
+		_get_animation_name(&"idle")
+	)
+
 func move_one_tile(direction: Vector2) -> void:
 	var motion := direction * GRID_SIZE
 	if test_move(global_transform, motion):
+		_play_idle_animation()
 		return
+
 	is_moving = true
 	last_stable_position = global_position
+
+	animated_sprite.play(
+		_get_animation_name(&"walk")
+	)
 
 	var target_position := position + motion
 	var tween := create_tween()
@@ -134,6 +175,7 @@ func move_one_tile(direction: Vector2) -> void:
 	await tween.finished
 	is_moving = false
 	last_stable_position = global_position
+	_play_idle_animation()
 
 
 func wait_for_current_movement() -> void:
@@ -570,3 +612,23 @@ func restore_mp(amount: int) -> void:
 
 func restore_full_health() -> void:
 	current_hp = max_hp
+
+
+func play_interact_animation() -> void:
+	is_acting = true
+
+	animated_sprite.play(
+		_get_animation_name(&"interact")
+	)
+
+	while animated_sprite.frame < 1:
+		await animated_sprite.frame_changed
+
+	try_interact()
+
+	await animated_sprite.animation_finished
+
+	is_acting = false
+	_play_idle_animation()
+
+

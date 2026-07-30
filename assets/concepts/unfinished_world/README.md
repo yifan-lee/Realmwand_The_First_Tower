@@ -32,6 +32,8 @@
 - `items/`：HP、MP 与四种属性兑换物各 4 个等级。
 - `interactables/`：四种属性对应的 NPC、雕像和兑换终端。
 - `tiles/`：地面、墙壁、门、楼梯、传送门、机关与单向洞口。
+- `player_animation/`：主角四方向移动、攻击、受击和交互的 52 帧动作
+  源表、透明表与独立切帧。
 
 ## 设计表网格
 
@@ -120,3 +122,6 @@ SpriteSheet。需要保留生成细节时使用 `split_original/`，需要统一
   tools/split_concept_sheets.py \
   --preview-directory tmp/tests/<run>/screenshots
 ```
+
+主角动作图集的网格映射与重建命令见
+`player_animation/README.md`。
