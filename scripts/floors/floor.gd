@@ -32,6 +32,7 @@ class TileCellSnapshot:
 @onready var spawn_points: Node2D = $SpawnPoints
 @onready var interactables: Node2D = %Interactables
 @onready var enemies: Node2D = %Enemies
+@onready var pickups: Node2D = %Pickups
 
 
 func get_spawn_point(spawn_id: StringName) -> Marker2D:
@@ -105,32 +106,39 @@ func capture_runtime_state() -> Dictionary:
 	for child: Node in interactables.get_children():
 		var floor_switch := child as FloorSwitch
 
-		if floor_switch != null:
-			if floor_switch.switch_id != &"":
-				var switch_key := String(
-					floor_switch.switch_id
-				)
-
-				switch_states[switch_key] = (
-					floor_switch.is_active
-				)
-
+		if floor_switch == null:
 			continue
 
+		if floor_switch.switch_id.is_empty():
+			continue
+
+		var switch_key := String(
+			floor_switch.switch_id
+		)
+
+		switch_states[switch_key] = (
+			floor_switch.is_active
+		)
+
+	for child: Node in pickups.get_children():
 		var item_pickup := child as ItemPickup
 
-		if item_pickup != null:
-			if item_pickup.pickup_id != &"":
-				var pickup_key := String(
-					item_pickup.pickup_id
-				)
+		if item_pickup == null:
+			continue
 
-				pickup_states[pickup_key] = {
-					"is_collected":
-						item_pickup.is_collected,
-					"amount":
-						item_pickup.amount,
-				}
+		if item_pickup.pickup_id.is_empty():
+			continue
+
+		var pickup_key := String(
+			item_pickup.pickup_id
+		)
+
+		pickup_states[pickup_key] = {
+			"is_collected":
+				item_pickup.is_collected,
+			"amount":
+				item_pickup.amount,
+		}
 
 	for child: Node in enemies.get_children():
 		var enemy := child as Enemy
@@ -212,7 +220,7 @@ func _apply_pickup_states(
 
 	var pickup_states: Dictionary = pickup_states_value
 
-	for child: Node in interactables.get_children():
+	for child: Node in pickups.get_children():
 		var item_pickup := child as ItemPickup
 
 		if item_pickup == null:

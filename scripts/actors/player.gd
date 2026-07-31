@@ -221,17 +221,39 @@ func equip_item(
 	):
 		return false
 
-	if not inventory.remove_item(item_id):
-		return false
-
 	var displaced_items: Array[EquipmentData] = (
-		equipment.equip(
+		equipment.get_displaced_items(
 			item,
 			target_slot
 		)
 	)
 
 	for displaced_item: EquipmentData in displaced_items:
+		var available_capacity: int = (
+			inventory.get_remaining_capacity(
+				displaced_item
+			)
+		)
+
+		if displaced_item.id == item.id:
+			available_capacity += 1
+
+		if available_capacity < 1:
+			return false
+
+	if not inventory.remove_item(item_id):
+		return false
+
+	var actual_displaced_items: Array[EquipmentData] = (
+		equipment.equip(
+			item,
+			target_slot
+		)
+	)
+
+	for displaced_item: EquipmentData in (
+		actual_displaced_items
+	):
 		var remaining_amount: int = (
 			inventory.add_item(displaced_item)
 		)
@@ -241,6 +263,7 @@ func equip_item(
 				"Could not return displaced equipment '%s'."
 				% displaced_item.id
 			)
+			return false
 
 	return true
 

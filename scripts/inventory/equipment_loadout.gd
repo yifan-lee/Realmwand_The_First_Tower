@@ -73,7 +73,7 @@ func equip(
 	if not can_equip(item, target_slot):
 		return displaced_items
 
-	displaced_items = _collect_displaced_items(
+	displaced_items = get_displaced_items(
 		item,
 		target_slot
 	)
@@ -252,3 +252,16 @@ func get_spd_bonus() -> float:
 		total += item.spd_bonus
 
 	return total
+
+
+func get_displaced_items(
+	item: EquipmentData,
+	target_slot: int
+) -> Array[EquipmentData]:
+	if not can_equip(item, target_slot):
+		return []
+
+	return _collect_displaced_items(
+		item,
+		target_slot
+	)

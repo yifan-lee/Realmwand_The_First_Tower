@@ -54,6 +54,7 @@ instance_id = &"floor_1_enemy_01"
 
 [node name="Blade" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
 position = Vector2(-32, 0)
+pickup_id = &"blade_01"
 item_data = ExtResource("7_x8e2u")
 
 [node name="HpRecoveryPickup" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=647430724 instance=ExtResource("5_wl6yc")]

@@ -148,3 +148,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.tilemap_get_cell]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_project_settings]
+approval_mode = "approve"

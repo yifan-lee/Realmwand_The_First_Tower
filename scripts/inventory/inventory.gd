@@ -80,3 +80,16 @@ func get_all_items() -> Array[ItemData]:
 		result.append(item)
 
 	return result
+
+
+func get_remaining_capacity(
+	item: ItemData
+) -> int:
+	if item == null or item.id.is_empty():
+		return 0
+
+	return maxi(
+		0,
+		item.max_stack
+		- get_quantity(item.id)
+	)
