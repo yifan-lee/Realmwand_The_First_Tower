@@ -1,0 +1,22 @@
+[gd_scene format=4 uid="uid://dxikdbmbbr8dd"]
+
+[ext_resource type="PackedScene" uid="uid://dmpsab2hobft3" path="res://scenes/floors/floor.tscn" id="1_6ha2l"]
+[ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="2_wiu4o"]
+
+[node name="Floor" unique_id=1021498195 instance=ExtResource("1_6ha2l")]
+floor_id = &"floor_2"
+display_name = "第二层"
+description = "还没想好"
+default_spawn_id = &"FromBelowStair"
+
+[node name="GroundLayer" parent="." index="0" unique_id=370044564]
+tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAA=")
+
+[node name="WallLayer" parent="." index="1" unique_id=917837273]
+tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAD///3/AAAAAAEAAAAAAP3/AAAAAAEAAAABAP3/AAAAAAEAAAACAP3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAD+/wAAAAAAAAEAAAD+/wEAAAAAAAEAAAD//wEAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAACAP//AAAAAAEAAAACAP7/AAAAAAEAAAA=")
+
+[node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=145704661]
+
+[node name="Stair" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="0" unique_id=841985626 instance=ExtResource("2_wiu4o")]
+target_floor_id = &"floor_1"
+target_spawn_id = &"FromAboveStair"

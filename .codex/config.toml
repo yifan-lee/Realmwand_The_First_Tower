@@ -142,3 +142,9 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.batch_get_properties]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.tilemap_get_used_cells]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.tilemap_get_cell]
+approval_mode = "approve"

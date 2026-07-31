@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody2D
 
+signal movement_finished
+
 @export var player_data: PlayerData
 
 @export_group("Movement")
@@ -135,6 +137,7 @@ func _move_one_tile(direction: Vector2) -> void:
 	global_position = target_position
 	is_moving = false
 	_play_directional_animation(&"idle")
+	movement_finished.emit()
 
 
 func _play_directional_animation(
