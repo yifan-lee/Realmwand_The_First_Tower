@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://danbpnxmjbb50"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_xod05"]
+[ext_resource type="Script" uid="uid://cr4um5c4e0ndp" path="res://scripts/ui/components/inventory_panel.gd" id="2_o2b44"]
+[ext_resource type="PackedScene" uid="uid://dblesw7ftf8nn" path="res://scenes/ui/components/inventory_item_row.tscn" id="3_18gfx"]
+
+[node name="InventoryPanel" type="PanelContainer" unique_id=1714447019]
+custom_minimum_size = Vector2(520, 520)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_xod05")
+script = ExtResource("2_o2b44")
+item_row_scene = ExtResource("3_18gfx")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=903262673]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1738512495]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content" unique_id=1799010044]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "背包"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=573108578]
+layout_mode = 2
+
+[node name="ItemScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1908676095]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemRows" type="VBoxContainer" parent="MarginContainer/Content/ItemScroll" unique_id=1204182463]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="EmptyLabel" type="Label" parent="MarginContainer/Content" unique_id=1243868439]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "背包为空"
+horizontal_alignment = 1

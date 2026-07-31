@@ -151,3 +151,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.get_project_settings]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_mouse_click]
+approval_mode = "approve"
