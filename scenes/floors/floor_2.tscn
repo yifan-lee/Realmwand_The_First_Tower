@@ -18,5 +18,6 @@ tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAD///3/AAAAAAEAAAAAAP3/AAAAAAE
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=145704661]
 
 [node name="Stair" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="0" unique_id=841985626 instance=ExtResource("2_wiu4o")]
+direction = 1
 target_floor_id = &"floor_1"
 target_spawn_id = &"FromAboveStair"

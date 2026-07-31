@@ -3,6 +3,7 @@
 [ext_resource type="SpriteFrames" uid="uid://rg80tmetdqnu" path="res://resources/actors/player_sprite_frames.tres" id="1_15tap"]
 [ext_resource type="Script" uid="uid://joeclpu10qiu" path="res://scripts/actors/player.gd" id="1_ktjr4"]
 [ext_resource type="Resource" uid="uid://busl32dqnk4m7" path="res://resources/actors/player.tres" id="2_7wueq"]
+[ext_resource type="Script" uid="uid://ch3bhi5uh7oog" path="res://scripts/inventory/inventory.gd" id="4_7wueq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cacbb"]
 size = Vector2(24, 24)
@@ -30,3 +31,6 @@ collide_with_areas = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1968162179]
 zoom = Vector2(3, 3)
+
+[node name="Inventory" type="Node" parent="." unique_id=1664787739]
+script = ExtResource("4_7wueq")

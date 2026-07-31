@@ -83,7 +83,7 @@ func _apply_switch_state(
 		)
 		return
 
-	push_error(
+	push_warning(
 		"Floor '%s' has no terrain rule for switch '%s'."
 		% [floor_id, switch_id]
 	)

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c0wag3rti6imh"]
+
+[ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="1_7bsk2"]
+[ext_resource type="Resource" uid="uid://dia3blq8yoel2" path="res://resources/actors/enemy_balance_lv1.tres" id="2_2fcdw"]
+[ext_resource type="Texture2D" uid="uid://dlwpf175gntet" path="res://assets/monsters/balanced_tier_1.png" id="3_rybnu"]
+
+[node name="Enemy" unique_id=796734484 instance=ExtResource("1_7bsk2")]
+enemy_data = ExtResource("2_2fcdw")
+
+[node name="Sprite2D" parent="." index="0" unique_id=548014908]
+texture = ExtResource("3_rybnu")

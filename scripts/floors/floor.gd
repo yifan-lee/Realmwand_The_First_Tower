@@ -31,6 +31,7 @@ class TileCellSnapshot:
 
 @onready var spawn_points: Node2D = $SpawnPoints
 @onready var interactables: Node2D = %Interactables
+@onready var enemies: Node2D = %Enemies
 
 
 func get_spawn_point(spawn_id: StringName) -> Marker2D:
@@ -98,32 +99,80 @@ func set_tile_cells_removed(
 
 func capture_runtime_state() -> Dictionary:
 	var switch_states: Dictionary = {}
+	var pickup_states: Dictionary = {}
+	var enemy_states: Dictionary = {}
 
 	for child: Node in interactables.get_children():
 		var floor_switch := child as FloorSwitch
 
-		if floor_switch == null:
+		if floor_switch != null:
+			if floor_switch.switch_id != &"":
+				var switch_key := String(
+					floor_switch.switch_id
+				)
+
+				switch_states[switch_key] = (
+					floor_switch.is_active
+				)
+
 			continue
 
-		if floor_switch.switch_id == &"":
+		var item_pickup := child as ItemPickup
+
+		if item_pickup != null:
+			if item_pickup.pickup_id != &"":
+				var pickup_key := String(
+					item_pickup.pickup_id
+				)
+
+				pickup_states[pickup_key] = {
+					"is_collected":
+						item_pickup.is_collected,
+					"amount":
+						item_pickup.amount,
+				}
+
+	for child: Node in enemies.get_children():
+		var enemy := child as Enemy
+
+		if enemy == null:
 			continue
 
-		var switch_key := String(
-			floor_switch.switch_id
+		if enemy.instance_id.is_empty():
+			continue
+
+		var enemy_key := String(
+			enemy.instance_id
 		)
 
-		switch_states[switch_key] = floor_switch.is_active
+		enemy_states[enemy_key] = {
+			"is_defeated": enemy.is_defeated,
+			"current_hp": enemy.current_hp,
+			"current_mp": enemy.current_mp,
+		}
 
 	return {
 		"switches": switch_states,
+		"pickups": pickup_states,
+		"enemies": enemy_states,
 	}
 
+
 func apply_runtime_state(state: Dictionary) -> void:
-	var switch_states_value: Variant = state.get(
-		"switches",
-		{}
+	_apply_switch_states(
+		state.get("switches", {})
+	)
+	_apply_pickup_states(
+		state.get("pickups", {})
+	)
+	_apply_enemy_states(
+		state.get("enemies", {})
 	)
 
+
+func _apply_switch_states(
+	switch_states_value: Variant
+) -> void:
 	if not (switch_states_value is Dictionary):
 		push_error(
 			"Floor '%s' has invalid switch state data."
@@ -148,4 +197,134 @@ func apply_runtime_state(state: Dictionary) -> void:
 
 		floor_switch.set_active(
 			bool(switch_states[switch_key])
+		)
+
+
+func _apply_pickup_states(
+	pickup_states_value: Variant
+) -> void:
+	if not (pickup_states_value is Dictionary):
+		push_error(
+			"Floor '%s' has invalid pickup state data."
+			% floor_id
+		)
+		return
+
+	var pickup_states: Dictionary = pickup_states_value
+
+	for child: Node in interactables.get_children():
+		var item_pickup := child as ItemPickup
+
+		if item_pickup == null:
+			continue
+
+		var pickup_key := String(
+			item_pickup.pickup_id
+		)
+
+		if not pickup_states.has(pickup_key):
+			continue
+
+		var pickup_state_value: Variant = (
+			pickup_states[pickup_key]
+		)
+
+		if not (pickup_state_value is Dictionary):
+			push_error(
+				"Pickup '%s' has invalid state data."
+				% item_pickup.pickup_id
+			)
+			continue
+
+		var pickup_state: Dictionary = (
+			pickup_state_value
+		)
+
+		item_pickup.amount = maxi(
+			1,
+			int(
+				pickup_state.get(
+					"amount",
+					item_pickup.amount
+				)
+			)
+		)
+
+		item_pickup.set_collected(
+			bool(
+				pickup_state.get(
+					"is_collected",
+					false
+				)
+			)
+		)
+
+
+func _apply_enemy_states(
+	enemy_states_value: Variant
+) -> void:
+	if not (enemy_states_value is Dictionary):
+		push_error(
+			"Floor '%s' has invalid enemy state data."
+			% floor_id
+		)
+		return
+
+	var enemy_states: Dictionary = enemy_states_value
+
+	for child: Node in enemies.get_children():
+		var enemy := child as Enemy
+
+		if enemy == null:
+			continue
+
+		var enemy_key := String(
+			enemy.instance_id
+		)
+
+		if not enemy_states.has(enemy_key):
+			continue
+
+		var enemy_state_value: Variant = (
+			enemy_states[enemy_key]
+		)
+
+		if not (enemy_state_value is Dictionary):
+			push_error(
+				"Enemy '%s' has invalid state data."
+				% enemy.instance_id
+			)
+			continue
+
+		var enemy_state: Dictionary = (
+			enemy_state_value
+		)
+
+		enemy.current_hp = maxf(
+			0.0,
+			float(
+				enemy_state.get(
+					"current_hp",
+					enemy.current_hp
+				)
+			)
+		)
+
+		enemy.current_mp = maxf(
+			0.0,
+			float(
+				enemy_state.get(
+					"current_mp",
+					enemy.current_mp
+				)
+			)
+		)
+
+		enemy.set_defeated(
+			bool(
+				enemy_state.get(
+					"is_defeated",
+					false
+				)
+			)
 		)

@@ -11,6 +11,7 @@ signal movement_finished
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var interaction_ray: RayCast2D = $InteractionRay
+@onready var inventory: Inventory = $Inventory
 
 var level: int = 1
 var experience: int = 0
@@ -25,7 +26,7 @@ var base_spd: float = 0.0
 var current_hp: float = 0.0
 var current_mp: float = 0.0
 
-var inventory: Array[ItemData] = []
+
 var learned_skills: Array[SkillData] = []
 
 var facing_direction: Vector2 = Vector2.DOWN
@@ -88,7 +89,15 @@ func _initialize_runtime_state() -> void:
 	current_hp = base_max_hp
 	current_mp = base_max_mp
 
-	inventory = player_data.starting_items.duplicate()
+	for starting_item: ItemData in player_data.starting_items:
+		var remaining_amount := inventory.add_item(starting_item)
+
+		if remaining_amount > 0:
+			push_warning(
+				"Could not add starting item '%s'."
+				% starting_item.id
+			)
+
 	learned_skills = player_data.starting_skills.duplicate()
 
 
