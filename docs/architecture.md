@@ -2,10 +2,11 @@
 
 ## 当前状态
 
-当前为从零重建基线。只有最小 `main.tscn` 和开发目录骨架。
+从零重建的第 1—8 块已形成首个可运行闭环：数据、楼层、Player、Enemy、
+Pickup、背包/装备、共享 UI、ESC、秒制 ATB 战斗与升级加点均已接入 Main。
 
-第 1 块及后续功能默认由项目作者亲自实现；AI 只提供逐步教学、检查和
-诊断，除非作者明确要求 AI 代为修改。
+当前仍属于早期开发实现，战斗数值、技能 Effect 执行、门/NPC、保存读取和
+正式内容配置将在后续迭代中继续扩展。
 
 ## 目标场景结构
 
@@ -18,11 +19,11 @@ Main
 │   ├── FloorManager
 │   ├── BattleManager
 │   └── LevelUpManager
-└── GameOverlay
-    ├── HudLayer
-    ├── MenuLayer
-    ├── BattleLayer
-    └── MessageLayer
+└── OverlayRoot
+    ├── GameHUD
+    ├── EscMenu
+    ├── BattleUI
+    └── LevelUpUI
 ```
 
 ## 目标目录

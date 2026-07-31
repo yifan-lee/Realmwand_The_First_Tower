@@ -6,6 +6,7 @@ signal battle_requested(
 	enemy: Enemy,
 	player: Player
 )
+signal stats_changed
 
 @export_group("Identity")
 @export var instance_id: StringName = &""
@@ -48,6 +49,7 @@ func interact(player: Player) -> void:
 		return
 
 	battle_requested.emit(self, player)
+	EventBus.battle_requested.emit(self, player)
 
 
 func take_damage(amount: float) -> float:
@@ -60,12 +62,25 @@ func take_damage(amount: float) -> float:
 	)
 
 	current_hp -= applied_damage
+	stats_changed.emit()
 
 	if current_hp <= 0.0:
 		current_hp = 0.0
 		set_defeated(true)
 
 	return applied_damage
+
+
+func change_mp(amount: float) -> void:
+	if enemy_data == null:
+		return
+
+	current_mp = clampf(
+		current_mp + amount,
+		0.0,
+		enemy_data.max_mp
+	)
+	stats_changed.emit()
 
 
 func set_defeated(defeated: bool) -> void:

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://75deq3hlwxqw"]
+
+[ext_resource type="Script" uid="uid://dnkj20o3bok0y" path="res://scripts/ui/game_hud.gd" id="1_8n052"]
+[ext_resource type="PackedScene" uid="uid://cy1i4bipsg2mn" path="res://scenes/ui/components/player_stat_hud.tscn" id="1_xsr0h"]
+[ext_resource type="PackedScene" uid="uid://hpn4ycefsqvv" path="res://scenes/ui/components/tracked_inventory_hud.tscn" id="2_fnxle"]
+[ext_resource type="PackedScene" uid="uid://b2r6mtmyrj37t" path="res://scenes/ui/components/game_message_panel.tscn" id="3_el006"]
+
+[node name="GameHUD" type="CanvasLayer" unique_id=129955379]
+script = ExtResource("1_8n052")
+
+[node name="HudRoot" type="Control" parent="." unique_id=1007332807]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerStatHUD" parent="HudRoot" unique_id=1829617016 instance=ExtResource("1_xsr0h")]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 444.0
+offset_bottom = 291.0
+
+[node name="TrackedInventoryHUD" parent="HudRoot" unique_id=794321377 instance=ExtResource("2_fnxle")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -384.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 184.0
+grow_horizontal = 0
+
+[node name="MessageArea" type="CenterContainer" parent="HudRoot" unique_id=1978331453]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -160.0
+offset_right = -24.0
+offset_bottom = -24.0
+
+[node name="GameMessagePanel" parent="HudRoot/MessageArea" unique_id=1461547814 instance=ExtResource("3_el006")]
+layout_mode = 2

@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://dnrvslgwgxro2"]
+
+[ext_resource type="Script" uid="uid://gm31ypgky8vd" path="res://scripts/progression/level_up_ui.gd" id="1_l57ej"]
+[ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_rxjkq"]
+
+[node name="LevelUpUI" type="CanvasLayer" unique_id=1205088737]
+script = ExtResource("1_l57ej")
+
+[node name="LevelRoot" type="Control" parent="." unique_id=1187424346]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="LevelRoot" unique_id=193025296]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.04, 0.92)
+
+[node name="Center" type="CenterContainer" parent="LevelRoot/Backdrop" unique_id=1876929391]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="LevelRoot/Backdrop/Center" unique_id=1469509314]
+custom_minimum_size = Vector2(820, 720)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="LevelRoot/Backdrop/Center/Panel" unique_id=477981902]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin" unique_id=1348066907]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1475800872]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "升级加点"
+horizontal_alignment = 1
+
+[node name="PointsLabel" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=616948073]
+layout_mode = 2
+text = "剩余属性点：0"
+horizontal_alignment = 1
+
+[node name="StatsPanel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("2_rxjkq")]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1191538684]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MaxHp" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=532378714]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "生命 +10"
+
+[node name="MaxMp" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=2002261199]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "魔法 +5"
+
+[node name="Atk" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=1713628790]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "攻击 +1"
+
+[node name="Def" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=545712562]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "防御 +1"
+
+[node name="Spd" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=1911693333]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "速度 +1"
+
+[node name="CloseButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=2135259514]
+layout_mode = 2
+text = "确认并关闭"

@@ -2,6 +2,8 @@ class_name Player
 extends CharacterBody2D
 
 signal movement_finished
+signal stats_changed
+signal level_up_available
 
 @export var player_data: PlayerData
 
@@ -17,6 +19,7 @@ signal movement_finished
 var level: int = 1
 var experience: int = 0
 var gold: int = 0
+var unspent_stat_points: int = 0
 
 var base_max_hp: float = 0.0
 var base_max_mp: float = 0.0
@@ -204,6 +207,89 @@ func set_input_enabled(enabled: bool) -> void:
 	if not input_enabled and not is_moving:
 		_play_directional_animation(&"idle")
 
+func set_current_hp(value: float) -> void:
+	var next_hp: float = clampf(
+		value,
+		0.0,
+		get_max_hp()
+	)
+
+	if is_equal_approx(current_hp, next_hp):
+		return
+
+	current_hp = next_hp
+	stats_changed.emit()
+
+
+func change_hp(amount: float) -> void:
+	set_current_hp(current_hp + amount)
+
+
+func set_current_mp(value: float) -> void:
+	var next_mp: float = clampf(
+		value,
+		0.0,
+		get_max_mp()
+	)
+
+	if is_equal_approx(current_mp, next_mp):
+		return
+
+	current_mp = next_mp
+	stats_changed.emit()
+
+
+func change_mp(amount: float) -> void:
+	set_current_mp(current_mp + amount)
+
+
+func get_experience_for_next_level() -> int:
+	return level * 100
+
+
+func add_experience(amount: int) -> void:
+	if amount <= 0:
+		return
+
+	experience += amount
+	var leveled_up := false
+
+	while experience >= get_experience_for_next_level():
+		experience -= get_experience_for_next_level()
+		level += 1
+		unspent_stat_points += 5
+		leveled_up = true
+
+	stats_changed.emit()
+
+	if leveled_up:
+		level_up_available.emit()
+
+
+func spend_stat_point(stat_id: StringName) -> bool:
+	if unspent_stat_points <= 0:
+		return false
+
+	match stat_id:
+		&"max_hp":
+			base_max_hp += 10.0
+			current_hp += 10.0
+		&"max_mp":
+			base_max_mp += 5.0
+			current_mp += 5.0
+		&"atk":
+			base_atk += 1.0
+		&"def":
+			base_def += 1.0
+		&"spd":
+			base_spd += 1.0
+		_:
+			return false
+
+	unspent_stat_points -= 1
+	stats_changed.emit()
+	return true
+
 func equip_item(
 	item_id: StringName,
 	target_slot: int
@@ -332,3 +418,5 @@ func _on_equipment_changed() -> void:
 		current_mp,
 		get_max_mp()
 	)
+
+	stats_changed.emit()

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d0j66d8tiecc6"]
+
+[ext_resource type="Script" uid="uid://d0yguxlf66av4" path="res://scripts/ui/components/selectable_list_row.gd" id="1_tle13"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_ykwlt"]
+
+[node name="SelectableListRow" type="Button" unique_id=2085511450]
+custom_minimum_size = Vector2(0, 64)
+offset_right = 8.0
+offset_bottom = 8.0
+size_flags_horizontal = 3
+theme = ExtResource("1_ykwlt")
+theme_override_constants/icon_max_width = 40
+text = "列表内容"
+alignment = 0
+script = ExtResource("1_tle13")

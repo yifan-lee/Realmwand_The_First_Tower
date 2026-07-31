@@ -154,3 +154,18 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.simulate_mouse_click]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_anchor_preset]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_input_actions]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_input_action]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.capture_frames]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_key]
+approval_mode = "approve"

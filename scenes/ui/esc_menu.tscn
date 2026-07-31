@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://cgtdidijthtbh"]
+
+[ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="1_akhel"]
+[ext_resource type="Script" uid="uid://beygk816d2c0f" path="res://scripts/ui/esc_menu.gd" id="1_viui7"]
+[ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="5_0us07"]
+
+[node name="EscMenu" type="CanvasLayer" unique_id=866050831]
+layer = 2
+script = ExtResource("1_viui7")
+
+[node name="MenuRoot" type="Control" parent="." unique_id=2016520592]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Backdrop" type="ColorRect" parent="MenuRoot" unique_id=1533708468]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="MenuCenter" type="CenterContainer" parent="MenuRoot/Backdrop" unique_id=1236309688]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MenuPanel" type="PanelContainer" parent="MenuRoot/Backdrop/MenuCenter" unique_id=1269820221]
+custom_minimum_size = Vector2(1500, 650)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel" unique_id=237617678]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer" unique_id=1519615851]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content" unique_id=1254687656]
+layout_mode = 2
+
+[node name="MenuTitle" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=1013143939]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "菜单"
+
+[node name="HeaderSpacer" type="Control" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=429418408]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseHint" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=40533757]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "ESC：关闭"
+
+[node name="HSeparator" type="HSeparator" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content" unique_id=674693084]
+layout_mode = 2
+
+[node name="Columns" type="HBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content" unique_id=1413311902]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="InventoryPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns" unique_id=1714447019 instance=ExtResource("1_akhel")]
+layout_mode = 2
+
+[node name="SkillPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns" unique_id=2087337204 instance=ExtResource("5_0us07")]
+layout_mode = 2
+
+[node name="SystemPanel" type="PanelContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns" unique_id=179523418]
+custom_minimum_size = Vector2(360, 520)
+layout_mode = 2
+
+[node name="SystemMargin" type="MarginContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SystemPanel" unique_id=1073521623]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="SystemContent" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SystemPanel/SystemMargin" unique_id=459785393]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SystemTitle" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SystemPanel/SystemMargin/SystemContent" unique_id=1756025761]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "系统"
+
+[node name="HSeparator" type="HSeparator" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SystemPanel/SystemMargin/SystemContent" unique_id=1863767452]
+layout_mode = 2
+
+[node name="SystemPlaceholder" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SystemPanel/SystemMargin/SystemContent" unique_id=1755975825]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "保存 / 读取功能
+将在之后加入"
+horizontal_alignment = 1
+autowrap_mode = 2

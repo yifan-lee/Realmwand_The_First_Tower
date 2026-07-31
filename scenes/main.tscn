@@ -3,6 +3,12 @@
 [ext_resource type="Script" uid="uid://cpdmgcoiwdyuu" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="2_0wfyh"]
 [ext_resource type="Script" uid="uid://ddq8reokgkxpy" path="res://scripts/floors/floor_manager.gd" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://75deq3hlwxqw" path="res://scenes/ui/game_hud.tscn" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://dr6tg0mdostdd" path="res://scripts/battle/battle_manager.gd" id="4_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://cgtdidijthtbh" path="res://scenes/ui/esc_menu.tscn" id="5_eb6dy"]
+[ext_resource type="Script" uid="uid://brxoo6rhyrxm3" path="res://scripts/progression/level_up_manager.gd" id="5_tipki"]
+[ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="8_85g3d"]
+[ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="9_choun"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
@@ -22,5 +28,21 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 script = ExtResource("3_sugp2")
 
+[node name="BattleManager" type="Node" parent="Systems" unique_id=1581082011]
+script = ExtResource("4_o6xl0")
+
+[node name="LevelUpManager" type="Node" parent="Systems" unique_id=1817577795]
+script = ExtResource("5_tipki")
+
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true
+
+[node name="GameHUD" parent="OverlayRoot" unique_id=129955379 instance=ExtResource("4_jyhfs")]
+
+[node name="EscMenu" parent="OverlayRoot" unique_id=866050831 instance=ExtResource("5_eb6dy")]
+
+[node name="BattleUI" parent="OverlayRoot" unique_id=609410111 instance=ExtResource("8_85g3d")]
+layer = 3
+
+[node name="LevelUpUI" parent="OverlayRoot" unique_id=1205088737 instance=ExtResource("9_choun")]
+layer = 4
