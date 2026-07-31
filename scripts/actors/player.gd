@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody2D
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+
 signal movement_finished
 signal stats_changed
 signal level_up_available
@@ -125,6 +127,13 @@ func _update_interaction_ray() -> void:
 
 func _move_one_tile(direction: Vector2) -> void:
 	var motion := direction * grid_size
+	interaction_ray.force_raycast_update()
+	if interaction_ray.is_colliding():
+		var collider: Object = interaction_ray.get_collider()
+		if collider is Enemy:
+			(collider as Enemy).request_battle(self)
+			_play_directional_animation(&"idle")
+			return
 
 	if test_move(global_transform, motion):
 		_play_directional_animation(&"idle")
@@ -244,7 +253,7 @@ func change_mp(amount: float) -> void:
 
 
 func get_experience_for_next_level() -> int:
-	return level * 100
+	return FORMULAS.experience_for_next_level(level)
 
 
 func add_experience(amount: int) -> void:
@@ -257,7 +266,7 @@ func add_experience(amount: int) -> void:
 	while experience >= get_experience_for_next_level():
 		experience -= get_experience_for_next_level()
 		level += 1
-		unspent_stat_points += 5
+		unspent_stat_points += FORMULAS.STAT_POINTS_PER_LEVEL
 		leveled_up = true
 
 	stats_changed.emit()
@@ -272,17 +281,19 @@ func spend_stat_point(stat_id: StringName) -> bool:
 
 	match stat_id:
 		&"max_hp":
-			base_max_hp += 10.0
-			current_hp += 10.0
+			var increase: float = FORMULAS.stat_point_increase(stat_id)
+			base_max_hp += increase
+			current_hp += increase
 		&"max_mp":
-			base_max_mp += 5.0
-			current_mp += 5.0
+			var increase: float = FORMULAS.stat_point_increase(stat_id)
+			base_max_mp += increase
+			current_mp += increase
 		&"atk":
-			base_atk += 1.0
+			base_atk += FORMULAS.stat_point_increase(stat_id)
 		&"def":
-			base_def += 1.0
+			base_def += FORMULAS.stat_point_increase(stat_id)
 		&"spd":
-			base_spd += 1.0
+			base_spd += FORMULAS.stat_point_increase(stat_id)
 		_:
 			return false
 

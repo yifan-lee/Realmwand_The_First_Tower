@@ -45,6 +45,10 @@ func _ready() -> void:
 
 
 func interact(player: Player) -> void:
+	request_battle(player)
+
+
+func request_battle(player: Player) -> void:
 	if is_defeated:
 		return
 

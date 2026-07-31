@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bip0oodwwfc5o" path="res://scripts/ui/components/entry_info_panel.gd" id="1_py60k"]
 
 [node name="EntryInfoPanel" type="PanelContainer" unique_id=446886182]
-custom_minimum_size = Vector2(520, 450)
+custom_minimum_size = Vector2(520, 300)
 offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_dkq5f")
@@ -12,10 +12,10 @@ script = ExtResource("1_py60k")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1726411729]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1550545500]
 layout_mode = 2
@@ -26,7 +26,7 @@ theme_override_constants/separation = 16
 
 [node name="Icon" type="TextureRect" parent="MarginContainer/Content/Header" unique_id=1348523174]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -44,7 +44,7 @@ layout_mode = 2
 
 [node name="DescriptionLabel" type="RichTextLabel" parent="MarginContainer/Content" unique_id=836767131]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 text = "这里显示物品或技能的主要说明。"
 fit_content = true
@@ -56,7 +56,7 @@ layout_mode = 2
 
 [node name="DetailsLabel" type="RichTextLabel" parent="MarginContainer/Content" unique_id=997913707]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "附加信息一
 附加信息二"

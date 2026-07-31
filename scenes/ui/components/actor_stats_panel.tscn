@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b5lltfg5dekj0" path="res://scripts/ui/components/actor_stats_panel.gd" id="2_mddi2"]
 
 [node name="ActorStatsPanel" type="PanelContainer" unique_id=799998403]
-custom_minimum_size = Vector2(420, 360)
+custom_minimum_size = Vector2(420, 300)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
@@ -13,14 +13,14 @@ script = ExtResource("2_mddi2")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=23613958]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=35085586]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
 [node name="Header" type="HBoxContainer" parent="MarginContainer/Content" unique_id=1115577434]
 layout_mode = 2
@@ -29,7 +29,7 @@ theme_override_constants/separation = 16
 
 [node name="Portrait" type="TextureRect" parent="MarginContainer/Content/Header" unique_id=1452877705]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -38,7 +38,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 26
 text = "角色名称"
 vertical_alignment = 1
 
@@ -49,7 +49,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 32
-theme_override_constants/v_separation = 12
+theme_override_constants/v_separation = 6
 columns = 2
 
 [node name="HpTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=247937661]

@@ -72,8 +72,18 @@ resources/
 - Switch 只保存自身状态并发出信号；具体地图变化由 `floor_n.gd` 处理。
 - UI 使用可复用辅助组件；HUD、ESC 菜单、战斗和 Message 使用独立
   CanvasLayer。
+- UI 以键盘焦点为主要输入方式；方向键移动焦点，确认键执行，ESC 返回。
+- `ActorStatsPanel`、`InventoryPanel`、`SkillPanel`、`EquipmentPanel` 与
+  `EntryInfoPanel` 在 Battle、ESC 和后续界面中统一复用。
 - ESC 菜单初期只包含背包、技能和 System，不包含 Message 页。
+- ESC 使用顶部主页签，背包页再使用装备、消耗品、材料、其他分类页签；
+  左侧固定显示属性和装备栏，焦点变化实时显示说明与属性预览。
 - Message 使用独立 UI。
+- Player 向 Enemy 所在格移动时立即请求战斗，不需要额外交互键。
+- BattleManager 使用 RUNNING / WAITING_FOR_PLAYER 状态；Player ATB 满后
+  战斗时间、Enemy ATB、冷却和持续效果计时全部冻结，直到玩家确认行动。
+- 全局纯数值公式集中在 `scripts/shared/game_formulas.gd`；技能、物品、
+  装备和敌人的具体数据仍由各自 `.tres` 定义。
 - Main 只初始化和连接顶层系统，不承载具体战斗、楼层、背包或升级逻辑。
 
 ## 重建阶段

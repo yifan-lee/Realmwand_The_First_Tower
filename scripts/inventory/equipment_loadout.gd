@@ -265,3 +265,39 @@ func get_displaced_items(
 		item,
 		target_slot
 	)
+
+
+func get_compatible_slots(
+	item: EquipmentData
+) -> Array[int]:
+	var result: Array[int] = []
+	for slot: int in Slot.values():
+		if can_equip(item, slot):
+			result.append(slot)
+	return result
+
+
+func get_slots_for_item(
+	item: EquipmentData
+) -> Array[int]:
+	var result: Array[int] = []
+	if item == null:
+		return result
+	for slot: int in _equipped:
+		if _equipped[slot] == item:
+			result.append(slot)
+	return result
+
+
+func get_affected_slots(
+	item: EquipmentData,
+	target_slot: int
+) -> Array[int]:
+	var result: Array[int] = [target_slot]
+	if (
+		item != null
+		and item.slot_type == EquipmentData.EquipmentSlotType.HAND
+		and item.hand_rule == EquipmentData.HandRule.TWO_HANDED
+	):
+		result = [Slot.LEFT_HAND, Slot.RIGHT_HAND]
+	return result

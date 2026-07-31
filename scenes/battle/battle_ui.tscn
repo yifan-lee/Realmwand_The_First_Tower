@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_elpkr"]
 [ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="3_bgiko"]
 [ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="4_keo60"]
+[ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_bgiko"]
 
 [node name="BattleUI" type="CanvasLayer" unique_id=609410111]
 script = ExtResource("1_d43ay")
@@ -35,7 +36,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BattlePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center" unique_id=1082741989]
-custom_minimum_size = Vector2(1500, 860)
+custom_minimum_size = Vector2(1700, 920)
 layout_mode = 2
 
 [node name="Margin" type="MarginContainer" parent="BattleRoot/Backdrop/Center/BattlePanel" unique_id=1053820961]
@@ -87,26 +88,66 @@ text = "敌人 ATB"
 layout_mode = 2
 show_percentage = false
 
-[node name="Actions" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=331513704]
+[node name="ActionTabs" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=689135324]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SkillsTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs" unique_id=822304724]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+button_pressed = true
+text = "技能"
+
+[node name="ItemsTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs" unique_id=174970472]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "物品"
+
+[node name="EscapeTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs" unique_id=129788017]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "撤退"
+
+[node name="ActionBody" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=260623237]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="SkillPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Actions" unique_id=2087337204 instance=ExtResource("3_bgiko")]
-custom_minimum_size = Vector2(700, 320)
+[node name="ListColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody" unique_id=574439855]
+custom_minimum_size = Vector2(700, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="InventoryPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Actions" unique_id=1714447019 instance=ExtResource("4_keo60")]
-custom_minimum_size = Vector2(700, 320)
+[node name="SkillPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn" unique_id=2087337204 instance=ExtResource("3_bgiko")]
+custom_minimum_size = Vector2(700, 300)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InventoryPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn" unique_id=1714447019 instance=ExtResource("4_keo60")]
+visible = false
+custom_minimum_size = Vector2(700, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EscapePage" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn" unique_id=1349778439]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EscapeHint" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/EscapePage" unique_id=1359532603]
+layout_mode = 2
+text = "按确认键撤退"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EntryInfoPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody" unique_id=446886182 instance=ExtResource("5_bgiko")]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 2
 
 [node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942472126]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 autowrap_mode = 2
-
-[node name="EscapeButton" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942048261]
-layout_mode = 2
-text = "撤退"

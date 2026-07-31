@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://ci88f3b52if7b"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_e20hi"]
+[ext_resource type="Script" uid="uid://dwj5fuvva38np" path="res://scripts/ui/components/equipment_panel.gd" id="2_57add"]
+
+[node name="EquipmentPanel" type="PanelContainer" unique_id=1086598637]
+custom_minimum_size = Vector2(560, 420)
+theme = ExtResource("1_e20hi")
+script = ExtResource("2_57add")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=452010850]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="Margin" unique_id=1883902262]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margin/Content" unique_id=1307447362]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "装备栏"
+
+[node name="Separator" type="HSeparator" parent="Margin/Content" unique_id=1343671169]
+layout_mode = 2
+
+[node name="SlotScroll" type="ScrollContainer" parent="Margin/Content" unique_id=707657558]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slots" type="VBoxContainer" parent="Margin/Content/SlotScroll" unique_id=409983277]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Head" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=2081954006]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "头部：—"
+alignment = 0
+
+[node name="Chest" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=459784488]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "胸甲：—"
+alignment = 0
+
+[node name="Hands" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=1480586820]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "手部：—"
+alignment = 0
+
+[node name="Legs" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=35484856]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "腿部：—"
+alignment = 0
+
+[node name="Feet" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=923202904]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "脚部：—"
+alignment = 0
+
+[node name="LeftHand" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=976100589]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "左手：—"
+alignment = 0
+
+[node name="RightHand" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=1379733189]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "右手：—"
+alignment = 0
+
+[node name="Accessory1" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=1795429613]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "饰品 1：—"
+alignment = 0
+
+[node name="Accessory2" type="Button" parent="Margin/Content/SlotScroll/Slots" unique_id=1056463977]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "饰品 2：—"
+alignment = 0

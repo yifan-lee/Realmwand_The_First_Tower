@@ -22,16 +22,22 @@ func display_stats(
 
 	name_label.text = view_data.display_name
 
-	hp_value.text = "%d / %s" % [
-		roundi(view_data.current_hp),
+	hp_value.text = "%s / %s" % [
+		_format_stat(
+			view_data.current_hp,
+			view_data.current_hp_delta
+		),
 		_format_stat(
 			view_data.max_hp,
 			view_data.max_hp_delta
 		),
 	]
 
-	mp_value.text = "%d / %s" % [
-		roundi(view_data.current_mp),
+	mp_value.text = "%s / %s" % [
+		_format_stat(
+			view_data.current_mp,
+			view_data.current_mp_delta
+		),
 		_format_stat(
 			view_data.max_mp,
 			view_data.max_mp_delta

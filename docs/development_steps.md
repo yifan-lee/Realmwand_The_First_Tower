@@ -153,10 +153,40 @@ Main 只做顶层 bind/setup、ESC UI 仲裁和战斗结果到 HUD Message 的�
 7. 运行 `python3 tools/run_basic_regression.py` 后再做目标交互测试和截图。
 8. 更新 `docs/progress/YYYY-MM-DD.md`。
 
-## 全部 GDScript 完整源码
+## 2026-07-31 键盘 UI 与战斗重构补充
 
-以下源码直接取自当前仓库。具体调用链见 `code_reference.md`。
-### 4.1 `scripts/actors/enemy.gd`
+### 5.2 可复用展示组件
+
+| 场景 | 脚本 | Inspector / 节点设置 | 用途 |
+|---|---|---|---|
+| `actor_stats_panel.tscn` | `actor_stats_panel.gd` | 根节点最小尺寸 420×300；接收 `ActorStatsViewData` | 战斗、ESC、升级统一显示属性与预览差值 |
+| `inventory_panel.tscn` | `inventory_panel.gd` | 列表行使用 `selectable_list_row.tscn` | 战斗和 ESC 共用背包列表，支持类型过滤 |
+| `skill_panel.tscn` | `skill_panel.gd` | 列表行使用 `selectable_list_row.tscn` | 战斗和 ESC 共用技能列表 |
+| `equipment_panel.tscn` | `equipment_panel.gd` | 九个装备槽 Button 放进 ScrollContainer | 显示装备栏并高亮候选装备会替换的槽位 |
+| `entry_info_panel.tscn` | `entry_info_panel.gd` | 接收 `EntryInfoViewData` | 统一显示技能、物品、装备说明 |
+| `selectable_list_row.tscn` | `selectable_list_row.gd` | Focus Mode 为 All | 方向键移动时发出 `entry_focused` |
+
+### 6.3 键盘优先 ESC 菜单
+
+1. 在 `esc_menu.tscn` 建立顶层页签：背包、技能、系统。
+2. 背包页建立装备、消耗品、材料、其他四个分类页签。
+3. 左侧实例化同一套属性面板和装备栏，右侧实例化背包/技能面板与说明面板。
+4. `esc_menu.gd` 只协调页签、焦点和预览；列表绘制继续由共享组件负责。
+5. 打开菜单后焦点自动落到背包页签；左右切页、上下选条目、确认使用或装备、取消关闭。
+6. 光标停在装备时，通过 `GameFormulas.equipment_delta()` 计算属性差，并通过 `EquipmentPanel.preview_slots()` 高亮将被替换的槽位。
+
+### 7.4 键盘优先 ATB 战斗
+
+1. 玩家向敌人所在格移动时，`player.gd` 直接调用 `Enemy.request_battle()`，玩家不进入敌人格。
+2. `BattleManager` 使用 `INACTIVE / RUNNING / WAITING_FOR_PLAYER` 三种状态。
+3. 玩家 ATB 到 100 后立即进入 `WAITING_FOR_PLAYER`；此时敌方 ATB、冷却和持续效果都不再推进。
+4. 战斗 UI 自动聚焦第一个技能；上下移动条目、左右切换技能/物品/逃跑，确认执行。
+5. 聚焦技能或物品时，使用同一套 `ActorStatsPanel` 同时预览玩家和敌人的数值变化。
+6. 所有伤害、ATB、恢复、经验、升级点数和装备差值统一由 `scripts/shared/game_formulas.gd` 计算；不再创建 `battle_rules.tres` 或 `progression_rules.tres`。
+
+## 全部 GDScript 完整源码（与当前工程同步）
+
+### `scripts/actors/enemy.gd`
 
 ```gdscript
 @tool
@@ -206,6 +236,10 @@ func _ready() -> void:
 
 
 func interact(player: Player) -> void:
+	request_battle(player)
+
+
+func request_battle(player: Player) -> void:
 	if is_defeated:
 		return
 
@@ -299,11 +333,13 @@ func _refresh_visual() -> void:
 	sprite.texture = enemy_data.world_texture
 ```
 
-### 2.2 `scripts/actors/player.gd`
+### `scripts/actors/player.gd`
 
 ```gdscript
 class_name Player
 extends CharacterBody2D
+
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 
 signal movement_finished
 signal stats_changed
@@ -429,6 +465,13 @@ func _update_interaction_ray() -> void:
 
 func _move_one_tile(direction: Vector2) -> void:
 	var motion := direction * grid_size
+	interaction_ray.force_raycast_update()
+	if interaction_ray.is_colliding():
+		var collider: Object = interaction_ray.get_collider()
+		if collider is Enemy:
+			(collider as Enemy).request_battle(self)
+			_play_directional_animation(&"idle")
+			return
 
 	if test_move(global_transform, motion):
 		_play_directional_animation(&"idle")
@@ -548,7 +591,7 @@ func change_mp(amount: float) -> void:
 
 
 func get_experience_for_next_level() -> int:
-	return level * 100
+	return FORMULAS.experience_for_next_level(level)
 
 
 func add_experience(amount: int) -> void:
@@ -561,7 +604,7 @@ func add_experience(amount: int) -> void:
 	while experience >= get_experience_for_next_level():
 		experience -= get_experience_for_next_level()
 		level += 1
-		unspent_stat_points += 5
+		unspent_stat_points += FORMULAS.STAT_POINTS_PER_LEVEL
 		leveled_up = true
 
 	stats_changed.emit()
@@ -576,17 +619,19 @@ func spend_stat_point(stat_id: StringName) -> bool:
 
 	match stat_id:
 		&"max_hp":
-			base_max_hp += 10.0
-			current_hp += 10.0
+			var increase: float = FORMULAS.stat_point_increase(stat_id)
+			base_max_hp += increase
+			current_hp += increase
 		&"max_mp":
-			base_max_mp += 5.0
-			current_mp += 5.0
+			var increase: float = FORMULAS.stat_point_increase(stat_id)
+			base_max_mp += increase
+			current_mp += increase
 		&"atk":
-			base_atk += 1.0
+			base_atk += FORMULAS.stat_point_increase(stat_id)
 		&"def":
-			base_def += 1.0
+			base_def += FORMULAS.stat_point_increase(stat_id)
 		&"spd":
-			base_spd += 1.0
+			base_spd += FORMULAS.stat_point_increase(stat_id)
 		_:
 			return false
 
@@ -726,7 +771,7 @@ func _on_equipment_changed() -> void:
 	stats_changed.emit()
 ```
 
-### 1.3 `scripts/autoload/event_bus.gd`
+### `scripts/autoload/event_bus.gd`
 
 ```gdscript
 extends Node
@@ -742,25 +787,32 @@ signal battle_requested(
 )
 ```
 
-### 7.4 `scripts/battle/battle_manager.gd`
+### `scripts/battle/battle_manager.gd`
 
 ```gdscript
 class_name BattleManager
 extends Node
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+
 signal battle_started(enemy: Enemy)
 signal battle_finished(victory: bool)
 
-const ATB_MAX := 100.0
+enum BattleState {
+	INACTIVE,
+	RUNNING,
+	WAITING_FOR_PLAYER,
+}
 
 var _player: Player
 var _enemy: Enemy
 var _battle_ui: BattleUI
-var _active := false
+var _state: BattleState = BattleState.INACTIVE
 var _player_atb := 0.0
 var _enemy_atb := 0.0
-var _player_ready := false
 var _cooldowns: Dictionary[StringName, float] = {}
+var _player_effects: Array[Dictionary] = []
+var _enemy_effects: Array[Dictionary] = []
 
 
 func setup(player: Player, battle_ui: BattleUI) -> void:
@@ -773,24 +825,36 @@ func setup(player: Player, battle_ui: BattleUI) -> void:
 
 
 func is_active() -> bool:
-	return _active
+	return _state != BattleState.INACTIVE
+
+
+func is_waiting_for_player() -> bool:
+	return _state == BattleState.WAITING_FOR_PLAYER
 
 
 func _process(delta: float) -> void:
-	if not _active or _enemy == null:
+	if _state != BattleState.RUNNING or _enemy == null:
 		return
 
 	_tick_cooldowns(delta)
+	_tick_effects(_player_effects, delta)
+	_tick_effects(_enemy_effects, delta)
+	_player_atb = minf(
+		FORMULAS.ATB_MAX,
+		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(SkillEffectData.EffectType.SPD), delta)
+	)
+	if _player_atb >= FORMULAS.ATB_MAX:
+		_state = BattleState.WAITING_FOR_PLAYER
+		_battle_ui.set_action_available(true)
+		_battle_ui.show_message("轮到你行动，战斗时间已暂停。")
+		_battle_ui.set_atb(_player_atb, _enemy_atb)
+		return
 
-	if not _player_ready:
-		_player_atb = minf(ATB_MAX, _player_atb + _player.get_spd() * delta)
-		if _player_atb >= ATB_MAX:
-			_player_ready = true
-			_battle_ui.set_action_available(true)
-			_battle_ui.show_message("轮到你行动。")
-
-	_enemy_atb = minf(ATB_MAX, _enemy_atb + _enemy.enemy_data.spd * delta)
-	if _enemy_atb >= ATB_MAX:
+	_enemy_atb = minf(
+		FORMULAS.ATB_MAX,
+		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(SkillEffectData.EffectType.SPD), delta)
+	)
+	if _enemy_atb >= FORMULAS.ATB_MAX:
 		_enemy_atb = 0.0
 		_enemy_take_turn()
 
@@ -798,16 +862,16 @@ func _process(delta: float) -> void:
 
 
 func start_battle(enemy: Enemy, player: Player) -> void:
-	if _active or enemy == null or player == null or enemy.is_defeated:
+	if is_active() or enemy == null or player == null or enemy.is_defeated:
 		return
-
 	_enemy = enemy
 	_player = player
-	_active = true
+	_state = BattleState.RUNNING
 	_player_atb = 0.0
 	_enemy_atb = 0.0
-	_player_ready = false
 	_cooldowns.clear()
+	_player_effects.clear()
+	_enemy_effects.clear()
 	_player.set_input_enabled(false)
 	_battle_ui.open(_player, _enemy)
 	_battle_ui.show_message("遭遇 %s，战斗开始。" % _enemy.enemy_data.display_name)
@@ -819,7 +883,7 @@ func _on_battle_requested(enemy: Enemy, player: Player) -> void:
 
 
 func _on_skill_selected(skill: SkillData) -> void:
-	if not _active or not _player_ready or skill == null:
+	if _state != BattleState.WAITING_FOR_PLAYER or skill == null:
 		return
 	if _cooldowns.get(skill.id, 0.0) > 0.0:
 		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
@@ -827,25 +891,32 @@ func _on_skill_selected(skill: SkillData) -> void:
 	if _player.current_mp < skill.mp_cost:
 		_battle_ui.show_message("MP 不足。")
 		return
-
 	_player.change_mp(-skill.mp_cost)
-	var damage := maxf(1.0, _player.get_atk() + skill.skill_power - _enemy.enemy_data.def)
-	var applied := _enemy.take_damage(damage)
+	var applied := 0.0
+	if skill.target_type == SkillData.TargetType.ENEMY:
+		var damage: float = FORMULAS.calculate_skill_damage(
+			_get_player_stat(SkillEffectData.EffectType.ATK),
+			skill.skill_power,
+			_get_enemy_stat(SkillEffectData.EffectType.DEF)
+		)
+		applied = _enemy.take_damage(damage)
+	_apply_skill_effects(skill)
 	_cooldowns[skill.id] = skill.cooldown_seconds
-	_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, applied])
+	if applied > 0.0:
+		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, applied])
+	else:
+		_battle_ui.show_message("使用了 %s。" % skill.display_name)
 	_complete_player_action()
-
 	if _enemy.is_defeated:
 		_finish_battle(true)
 
 
 func _on_item_selected(item: ItemData) -> void:
-	if not _active or not _player_ready or item == null:
+	if _state != BattleState.WAITING_FOR_PLAYER or item == null:
 		return
 	if not item.usable_in_battle:
 		_battle_ui.show_message("这个物品不能在战斗中使用。")
 		return
-
 	_player.change_hp(item.hp_recovery)
 	_player.change_mp(item.mp_recovery)
 	if item.consumed_on_use:
@@ -855,52 +926,50 @@ func _on_item_selected(item: ItemData) -> void:
 
 
 func _on_escape_requested() -> void:
-	if _active:
+	if _state == BattleState.WAITING_FOR_PLAYER:
 		_finish_battle(false)
 
 
 func _enemy_take_turn() -> void:
-	if not _active:
+	if _state != BattleState.RUNNING:
 		return
-
 	var power := 0.0
 	var skill_name := "攻击"
 	if not _enemy.enemy_data.skills.is_empty():
 		var skill: SkillData = _enemy.enemy_data.skills.front()
 		power = skill.skill_power
 		skill_name = skill.display_name
-
-	var damage := maxf(1.0, _enemy.enemy_data.atk + power - _player.get_def())
+	var damage: float = FORMULAS.calculate_skill_damage(
+		_get_enemy_stat(SkillEffectData.EffectType.ATK),
+		power,
+		_get_player_stat(SkillEffectData.EffectType.DEF)
+	)
 	_player.change_hp(-damage)
 	_battle_ui.refresh_stats()
 	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage])
-
 	if _player.current_hp <= 0.0:
 		_finish_battle(false)
 
 
 func _complete_player_action() -> void:
 	_player_atb = 0.0
-	_player_ready = false
+	_state = BattleState.RUNNING
 	_battle_ui.set_action_available(false)
 	_battle_ui.refresh_stats()
 
 
 func _finish_battle(victory: bool) -> void:
-	if not _active:
+	if not is_active():
 		return
-
-	_active = false
+	_state = BattleState.INACTIVE
 	_battle_ui.close()
 	_player.set_input_enabled(true)
-
 	if victory:
 		var reward := _get_experience_reward()
 		_player.gold += _enemy.enemy_data.gold_reward
 		_player.add_experience(reward)
 	else:
 		_player.set_current_hp(maxf(1.0, _player.current_hp))
-
 	battle_finished.emit(victory)
 	_enemy = null
 
@@ -908,42 +977,127 @@ func _finish_battle(victory: bool) -> void:
 func _get_experience_reward() -> int:
 	if _enemy.enemy_data.experience_reward_override >= 0:
 		return _enemy.enemy_data.experience_reward_override
-	return maxi(1, roundi(_enemy.enemy_data.max_hp * 0.25))
+	return FORMULAS.default_enemy_experience(_enemy.enemy_data.max_hp)
 
 
 func _tick_cooldowns(delta: float) -> void:
 	for skill_id: StringName in _cooldowns.keys():
 		_cooldowns[skill_id] = maxf(0.0, _cooldowns[skill_id] - delta)
+
+
+func _apply_skill_effects(skill: SkillData) -> void:
+	for effect: SkillEffectData in skill.effects:
+		var target: Array[Dictionary] = _player_effects
+		if effect.target_type == SkillEffectData.TargetType.ENEMY:
+			target = _enemy_effects
+		target.append({
+			&"effect": effect,
+			&"remaining": effect.duration_seconds,
+		})
+
+
+func _tick_effects(
+	effects: Array[Dictionary],
+	delta: float
+) -> void:
+	for index: int in range(effects.size() - 1, -1, -1):
+		var remaining: float = float(effects[index].get(&"remaining", 0.0)) - delta
+		if remaining <= 0.0:
+			effects.remove_at(index)
+		else:
+			effects[index][&"remaining"] = remaining
+
+
+func _get_player_stat(effect_type: int) -> float:
+	var base_value := 0.0
+	match effect_type:
+		SkillEffectData.EffectType.ATK:
+			base_value = _player.get_atk()
+		SkillEffectData.EffectType.DEF:
+			base_value = _player.get_def()
+		SkillEffectData.EffectType.SPD:
+			base_value = _player.get_spd()
+	return FORMULAS.calculate_effective_stat(base_value, _player_effects, effect_type)
+
+
+func _get_enemy_stat(effect_type: int) -> float:
+	var base_value := 0.0
+	match effect_type:
+		SkillEffectData.EffectType.ATK:
+			base_value = _enemy.enemy_data.atk
+		SkillEffectData.EffectType.DEF:
+			base_value = _enemy.enemy_data.def
+		SkillEffectData.EffectType.SPD:
+			base_value = _enemy.enemy_data.spd
+	return FORMULAS.calculate_effective_stat(base_value, _enemy_effects, effect_type)
 ```
 
-### 7.5 `scripts/battle/battle_ui.gd`
+### `scripts/battle/battle_ui.gd`
 
 ```gdscript
 class_name BattleUI
 extends CanvasLayer
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+
 signal skill_selected(skill: SkillData)
 signal item_selected(item: ItemData)
 signal escape_requested
+
+enum ActionPage {
+	SKILLS,
+	ITEMS,
+	ESCAPE,
+}
 
 @onready var battle_root: Control = $BattleRoot
 @onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Stats/PlayerStats
 @onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Stats/EnemyStats
 @onready var player_atb: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Gauges/PlayerAtb
 @onready var enemy_atb: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Gauges/EnemyAtb
-@onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Actions/SkillPanel
-@onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Actions/InventoryPanel
+@onready var skills_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/SkillsTab
+@onready var items_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/ItemsTab
+@onready var escape_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/EscapeTab
+@onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/SkillPanel
+@onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/InventoryPanel
+@onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/EscapePage
+@onready var entry_info_panel: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/EntryInfoPanel
 @onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Message
-@onready var escape_button: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/EscapeButton
 
 var _player: Player
 var _enemy: Enemy
+var _action_available := false
+var _current_page: ActionPage = ActionPage.SKILLS
 
 
 func _ready() -> void:
 	skill_panel.skill_selected.connect(skill_selected.emit)
+	skill_panel.skill_focused.connect(_on_skill_focused)
 	inventory_panel.item_selected.connect(item_selected.emit)
-	escape_button.pressed.connect(escape_requested.emit)
+	inventory_panel.item_focused.connect(_on_item_focused)
+	skills_tab.pressed.connect(_show_action_page.bind(ActionPage.SKILLS, true))
+	items_tab.pressed.connect(_show_action_page.bind(ActionPage.ITEMS, true))
+	escape_tab.pressed.connect(_on_escape_tab_pressed)
+	skills_tab.focus_entered.connect(_show_action_page.bind(ActionPage.SKILLS, false))
+	items_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ITEMS, false))
+	escape_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ESCAPE, false))
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not battle_root.visible or not _action_available:
+		return
+	if event.is_action_pressed(&"ui_left"):
+		_cycle_action_page(-1)
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_right"):
+		_cycle_action_page(1)
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_down") and _is_tab_focused():
+		_focus_current_page()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_cancel"):
+		_focus_current_tab()
+		get_viewport().set_input_as_handled()
 
 
 func open(player: Player, enemy: Enemy) -> void:
@@ -951,7 +1105,9 @@ func open(player: Player, enemy: Enemy) -> void:
 	_enemy = enemy
 	skill_panel.display_skills(player.learned_skills)
 	inventory_panel.bind_inventory(player.inventory)
+	inventory_panel.set_battle_only(true)
 	battle_root.visible = true
+	_show_action_page(ActionPage.SKILLS, false)
 	set_action_available(false)
 	refresh_stats()
 
@@ -959,15 +1115,21 @@ func open(player: Player, enemy: Enemy) -> void:
 func close() -> void:
 	battle_root.visible = false
 	inventory_panel.bind_inventory(null)
+	entry_info_panel.clear_info()
 	_player = null
 	_enemy = null
 
 
 func set_action_available(available: bool) -> void:
-	skill_panel.mouse_filter = Control.MOUSE_FILTER_STOP if available else Control.MOUSE_FILTER_IGNORE
-	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP if available else Control.MOUSE_FILTER_IGNORE
-	skill_panel.modulate.a = 1.0 if available else 0.55
-	inventory_panel.modulate.a = 1.0 if available else 0.55
+	_action_available = available
+	skills_tab.disabled = not available
+	items_tab.disabled = not available
+	escape_tab.disabled = not available
+	if available:
+		_show_action_page(ActionPage.SKILLS, false)
+		call_deferred(&"_focus_current_page")
+	else:
+		get_viewport().gui_release_focus()
 
 
 func set_atb(player_value: float, enemy_value: float) -> void:
@@ -984,10 +1146,135 @@ func refresh_stats() -> void:
 	enemy_stats.display_stats(_build_enemy_view())
 
 
+func _show_action_page(page: ActionPage, focus_page: bool) -> void:
+	_current_page = page
+	skill_panel.visible = page == ActionPage.SKILLS
+	inventory_panel.visible = page == ActionPage.ITEMS
+	escape_page.visible = page == ActionPage.ESCAPE
+	skills_tab.set_pressed_no_signal(page == ActionPage.SKILLS)
+	items_tab.set_pressed_no_signal(page == ActionPage.ITEMS)
+	escape_tab.set_pressed_no_signal(page == ActionPage.ESCAPE)
+	entry_info_panel.clear_info()
+	refresh_stats()
+	if focus_page:
+		_focus_current_page()
+
+
+func _cycle_action_page(direction: int) -> void:
+	var next_page: int = posmod(
+		int(_current_page) + direction,
+		ActionPage.size()
+	)
+	_show_action_page(next_page, false)
+	_focus_current_page()
+
+
+func _focus_current_page() -> void:
+	match _current_page:
+		ActionPage.SKILLS:
+			if not skill_panel.focus_first_skill():
+				skills_tab.grab_focus()
+		ActionPage.ITEMS:
+			if not inventory_panel.focus_first_item():
+				items_tab.grab_focus()
+		ActionPage.ESCAPE:
+			escape_tab.grab_focus()
+
+
+func _focus_current_tab() -> void:
+	match _current_page:
+		ActionPage.SKILLS:
+			skills_tab.grab_focus()
+		ActionPage.ITEMS:
+			items_tab.grab_focus()
+		ActionPage.ESCAPE:
+			escape_tab.grab_focus()
+
+
+func _is_tab_focused() -> bool:
+	var focused: Control = get_viewport().gui_get_focus_owner()
+	return focused in [skills_tab, items_tab, escape_tab]
+
+
+func _on_escape_tab_pressed() -> void:
+	if _current_page == ActionPage.ESCAPE:
+		escape_requested.emit()
+		return
+	_show_action_page(ActionPage.ESCAPE, true)
+
+
+func _on_skill_focused(skill: SkillData) -> void:
+	var player_view := _build_player_view()
+	var enemy_view := _build_enemy_view()
+	player_view.current_mp_delta = -skill.mp_cost
+	if skill.target_type == SkillData.TargetType.ENEMY:
+		enemy_view.current_hp_delta = -FORMULAS.calculate_skill_damage(
+			_player.get_atk(),
+			skill.skill_power,
+			_enemy.enemy_data.def
+		)
+	_apply_skill_effect_preview(skill, player_view, enemy_view)
+	player_stats.display_stats(player_view)
+	enemy_stats.display_stats(enemy_view)
+	var info := EntryInfoViewData.new()
+	info.title = skill.display_name
+	info.icon = skill.icon
+	info.description = skill.description
+	info.detail_lines = [
+		"MP 消耗：%.0f" % skill.mp_cost,
+		"冷却：%.1f 秒" % skill.cooldown_seconds,
+		"技能威力：%.0f" % skill.skill_power,
+	]
+	entry_info_panel.display_info(info)
+
+
+func _on_item_focused(item: ItemData) -> void:
+	var player_view := _build_player_view()
+	var enemy_view := _build_enemy_view()
+	player_view.current_hp_delta = FORMULAS.calculate_recovery_delta(
+		_player.current_hp,
+		_player.get_max_hp(),
+		item.hp_recovery
+	)
+	player_view.current_mp_delta = FORMULAS.calculate_recovery_delta(
+		_player.current_mp,
+		_player.get_max_mp(),
+		item.mp_recovery
+	)
+	player_stats.display_stats(player_view)
+	enemy_stats.display_stats(enemy_view)
+	var info := EntryInfoViewData.new()
+	info.title = item.display_name
+	info.icon = item.icon
+	info.description = item.description
+	info.detail_lines = [
+		"HP 回复：%.0f" % item.hp_recovery,
+		"MP 回复：%.0f" % item.mp_recovery,
+	]
+	entry_info_panel.display_info(info)
+
+
+func _apply_skill_effect_preview(
+	skill: SkillData,
+	player_view: ActorStatsViewData,
+	enemy_view: ActorStatsViewData
+) -> void:
+	for effect: SkillEffectData in skill.effects:
+		var target := player_view
+		if effect.target_type == SkillEffectData.TargetType.ENEMY:
+			target = enemy_view
+		match effect.effect_type:
+			SkillEffectData.EffectType.ATK:
+				target.atk_delta += FORMULAS.skill_effect_delta(target.atk, effect)
+			SkillEffectData.EffectType.DEF:
+				target.def_delta += FORMULAS.skill_effect_delta(target.def, effect)
+			SkillEffectData.EffectType.SPD:
+				target.spd_delta += FORMULAS.skill_effect_delta(target.spd, effect)
+
+
 func _build_player_view() -> ActorStatsViewData:
 	if _player == null or _player.player_data == null:
 		return null
-
 	var view := ActorStatsViewData.new()
 	view.display_name = _player.player_data.display_name
 	view.portrait = _player.player_data.portrait
@@ -1004,7 +1291,6 @@ func _build_player_view() -> ActorStatsViewData:
 func _build_enemy_view() -> ActorStatsViewData:
 	if _enemy == null or _enemy.enemy_data == null:
 		return null
-
 	var view := ActorStatsViewData.new()
 	view.display_name = _enemy.enemy_data.display_name
 	view.portrait = _enemy.enemy_data.portrait
@@ -1018,7 +1304,7 @@ func _build_enemy_view() -> ActorStatsViewData:
 	return view
 ```
 
-### 1.6 `scripts/data/actor_data.gd`
+### `scripts/data/actor_data.gd`
 
 ```gdscript
 class_name ActorData
@@ -1040,7 +1326,7 @@ extends Resource
 @export var portrait: Texture2D
 ```
 
-### 1.7 `scripts/data/enemy_data.gd`
+### `scripts/data/enemy_data.gd`
 
 ```gdscript
 class_name EnemyData
@@ -1058,7 +1344,7 @@ extends ActorData
 @export var world_texture: Texture2D
 ```
 
-### 1.8 `scripts/data/equipment_data.gd`
+### `scripts/data/equipment_data.gd`
 
 ```gdscript
 class_name EquipmentData
@@ -1096,7 +1382,7 @@ enum HandRule {
 @export var spd_bonus: float = 0.0
 ```
 
-### 1.9 `scripts/data/item_data.gd`
+### `scripts/data/item_data.gd`
 
 ```gdscript
 class_name ItemData
@@ -1130,7 +1416,7 @@ enum ItemType {
 @export_range(0.0, 999999.0, 1.0) var mp_recovery: float = 0.0
 ```
 
-### 1.10 `scripts/data/player_data.gd`
+### `scripts/data/player_data.gd`
 
 ```gdscript
 class_name PlayerData
@@ -1149,7 +1435,7 @@ extends ActorData
 @export var starting_skills: Array[SkillData] = []
 ```
 
-### 1.11 `scripts/data/skill_data.gd`
+### `scripts/data/skill_data.gd`
 
 ```gdscript
 class_name SkillData
@@ -1181,7 +1467,7 @@ enum TargetType {
 @export var effects: Array[SkillEffectData] = []
 ```
 
-### 1.12 `scripts/data/skill_effect_data.gd`
+### `scripts/data/skill_effect_data.gd`
 
 ```gdscript
 class_name SkillEffectData
@@ -1213,7 +1499,7 @@ enum OperationType {
 @export_range(0.1, 999.0, 0.1) var duration_seconds: float = 5.0
 ```
 
-### 3.13 `scripts/floors/floor.gd`
+### `scripts/floors/floor.gd`
 
 ```gdscript
 class_name Floor
@@ -1556,7 +1842,7 @@ func _apply_enemy_states(
 		)
 ```
 
-### 3.14 `scripts/floors/floor_1.gd`
+### `scripts/floors/floor_1.gd`
 
 ```gdscript
 extends Floor
@@ -1650,7 +1936,7 @@ func _apply_switch_state(
 	)
 ```
 
-### 3.15 `scripts/floors/floor_manager.gd`
+### `scripts/floors/floor_manager.gd`
 
 ```gdscript
 class_name FloorManager
@@ -1800,7 +2086,7 @@ func _apply_saved_floor_state(
 	floor.apply_runtime_state(saved_state)
 ```
 
-### 4.16 `scripts/interactables/item_pickup.gd`
+### `scripts/interactables/item_pickup.gd`
 
 ```gdscript
 @tool
@@ -1906,7 +2192,7 @@ func set_collected(collected: bool) -> void:
 	)
 ```
 
-### 3.17 `scripts/interactables/stair.gd`
+### `scripts/interactables/stair.gd`
 
 ```gdscript
 @tool
@@ -1991,7 +2277,7 @@ func _update_visual() -> void:
 	animated_sprite.frame = 0
 ```
 
-### 3.18 `scripts/interactables/switch.gd`
+### `scripts/interactables/switch.gd`
 
 ```gdscript
 class_name FloorSwitch
@@ -2037,7 +2323,7 @@ func _update_visual() -> void:
 		animated_sprite.play(&"inactive")
 ```
 
-### 4.19 `scripts/inventory/equipment_loadout.gd`
+### `scripts/inventory/equipment_loadout.gd`
 
 ```gdscript
 class_name EquipmentLoadout
@@ -2307,9 +2593,45 @@ func get_displaced_items(
 		item,
 		target_slot
 	)
+
+
+func get_compatible_slots(
+	item: EquipmentData
+) -> Array[int]:
+	var result: Array[int] = []
+	for slot: int in Slot.values():
+		if can_equip(item, slot):
+			result.append(slot)
+	return result
+
+
+func get_slots_for_item(
+	item: EquipmentData
+) -> Array[int]:
+	var result: Array[int] = []
+	if item == null:
+		return result
+	for slot: int in _equipped:
+		if _equipped[slot] == item:
+			result.append(slot)
+	return result
+
+
+func get_affected_slots(
+	item: EquipmentData,
+	target_slot: int
+) -> Array[int]:
+	var result: Array[int] = [target_slot]
+	if (
+		item != null
+		and item.slot_type == EquipmentData.EquipmentSlotType.HAND
+		and item.hand_rule == EquipmentData.HandRule.TWO_HANDED
+	):
+		result = [Slot.LEFT_HAND, Slot.RIGHT_HAND]
+	return result
 ```
 
-### 4.20 `scripts/inventory/inventory.gd`
+### `scripts/inventory/inventory.gd`
 
 ```gdscript
 class_name Inventory
@@ -2409,7 +2731,7 @@ func get_remaining_capacity(
 	)
 ```
 
-### 2.21 `scripts/main.gd`
+### `scripts/main.gd`
 
 ```gdscript
 extends Node2D
@@ -2451,7 +2773,7 @@ func _on_battle_finished(victory: bool) -> void:
 	)
 ```
 
-### 7.22 `scripts/progression/level_up_manager.gd`
+### `scripts/progression/level_up_manager.gd`
 
 ```gdscript
 class_name LevelUpManager
@@ -2490,7 +2812,7 @@ func _on_close_requested() -> void:
 	_player.set_input_enabled(true)
 ```
 
-### 7.23 `scripts/progression/level_up_ui.gd`
+### `scripts/progression/level_up_ui.gd`
 
 ```gdscript
 class_name LevelUpUI
@@ -2520,6 +2842,7 @@ func open(player: Player) -> void:
 	_player = player
 	level_root.visible = true
 	refresh()
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons/MaxHp.grab_focus()
 
 
 func close() -> void:
@@ -2545,7 +2868,126 @@ func refresh() -> void:
 	close_button.disabled = _player.unspent_stat_points > 0
 ```
 
-### 5.24 `scripts/ui/components/actor_stats_panel.gd`
+### `scripts/shared/game_formulas.gd`
+
+```gdscript
+class_name GameFormulas
+extends RefCounted
+
+const ATB_MAX: float = 100.0
+const MIN_DAMAGE: float = 1.0
+const EXPERIENCE_PER_LEVEL: int = 100
+const STAT_POINTS_PER_LEVEL: int = 5
+
+
+static func calculate_atb_gain(
+	speed: float,
+	delta: float
+) -> float:
+	return maxf(0.0, speed) * maxf(0.0, delta)
+
+
+static func calculate_skill_damage(
+	attack: float,
+	skill_power: float,
+	defense: float
+) -> float:
+	return maxf(
+		MIN_DAMAGE,
+		attack + skill_power - defense
+	)
+
+
+static func calculate_recovery_delta(
+	current_value: float,
+	maximum_value: float,
+	recovery: float
+) -> float:
+	return clampf(
+		recovery,
+		0.0,
+		maxf(0.0, maximum_value - current_value)
+	)
+
+
+static func experience_for_next_level(
+	current_level: int
+) -> int:
+	return maxi(1, current_level) * EXPERIENCE_PER_LEVEL
+
+
+static func default_enemy_experience(
+	enemy_max_hp: float
+) -> int:
+	return maxi(1, roundi(enemy_max_hp * 0.25))
+
+
+static func stat_point_increase(
+	stat_id: StringName
+) -> float:
+	match stat_id:
+		&"max_hp":
+			return 10.0
+		&"max_mp":
+			return 5.0
+		&"atk", &"def", &"spd":
+			return 1.0
+		_:
+			return 0.0
+
+
+static func skill_effect_delta(
+	base_value: float,
+	effect: SkillEffectData
+) -> float:
+	if effect == null:
+		return 0.0
+	if effect.operation_type == SkillEffectData.OperationType.MULTIPLY:
+		return base_value * (effect.value - 1.0)
+	return effect.value
+
+
+static func calculate_effective_stat(
+	base_value: float,
+	active_effects: Array[Dictionary],
+	effect_type: int
+) -> float:
+	var added_value := 0.0
+	var multiplier := 1.0
+	for active: Dictionary in active_effects:
+		var effect: SkillEffectData = active.get(&"effect") as SkillEffectData
+		if effect == null or effect.effect_type != effect_type:
+			continue
+		if effect.operation_type == SkillEffectData.OperationType.MULTIPLY:
+			multiplier *= effect.value
+		else:
+			added_value += effect.value
+	return maxf(0.0, (base_value + added_value) * multiplier)
+
+
+static func equipment_delta(
+	candidate: EquipmentData,
+	displaced_items: Array[EquipmentData]
+) -> Dictionary[StringName, float]:
+	var result: Dictionary[StringName, float] = {
+		&"max_hp": candidate.max_hp_bonus,
+		&"max_mp": candidate.max_mp_bonus,
+		&"atk": candidate.atk_bonus,
+		&"def": candidate.def_bonus,
+		&"spd": candidate.spd_bonus,
+	}
+
+	for item: EquipmentData in displaced_items:
+		result[&"max_hp"] -= item.max_hp_bonus
+		result[&"max_mp"] -= item.max_mp_bonus
+		result[&"atk"] -= item.atk_bonus
+		result[&"def"] -= item.def_bonus
+		result[&"spd"] -= item.spd_bonus
+
+	return result
+```
+
+### `scripts/ui/components/actor_stats_panel.gd`
 
 ```gdscript
 class_name ActorStatsPanel
@@ -2572,16 +3014,22 @@ func display_stats(
 
 	name_label.text = view_data.display_name
 
-	hp_value.text = "%d / %s" % [
-		roundi(view_data.current_hp),
+	hp_value.text = "%s / %s" % [
+		_format_stat(
+			view_data.current_hp,
+			view_data.current_hp_delta
+		),
 		_format_stat(
 			view_data.max_hp,
 			view_data.max_hp_delta
 		),
 	]
 
-	mp_value.text = "%d / %s" % [
-		roundi(view_data.current_mp),
+	mp_value.text = "%s / %s" % [
+		_format_stat(
+			view_data.current_mp,
+			view_data.current_mp_delta
+		),
 		_format_stat(
 			view_data.max_mp,
 			view_data.max_mp_delta
@@ -2636,7 +3084,7 @@ func _format_stat(
 	]
 ```
 
-### 5.25 `scripts/ui/components/actor_stats_view_data.gd`
+### `scripts/ui/components/actor_stats_view_data.gd`
 
 ```gdscript
 class_name ActorStatsViewData
@@ -2650,6 +3098,9 @@ var max_hp: float = 0.0
 var current_mp: float = 0.0
 var max_mp: float = 0.0
 
+var current_hp_delta: float = 0.0
+var current_mp_delta: float = 0.0
+
 var atk: float = 0.0
 var def: float = 0.0
 var spd: float = 0.0
@@ -2661,7 +3112,7 @@ var def_delta: float = 0.0
 var spd_delta: float = 0.0
 ```
 
-### 5.26 `scripts/ui/components/entry_info_panel.gd`
+### `scripts/ui/components/entry_info_panel.gd`
 
 ```gdscript
 class_name EntryInfoPanel
@@ -2708,7 +3159,7 @@ func clear_info() -> void:
 	details_separator.visible = false
 ```
 
-### 5.27 `scripts/ui/components/entry_info_view_data.gd`
+### `scripts/ui/components/entry_info_view_data.gd`
 
 ```gdscript
 class_name EntryInfoViewData
@@ -2720,7 +3171,96 @@ var description: String = ""
 var detail_lines: Array[String] = []
 ```
 
-### 5.28 `scripts/ui/components/game_message_panel.gd`
+### `scripts/ui/components/equipment_panel.gd`
+
+```gdscript
+class_name EquipmentPanel
+extends PanelContainer
+
+signal slot_focused(slot: int)
+signal slot_selected(slot: int)
+
+const SLOT_NAMES: Dictionary[int, String] = {
+	EquipmentLoadout.Slot.HEAD: "头部",
+	EquipmentLoadout.Slot.CHEST: "胸甲",
+	EquipmentLoadout.Slot.HANDS: "手部",
+	EquipmentLoadout.Slot.LEGS: "腿部",
+	EquipmentLoadout.Slot.FEET: "脚部",
+	EquipmentLoadout.Slot.LEFT_HAND: "左手",
+	EquipmentLoadout.Slot.RIGHT_HAND: "右手",
+	EquipmentLoadout.Slot.ACCESSORY_1: "饰品 1",
+	EquipmentLoadout.Slot.ACCESSORY_2: "饰品 2",
+}
+
+@onready var _slot_buttons: Dictionary[int, Button] = {
+	EquipmentLoadout.Slot.HEAD: $Margin/Content/SlotScroll/Slots/Head,
+	EquipmentLoadout.Slot.CHEST: $Margin/Content/SlotScroll/Slots/Chest,
+	EquipmentLoadout.Slot.HANDS: $Margin/Content/SlotScroll/Slots/Hands,
+	EquipmentLoadout.Slot.LEGS: $Margin/Content/SlotScroll/Slots/Legs,
+	EquipmentLoadout.Slot.FEET: $Margin/Content/SlotScroll/Slots/Feet,
+	EquipmentLoadout.Slot.LEFT_HAND: $Margin/Content/SlotScroll/Slots/LeftHand,
+	EquipmentLoadout.Slot.RIGHT_HAND: $Margin/Content/SlotScroll/Slots/RightHand,
+	EquipmentLoadout.Slot.ACCESSORY_1: $Margin/Content/SlotScroll/Slots/Accessory1,
+	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/SlotScroll/Slots/Accessory2,
+}
+
+var _loadout: EquipmentLoadout
+
+
+func _ready() -> void:
+	for slot: int in _slot_buttons:
+		var button: Button = _slot_buttons[slot]
+		button.focus_entered.connect(
+			slot_focused.emit.bind(slot)
+		)
+		button.mouse_entered.connect(button.grab_focus)
+		button.pressed.connect(slot_selected.emit.bind(slot))
+
+
+func bind_loadout(loadout: EquipmentLoadout) -> void:
+	if _loadout != null and _loadout.equipment_changed.is_connected(refresh):
+		_loadout.equipment_changed.disconnect(refresh)
+
+	_loadout = loadout
+
+	if _loadout != null:
+		_loadout.equipment_changed.connect(refresh)
+
+	refresh()
+
+
+func refresh() -> void:
+	clear_preview()
+	for slot: int in _slot_buttons:
+		var button: Button = _slot_buttons[slot]
+		var item: EquipmentData = null
+		if _loadout != null:
+			item = _loadout.get_equipped(slot)
+		button.text = "%s：%s" % [
+			SLOT_NAMES[slot],
+			"—" if item == null else item.display_name,
+		]
+
+
+func preview_slots(slots: Array[int]) -> void:
+	clear_preview()
+	for slot: int in slots:
+		if _slot_buttons.has(slot):
+			_slot_buttons[slot].set_pressed_no_signal(true)
+			_slot_buttons[slot].self_modulate = Color("#FFD54AFF")
+
+
+func clear_preview() -> void:
+	for button: Button in _slot_buttons.values():
+		button.set_pressed_no_signal(false)
+		button.self_modulate = Color("#FFFFFFFF")
+
+
+func focus_first_slot() -> void:
+	_slot_buttons[EquipmentLoadout.Slot.HEAD].grab_focus()
+```
+
+### `scripts/ui/components/game_message_panel.gd`
 
 ```gdscript
 class_name GameMessagePanel
@@ -2739,13 +3279,14 @@ func clear_message() -> void:
 	visible = false
 ```
 
-### 5.29 `scripts/ui/components/inventory_panel.gd`
+### `scripts/ui/components/inventory_panel.gd`
 
 ```gdscript
 class_name InventoryPanel
 extends PanelContainer
 
 signal item_selected(item: ItemData)
+signal item_focused(item: ItemData)
 
 @export var row_scene: PackedScene
 
@@ -2757,6 +3298,9 @@ signal item_selected(item: ItemData)
 )
 
 var _inventory: Inventory
+var _item_type_filter: int = -1
+var _battle_only: bool = false
+var _rows: Array[SelectableListRow] = []
 
 
 func bind_inventory(inventory: Inventory) -> void:
@@ -2773,6 +3317,7 @@ func bind_inventory(inventory: Inventory) -> void:
 
 
 func refresh() -> void:
+	_rows.clear()
 	for child: Node in item_rows.get_children():
 		item_rows.remove_child(child)
 		child.queue_free()
@@ -2782,6 +3327,7 @@ func refresh() -> void:
 		return
 
 	var items: Array[ItemData] = _inventory.get_all_items()
+	items = items.filter(_matches_filter)
 	items.sort_custom(_sort_items)
 
 	empty_label.visible = items.is_empty()
@@ -2797,6 +3343,7 @@ func refresh() -> void:
 			return
 
 		item_rows.add_child(row)
+		_rows.append(row)
 		row.setup(
 			item,
 			"%s  ×%d" % [
@@ -2807,6 +3354,34 @@ func refresh() -> void:
 			item.description
 		)
 		row.entry_selected.connect(_on_entry_selected)
+		row.entry_focused.connect(_on_entry_focused)
+
+
+func set_item_type_filter(item_type: int) -> void:
+	_item_type_filter = item_type
+	refresh()
+
+
+func clear_filter() -> void:
+	set_item_type_filter(-1)
+
+
+func set_battle_only(enabled: bool) -> void:
+	_battle_only = enabled
+	refresh()
+
+
+func focus_first_item() -> bool:
+	if _rows.is_empty():
+		return false
+	_rows.front().grab_focus()
+	return true
+
+
+func _matches_filter(item: ItemData) -> bool:
+	if _battle_only and not item.usable_in_battle:
+		return false
+	return _item_type_filter < 0 or item.item_type == _item_type_filter
 
 
 func _sort_items(
@@ -2821,9 +3396,15 @@ func _on_entry_selected(entry: Resource) -> void:
 
 	if item != null:
 		item_selected.emit(item)
+
+
+func _on_entry_focused(entry: Resource) -> void:
+	var item: ItemData = entry as ItemData
+	if item != null:
+		item_focused.emit(item)
 ```
 
-### 5.30 `scripts/ui/components/player_stat_hud.gd`
+### `scripts/ui/components/player_stat_hud.gd`
 
 ```gdscript
 class_name PlayerStatHUD
@@ -2893,15 +3474,22 @@ func _set_bar(
 	]
 ```
 
-### 5.31 `scripts/ui/components/selectable_list_row.gd`
+### `scripts/ui/components/selectable_list_row.gd`
 
 ```gdscript
 class_name SelectableListRow
 extends Button
 
 signal entry_selected(entry: Resource)
+signal entry_focused(entry: Resource)
 
 var entry_data: Resource
+
+
+func _ready() -> void:
+	focus_mode = Control.FOCUS_ALL
+	focus_entered.connect(_emit_focused)
+	mouse_entered.connect(grab_focus)
 
 
 func setup(
@@ -2928,15 +3516,21 @@ func setup(
 func _pressed() -> void:
 	if entry_data != null:
 		entry_selected.emit(entry_data)
+
+
+func _emit_focused() -> void:
+	if entry_data != null:
+		entry_focused.emit(entry_data)
 ```
 
-### 5.32 `scripts/ui/components/skill_panel.gd`
+### `scripts/ui/components/skill_panel.gd`
 
 ```gdscript
 class_name SkillPanel
 extends PanelContainer
 
 signal skill_selected(skill: SkillData)
+signal skill_focused(skill: SkillData)
 
 @export var row_scene: PackedScene
 
@@ -2948,6 +3542,7 @@ signal skill_selected(skill: SkillData)
 )
 
 var _skills: Array[SkillData] = []
+var _rows: Array[SelectableListRow] = []
 
 
 func display_skills(
@@ -2963,6 +3558,7 @@ func clear_skills() -> void:
 
 
 func refresh() -> void:
+	_rows.clear()
 	for child: Node in skill_rows.get_children():
 		skill_rows.remove_child(child)
 		child.queue_free()
@@ -2983,6 +3579,7 @@ func refresh() -> void:
 			return
 
 		skill_rows.add_child(row)
+		_rows.append(row)
 		row.setup(
 			skill,
 			_build_row_text(skill),
@@ -2992,6 +3589,16 @@ func refresh() -> void:
 		row.entry_selected.connect(
 			_on_entry_selected
 		)
+		row.entry_focused.connect(
+			_on_entry_focused
+		)
+
+
+func focus_first_skill() -> bool:
+	if _rows.is_empty():
+		return false
+	_rows.front().grab_focus()
+	return true
 
 
 func _build_row_text(skill: SkillData) -> String:
@@ -3031,9 +3638,15 @@ func _on_entry_selected(entry: Resource) -> void:
 
 	if skill != null:
 		skill_selected.emit(skill)
+
+
+func _on_entry_focused(entry: Resource) -> void:
+	var skill: SkillData = entry as SkillData
+	if skill != null:
+		skill_focused.emit(skill)
 ```
 
-### 5.33 `scripts/ui/components/tracked_inventory_hud.gd`
+### `scripts/ui/components/tracked_inventory_hud.gd`
 
 ```gdscript
 class_name TrackedInventoryHUD
@@ -3058,7 +3671,7 @@ func bind_inventory(
 			row.bind_inventory(_inventory)
 ```
 
-### 5.34 `scripts/ui/components/tracked_item_row.gd`
+### `scripts/ui/components/tracked_item_row.gd`
 
 ```gdscript
 class_name TrackedItemRow
@@ -3114,24 +3727,85 @@ func refresh() -> void:
 	quantity_label.text = "×%d" % quantity
 ```
 
-### 6.35 `scripts/ui/esc_menu.gd`
+### `scripts/ui/esc_menu.gd`
 
 ```gdscript
 class_name EscMenu
 extends CanvasLayer
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+
 signal opened
 signal closed
 
-@onready var inventory_panel: InventoryPanel = (
-	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/InventoryPanel
-)
-@onready var skill_panel: SkillPanel = (
-	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Columns/SkillPanel
-)
+enum MainPage {
+	INVENTORY,
+	SKILLS,
+	SYSTEM,
+}
+
+const CATEGORY_TYPES: Array[int] = [
+	ItemData.ItemType.EQUIPMENT,
+	ItemData.ItemType.CONSUMABLE,
+	ItemData.ItemType.MATERIAL,
+	ItemData.ItemType.KEY_ITEM,
+]
+
 @onready var menu_root: Control = $MenuRoot
+@onready var inventory_tab: Button = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs/InventoryTab
+@onready var skills_tab: Button = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs/SkillsTab
+@onready var system_tab: Button = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs/SystemTab
+@onready var actor_stats_panel: ActorStatsPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/ActorStatsPanel
+@onready var equipment_panel: Node = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/EquipmentPanel
+@onready var inventory_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage
+@onready var skill_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage
+@onready var system_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage
+@onready var inventory_panel: InventoryPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/InventoryPanel
+@onready var skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanel
+@onready var entry_info_panel: EntryInfoPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/EntryInfoPanel
+@onready var category_buttons: Array[Button] = [
+	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/EquipmentCategory,
+	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/ConsumableCategory,
+	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/MaterialCategory,
+	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/OtherCategory,
+]
 
 var _player: Player
+var _current_page: MainPage = MainPage.INVENTORY
+var _current_category := 0
+var _preview_target_slot := -1
+
+
+func _ready() -> void:
+	inventory_tab.pressed.connect(_show_main_page.bind(MainPage.INVENTORY, true))
+	skills_tab.pressed.connect(_show_main_page.bind(MainPage.SKILLS, true))
+	system_tab.pressed.connect(_show_main_page.bind(MainPage.SYSTEM, true))
+	inventory_tab.focus_entered.connect(_show_main_page.bind(MainPage.INVENTORY, false))
+	skills_tab.focus_entered.connect(_show_main_page.bind(MainPage.SKILLS, false))
+	system_tab.focus_entered.connect(_show_main_page.bind(MainPage.SYSTEM, false))
+	for index: int in category_buttons.size():
+		category_buttons[index].pressed.connect(_show_category.bind(index, true))
+		category_buttons[index].focus_entered.connect(_show_category.bind(index, false))
+		category_buttons[index].mouse_entered.connect(category_buttons[index].grab_focus)
+	inventory_panel.item_focused.connect(_on_item_focused)
+	inventory_panel.item_selected.connect(_on_item_selected)
+	skill_panel.skill_focused.connect(_on_skill_focused)
+	equipment_panel.slot_focused.connect(_on_equipment_slot_focused)
+	equipment_panel.slot_selected.connect(_on_equipment_slot_selected)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not menu_root.visible:
+		return
+	if event.is_action_pressed(&"ui_left"):
+		_navigate_horizontal(-1)
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_right"):
+		_navigate_horizontal(1)
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_down") and _is_main_tab_focused():
+		_focus_current_page()
+		get_viewport().set_input_as_handled()
 
 
 func bind_player(player: Player) -> void:
@@ -3143,34 +3817,37 @@ func refresh_content() -> void:
 	if _player == null:
 		inventory_panel.bind_inventory(null)
 		skill_panel.clear_skills()
+		equipment_panel.bind_loadout(null)
+		actor_stats_panel.clear_stats()
 		return
-
+	inventory_panel.set_battle_only(false)
 	inventory_panel.bind_inventory(_player.inventory)
 	skill_panel.display_skills(_player.learned_skills)
+	equipment_panel.bind_loadout(_player.equipment)
+	refresh_player_stats()
 
 
 func open() -> void:
 	if menu_root.visible:
 		return
-
 	refresh_content()
 	menu_root.visible = true
-
 	if _player != null:
 		_player.set_input_enabled(false)
-
+	_show_main_page(MainPage.INVENTORY, false)
+	_show_category(0, false)
+	call_deferred(&"_focus_main_tab")
 	opened.emit()
 
 
 func close() -> void:
 	if not menu_root.visible:
 		return
-
 	menu_root.visible = false
-
+	equipment_panel.clear_preview()
+	entry_info_panel.clear_info()
 	if _player != null:
 		_player.set_input_enabled(true)
-
 	closed.emit()
 
 
@@ -3178,15 +3855,207 @@ func toggle() -> void:
 	if menu_root.visible:
 		close()
 		return
-
 	open()
 
 
 func is_open() -> bool:
 	return menu_root.visible
+
+
+func refresh_player_stats(view: ActorStatsViewData = null) -> void:
+	if _player == null:
+		actor_stats_panel.clear_stats()
+		return
+	actor_stats_panel.display_stats(view if view != null else _build_player_view())
+
+
+func _show_main_page(page: MainPage, focus_content: bool) -> void:
+	_current_page = page
+	inventory_page.visible = page == MainPage.INVENTORY
+	skill_page.visible = page == MainPage.SKILLS
+	system_page.visible = page == MainPage.SYSTEM
+	inventory_tab.set_pressed_no_signal(page == MainPage.INVENTORY)
+	skills_tab.set_pressed_no_signal(page == MainPage.SKILLS)
+	system_tab.set_pressed_no_signal(page == MainPage.SYSTEM)
+	equipment_panel.clear_preview()
+	entry_info_panel.clear_info()
+	refresh_player_stats()
+	if focus_content:
+		_focus_current_page()
+
+
+func _show_category(index: int, focus_items: bool) -> void:
+	_current_category = posmod(index, CATEGORY_TYPES.size())
+	for button_index: int in category_buttons.size():
+		category_buttons[button_index].set_pressed_no_signal(button_index == _current_category)
+	inventory_panel.set_item_type_filter(CATEGORY_TYPES[_current_category])
+	equipment_panel.clear_preview()
+	entry_info_panel.clear_info()
+	refresh_player_stats()
+	if focus_items and not inventory_panel.focus_first_item():
+		category_buttons[_current_category].grab_focus()
+
+
+func _navigate_horizontal(direction: int) -> void:
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	if _current_page == MainPage.INVENTORY and _is_in_control(focus, inventory_page):
+		_show_category(_current_category + direction, true)
+		return
+	var next_page: int = posmod(int(_current_page) + direction, MainPage.size())
+	_show_main_page(next_page, false)
+	_focus_main_tab()
+
+
+func _focus_current_page() -> void:
+	match _current_page:
+		MainPage.INVENTORY:
+			category_buttons[_current_category].grab_focus()
+		MainPage.SKILLS:
+			if not skill_panel.focus_first_skill():
+				skills_tab.grab_focus()
+		MainPage.SYSTEM:
+			system_tab.grab_focus()
+
+
+func _focus_main_tab() -> void:
+	match _current_page:
+		MainPage.INVENTORY:
+			inventory_tab.grab_focus()
+		MainPage.SKILLS:
+			skills_tab.grab_focus()
+		MainPage.SYSTEM:
+			system_tab.grab_focus()
+
+
+func _is_main_tab_focused() -> bool:
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	return focus in [inventory_tab, skills_tab, system_tab]
+
+
+func _is_in_control(focus: Control, ancestor: Control) -> bool:
+	if focus == null:
+		return false
+	return focus == ancestor or ancestor.is_ancestor_of(focus)
+
+
+func _on_item_focused(item: ItemData) -> void:
+	equipment_panel.clear_preview()
+	var view := _build_player_view()
+	var details: Array[String] = []
+	if item is EquipmentData:
+		var equipment := item as EquipmentData
+		_preview_target_slot = _choose_equipment_target(equipment)
+		if _preview_target_slot >= 0:
+			var displaced: Array[EquipmentData] = _player.equipment.get_displaced_items(equipment, _preview_target_slot)
+			var delta: Dictionary[StringName, float] = FORMULAS.equipment_delta(equipment, displaced)
+			view.max_hp_delta = delta[&"max_hp"]
+			view.max_mp_delta = delta[&"max_mp"]
+			view.atk_delta = delta[&"atk"]
+			view.def_delta = delta[&"def"]
+			view.spd_delta = delta[&"spd"]
+			var affected: Array[int] = _player.equipment.get_affected_slots(equipment, _preview_target_slot)
+			for displaced_item: EquipmentData in displaced:
+				for slot: int in _player.equipment.get_slots_for_item(displaced_item):
+					if not affected.has(slot):
+						affected.append(slot)
+			equipment_panel.preview_slots(affected)
+			details.append("确认后装备；高亮槽位会被占用或替换")
+	else:
+		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), item.hp_recovery)
+		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), item.mp_recovery)
+		details.append("HP 回复：%.0f" % item.hp_recovery)
+		details.append("MP 回复：%.0f" % item.mp_recovery)
+	refresh_player_stats(view)
+	_display_entry_info(item.display_name, item.icon, item.description, details)
+
+
+func _on_item_selected(item: ItemData) -> void:
+	if _player == null:
+		return
+	if item is EquipmentData:
+		if _preview_target_slot >= 0:
+			_player.equip_item(item.id, _preview_target_slot)
+	else:
+		if not item.usable_from_inventory:
+			return
+		_player.change_hp(item.hp_recovery)
+		_player.change_mp(item.mp_recovery)
+		if item.consumed_on_use:
+			_player.inventory.remove_item(item.id)
+	refresh_content()
+	_show_category(_current_category, true)
+
+
+func _on_skill_focused(skill: SkillData) -> void:
+	var view := _build_player_view()
+	for effect: SkillEffectData in skill.effects:
+		if effect.target_type != SkillEffectData.TargetType.SELF:
+			continue
+		match effect.effect_type:
+			SkillEffectData.EffectType.ATK:
+				view.atk_delta += FORMULAS.skill_effect_delta(view.atk, effect)
+			SkillEffectData.EffectType.DEF:
+				view.def_delta += FORMULAS.skill_effect_delta(view.def, effect)
+			SkillEffectData.EffectType.SPD:
+				view.spd_delta += FORMULAS.skill_effect_delta(view.spd, effect)
+	refresh_player_stats(view)
+	_display_entry_info(skill.display_name, skill.icon, skill.description, ["MP：%.0f" % skill.mp_cost, "冷却：%.1f 秒" % skill.cooldown_seconds])
+
+
+func _on_equipment_slot_focused(slot: int) -> void:
+	equipment_panel.clear_preview()
+	equipment_panel.preview_slots([slot])
+	refresh_player_stats()
+	var item: EquipmentData = _player.equipment.get_equipped(slot)
+	if item == null:
+		entry_info_panel.clear_info()
+		return
+	_display_entry_info(item.display_name, item.icon, item.description, ["确认后卸下装备"])
+
+
+func _on_equipment_slot_selected(slot: int) -> void:
+	if _player.unequip_item(slot):
+		refresh_content()
+		equipment_panel.focus_first_slot()
+
+
+func _choose_equipment_target(item: EquipmentData) -> int:
+	var slots: Array[int] = _player.equipment.get_compatible_slots(item)
+	for slot: int in slots:
+		if _player.equipment.get_equipped(slot) == null:
+			return slot
+	return -1 if slots.is_empty() else slots.front()
+
+
+func _build_player_view() -> ActorStatsViewData:
+	var view := ActorStatsViewData.new()
+	view.display_name = _player.player_data.display_name
+	view.portrait = _player.player_data.portrait
+	view.current_hp = _player.current_hp
+	view.max_hp = _player.get_max_hp()
+	view.current_mp = _player.current_mp
+	view.max_mp = _player.get_max_mp()
+	view.atk = _player.get_atk()
+	view.def = _player.get_def()
+	view.spd = _player.get_spd()
+	return view
+
+
+func _display_entry_info(
+	title: String,
+	icon: Texture2D,
+	description: String,
+	details: Array[String]
+) -> void:
+	var info := EntryInfoViewData.new()
+	info.title = title
+	info.icon = icon
+	info.description = description
+	info.detail_lines = details
+	entry_info_panel.display_info(info)
 ```
 
-### 6.36 `scripts/ui/game_hud.gd`
+### `scripts/ui/game_hud.gd`
 
 ```gdscript
 class_name GameHUD
@@ -3259,5 +4128,4 @@ func show_message(message: String) -> void:
 func clear_message() -> void:
 	game_message_panel.clear_message()
 ```
-
 

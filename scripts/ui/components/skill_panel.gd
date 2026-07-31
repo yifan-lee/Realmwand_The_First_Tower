@@ -2,6 +2,7 @@ class_name SkillPanel
 extends PanelContainer
 
 signal skill_selected(skill: SkillData)
+signal skill_focused(skill: SkillData)
 
 @export var row_scene: PackedScene
 
@@ -13,6 +14,7 @@ signal skill_selected(skill: SkillData)
 )
 
 var _skills: Array[SkillData] = []
+var _rows: Array[SelectableListRow] = []
 
 
 func display_skills(
@@ -28,6 +30,7 @@ func clear_skills() -> void:
 
 
 func refresh() -> void:
+	_rows.clear()
 	for child: Node in skill_rows.get_children():
 		skill_rows.remove_child(child)
 		child.queue_free()
@@ -48,6 +51,7 @@ func refresh() -> void:
 			return
 
 		skill_rows.add_child(row)
+		_rows.append(row)
 		row.setup(
 			skill,
 			_build_row_text(skill),
@@ -57,6 +61,16 @@ func refresh() -> void:
 		row.entry_selected.connect(
 			_on_entry_selected
 		)
+		row.entry_focused.connect(
+			_on_entry_focused
+		)
+
+
+func focus_first_skill() -> bool:
+	if _rows.is_empty():
+		return false
+	_rows.front().grab_focus()
+	return true
 
 
 func _build_row_text(skill: SkillData) -> String:
@@ -96,3 +110,9 @@ func _on_entry_selected(entry: Resource) -> void:
 
 	if skill != null:
 		skill_selected.emit(skill)
+
+
+func _on_entry_focused(entry: Resource) -> void:
+	var skill: SkillData = entry as SkillData
+	if skill != null:
+		skill_focused.emit(skill)

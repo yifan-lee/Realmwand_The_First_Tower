@@ -2,6 +2,7 @@ class_name InventoryPanel
 extends PanelContainer
 
 signal item_selected(item: ItemData)
+signal item_focused(item: ItemData)
 
 @export var row_scene: PackedScene
 
@@ -13,6 +14,9 @@ signal item_selected(item: ItemData)
 )
 
 var _inventory: Inventory
+var _item_type_filter: int = -1
+var _battle_only: bool = false
+var _rows: Array[SelectableListRow] = []
 
 
 func bind_inventory(inventory: Inventory) -> void:
@@ -29,6 +33,7 @@ func bind_inventory(inventory: Inventory) -> void:
 
 
 func refresh() -> void:
+	_rows.clear()
 	for child: Node in item_rows.get_children():
 		item_rows.remove_child(child)
 		child.queue_free()
@@ -38,6 +43,7 @@ func refresh() -> void:
 		return
 
 	var items: Array[ItemData] = _inventory.get_all_items()
+	items = items.filter(_matches_filter)
 	items.sort_custom(_sort_items)
 
 	empty_label.visible = items.is_empty()
@@ -53,6 +59,7 @@ func refresh() -> void:
 			return
 
 		item_rows.add_child(row)
+		_rows.append(row)
 		row.setup(
 			item,
 			"%s  ×%d" % [
@@ -63,6 +70,34 @@ func refresh() -> void:
 			item.description
 		)
 		row.entry_selected.connect(_on_entry_selected)
+		row.entry_focused.connect(_on_entry_focused)
+
+
+func set_item_type_filter(item_type: int) -> void:
+	_item_type_filter = item_type
+	refresh()
+
+
+func clear_filter() -> void:
+	set_item_type_filter(-1)
+
+
+func set_battle_only(enabled: bool) -> void:
+	_battle_only = enabled
+	refresh()
+
+
+func focus_first_item() -> bool:
+	if _rows.is_empty():
+		return false
+	_rows.front().grab_focus()
+	return true
+
+
+func _matches_filter(item: ItemData) -> bool:
+	if _battle_only and not item.usable_in_battle:
+		return false
+	return _item_type_filter < 0 or item.item_type == _item_type_filter
 
 
 func _sort_items(
@@ -77,3 +112,9 @@ func _on_entry_selected(entry: Resource) -> void:
 
 	if item != null:
 		item_selected.emit(item)
+
+
+func _on_entry_focused(entry: Resource) -> void:
+	var item: ItemData = entry as ItemData
+	if item != null:
+		item_focused.emit(item)

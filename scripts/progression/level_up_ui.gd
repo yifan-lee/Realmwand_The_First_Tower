@@ -25,6 +25,7 @@ func open(player: Player) -> void:
 	_player = player
 	level_root.visible = true
 	refresh()
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons/MaxHp.grab_focus()
 
 
 func close() -> void:
