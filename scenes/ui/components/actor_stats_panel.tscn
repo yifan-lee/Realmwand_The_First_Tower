@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://c01uv3eb5dpcj"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_jqoyi"]
+[ext_resource type="Script" uid="uid://b5lltfg5dekj0" path="res://scripts/ui/components/actor_stats_panel.gd" id="2_mddi2"]
+
+[node name="ActorStatsPanel" type="PanelContainer" unique_id=799998403]
+custom_minimum_size = Vector2(420, 360)
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme = ExtResource("1_jqoyi")
+script = ExtResource("2_mddi2")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=23613958]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=35085586]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/Content" unique_id=1115577434]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="Portrait" type="TextureRect" parent="MarginContainer/Content/Header" unique_id=1452877705]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Content/Header" unique_id=786158178]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "角色名称"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=359877022]
+layout_mode = 2
+
+[node name="StatsGrid" type="GridContainer" parent="MarginContainer/Content" unique_id=545130794]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 32
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="HpTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=247937661]
+layout_mode = 2
+text = "生命"
+
+[node name="HpValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1514780235]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "400 / 400"
+horizontal_alignment = 2
+
+[node name="MpTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1508054529]
+layout_mode = 2
+text = "魔法"
+
+[node name="MpValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=689330993]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "200 / 200"
+horizontal_alignment = 2
+
+[node name="AtkTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=341848647]
+layout_mode = 2
+text = "攻击"
+
+[node name="AtkValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=477720086]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "40"
+horizontal_alignment = 2
+
+[node name="DefTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1302738792]
+layout_mode = 2
+text = "防御"
+
+[node name="DefValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1899293634]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "40"
+horizontal_alignment = 2
+
+[node name="SpdTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=43382800]
+layout_mode = 2
+text = "速度"
+
+[node name="SpdValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1671456509]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "40"
+horizontal_alignment = 2
