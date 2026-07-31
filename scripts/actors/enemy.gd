@@ -11,7 +11,11 @@ signal battle_requested(
 @export var instance_id: StringName = &""
 
 @export_group("Data")
-@export var enemy_data: EnemyData
+@export var enemy_data: EnemyData:
+	set(value):
+		enemy_data = value
+		_refresh_visual()
+
 
 var current_hp: float = 0.0
 var current_mp: float = 0.0
@@ -21,6 +25,8 @@ var _active_collision_layer: int = 0
 
 
 func _ready() -> void:
+	_refresh_visual()
+
 	if Engine.is_editor_hint():
 		return
 
@@ -90,13 +96,28 @@ func _get_configuration_warnings() -> PackedStringArray:
 			"EnemyData requires a non-empty ID."
 		)
 
+
+	if (
+		enemy_data != null
+		and enemy_data.world_texture == null
+	):
+		warnings.append(
+			"EnemyData requires a world texture."
+		)
+
+	return warnings
+
+
+func _refresh_visual() -> void:
 	var sprite := get_node_or_null(
 		"Sprite2D"
 	) as Sprite2D
 
-	if sprite == null or sprite.texture == null:
-		warnings.append(
-			"Enemy requires a world sprite texture."
-		)
+	if sprite == null:
+		return
 
-	return warnings
+	if enemy_data == null:
+		sprite.texture = null
+		return
+
+	sprite.texture = enemy_data.world_texture

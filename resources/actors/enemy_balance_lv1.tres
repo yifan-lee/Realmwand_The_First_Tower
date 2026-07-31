@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("1_y3vm6")
 skills = Array[ExtResource("2_norgi")]([ExtResource("3_norgi")])
+world_texture = ExtResource("1_64pky")
 id = &"enemy_balance_lv1"
 display_name = "1级平衡怪"
 description = "各项属性都比较平衡的生物"

@@ -7,3 +7,7 @@ extends ActorData
 @export_group("Rewards")
 @export var experience_reward_override: int = -1
 @export_range(0, 999999, 1) var gold_reward: int = 0
+
+
+@export_group("World Presentation")
+@export var world_texture: Texture2D

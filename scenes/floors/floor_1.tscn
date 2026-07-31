@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="5_wl6yc"]
 [ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="6_fu1vu"]
 [ext_resource type="PackedScene" uid="uid://c0wag3rti6imh" path="res://scenes/actors/enemies/enemy_balance_lv1.tscn" id="7_l8omj"]
+[ext_resource type="Resource" uid="uid://cs1gj5asd0b0e" path="res://resources/equipment/blade_lv1.tres" id="7_x8e2u"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
@@ -47,13 +48,17 @@ position = Vector2(0, -256)
 target_floor_id = &"floor_2"
 target_spawn_id = &"FromBelowStair"
 
-[node name="HpRecoveryPickup" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="5" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
-position = Vector2(0, -64)
-pickup_id = &"hp_recovery_01"
-item_data = ExtResource("6_fu1vu")
-
 [node name="EnemyBalanceLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="0" unique_id=796734484 instance=ExtResource("7_l8omj")]
 position = Vector2(32, 0)
 instance_id = &"floor_1_enemy_01"
+
+[node name="Blade" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
+position = Vector2(-32, 0)
+item_data = ExtResource("7_x8e2u")
+
+[node name="HpRecoveryPickup" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=647430724 instance=ExtResource("5_wl6yc")]
+position = Vector2(0, -64)
+pickup_id = &"hp_recovery_01"
+item_data = ExtResource("6_fu1vu")
 
 [connection signal="state_changed" from="Interactables/WallSwitch" to="." method="_on_floor_switch_state_changed"]

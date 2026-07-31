@@ -12,6 +12,7 @@ signal movement_finished
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var interaction_ray: RayCast2D = $InteractionRay
 @onready var inventory: Inventory = $Inventory
+@onready var equipment: EquipmentLoadout = $Equipment
 
 var level: int = 1
 var experience: int = 0
@@ -202,3 +203,109 @@ func set_input_enabled(enabled: bool) -> void:
 
 	if not input_enabled and not is_moving:
 		_play_directional_animation(&"idle")
+
+func equip_item(
+	item_id: StringName,
+	target_slot: int
+) -> bool:
+	var item := inventory.get_item(
+		item_id
+	) as EquipmentData
+
+	if item == null:
+		return false
+
+	if not equipment.can_equip(
+		item,
+		target_slot
+	):
+		return false
+
+	if not inventory.remove_item(item_id):
+		return false
+
+	var displaced_items: Array[EquipmentData] = (
+		equipment.equip(
+			item,
+			target_slot
+		)
+	)
+
+	for displaced_item: EquipmentData in displaced_items:
+		var remaining_amount: int = (
+			inventory.add_item(displaced_item)
+		)
+
+		if remaining_amount > 0:
+			push_error(
+				"Could not return displaced equipment '%s'."
+				% displaced_item.id
+			)
+
+	return true
+
+
+func unequip_item(target_slot: int) -> bool:
+	var item := equipment.get_equipped(
+		target_slot
+	)
+
+	if item == null:
+		return false
+
+	var remaining_amount: int = (
+		inventory.add_item(item)
+	)
+
+	if remaining_amount > 0:
+		return false
+
+	equipment.unequip(target_slot)
+
+	return true
+
+
+func get_max_hp() -> float:
+	return (
+		base_max_hp
+		+ equipment.get_max_hp_bonus()
+	)
+
+
+func get_max_mp() -> float:
+	return (
+		base_max_mp
+		+ equipment.get_max_mp_bonus()
+	)
+
+
+func get_atk() -> float:
+	return (
+		base_atk
+		+ equipment.get_atk_bonus()
+	)
+
+
+func get_def() -> float:
+	return (
+		base_def
+		+ equipment.get_def_bonus()
+	)
+
+
+func get_spd() -> float:
+	return (
+		base_spd
+		+ equipment.get_spd_bonus()
+	)
+
+
+func _on_equipment_changed() -> void:
+	current_hp = minf(
+		current_hp,
+		get_max_hp()
+	)
+	current_mp = minf(
+		current_mp,
+		get_max_mp()
+	)
