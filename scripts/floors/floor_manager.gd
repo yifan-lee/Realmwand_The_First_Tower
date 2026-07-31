@@ -12,6 +12,7 @@ const FLOOR_SCENE_DIRECTORY := "res://scenes/floors"
 
 var current_floor: Floor
 var current_floor_id: StringName = &""
+var floor_states: Dictionary = {}
 
 
 func _ready() -> void:
@@ -94,12 +95,18 @@ func change_floor(
 
 	player.set_input_enabled(false)
 
+	_store_current_floor_state()
+
 	if is_instance_valid(current_floor):
 		floor_container.remove_child(current_floor)
 		current_floor.queue_free()
 
 	current_floor = new_floor
 	current_floor_id = target_floor_id
+
+	_apply_saved_floor_state(current_floor)
+
+	
 	player.global_position = spawn_point.global_position
 
 	player.set_input_enabled(true)
@@ -113,3 +120,26 @@ func _on_floor_change_requested(
 		target_floor_id,
 		target_spawn_id
 	)
+
+
+func _store_current_floor_state() -> void:
+	if not is_instance_valid(current_floor):
+		return
+
+	var floor_key := String(current_floor.floor_id)
+
+	floor_states[floor_key] = (
+		current_floor.capture_runtime_state()
+	)
+
+func _apply_saved_floor_state(
+	floor: Floor
+) -> void:
+	var floor_key := String(floor.floor_id)
+
+	if not floor_states.has(floor_key):
+		return
+
+	var saved_state: Dictionary = floor_states[floor_key]
+
+	floor.apply_runtime_state(saved_state)

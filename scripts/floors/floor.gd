@@ -30,6 +30,7 @@ class TileCellSnapshot:
 @export var default_spawn_id: StringName = &"FromStart"
 
 @onready var spawn_points: Node2D = $SpawnPoints
+@onready var interactables: Node2D = %Interactables
 
 
 func get_spawn_point(spawn_id: StringName) -> Marker2D:
@@ -94,3 +95,57 @@ func set_tile_cells_removed(
 				snapshot.atlas_coords,
 				snapshot.alternative_tile
 			)
+
+func capture_runtime_state() -> Dictionary:
+	var switch_states: Dictionary = {}
+
+	for child: Node in interactables.get_children():
+		var floor_switch := child as FloorSwitch
+
+		if floor_switch == null:
+			continue
+
+		if floor_switch.switch_id == &"":
+			continue
+
+		var switch_key := String(
+			floor_switch.switch_id
+		)
+
+		switch_states[switch_key] = floor_switch.is_active
+
+	return {
+		"switches": switch_states,
+	}
+
+func apply_runtime_state(state: Dictionary) -> void:
+	var switch_states_value: Variant = state.get(
+		"switches",
+		{}
+	)
+
+	if not (switch_states_value is Dictionary):
+		push_error(
+			"Floor '%s' has invalid switch state data."
+			% floor_id
+		)
+		return
+
+	var switch_states: Dictionary = switch_states_value
+
+	for child: Node in interactables.get_children():
+		var floor_switch := child as FloorSwitch
+
+		if floor_switch == null:
+			continue
+
+		var switch_key := String(
+			floor_switch.switch_id
+		)
+
+		if not switch_states.has(switch_key):
+			continue
+
+		floor_switch.set_active(
+			bool(switch_states[switch_key])
+		)

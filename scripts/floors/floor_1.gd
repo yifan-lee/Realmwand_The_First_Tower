@@ -17,7 +17,6 @@ class SwitchTerrainRule:
 
 
 @onready var wall_layer: TileMapLayer = %WallLayer
-@onready var interactables: Node2D = %Interactables
 
 var switch_rules: Array[SwitchTerrainRule] = []
 
