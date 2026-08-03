@@ -2,11 +2,11 @@ class_name GameHUD
 extends CanvasLayer
 
 
-@onready var player_stat_hud: PlayerStatHUD = (
-	$HudRoot/PlayerStatHUD
+@onready var actor_stats_panel: ActorStatsPanel = (
+	$HudRoot/StatsColumn/Content/ActorStatsPanel
 )
 @onready var tracked_inventory_hud: TrackedInventoryHUD = (
-	$HudRoot/TrackedInventoryHUD
+	$HudRoot/StatsColumn/Content/TrackedInventoryHUD
 )
 @onready var game_message_panel: GameMessagePanel = (
 	$HudRoot/MessageArea/GameMessagePanel
@@ -29,7 +29,7 @@ func bind_player(player: Player) -> void:
 	_player = player
 
 	if _player == null:
-		player_stat_hud.clear_stats()
+		actor_stats_panel.clear_stats()
 		tracked_inventory_hud.bind_inventory(null)
 		return
 
@@ -45,7 +45,7 @@ func bind_player(player: Player) -> void:
 
 func refresh_player_stats() -> void:
 	if _player == null or _player.player_data == null:
-		player_stat_hud.clear_stats()
+		actor_stats_panel.clear_stats()
 		return
 
 	var view_data: ActorStatsViewData = ActorStatsViewData.new()
@@ -57,8 +57,11 @@ func refresh_player_stats() -> void:
 	view_data.max_hp = _player.get_max_hp()
 	view_data.current_mp = _player.current_mp
 	view_data.max_mp = _player.get_max_mp()
+	view_data.atk = _player.get_atk()
+	view_data.def = _player.get_def()
+	view_data.spd = _player.get_spd()
 
-	player_stat_hud.display_stats(view_data)
+	actor_stats_panel.display_stats(view_data)
 
 
 func show_message(message: String) -> void:

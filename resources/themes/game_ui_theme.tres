@@ -97,7 +97,7 @@ content_margin_left = 16.0
 content_margin_top = 16.0
 content_margin_right = 16.0
 content_margin_bottom = 16.0
-bg_color = Color(0.14117648, 0.15294118, 0.16862746, 0.9490196)
+bg_color = Color(0.14117648, 0.15294118, 0.16862746, 0.28)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -213,7 +213,7 @@ content_margin_left = 16.0
 content_margin_top = 16.0
 content_margin_right = 16.0
 content_margin_bottom = 16.0
-bg_color = Color(0.9490196, 0.9254902, 0.8784314, 0.9490196)
+bg_color = Color(0.9490196, 0.9254902, 0.8784314, 0.28)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -273,15 +273,15 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bh7ty"]
-content_margin_left = 16.0
-content_margin_top = 16.0
-content_margin_right = 16.0
-content_margin_bottom = 16.0
-bg_color = Color(0.9490196, 0.9254902, 0.8784314, 0.98039216)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9490196, 0.9254902, 0.8784314, 0.28)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color(0.08627451, 0.09411765, 0.105882354, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
@@ -303,6 +303,12 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gg8i1"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_htpng"]
 color = Color(0.08627451, 0.09411765, 0.105882354, 1)
@@ -415,6 +421,8 @@ TooltipLabel/colors/font_shadow_color = Color(0, 0, 0, 0)
 TooltipLabel/constants/outline_size = 0
 TooltipLabel/font_sizes/font_size = 20
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_6kd0v")
+TransparentPanelContainer/base_type = &"PanelContainer"
+TransparentPanelContainer/styles/panel = SubResource("StyleBoxEmpty_gg8i1")
 VBoxContainer/constants/separation = 12
 VSeparator/styles/separator = SubResource("StyleBoxLine_htpng")
 ValueLabel/base_type = &"Label"

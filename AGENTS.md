@@ -31,7 +31,7 @@
 
 1. **环境前置条件**：执行任何 Godot 开发任务前，必须先确保 Godot MCP Pro 工具链可用（参见 `godot-mcp-setup` skill）。不可用则拒绝开发，不降级。
 2. **场景为根基**：所有功能从场景节点树出发设计，脚本只是节点上的附加行为。每个场景必须在 Godot 编辑器中可完整可视化。（→ dev_standards.md 四）
-3. **通过 MCP 操作编辑器**：使用 Godot MCP Pro 创建/修改场景、节点、资源，**禁止直接手写 .tscn / .tres 文件**。脚本（.gd）可以手写后通过 MCP 挂载。（→ dev_standards.md 五）
+3. **通过 MCP 操作编辑器**：使用 Godot MCP Pro 创建/修改场景、节点、资源，**禁止直接手写 .tscn / .tres 文件**；但**在通过 MCP 修改任何 `.tscn` / `.tres` 文件后，AI 必须在回复中主动呈现 `git diff` 文本对比代码块**，以便用户检阅和确认。脚本（.gd）可以手写后通过 MCP 挂载。（→ dev_standards.md 五）
 4. **可视化调参**：Shader 参数、材质属性在编辑器中可调节，Inspector 中暴露为 `@export` 变量。（→ dev_standards.md 六）
 5. **可复用组件场景化**：可复用的动画、UI 组件做成独立场景（.tscn）。（→ dev_standards.md 七）
 6. **破坏性重构**：早期开发阶段，不以兼容性为约束。需要改架构时直接改，不写迁移脚本、不做向后兼容层。（→ dev_standards.md 九）
