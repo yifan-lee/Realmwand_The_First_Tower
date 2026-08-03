@@ -16,7 +16,7 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.ACCESSORY_2: "饰品 2",
 }
 
-@onready var _slot_buttons: Dictionary[int, Button] = {
+@onready var _slot_labels: Dictionary[int, Label] = {
 	EquipmentLoadout.Slot.HEAD: $Margin/Content/SlotScroll/Slots/Head,
 	EquipmentLoadout.Slot.CHEST: $Margin/Content/SlotScroll/Slots/Chest,
 	EquipmentLoadout.Slot.HANDS: $Margin/Content/SlotScroll/Slots/Hands,
@@ -32,13 +32,7 @@ var _loadout: EquipmentLoadout
 
 
 func _ready() -> void:
-	for slot: int in _slot_buttons:
-		var button: Button = _slot_buttons[slot]
-		button.focus_entered.connect(
-			slot_focused.emit.bind(slot)
-		)
-		button.mouse_entered.connect(button.grab_focus)
-		button.pressed.connect(slot_selected.emit.bind(slot))
+	pass
 
 
 func bind_loadout(loadout: EquipmentLoadout) -> void:
@@ -55,12 +49,12 @@ func bind_loadout(loadout: EquipmentLoadout) -> void:
 
 func refresh() -> void:
 	clear_preview()
-	for slot: int in _slot_buttons:
-		var button: Button = _slot_buttons[slot]
+	for slot: int in _slot_labels:
+		var label: Label = _slot_labels[slot]
 		var item: EquipmentData = null
 		if _loadout != null:
 			item = _loadout.get_equipped(slot)
-		button.text = "%s：%s" % [
+		label.text = "%s：%s" % [
 			SLOT_NAMES[slot],
 			"—" if item == null else item.display_name,
 		]
@@ -69,16 +63,16 @@ func refresh() -> void:
 func preview_slots(slots: Array[int]) -> void:
 	clear_preview()
 	for slot: int in slots:
-		if _slot_buttons.has(slot):
-			_slot_buttons[slot].set_pressed_no_signal(true)
-			_slot_buttons[slot].self_modulate = Color("#FFD54AFF")
+		if _slot_labels.has(slot):
+			_slot_labels[slot].add_theme_color_override("font_color", Color("#FFD54AFF"))
+			_slot_labels[slot].self_modulate = Color("#FFD54AFF")
 
 
 func clear_preview() -> void:
-	for button: Button in _slot_buttons.values():
-		button.set_pressed_no_signal(false)
-		button.self_modulate = Color("#FFFFFFFF")
+	for label: Label in _slot_labels.values():
+		label.remove_theme_color_override("font_color")
+		label.self_modulate = Color("#FFFFFFFF")
 
 
 func focus_first_slot() -> void:
-	_slot_buttons[EquipmentLoadout.Slot.HEAD].grab_focus()
+	pass

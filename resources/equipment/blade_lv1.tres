@@ -13,5 +13,4 @@ description = "增加攻击力"
 item_type = 1
 icon = ExtResource("1_3vhug")
 world_texture = ExtResource("1_3vhug")
-max_stack = 1
 usable_from_inventory = true

@@ -272,8 +272,10 @@ func _on_skill_focused(skill: SkillData) -> void:
 
 func _on_equipment_slot_focused(slot: int) -> void:
 	equipment_panel.clear_preview()
-	equipment_panel.preview_slots([slot])
+	var slots: Array[int] = [slot] # 显式类型声明将数组转换/实例化为 Array[int]
+	equipment_panel.preview_slots(slots)
 	refresh_player_stats()
+
 	var item: EquipmentData = _player.equipment.get_equipped(slot)
 	if item == null:
 		entry_info_panel.clear_info()
