@@ -32,7 +32,7 @@ position = Vector2(0, 32)
 switch_id = &"wall_passage"
 
 [node name="SwitchRed" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="1" unique_id=1060858094 instance=ExtResource("2_qyw1v")]
-position = Vector2(-384, -256)
+position = Vector2(-383, -256)
 switch_id = &"switch_red"
 
 [node name="SwitchBlue" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="2" unique_id=1894381403 instance=ExtResource("2_qyw1v")]
@@ -73,3 +73,6 @@ pickup_id = &"hp_recovery_01"
 item_data = ExtResource("6_fu1vu")
 
 [connection signal="state_changed" from="Interactables/WallSwitch" to="." method="_on_floor_switch_state_changed"]
+[connection signal="state_changed" from="Interactables/SwitchRed" to="." method="_on_floor_switch_state_changed"]
+[connection signal="state_changed" from="Interactables/SwitchBlue" to="." method="_on_floor_switch_state_changed"]
+[connection signal="state_changed" from="Interactables/SwitchYellow" to="." method="_on_floor_switch_state_changed"]
