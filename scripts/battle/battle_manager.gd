@@ -19,6 +19,9 @@ var _state: BattleState = BattleState.INACTIVE
 var _player_atb := 0.0
 var _enemy_atb := 0.0
 var _cooldowns: Dictionary[StringName, float] = {}
+var _enemy_cooldowns: Dictionary[StringName, float] = {}
+var _player_casting_skill: SkillData
+var _enemy_casting_skill: SkillData
 var _player_effects: Array[Dictionary] = []
 var _enemy_effects: Array[Dictionary] = []
 
@@ -47,24 +50,34 @@ func _process(delta: float) -> void:
 	_tick_cooldowns(delta)
 	_tick_effects(_player_effects, delta)
 	_tick_effects(_enemy_effects, delta)
+	_recover_focus_points(delta)
 	_player_atb = minf(
 		FORMULAS.ATB_MAX,
 		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(SkillEffectData.EffectType.SPD), delta)
 	)
 	if _player_atb >= FORMULAS.ATB_MAX:
-		_state = BattleState.WAITING_FOR_PLAYER
-		_battle_ui.set_action_available(true)
-		_battle_ui.show_message("轮到你行动，战斗时间已暂停。")
-		_battle_ui.set_atb(_player_atb, _enemy_atb)
-		return
+		if _player_casting_skill != null:
+			_release_player_skill()
+			if not is_active():
+				return
+		else:
+			_state = BattleState.WAITING_FOR_PLAYER
+			_battle_ui.set_action_available(true)
+			_battle_ui.show_message("轮到你行动，战斗时间已暂停。")
+			_battle_ui.set_atb(_player_atb, _enemy_atb)
+			return
 
 	_enemy_atb = minf(
 		FORMULAS.ATB_MAX,
 		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(SkillEffectData.EffectType.SPD), delta)
 	)
 	if _enemy_atb >= FORMULAS.ATB_MAX:
-		_enemy_atb = 0.0
-		_enemy_take_turn()
+		if _enemy_casting_skill != null:
+			_release_enemy_skill()
+		else:
+			_begin_enemy_turn()
+		if not is_active():
+			return
 
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
 
@@ -74,10 +87,15 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 		return
 	_enemy = enemy
 	_player = player
+	_player.set_current_fp(_player.get_start_fp())
+	_enemy.set_current_fp(_enemy.enemy_data.start_fp)
 	_state = BattleState.RUNNING
 	_player_atb = 0.0
 	_enemy_atb = 0.0
 	_cooldowns.clear()
+	_enemy_cooldowns.clear()
+	_player_casting_skill = null
+	_enemy_casting_skill = null
 	_player_effects.clear()
 	_enemy_effects.clear()
 	_player.set_input_enabled(false)
@@ -97,26 +115,26 @@ func _on_skill_selected(skill: SkillData) -> void:
 		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
 		return
 	if _player.current_mp < skill.mp_cost:
-		_battle_ui.show_message("MP 不足。")
+		_battle_ui.show_message("魔力不足。")
 		return
+	if _player.current_fp < skill.fp_cost:
+		_battle_ui.show_message("专注值不足。")
+		return
+
 	_player.change_mp(-skill.mp_cost)
-	var applied := 0.0
-	if skill.target_type == SkillData.TargetType.ENEMY:
-		var damage: float = FORMULAS.calculate_skill_damage(
-			_get_player_stat(SkillEffectData.EffectType.ATK),
-			skill.skill_power,
-			_get_enemy_stat(SkillEffectData.EffectType.DEF)
-		)
-		applied = _enemy.take_damage(damage)
-	_apply_skill_effects(skill)
+	_player.change_fp(-skill.fp_cost)
 	_cooldowns[skill.id] = skill.cooldown_seconds
-	if applied > 0.0:
-		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, applied])
-	else:
-		_battle_ui.show_message("使用了 %s。" % skill.display_name)
-	_complete_player_action()
-	if _enemy.is_defeated:
-		_finish_battle(true)
+	if is_zero_approx(skill.cast_time):
+		_release_player_skill(skill)
+		return
+
+	_player_casting_skill = skill
+	_player_atb = FORMULAS.calculate_atb_after_cast(skill.cast_time)
+	_state = BattleState.RUNNING
+	_battle_ui.set_action_available(false)
+	_battle_ui.refresh_stats()
+	_battle_ui.set_atb(_player_atb, _enemy_atb)
+	_battle_ui.show_message("%s 正在吟唱。" % skill.display_name)
 
 
 func _on_item_selected(item: ItemData) -> void:
@@ -138,13 +156,66 @@ func _on_escape_requested() -> void:
 		_finish_battle(false)
 
 
-func _enemy_take_turn() -> void:
+func _begin_enemy_turn() -> void:
 	if _state != BattleState.RUNNING:
 		return
+
+	var skill := _get_enemy_usable_skill()
+	if skill == null:
+		_enemy_atb = 0.0
+		_resolve_enemy_attack(null)
+		return
+
+	_enemy.change_mp(-skill.mp_cost)
+	_enemy.change_fp(-skill.fp_cost)
+	_enemy_cooldowns[skill.id] = skill.cooldown_seconds
+	if is_zero_approx(skill.cast_time):
+		_resolve_enemy_attack(skill)
+		return
+
+	_enemy_casting_skill = skill
+	_enemy_atb = FORMULAS.calculate_atb_after_cast(skill.cast_time)
+	_battle_ui.refresh_stats()
+	_battle_ui.set_atb(_player_atb, _enemy_atb)
+	_battle_ui.show_message("%s 正在吟唱 %s。" % [_enemy.enemy_data.display_name, skill.display_name])
+
+
+func _release_player_skill(skill: SkillData = null) -> void:
+	var resolved_skill := skill
+	if resolved_skill == null:
+		resolved_skill = _player_casting_skill
+	_player_casting_skill = null
+	if resolved_skill == null:
+		return
+
+	var applied := 0.0
+	if resolved_skill.target_type == SkillData.TargetType.ENEMY:
+		var damage: float = FORMULAS.calculate_skill_damage(
+			_get_player_stat(SkillEffectData.EffectType.ATK),
+			resolved_skill.skill_power,
+			_get_enemy_stat(SkillEffectData.EffectType.DEF)
+		)
+		applied = _enemy.take_damage(damage)
+	_apply_skill_effects(resolved_skill, false)
+	if applied > 0.0:
+		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [resolved_skill.display_name, applied])
+	else:
+		_battle_ui.show_message("使用了 %s。" % resolved_skill.display_name)
+	_complete_player_action()
+	if _enemy.is_defeated:
+		_finish_battle(true)
+
+
+func _release_enemy_skill() -> void:
+	var skill := _enemy_casting_skill
+	_enemy_casting_skill = null
+	_resolve_enemy_attack(skill)
+
+
+func _resolve_enemy_attack(skill: SkillData) -> void:
 	var power := 0.0
 	var skill_name := "攻击"
-	if not _enemy.enemy_data.skills.is_empty():
-		var skill: SkillData = _enemy.enemy_data.skills.front()
+	if skill != null:
 		power = skill.skill_power
 		skill_name = skill.display_name
 	var damage: float = FORMULAS.calculate_skill_damage(
@@ -153,6 +224,9 @@ func _enemy_take_turn() -> void:
 		_get_player_stat(SkillEffectData.EffectType.DEF)
 	)
 	_player.change_hp(-damage)
+	if skill != null:
+		_apply_skill_effects(skill, true)
+	_enemy_atb = 0.0
 	_battle_ui.refresh_stats()
 	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage])
 	if _player.current_hp <= 0.0:
@@ -185,18 +259,55 @@ func _finish_battle(victory: bool) -> void:
 func _get_experience_reward() -> int:
 	if _enemy.enemy_data.experience_reward_override >= 0:
 		return _enemy.enemy_data.experience_reward_override
-	return FORMULAS.default_enemy_experience(_enemy.enemy_data.max_hp)
+	return FORMULAS.default_enemy_experience(
+		_enemy.enemy_data.atk,
+		_enemy.enemy_data.def,
+		_enemy.enemy_data.spd
+	)
 
 
 func _tick_cooldowns(delta: float) -> void:
 	for skill_id: StringName in _cooldowns.keys():
 		_cooldowns[skill_id] = maxf(0.0, _cooldowns[skill_id] - delta)
+	for skill_id: StringName in _enemy_cooldowns.keys():
+		_enemy_cooldowns[skill_id] = maxf(0.0, _enemy_cooldowns[skill_id] - delta)
 
 
-func _apply_skill_effects(skill: SkillData) -> void:
+func _recover_focus_points(delta: float) -> void:
+	_player.change_fp(
+		FORMULAS.calculate_fp_recovery(
+			_player.get_fp_recovery_spd(),
+			delta
+		)
+	)
+	_enemy.change_fp(
+		FORMULAS.calculate_fp_recovery(
+		_enemy.get_fp_recovery_spd(),
+			delta
+		)
+	)
+
+
+func _get_enemy_usable_skill() -> SkillData:
+	for skill: SkillData in _enemy.enemy_data.skills:
+		if _enemy_cooldowns.get(skill.id, 0.0) > 0.0:
+			continue
+		if _enemy.current_mp < skill.mp_cost:
+			continue
+		if _enemy.current_fp < skill.fp_cost:
+			continue
+		return skill
+	return null
+
+
+func _apply_skill_effects(
+	skill: SkillData,
+	caster_is_enemy: bool
+) -> void:
 	for effect: SkillEffectData in skill.effects:
+		var targets_self := effect.target_type == SkillEffectData.TargetType.SELF
 		var target: Array[Dictionary] = _player_effects
-		if effect.target_type == SkillEffectData.TargetType.ENEMY:
+		if targets_self == caster_is_enemy:
 			target = _enemy_effects
 		target.append({
 			&"effect": effect,

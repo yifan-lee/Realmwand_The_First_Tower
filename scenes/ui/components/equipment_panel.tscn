@@ -4,70 +4,76 @@
 [ext_resource type="Script" uid="uid://dwj5fuvva38np" path="res://scripts/ui/components/equipment_panel.gd" id="2_57add"]
 
 [node name="EquipmentPanel" type="PanelContainer" unique_id=1086598637]
-custom_minimum_size = Vector2(560, 420)
+custom_minimum_size = Vector2(390, 0)
 theme = ExtResource("1_e20hi")
+theme_type_variation = &"TerminalInsetPanel"
 script = ExtResource("2_57add")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=452010850]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
 
 [node name="Content" type="VBoxContainer" parent="Margin" unique_id=1883902262]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="Margin/Content" unique_id=1307447362]
+[node name="Slots" type="GridContainer" parent="Margin/Content" unique_id=1088506112]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
-text = "装备栏"
+columns = 2
 
-[node name="Separator" type="HSeparator" parent="Margin/Content" unique_id=1343671169]
+[node name="Head" type="Label" parent="Margin/Content/Slots" unique_id=1403330530]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="SlotScroll" type="ScrollContainer" parent="Margin/Content" unique_id=707657558]
+[node name="Chest" type="Label" parent="Margin/Content/Slots" unique_id=1471853789]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-size_flags_vertical = 3
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Slots" type="VBoxContainer" parent="Margin/Content/SlotScroll" unique_id=409983277]
+[node name="Hands" type="Label" parent="Margin/Content/Slots" unique_id=1954468703]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Head" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=1038210212]
+[node name="Legs" type="Label" parent="Margin/Content/Slots" unique_id=727975541]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "头部：—"
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Chest" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=342208662]
+[node name="Feet" type="Label" parent="Margin/Content/Slots" unique_id=1819366898]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "胸甲：—"
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Hands" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=1336008843]
+[node name="LeftHand" type="Label" parent="Margin/Content/Slots" unique_id=1631144394]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "手部：—"
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Legs" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=1352620435]
+[node name="RightHand" type="Label" parent="Margin/Content/Slots" unique_id=286940171]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "腿部：—"
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="Feet" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=734204201]
+[node name="Accessory1" type="Label" parent="Margin/Content/Slots" unique_id=11826823]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "脚部：—"
+theme_type_variation = &"SectionLabel"
+text = "—"
 
-[node name="LeftHand" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=1695517260]
+[node name="Accessory2" type="Label" parent="Margin/Content/Slots" unique_id=1434171898]
+custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
-text = "左手：—"
-
-[node name="RightHand" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=1539174523]
-layout_mode = 2
-text = "右手：—"
-
-[node name="Accessory1" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=406843877]
-layout_mode = 2
-text = "饰品 1：—"
-
-[node name="Accessory2" type="Label" parent="Margin/Content/SlotScroll/Slots" unique_id=40174801]
-layout_mode = 2
-text = "饰品 2：—"
+theme_type_variation = &"SectionLabel"
+text = "—"

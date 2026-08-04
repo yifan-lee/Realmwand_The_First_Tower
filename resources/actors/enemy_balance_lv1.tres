@@ -8,12 +8,11 @@
 [resource]
 script = ExtResource("1_y3vm6")
 skills = Array[ExtResource("2_norgi")]([ExtResource("3_norgi")])
+experience_reward_override = 200
 world_texture = ExtResource("1_64pky")
 id = &"enemy_balance_lv1"
 display_name = "1级平衡怪"
 description = "各项属性都比较平衡的生物"
-max_hp = 80.0
-max_mp = 10.0
 atk = 14.0
 def = 6.0
 spd = 20.0

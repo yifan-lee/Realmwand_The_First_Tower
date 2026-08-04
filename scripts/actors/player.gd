@@ -25,12 +25,16 @@ var unspent_stat_points: int = 0
 
 var base_max_hp: float = 0.0
 var base_max_mp: float = 0.0
+var base_max_fp: float = 0.0
+var base_start_fp: float = 0.0
+var base_fp_recovery_spd: float = 0.0
 var base_atk: float = 0.0
 var base_def: float = 0.0
 var base_spd: float = 0.0
 
 var current_hp: float = 0.0
 var current_mp: float = 0.0
+var current_fp: float = 0.0
 
 
 var learned_skills: Array[SkillData] = []
@@ -88,12 +92,20 @@ func _initialize_runtime_state() -> void:
 
 	base_max_hp = player_data.max_hp
 	base_max_mp = player_data.max_mp
+	base_max_fp = player_data.max_fp
+	base_start_fp = player_data.start_fp
+	base_fp_recovery_spd = player_data.fp_recovery_spd
 	base_atk = player_data.atk
 	base_def = player_data.def
 	base_spd = player_data.spd
 
-	current_hp = base_max_hp
-	current_mp = base_max_mp
+	current_hp = get_max_hp()
+	current_mp = get_max_mp()
+	current_fp = clampf(
+		base_start_fp,
+		0.0,
+		get_max_fp()
+	)
 
 	for starting_item: ItemData in player_data.starting_items:
 		var remaining_amount := inventory.add_item(starting_item)
@@ -252,6 +264,24 @@ func change_mp(amount: float) -> void:
 	set_current_mp(current_mp + amount)
 
 
+func set_current_fp(value: float) -> void:
+	var next_fp: float = clampf(
+		value,
+		0.0,
+		get_max_fp()
+	)
+
+	if is_equal_approx(current_fp, next_fp):
+		return
+
+	current_fp = next_fp
+	stats_changed.emit()
+
+
+func change_fp(amount: float) -> void:
+	set_current_fp(current_fp + amount)
+
+
 func get_experience_for_next_level() -> int:
 	return FORMULAS.experience_for_next_level(level)
 
@@ -266,7 +296,10 @@ func add_experience(amount: int) -> void:
 	while experience >= get_experience_for_next_level():
 		experience -= get_experience_for_next_level()
 		level += 1
-		unspent_stat_points += FORMULAS.STAT_POINTS_PER_LEVEL
+		base_atk += FORMULAS.AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL
+		base_def += FORMULAS.AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL
+		base_spd += FORMULAS.AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL
+		unspent_stat_points += FORMULAS.FREE_STAT_POINTS_PER_LEVEL
 		leveled_up = true
 
 	stats_changed.emit()
@@ -280,14 +313,6 @@ func spend_stat_point(stat_id: StringName) -> bool:
 		return false
 
 	match stat_id:
-		&"max_hp":
-			var increase: float = FORMULAS.stat_point_increase(stat_id)
-			base_max_hp += increase
-			current_hp += increase
-		&"max_mp":
-			var increase: float = FORMULAS.stat_point_increase(stat_id)
-			base_max_mp += increase
-			current_mp += increase
 		&"atk":
 			base_atk += FORMULAS.stat_point_increase(stat_id)
 		&"def":
@@ -298,6 +323,68 @@ func spend_stat_point(stat_id: StringName) -> bool:
 			return false
 
 	unspent_stat_points -= 1
+	stats_changed.emit()
+	return true
+
+
+func get_stat_allocation_preview(
+	allocation: Dictionary[StringName, int]
+) -> Dictionary[StringName, float]:
+	var atk_points: int = int(allocation.get(&"atk", 0))
+	var def_points: int = int(allocation.get(&"def", 0))
+	var spd_points: int = int(allocation.get(&"spd", 0))
+	var increase: float = FORMULAS.stat_point_increase(&"atk")
+	var next_base_atk: float = base_atk + atk_points * increase
+	var next_base_def: float = base_def + def_points * increase
+	var next_base_spd: float = base_spd + spd_points * increase
+	var next_max_hp: float = FORMULAS.resolve_base_max_hp(
+		base_max_hp,
+		next_base_def,
+		next_base_spd
+	) + equipment.get_max_hp_bonus()
+	var next_max_mp: float = FORMULAS.resolve_base_max_mp(
+		base_max_mp,
+		next_base_atk,
+		next_base_spd
+	) + equipment.get_max_mp_bonus()
+
+	return {
+		&"current_hp": current_hp + next_max_hp - get_max_hp(),
+		&"max_hp": next_max_hp,
+		&"current_mp": current_mp + next_max_mp - get_max_mp(),
+		&"max_mp": next_max_mp,
+		&"fp_recovery": FORMULAS.resolve_base_fp_recovery(
+			base_fp_recovery_spd,
+			next_base_atk,
+			next_base_def
+		),
+		&"atk": next_base_atk + equipment.get_atk_bonus(),
+		&"def": next_base_def + equipment.get_def_bonus(),
+		&"spd": next_base_spd + equipment.get_spd_bonus(),
+	}
+
+
+func apply_stat_allocation(
+	allocation: Dictionary[StringName, int]
+) -> bool:
+	var total_points := 0
+	for stat_id: StringName in [&"atk", &"def", &"spd"]:
+		var points: int = int(allocation.get(stat_id, 0))
+		if points < 0:
+			return false
+		total_points += points
+	if total_points <= 0 or total_points > unspent_stat_points:
+		return false
+
+	var previous_max_hp: float = get_max_hp()
+	var previous_max_mp: float = get_max_mp()
+	var increase: float = FORMULAS.stat_point_increase(&"atk")
+	base_atk += int(allocation.get(&"atk", 0)) * increase
+	base_def += int(allocation.get(&"def", 0)) * increase
+	base_spd += int(allocation.get(&"spd", 0)) * increase
+	unspent_stat_points -= total_points
+	current_hp = clampf(current_hp + get_max_hp() - previous_max_hp, 0.0, get_max_hp())
+	current_mp = clampf(current_mp + get_max_mp() - previous_max_mp, 0.0, get_max_mp())
 	stats_changed.emit()
 	return true
 
@@ -387,16 +474,61 @@ func unequip_item(target_slot: int) -> bool:
 
 func get_max_hp() -> float:
 	return (
-		base_max_hp
+		FORMULAS.resolve_base_max_hp(
+			base_max_hp,
+			base_def,
+			base_spd
+		)
 		+ equipment.get_max_hp_bonus()
 	)
 
 
 func get_max_mp() -> float:
 	return (
-		base_max_mp
+		FORMULAS.resolve_base_max_mp(
+			base_max_mp,
+			base_atk,
+			base_spd
+		)
 		+ equipment.get_max_mp_bonus()
 	)
+
+
+func get_max_fp() -> float:
+	return base_max_fp
+
+
+func get_start_fp() -> float:
+	return base_start_fp
+
+
+func get_fp_recovery_spd() -> float:
+	return FORMULAS.resolve_base_fp_recovery(
+		base_fp_recovery_spd,
+		base_atk,
+		base_def
+	)
+
+
+func get_stat_upgrade_preview(stat_id: StringName) -> Dictionary[StringName, float]:
+	var next_atk := base_atk
+	var next_def := base_def
+	var next_spd := base_spd
+	var increase := FORMULAS.stat_point_increase(stat_id)
+	match stat_id:
+		&"atk":
+			next_atk += increase
+		&"def":
+			next_def += increase
+		&"spd":
+			next_spd += increase
+		_:
+			return {}
+	return {
+		&"max_hp": FORMULAS.resolve_base_max_hp(base_max_hp, next_def, next_spd) - get_max_hp(),
+		&"max_mp": FORMULAS.resolve_base_max_mp(base_max_mp, next_atk, next_spd) - get_max_mp(),
+		&"fp_recovery": FORMULAS.resolve_base_fp_recovery(base_fp_recovery_spd, next_atk, next_def) - get_fp_recovery_spd(),
+	}
 
 
 func get_atk() -> float:

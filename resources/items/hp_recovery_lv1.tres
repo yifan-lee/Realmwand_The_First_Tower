@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_bllr4")
 id = &"hp_recovery_lv1"
-display_name = "1级hp回复"
-description = "使用可以回复hp"
+display_name = "1级生命药剂"
+description = "使用后回复生命值"
 icon = ExtResource("1_d1yla")
 world_texture = ExtResource("1_d1yla")
 usable_from_inventory = true

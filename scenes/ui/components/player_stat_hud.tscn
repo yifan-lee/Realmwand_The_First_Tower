@@ -73,3 +73,27 @@ layout_mode = 2
 theme_type_variation = &"MpProgressBar"
 value = 100.0
 show_percentage = false
+
+[node name="FpHeader" type="HBoxContainer" parent="Content" unique_id=1264631107]
+layout_mode = 2
+
+[node name="FpTitle" type="Label" parent="Content/FpHeader" unique_id=217707799]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"FpLabel"
+text = "专注"
+
+[node name="FpValue" type="Label" parent="Content/FpHeader" unique_id=715088692]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ValueLabel"
+text = "0 / 0"
+horizontal_alignment = 2
+
+[node name="FpBar" type="ProgressBar" parent="Content" unique_id=1047321634]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_type_variation = &"FpProgressBar"
+show_percentage = false

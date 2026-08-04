@@ -2,6 +2,8 @@
 class_name Enemy
 extends StaticBody2D
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+
 signal battle_requested(
 	enemy: Enemy,
 	player: Player
@@ -20,6 +22,7 @@ signal stats_changed
 
 var current_hp: float = 0.0
 var current_mp: float = 0.0
+var current_fp: float = 0.0
 var is_defeated: bool = false
 
 var _active_collision_layer: int = 0
@@ -40,8 +43,13 @@ func _ready() -> void:
 		set_defeated(true)
 		return
 
-	current_hp = enemy_data.max_hp
-	current_mp = enemy_data.max_mp
+	current_hp = get_max_hp()
+	current_mp = get_max_mp()
+	current_fp = clampf(
+		enemy_data.start_fp,
+		0.0,
+		get_max_fp()
+	)
 
 
 func interact(player: Player) -> void:
@@ -82,8 +90,31 @@ func change_mp(amount: float) -> void:
 	current_mp = clampf(
 		current_mp + amount,
 		0.0,
-		enemy_data.max_mp
+		get_max_mp()
 	)
+	stats_changed.emit()
+
+
+func change_fp(amount: float) -> void:
+	if enemy_data == null:
+		return
+
+	set_current_fp(current_fp + amount)
+
+
+func set_current_fp(value: float) -> void:
+	if enemy_data == null:
+		return
+
+	var next_fp := clampf(
+		value,
+		0.0,
+		get_max_fp()
+	)
+	if is_equal_approx(current_fp, next_fp):
+		return
+
+	current_fp = next_fp
 	stats_changed.emit()
 
 
@@ -96,6 +127,26 @@ func set_defeated(defeated: bool) -> void:
 		0 if is_defeated
 		else _active_collision_layer
 	)
+
+
+func get_max_hp() -> float:
+	return FORMULAS.resolve_base_max_hp(enemy_data.max_hp, enemy_data.def, enemy_data.spd)
+
+
+func get_max_mp() -> float:
+	return FORMULAS.resolve_base_max_mp(enemy_data.max_mp, enemy_data.atk, enemy_data.spd)
+
+
+func get_max_fp() -> float:
+	return enemy_data.max_fp
+
+
+func get_fp_recovery_spd() -> float:
+	return FORMULAS.resolve_base_fp_recovery(enemy_data.fp_recovery_spd, enemy_data.atk, enemy_data.def)
+
+
+func get_cp() -> float:
+	return FORMULAS.calculate_cp(enemy_data.atk, enemy_data.def, enemy_data.spd)
 
 
 func _get_configuration_warnings() -> PackedStringArray:

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cs8x24knlv251"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1xnwh"]
+
+[node name="SystemPanel" type="PanelContainer" unique_id=837222677]
+custom_minimum_size = Vector2(500, 390)
+theme = ExtResource("1_1xnwh")
+theme_type_variation = &"TerminalInsetPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1126485718]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=248962949]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Spacer" type="Control" parent="MarginContainer/Content" unique_id=7987138]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Placeholder" type="Label" parent="MarginContainer/Content" unique_id=677332340]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "系统设置将在后续加入"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="MarginContainer/Content" unique_id=1434194829]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "按菜单键返回游戏"
+horizontal_alignment = 1

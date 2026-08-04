@@ -5,29 +5,22 @@
 [ext_resource type="PackedScene" uid="uid://d0j66d8tiecc6" path="res://scenes/ui/components/selectable_list_row.tscn" id="3_tulss"]
 
 [node name="SkillPanel" type="PanelContainer" unique_id=2087337204]
-custom_minimum_size = Vector2(520, 520)
+custom_minimum_size = Vector2(500, 390)
 offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_4is37")
+theme_type_variation = &"TerminalInsetPanel"
 script = ExtResource("1_m83mt")
 row_scene = ExtResource("3_tulss")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1924166177]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
 
 [node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1436682856]
-layout_mode = 2
-
-[node name="TitleLabel" type="Label" parent="MarginContainer/Content" unique_id=63435301]
-layout_mode = 2
-theme_type_variation = &"HeaderLabel"
-text = "技能"
-
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=1165682271]
 layout_mode = 2
 
 [node name="SkillScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1406423143]

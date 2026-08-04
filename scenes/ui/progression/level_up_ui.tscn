@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dnrvslgwgxro2"]
 
 [ext_resource type="Script" uid="uid://gm31ypgky8vd" path="res://scripts/progression/level_up_ui.gd" id="1_l57ej"]
-[ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_rxjkq"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_rxjkq"]
 
 [node name="LevelUpUI" type="CanvasLayer" unique_id=1205088737]
 script = ExtResource("1_l57ej")
@@ -14,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_rxjkq")
 
 [node name="Backdrop" type="ColorRect" parent="LevelRoot" unique_id=193025296]
 layout_mode = 1
@@ -22,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.02, 0.04, 0.92)
+color = Color(0.019607844, 0.039215688, 0.050980393, 0.8)
 
 [node name="Center" type="CenterContainer" parent="LevelRoot/Backdrop" unique_id=1876929391]
 layout_mode = 1
@@ -33,15 +34,16 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="LevelRoot/Backdrop/Center" unique_id=1469509314]
-custom_minimum_size = Vector2(820, 720)
+custom_minimum_size = Vector2(720, 520)
 layout_mode = 2
+theme_type_variation = &"TerminalPanel"
 
 [node name="Margin" type="MarginContainer" parent="LevelRoot/Backdrop/Center/Panel" unique_id=477981902]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
 
 [node name="Content" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin" unique_id=1348066907]
 layout_mode = 2
@@ -49,48 +51,179 @@ theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1475800872]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 theme_override_font_sizes/font_size = 28
 text = "升级加点"
 horizontal_alignment = 1
 
 [node name="PointsLabel" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=616948073]
 layout_mode = 2
-text = "剩余属性点：0"
+theme_type_variation = &"SectionLabel"
+text = "剩余点数：0"
 horizontal_alignment = 1
 
-[node name="StatsPanel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("2_rxjkq")]
-custom_minimum_size = Vector2(0, 420)
+[node name="ResourcePreview" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1113977406]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HpLabel" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview" unique_id=710741199]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]生命 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MpLabel" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview" unique_id=1507261234]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]魔力 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FpLabel" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview" unique_id=1192050847]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]专注 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AllocationCenter" type="CenterContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=488215329]
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1191538684]
+[node name="AllocationBlock" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter" unique_id=1831226279]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="AllocationRows" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock" unique_id=994839524]
+custom_minimum_size = Vector2(430, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MaxHp" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=532378714]
+[node name="AtkRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows" unique_id=881998970]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MinusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow" unique_id=2036381462]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0.255, 0.333, 1)
+text = "-1"
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow" unique_id=114669177]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "生命 +10"
 
-[node name="MaxMp" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=2002261199]
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow/ValueButton" unique_id=1268393327]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]攻击 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow" unique_id=1478209426]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.196, 1, 0.49, 1)
+text = "+1"
+
+[node name="DefRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows" unique_id=1232741704]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MinusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow" unique_id=1321627415]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0.255, 0.333, 1)
+text = "-1"
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow" unique_id=834161118]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "魔法 +5"
 
-[node name="Atk" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=1713628790]
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow/ValueButton" unique_id=899951319]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]防御 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow" unique_id=13627146]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.196, 1, 0.49, 1)
+text = "+1"
+
+[node name="SpdRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows" unique_id=755491280]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MinusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow" unique_id=128078897]
+custom_minimum_size = Vector2(64, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0.255, 0.333, 1)
+text = "-1"
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow" unique_id=1525444666]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "攻击 +1"
 
-[node name="Def" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=545712562]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "防御 +1"
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow/ValueButton" unique_id=246200577]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]速度 0[/center]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Spd" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/Buttons" unique_id=1911693333]
+[node name="PlusButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow" unique_id=877838088]
+custom_minimum_size = Vector2(64, 38)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "速度 +1"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.196, 1, 0.49, 1)
+text = "+1"
 
-[node name="CloseButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=2135259514]
+[node name="HintLabel" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock" unique_id=1663725814]
 layout_mode = 2
-text = "确认并关闭"
+theme_type_variation = &"MutedLabel"
+text = "↑↓ 选择属性   ←→ 分配点数   确认键确认"
+horizontal_alignment = 1

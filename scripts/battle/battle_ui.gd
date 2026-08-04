@@ -14,23 +14,26 @@ enum ActionPage {
 }
 
 @onready var battle_root: Control = $BattleRoot
-@onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Stats/PlayerStats
-@onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Stats/EnemyStats
-@onready var player_atb: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Gauges/PlayerAtb
-@onready var enemy_atb: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Gauges/EnemyAtb
-@onready var skills_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/SkillsTab
-@onready var items_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/ItemsTab
-@onready var escape_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionTabs/EscapeTab
-@onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/SkillPanel
-@onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/InventoryPanel
-@onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/ListColumn/EscapePage
-@onready var entry_info_panel: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/ActionBody/EntryInfoPanel
+@onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/PlayerStats
+@onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/EnemyStats
+@onready var shared_atb_track: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track
+@onready var player_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker
+@onready var enemy_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker
+@onready var skills_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/SkillsTab
+@onready var items_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/ItemsTab
+@onready var escape_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/EscapeTab
+@onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/SkillPanel
+@onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/InventoryPanel
+@onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/EscapePage
+@onready var entry_info_panel: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/EntryInfoPanel
 @onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Message
 
 var _player: Player
 var _enemy: Enemy
 var _action_available := false
 var _current_page: ActionPage = ActionPage.SKILLS
+var _player_atb_value := 0.0
+var _enemy_atb_value := 0.0
 
 
 func _ready() -> void:
@@ -44,6 +47,24 @@ func _ready() -> void:
 	skills_tab.focus_entered.connect(_show_action_page.bind(ActionPage.SKILLS, false))
 	items_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ITEMS, false))
 	escape_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ESCAPE, false))
+
+
+func _process(_delta: float) -> void:
+	if not battle_root.visible:
+		return
+
+	if _player != null:
+		player_stats.refresh_runtime_resources(
+			_player.current_hp,
+			_player.current_mp,
+			_player.current_fp
+		)
+	if _enemy != null:
+		enemy_stats.refresh_runtime_resources(
+			_enemy.current_hp,
+			_enemy.current_mp,
+			_enemy.current_fp
+		)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,6 +91,11 @@ func open(player: Player, enemy: Enemy) -> void:
 	inventory_panel.bind_inventory(player.inventory)
 	inventory_panel.set_battle_only(true)
 	battle_root.visible = true
+	entry_info_panel.clear_info()
+	player_atb_marker.texture = _get_marker_texture(player, player.player_data.portrait)
+	enemy_atb_marker.texture = _get_marker_texture(enemy, enemy.enemy_data.portrait)
+	player_atb_marker.visible = player_atb_marker.texture != null
+	enemy_atb_marker.visible = enemy_atb_marker.texture != null
 	_show_action_page(ActionPage.SKILLS, false)
 	set_action_available(false)
 	refresh_stats()
@@ -96,8 +122,9 @@ func set_action_available(available: bool) -> void:
 
 
 func set_atb(player_value: float, enemy_value: float) -> void:
-	player_atb.value = player_value
-	enemy_atb.value = enemy_value
+	_player_atb_value = clampf(player_value, 0.0, FORMULAS.ATB_MAX)
+	_enemy_atb_value = clampf(enemy_value, 0.0, FORMULAS.ATB_MAX)
+	_update_atb_markers(_player_atb_value, _enemy_atb_value)
 
 
 func show_message(message: String) -> void:
@@ -107,6 +134,7 @@ func show_message(message: String) -> void:
 func refresh_stats() -> void:
 	player_stats.display_stats(_build_player_view())
 	enemy_stats.display_stats(_build_enemy_view())
+	_update_atb_markers(_player_atb_value, _enemy_atb_value)
 
 
 func _show_action_page(page: ActionPage, focus_page: bool) -> void:
@@ -169,23 +197,34 @@ func _on_escape_tab_pressed() -> void:
 func _on_skill_focused(skill: SkillData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
-	player_view.current_mp_delta = -skill.mp_cost
+	player_view.preview_skill_cost(
+		skill.mp_cost,
+		skill.fp_cost,
+		skill.cast_time
+	)
 	if skill.target_type == SkillData.TargetType.ENEMY:
-		enemy_view.current_hp_delta = -FORMULAS.calculate_skill_damage(
+		enemy_view.preview_damage(FORMULAS.calculate_skill_damage(
 			_player.get_atk(),
 			skill.skill_power,
 			_enemy.enemy_data.def
-		)
+		))
 	_apply_skill_effect_preview(skill, player_view, enemy_view)
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
+	_update_atb_markers(
+		player_view.get_atb_bar_value(),
+		enemy_view.get_atb_bar_value()
+	)
 	var info := EntryInfoViewData.new()
 	info.title = skill.display_name
 	info.icon = skill.icon
 	info.description = skill.description
 	info.detail_lines = [
-		"MP 消耗：%.0f" % skill.mp_cost,
+		"类型：%s" % _skill_type_label(skill.skill_type),
+		"魔力消耗：%.0f" % skill.mp_cost,
+		"专注消耗：%.0f" % skill.fp_cost,
 		"冷却：%.1f 秒" % skill.cooldown_seconds,
+		"吟唱：行动条倒退 %.0f%%" % (skill.cast_time * 100.0),
 		"技能威力：%.0f" % skill.skill_power,
 	]
 	entry_info_panel.display_info(info)
@@ -211,8 +250,8 @@ func _on_item_focused(item: ItemData) -> void:
 	info.icon = item.icon
 	info.description = item.description
 	info.detail_lines = [
-		"HP 回复：%.0f" % item.hp_recovery,
-		"MP 回复：%.0f" % item.mp_recovery,
+		"生命回复：%.0f" % item.hp_recovery,
+		"魔力回复：%.0f" % item.mp_recovery,
 	]
 	entry_info_panel.display_info(info)
 
@@ -241,10 +280,19 @@ func _build_player_view() -> ActorStatsViewData:
 	var view := ActorStatsViewData.new()
 	view.display_name = _player.player_data.display_name
 	view.portrait = _player.player_data.portrait
+	view.level = _player.level
+	view.experience = _player.experience
+	view.experience_to_next_level = _player.get_experience_for_next_level()
 	view.current_hp = _player.current_hp
 	view.max_hp = _player.get_max_hp()
 	view.current_mp = _player.current_mp
 	view.max_mp = _player.get_max_mp()
+	view.current_fp = _player.current_fp
+	view.max_fp = _player.get_max_fp()
+	view.start_fp = _player.get_start_fp()
+	view.fp_recovery_spd = _player.get_fp_recovery_spd()
+	view.current_atb = _player_atb_value
+	view.max_atb = FORMULAS.ATB_MAX
 	view.atk = _player.get_atk()
 	view.def = _player.get_def()
 	view.spd = _player.get_spd()
@@ -258,10 +306,74 @@ func _build_enemy_view() -> ActorStatsViewData:
 	view.display_name = _enemy.enemy_data.display_name
 	view.portrait = _enemy.enemy_data.portrait
 	view.current_hp = _enemy.current_hp
-	view.max_hp = _enemy.enemy_data.max_hp
+	view.max_hp = _enemy.get_max_hp()
 	view.current_mp = _enemy.current_mp
-	view.max_mp = _enemy.enemy_data.max_mp
+	view.max_mp = _enemy.get_max_mp()
+	view.current_fp = _enemy.current_fp
+	view.max_fp = _enemy.get_max_fp()
+	view.start_fp = _enemy.enemy_data.start_fp
+	view.fp_recovery_spd = _enemy.get_fp_recovery_spd()
+	view.current_atb = _enemy_atb_value
+	view.max_atb = FORMULAS.ATB_MAX
 	view.atk = _enemy.enemy_data.atk
 	view.def = _enemy.enemy_data.def
 	view.spd = _enemy.enemy_data.spd
 	return view
+
+
+func _update_atb_markers(
+	player_value: float,
+	enemy_value: float
+) -> void:
+	if shared_atb_track == null:
+		return
+
+	_set_atb_marker(player_atb_marker, player_value, -0.5)
+	_set_atb_marker(enemy_atb_marker, enemy_value, 0.5)
+
+
+func _set_atb_marker(
+	marker: TextureRect,
+	value: float,
+	lane_offset: float
+) -> void:
+	if marker == null:
+		return
+
+	var travel_distance := maxf(
+		0.0,
+		shared_atb_track.size.x - marker.size.x
+	)
+	marker.position.x = clampf(
+		travel_distance * clampf(
+		value / FORMULAS.ATB_MAX,
+		0.0,
+		1.0
+		) + marker.size.x * lane_offset,
+		0.0,
+		travel_distance
+	)
+
+
+func _get_marker_texture(
+	actor: Node,
+	portrait: Texture2D
+) -> Texture2D:
+	if portrait != null:
+		return portrait
+
+	var sprite := actor.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite == null or sprite.sprite_frames == null:
+		return null
+
+	return sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+
+
+func _skill_type_label(skill_type: SkillData.SkillType) -> String:
+	match skill_type:
+		SkillData.SkillType.MAGICAL:
+			return "魔法"
+		SkillData.SkillType.TRANSFORM:
+			return "变换"
+		_:
+			return "物理"

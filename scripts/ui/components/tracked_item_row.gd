@@ -38,8 +38,6 @@ func refresh() -> void:
 		visible = false
 		return
 
-	visible = true
-
 	icon_rect.texture = item.icon
 	name_label.text = item.display_name
 
@@ -47,5 +45,9 @@ func refresh() -> void:
 
 	if _inventory != null:
 		quantity = _inventory.get_quantity(item.id)
+
+	visible = quantity > 0
+	if not visible:
+		return
 
 	quantity_label.text = "×%d" % quantity

@@ -30,7 +30,7 @@ const CATEGORY_TYPES: Array[int] = [
 @onready var system_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage
 @onready var inventory_panel: InventoryPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/InventoryPanel
 @onready var skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanel
-@onready var entry_info_panel: EntryInfoPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/EntryInfoPanel
+@onready var entry_info_panel: EntryInfoPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/SelectionDetailPanel
 @onready var category_buttons: Array[Button] = [
 	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/EquipmentCategory,
 	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/ConsumableCategory,
@@ -58,8 +58,6 @@ func _ready() -> void:
 	inventory_panel.item_focused.connect(_on_item_focused)
 	inventory_panel.item_selected.connect(_on_item_selected)
 	skill_panel.skill_focused.connect(_on_skill_focused)
-	equipment_panel.slot_focused.connect(_on_equipment_slot_focused)
-	equipment_panel.slot_selected.connect(_on_equipment_slot_selected)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -231,8 +229,8 @@ func _on_item_focused(item: ItemData) -> void:
 	else:
 		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), item.hp_recovery)
 		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), item.mp_recovery)
-		details.append("HP 回复：%.0f" % item.hp_recovery)
-		details.append("MP 回复：%.0f" % item.mp_recovery)
+		details.append("生命回复：%.0f" % item.hp_recovery)
+		details.append("魔力回复：%.0f" % item.mp_recovery)
 	refresh_player_stats(view)
 	_display_entry_info(item.display_name, item.icon, item.description, details)
 
@@ -267,7 +265,23 @@ func _on_skill_focused(skill: SkillData) -> void:
 			SkillEffectData.EffectType.SPD:
 				view.spd_delta += FORMULAS.skill_effect_delta(view.spd, effect)
 	refresh_player_stats(view)
-	_display_entry_info(skill.display_name, skill.icon, skill.description, ["MP：%.0f" % skill.mp_cost, "冷却：%.1f 秒" % skill.cooldown_seconds])
+	_display_entry_info(skill.display_name, skill.icon, skill.description, [
+		"类型：%s" % _skill_type_label(skill.skill_type),
+		"魔力消耗：%.0f" % skill.mp_cost,
+		"专注消耗：%.0f" % skill.fp_cost,
+		"冷却：%.1f 秒" % skill.cooldown_seconds,
+		"吟唱：行动条倒退 %.0f%%" % (skill.cast_time * 100.0),
+	])
+
+
+func _skill_type_label(skill_type: SkillData.SkillType) -> String:
+	match skill_type:
+		SkillData.SkillType.MAGICAL:
+			return "魔法"
+		SkillData.SkillType.TRANSFORM:
+			return "变换"
+		_:
+			return "物理"
 
 
 func _on_equipment_slot_focused(slot: int) -> void:
@@ -301,10 +315,17 @@ func _build_player_view() -> ActorStatsViewData:
 	var view := ActorStatsViewData.new()
 	view.display_name = _player.player_data.display_name
 	view.portrait = _player.player_data.portrait
+	view.level = _player.level
+	view.experience = _player.experience
+	view.experience_to_next_level = _player.get_experience_for_next_level()
 	view.current_hp = _player.current_hp
 	view.max_hp = _player.get_max_hp()
 	view.current_mp = _player.current_mp
 	view.max_mp = _player.get_max_mp()
+	view.current_fp = _player.current_fp
+	view.max_fp = _player.get_max_fp()
+	view.start_fp = _player.get_start_fp()
+	view.fp_recovery_spd = _player.get_fp_recovery_spd()
 	view.atk = _player.get_atk()
 	view.def = _player.get_def()
 	view.spd = _player.get_spd()

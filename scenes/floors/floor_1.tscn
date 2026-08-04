@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="6_fu1vu"]
 [ext_resource type="PackedScene" uid="uid://c0wag3rti6imh" path="res://scenes/actors/enemies/enemy_balance_lv1.tscn" id="7_l8omj"]
 [ext_resource type="Resource" uid="uid://cs1gj5asd0b0e" path="res://resources/equipment/blade_lv1.tres" id="7_x8e2u"]
+[ext_resource type="Resource" uid="uid://b4l6caihdn1ku" path="res://resources/items/fragment_red_lv1.tres" id="9_mnxw0"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
@@ -71,6 +72,11 @@ item_data = ExtResource("6_fu1vu")
 position = Vector2(0, -128)
 pickup_id = &"hp_recovery_01"
 item_data = ExtResource("6_fu1vu")
+
+[node name="RedFragment" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="4" unique_id=633578570 instance=ExtResource("5_wl6yc")]
+position = Vector2(0, -96)
+pickup_id = &"red_fragment"
+item_data = ExtResource("9_mnxw0")
 
 [connection signal="state_changed" from="Interactables/WallSwitch" to="." method="_on_floor_switch_state_changed"]
 [connection signal="state_changed" from="Interactables/SwitchRed" to="." method="_on_floor_switch_state_changed"]

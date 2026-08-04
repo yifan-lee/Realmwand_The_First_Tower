@@ -2,10 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="1_akhel"]
 [ext_resource type="Script" uid="uid://beygk816d2c0f" path="res://scripts/ui/esc_menu.gd" id="1_viui7"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_3axht"]
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_akhel"]
 [ext_resource type="PackedScene" uid="uid://ci88f3b52if7b" path="res://scenes/ui/components/equipment_panel.tscn" id="3_viui7"]
 [ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="5_0us07"]
 [ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="6_3axht"]
+[ext_resource type="PackedScene" uid="uid://cs8x24knlv251" path="res://scenes/ui/components/system_panel.tscn" id="6_oy65n"]
 
 [node name="EscMenu" type="CanvasLayer" unique_id=866050831]
 layer = 2
@@ -19,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_3axht")
 
 [node name="Backdrop" type="ColorRect" parent="MenuRoot" unique_id=1533708468]
 layout_mode = 1
@@ -35,15 +38,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="MenuPanel" type="PanelContainer" parent="MenuRoot/Backdrop/MenuCenter" unique_id=1269820221]
-custom_minimum_size = Vector2(1700, 1030)
+custom_minimum_size = Vector2(1680, 980)
 layout_mode = 2
+theme_type_variation = &"TerminalPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel" unique_id=237617678]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="Content" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer" unique_id=2133047646]
 layout_mode = 2
@@ -55,7 +59,7 @@ layout_mode = 2
 [node name="MenuTitle" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=1079448578]
 layout_mode = 2
 theme_type_variation = &"HeaderLabel"
-text = "菜单"
+text = "游戏菜单"
 
 [node name="HeaderSpacer" type="Control" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=1477920272]
 layout_mode = 2
@@ -63,7 +67,8 @@ size_flags_horizontal = 3
 
 [node name="CloseHint" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Header" unique_id=1764196001]
 layout_mode = 2
-text = "方向键选择 / Enter 确认 / ESC 返回"
+theme_type_variation = &"MutedLabel"
+text = "方向键选择 / 确认键确认 / 菜单键返回"
 
 [node name="HeaderSeparator" type="HSeparator" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content" unique_id=564099036]
 layout_mode = 2
@@ -75,6 +80,7 @@ theme_override_constants/separation = 8
 [node name="InventoryTab" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs" unique_id=1429799105]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 button_pressed = true
 text = "背包"
@@ -82,39 +88,26 @@ text = "背包"
 [node name="SkillsTab" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs" unique_id=217922955]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 text = "技能"
 
 [node name="SystemTab" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/MainTabs" unique_id=7990970]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 text = "系统"
 
 [node name="Body" type="HBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content" unique_id=1504753641]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-
-[node name="CharacterColumn" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body" unique_id=612265806]
-custom_minimum_size = Vector2(620, 0)
-layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
-
-[node name="ActorStatsPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=799998403 instance=ExtResource("2_akhel")]
-custom_minimum_size = Vector2(0, 280)
-layout_mode = 2
-
-[node name="EquipmentPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=1086598637 instance=ExtResource("3_viui7")]
-custom_minimum_size = Vector2(0, 420)
-layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 12
 
 [node name="PageColumn" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body" unique_id=1436962507]
-custom_minimum_size = Vector2(760, 0)
+custom_minimum_size = Vector2(900, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
 [node name="InventoryPage" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn" unique_id=1024113794]
@@ -128,6 +121,7 @@ theme_override_constants/separation = 6
 [node name="EquipmentCategory" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs" unique_id=1407972909]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 button_pressed = true
 text = "装备"
@@ -135,18 +129,21 @@ text = "装备"
 [node name="ConsumableCategory" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs" unique_id=856660181]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 text = "消耗品"
 
 [node name="MaterialCategory" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs" unique_id=1504790674]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 text = "材料"
 
 [node name="OtherCategory" type="Button" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs" unique_id=1292359483]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
 toggle_mode = true
 text = "其他"
 
@@ -165,17 +162,25 @@ custom_minimum_size = Vector2(0, 450)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SystemPage" type="PanelContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn" unique_id=985941033]
+[node name="SystemPage" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn" unique_id=837222677 instance=ExtResource("6_oy65n")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SystemPlaceholder" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage" unique_id=1591180795]
+[node name="CharacterColumn" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body" unique_id=612265806]
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
-text = "保存 / 读取功能将在之后加入"
-horizontal_alignment = 1
-vertical_alignment = 1
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
 
-[node name="EntryInfoPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn" unique_id=446886182 instance=ExtResource("6_3axht")]
-custom_minimum_size = Vector2(0, 280)
+[node name="ActorStatsPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=799998403 instance=ExtResource("2_akhel")]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="EquipmentPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=1086598637 instance=ExtResource("3_viui7")]
+custom_minimum_size = Vector2(0, 230)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="SelectionDetailPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=446886182 instance=ExtResource("6_3axht")]
 layout_mode = 2

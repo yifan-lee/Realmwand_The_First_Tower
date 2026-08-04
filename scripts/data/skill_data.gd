@@ -6,6 +6,12 @@ enum TargetType {
 	SELF,
 }
 
+enum SkillType {
+	PHYSICAL,
+	MAGICAL,
+	TRANSFORM,
+}
+
 @export_group("Identity")
 @export var id: StringName = &""
 @export var display_name: String = ""
@@ -16,8 +22,11 @@ enum TargetType {
 @export_range(1, 99, 1) var unlock_level: int = 1
 
 @export_group("Usage")
+@export var skill_type: SkillType = SkillType.PHYSICAL
 @export_range(0.0, 9999.0, 0.1) var mp_cost: float = 0.0
+@export_range(0.0, 9999.0, 0.1) var fp_cost: float = 0.0
 @export_range(0.0, 9999.0, 0.1) var cooldown_seconds: float = 0.0
+@export_range(0.0, 1.0, 0.05) var cast_time: float = 0.0
 @export var target_type: TargetType = TargetType.ENEMY
 
 @export_group("Damage")

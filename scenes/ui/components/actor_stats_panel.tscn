@@ -4,19 +4,20 @@
 [ext_resource type="Script" uid="uid://b5lltfg5dekj0" path="res://scripts/ui/components/actor_stats_panel.gd" id="2_mddi2"]
 
 [node name="ActorStatsPanel" type="PanelContainer" unique_id=799998403]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(330, 0)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 theme = ExtResource("1_jqoyi")
+theme_type_variation = &"TerminalInsetPanel"
 script = ExtResource("2_mddi2")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=23613958]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
 
 [node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=35085586]
 layout_mode = 2
@@ -34,7 +35,14 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="MarginContainer/Content/Header" unique_id=786158178]
+[node name="HeaderDetails" type="VBoxContainer" parent="MarginContainer/Content/Header" unique_id=1272884201]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleRow" type="HBoxContainer" parent="MarginContainer/Content/Header/HeaderDetails" unique_id=522840370]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Content/Header/HeaderDetails/TitleRow" unique_id=786158178]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -42,67 +50,189 @@ theme_override_font_sizes/font_size = 26
 text = "角色名称"
 vertical_alignment = 1
 
+[node name="LevelLabel" type="Label" parent="MarginContainer/Content/Header/HeaderDetails/TitleRow" unique_id=1666789382]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "等级 1"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ExperienceRow" type="HBoxContainer" parent="MarginContainer/Content/Header/HeaderDetails" unique_id=1996493495]
+layout_mode = 2
+
+[node name="ExperienceTitle" type="Label" parent="MarginContainer/Content/Header/HeaderDetails/ExperienceRow" unique_id=1390755030]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "经验"
+vertical_alignment = 1
+
+[node name="ExperienceValue" type="Label" parent="MarginContainer/Content/Header/HeaderDetails/ExperienceRow" unique_id=1843466724]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "0/100"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=359877022]
 layout_mode = 2
 
-[node name="StatsGrid" type="GridContainer" parent="MarginContainer/Content" unique_id=545130794]
+[node name="Resources" type="VBoxContainer" parent="MarginContainer/Content" unique_id=40249871]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 4
-columns = 2
 
-[node name="HpTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=247937661]
+[node name="HpRow" type="HBoxContainer" parent="MarginContainer/Content/Resources" unique_id=1313019666]
 layout_mode = 2
+
+[node name="HpTitle" type="Label" parent="MarginContainer/Content/Resources/HpRow" unique_id=1710344130]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_type_variation = &"HpLabel"
 text = "生命"
 
-[node name="HpValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1514780235]
-unique_name_in_owner = true
+[node name="HpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/HpRow" unique_id=611052089]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "400 / 400"
-horizontal_alignment = 2
+theme_type_variation = &"HpProgressBar"
+value = 100.0
+show_percentage = false
 
-[node name="MpTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1508054529]
+[node name="HpValue" type="RichTextLabel" parent="MarginContainer/Content/Resources/HpRow/HpBar" unique_id=2111815387]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="MpRow" type="HBoxContainer" parent="MarginContainer/Content/Resources" unique_id=2146452809]
 layout_mode = 2
-text = "魔法"
 
-[node name="MpValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=689330993]
-unique_name_in_owner = true
+[node name="MpTitle" type="Label" parent="MarginContainer/Content/Resources/MpRow" unique_id=448042107]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_type_variation = &"MpLabel"
+text = "魔力"
+
+[node name="MpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/MpRow" unique_id=156670691]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "200 / 200"
-horizontal_alignment = 2
+theme_type_variation = &"MpProgressBar"
+value = 100.0
+show_percentage = false
 
-[node name="AtkTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=341848647]
+[node name="MpValue" type="RichTextLabel" parent="MarginContainer/Content/Resources/MpRow/MpBar" unique_id=1405128242]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="FpRow" type="HBoxContainer" parent="MarginContainer/Content/Resources" unique_id=1376565101]
 layout_mode = 2
+
+[node name="FpTitle" type="Label" parent="MarginContainer/Content/Resources/FpRow" unique_id=1457607098]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_type_variation = &"FpLabel"
+text = "专注"
+
+[node name="FpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/FpRow" unique_id=1170054760]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FpProgressBar"
+show_percentage = false
+
+[node name="FpValue" type="RichTextLabel" parent="MarginContainer/Content/Resources/FpRow/FpBar" unique_id=706733928]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="CombatStats" type="GridContainer" parent="MarginContainer/Content" unique_id=618745701]
+layout_mode = 2
+
+[node name="AtkRow" type="HBoxContainer" parent="MarginContainer/Content/CombatStats" unique_id=1913566047]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="AtkTitle" type="Label" parent="MarginContainer/Content/CombatStats/AtkRow" unique_id=602187228]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_type_variation = &"AtkLabel"
 text = "攻击"
+vertical_alignment = 1
 
-[node name="AtkValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=477720086]
-unique_name_in_owner = true
+[node name="AtkValue" type="RichTextLabel" parent="MarginContainer/Content/CombatStats/AtkRow" unique_id=1387333259]
+custom_minimum_size = Vector2(110, 26)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "40"
-horizontal_alignment = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+vertical_alignment = 1
 
-[node name="DefTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1302738792]
+[node name="DefRow" type="HBoxContainer" parent="MarginContainer/Content/CombatStats" unique_id=1575723949]
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DefTitle" type="Label" parent="MarginContainer/Content/CombatStats/DefRow" unique_id=1011426555]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_type_variation = &"DefLabel"
 text = "防御"
+vertical_alignment = 1
 
-[node name="DefValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1899293634]
-unique_name_in_owner = true
+[node name="DefValue" type="RichTextLabel" parent="MarginContainer/Content/CombatStats/DefRow" unique_id=1064984955]
+custom_minimum_size = Vector2(110, 26)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "40"
-horizontal_alignment = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+vertical_alignment = 1
 
-[node name="SpdTitle" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=43382800]
+[node name="SpdRow" type="HBoxContainer" parent="MarginContainer/Content/CombatStats" unique_id=546770562]
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SpdTitle" type="Label" parent="MarginContainer/Content/CombatStats/SpdRow" unique_id=20239766]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_type_variation = &"SpdLabel"
 text = "速度"
+vertical_alignment = 1
 
-[node name="SpdValue" type="Label" parent="MarginContainer/Content/StatsGrid" unique_id=1671456509]
-unique_name_in_owner = true
+[node name="SpdValue" type="RichTextLabel" parent="MarginContainer/Content/CombatStats/SpdRow" unique_id=1646347169]
+custom_minimum_size = Vector2(110, 26)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "40"
-horizontal_alignment = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+vertical_alignment = 1

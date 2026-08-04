@@ -5,9 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://b2r6mtmyrj37t" path="res://scenes/ui/components/game_message_panel.tscn" id="3_el006"]
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_x6mpk"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="4_ehshv"]
-[ext_resource type="Script" uid="uid://bafkb6vqhc24l" path="res://scripts/ui/components/game_message_panel.gd" id="4_x6mpk"]
-[ext_resource type="Script" uid="uid://b5lltfg5dekj0" path="res://scripts/ui/components/actor_stats_panel.gd" id="5_4qk33"]
-[ext_resource type="Script" uid="uid://dmfexv8ruyxi3" path="res://scripts/ui/components/tracked_inventory_hud.gd" id="8_ehshv"]
 
 [node name="GameHUD" type="CanvasLayer" unique_id=129955379]
 script = ExtResource("1_8n052")
@@ -20,6 +17,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("4_ehshv")
 
 [node name="MessageArea" type="CenterContainer" parent="HudRoot" unique_id=1978331453]
 layout_mode = 1
@@ -32,41 +30,31 @@ offset_top = -160.0
 offset_right = -24.0
 offset_bottom = -24.0
 
-[node name="GameMessagePanel" type="PanelContainer" parent="HudRoot/MessageArea" unique_id=1461547814 instance=ExtResource("3_el006")]
-visible = false
-custom_minimum_size = Vector2(760, 100)
+[node name="GameMessagePanel" parent="HudRoot/MessageArea" unique_id=1461547814 instance=ExtResource("3_el006")]
+custom_minimum_size = Vector2(820, 96)
 layout_mode = 2
-mouse_filter = 2
-theme = ExtResource("4_ehshv")
-theme_type_variation = &"DarkPanelContainer"
-script = ExtResource("4_x6mpk")
+theme_type_variation = &"TerminalPanel"
 
 [node name="StatsColumn" type="PanelContainer" parent="HudRoot" unique_id=1744338664]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(360, 0)
 layout_mode = 0
 offset_left = 24.0
 offset_top = 24.0
 offset_right = 24.0
 offset_bottom = 24.0
 theme = ExtResource("4_ehshv")
-theme_type_variation = &"StatPanelContainer"
+theme_type_variation = &"TerminalPanel"
 
 [node name="Content" type="VBoxContainer" parent="HudRoot/StatsColumn" unique_id=1814305014]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ActorStatsPanel" type="PanelContainer" parent="HudRoot/StatsColumn/Content" unique_id=799998403 instance=ExtResource("3_x6mpk")]
-custom_minimum_size = Vector2(250, 0)
+[node name="ActorStatsPanel" parent="HudRoot/StatsColumn/Content" unique_id=799998403 instance=ExtResource("3_x6mpk")]
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
-mouse_filter = 2
-theme = ExtResource("4_ehshv")
 theme_type_variation = &"TransparentPanelContainer"
-script = ExtResource("5_4qk33")
 
-[node name="TrackedInventoryHUD" type="PanelContainer" parent="HudRoot/StatsColumn/Content" unique_id=794321377 instance=ExtResource("2_fnxle")]
-custom_minimum_size = Vector2(250, 0)
+[node name="TrackedInventoryHUD" parent="HudRoot/StatsColumn/Content" unique_id=794321377 instance=ExtResource("2_fnxle")]
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
-mouse_filter = 2
-theme = ExtResource("4_ehshv")
 theme_type_variation = &"TransparentPanelContainer"
-script = ExtResource("8_ehshv")

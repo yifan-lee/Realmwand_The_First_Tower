@@ -169,3 +169,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.simulate_key]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_resource]
+approval_mode = "approve"

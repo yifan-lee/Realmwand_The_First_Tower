@@ -52,11 +52,18 @@ func refresh_player_stats() -> void:
 
 	view_data.display_name = _player.player_data.display_name
 	view_data.portrait = _player.player_data.portrait
+	view_data.level = _player.level
+	view_data.experience = _player.experience
+	view_data.experience_to_next_level = _player.get_experience_for_next_level()
 
 	view_data.current_hp = _player.current_hp
 	view_data.max_hp = _player.get_max_hp()
 	view_data.current_mp = _player.current_mp
 	view_data.max_mp = _player.get_max_mp()
+	view_data.current_fp = _player.current_fp
+	view_data.max_fp = _player.get_max_fp()
+	view_data.start_fp = _player.get_start_fp()
+	view_data.fp_recovery_spd = _player.get_fp_recovery_spd()
 	view_data.atk = _player.get_atk()
 	view_data.def = _player.get_def()
 	view_data.spd = _player.get_spd()
