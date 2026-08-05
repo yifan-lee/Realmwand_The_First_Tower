@@ -7,6 +7,7 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 
 @onready var portrait: TextureRect = $MarginContainer/Content/Header/Portrait
 @onready var name_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/NameLabel
+@onready var description_label: Label = $MarginContainer/Content/Header/HeaderDetails/DescriptionLabel
 @onready var header_details: VBoxContainer = $MarginContainer/Content/Header/HeaderDetails
 @onready var level_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/LevelLabel
 @onready var experience_row: HBoxContainer = $MarginContainer/Content/Header/HeaderDetails/ExperienceRow
@@ -14,12 +15,15 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 @onready var hp_bar: ProgressBar = $MarginContainer/Content/Resources/HpRow/HpBar
 @onready var mp_bar: ProgressBar = $MarginContainer/Content/Resources/MpRow/MpBar
 @onready var fp_bar: ProgressBar = $MarginContainer/Content/Resources/FpRow/FpBar
-@onready var hp_value: RichTextLabel = $MarginContainer/Content/Resources/HpRow/HpBar/HpValue
-@onready var mp_value: RichTextLabel = $MarginContainer/Content/Resources/MpRow/MpBar/MpValue
-@onready var fp_value: RichTextLabel = $MarginContainer/Content/Resources/FpRow/FpBar/FpValue
-@onready var atk_value: RichTextLabel = $MarginContainer/Content/CombatStats/AtkRow/AtkValue
-@onready var def_value: RichTextLabel = $MarginContainer/Content/CombatStats/DefRow/DefValue
-@onready var spd_value: RichTextLabel = $MarginContainer/Content/CombatStats/SpdRow/SpdValue
+@onready var hp_value: RichTextLabel = $MarginContainer/Content/Resources/HpRow/HpValue
+@onready var mp_value: RichTextLabel = $MarginContainer/Content/Resources/MpRow/MpValue
+@onready var fp_value: RichTextLabel = $MarginContainer/Content/Resources/FpRow/FpValue
+@onready var hp_preview_segment: ColorRect = $MarginContainer/Content/Resources/HpRow/HpBar/HpPreviewSegment
+@onready var mp_preview_segment: ColorRect = $MarginContainer/Content/Resources/MpRow/MpBar/MpPreviewSegment
+@onready var fp_preview_segment: ColorRect = $MarginContainer/Content/Resources/FpRow/FpBar/FpPreviewSegment
+@onready var atk_value: RichTextLabel = $MarginContainer/Content/CombatStats/AtkGroup/AtkValue
+@onready var def_value: RichTextLabel = $MarginContainer/Content/CombatStats/DefGroup/DefValue
+@onready var spd_value: RichTextLabel = $MarginContainer/Content/CombatStats/SpdGroup/SpdValue
 
 var _view_data: ActorStatsViewData
 
@@ -36,6 +40,8 @@ func display_stats(
 	portrait.visible = view_data.portrait != null
 
 	name_label.text = view_data.display_name
+	description_label.text = view_data.description
+	description_label.visible = not view_data.description.is_empty()
 	var show_progression := view_data.has_progression()
 	level_label.visible = show_progression
 	experience_row.visible = show_progression
@@ -68,6 +74,8 @@ func clear_stats() -> void:
 	portrait.visible = false
 
 	name_label.text = ""
+	description_label.text = ""
+	description_label.visible = false
 	header_details.visible = true
 	level_label.visible = false
 	experience_row.visible = false
@@ -82,6 +90,7 @@ func clear_stats() -> void:
 	hp_bar.value = 0.0
 	mp_bar.value = 0.0
 	fp_bar.value = 0.0
+	_hide_preview_segments()
 
 
 func _process(_delta: float) -> void:
@@ -110,9 +119,42 @@ func _update_resource_bars() -> void:
 	hp_bar.max_value = _view_data.get_preview_max_hp()
 	mp_bar.max_value = _view_data.get_preview_max_mp()
 	fp_bar.max_value = maxf(_view_data.max_fp, 1.0)
-	hp_bar.value = _view_data.get_hp_bar_value()
-	mp_bar.value = _view_data.get_mp_bar_value()
-	fp_bar.value = _view_data.get_fp_bar_value()
+	_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
+	_update_preview_segment(mp_preview_segment, mp_bar, _view_data.current_mp, _view_data.current_mp_delta)
+	_update_preview_segment(fp_preview_segment, fp_bar, _view_data.current_fp, _view_data.current_fp_delta)
+
+
+func _update_preview_segment(
+	segment: ColorRect,
+	bar: ProgressBar,
+	current_value: float,
+	delta: float
+) -> void:
+	if is_zero_approx(delta):
+		bar.value = current_value
+		segment.visible = false
+		return
+
+	var maximum := maxf(bar.max_value, 1.0)
+	var preview_value := clampf(current_value + delta, 0.0, maximum)
+	bar.value = minf(current_value, preview_value)
+	if bar.size.x <= 0.0:
+		segment.visible = false
+		return
+	var segment_start := minf(current_value, preview_value)
+	var segment_width := absf(preview_value - current_value)
+	segment.position = Vector2(bar.size.x * segment_start / maximum, 2.0)
+	segment.size = Vector2(maxf(2.0, bar.size.x * segment_width / maximum), maxf(0.0, bar.size.y - 4.0))
+	var flash_tint := Color("#FFFFFFFF")
+	flash_tint.a = lerpf(0.15, 1.0, _view_data.get_flash_pulse())
+	segment.self_modulate = flash_tint
+	segment.visible = true
+
+
+func _hide_preview_segments() -> void:
+	hp_preview_segment.visible = false
+	mp_preview_segment.visible = false
+	fp_preview_segment.visible = false
 
 
 func _format_resource(value: float, maximum: float, delta: float, maximum_delta: float = 0.0) -> String:

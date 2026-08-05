@@ -51,10 +51,19 @@ func _process(delta: float) -> void:
 	_tick_effects(_player_effects, delta)
 	_tick_effects(_enemy_effects, delta)
 	_recover_focus_points(delta)
+	if _enemy_atb >= FORMULAS.ATB_MAX:
+		_resolve_ready_enemy_turn()
+		return
+
 	_player_atb = minf(
 		FORMULAS.ATB_MAX,
 		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(SkillEffectData.EffectType.SPD), delta)
 	)
+	_enemy_atb = minf(
+		FORMULAS.ATB_MAX,
+		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(SkillEffectData.EffectType.SPD), delta)
+	)
+
 	if _player_atb >= FORMULAS.ATB_MAX:
 		if _player_casting_skill != null:
 			_release_player_skill()
@@ -67,17 +76,9 @@ func _process(delta: float) -> void:
 			_battle_ui.set_atb(_player_atb, _enemy_atb)
 			return
 
-	_enemy_atb = minf(
-		FORMULAS.ATB_MAX,
-		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(SkillEffectData.EffectType.SPD), delta)
-	)
 	if _enemy_atb >= FORMULAS.ATB_MAX:
-		if _enemy_casting_skill != null:
-			_release_enemy_skill()
-		else:
-			_begin_enemy_turn()
-		if not is_active():
-			return
+		_resolve_ready_enemy_turn()
+		return
 
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
 
@@ -178,6 +179,15 @@ func _begin_enemy_turn() -> void:
 	_battle_ui.refresh_stats()
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
 	_battle_ui.show_message("%s 正在吟唱 %s。" % [_enemy.enemy_data.display_name, skill.display_name])
+
+
+func _resolve_ready_enemy_turn() -> void:
+	if _enemy_casting_skill != null:
+		_release_enemy_skill()
+	else:
+		_begin_enemy_turn()
+	if is_active():
+		_battle_ui.set_atb(_player_atb, _enemy_atb)
 
 
 func _release_player_skill(skill: SkillData = null) -> void:

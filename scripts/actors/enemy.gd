@@ -169,10 +169,10 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 	if (
 		enemy_data != null
-		and enemy_data.world_texture == null
+		and enemy_data.get_world_texture() == null
 	):
 		warnings.append(
-			"EnemyData requires a world texture."
+			"EnemyData requires a world texture or portrait."
 		)
 
 	return warnings
@@ -190,4 +190,4 @@ func _refresh_visual() -> void:
 		sprite.texture = null
 		return
 
-	sprite.texture = enemy_data.world_texture
+	sprite.texture = enemy_data.get_world_texture()

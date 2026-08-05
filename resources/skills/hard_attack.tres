@@ -11,5 +11,5 @@ display_name = "强力攻击"
 description = "发动一次强力的攻击"
 icon = ExtResource("2_hx6h4")
 unlock_level = 2
-cooldown_seconds = 3.0
+fp_cost = 25.0
 skill_power = 30.0

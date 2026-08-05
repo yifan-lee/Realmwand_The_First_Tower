@@ -11,6 +11,8 @@ const BASE_MAX_HP_COEFFICIENT: float = 4.0
 const BASE_MAX_MP_COEFFICIENT: float = 2.0
 const BASE_FP_RECOVERY_COEFFICIENT: float = 0.1
 const CP_DIVISOR: float = 10.0
+## 为 true 时，因加点提升的最大生命/魔力会同步恢复等量当前值。
+const RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE: bool = true
 
 
 static func calculate_atb_gain(

@@ -61,14 +61,12 @@ func preview_slots(slots: Array[int]) -> void:
 	clear_preview()
 	for slot: int in slots:
 		if _slot_labels.has(slot):
-			_slot_labels[slot].add_theme_color_override("font_color", Color("#FF9B42FF"))
-			_slot_labels[slot].self_modulate = Color("#FF9B42FF")
+			_slot_labels[slot].theme_type_variation = &"EquipmentSlotPreviewLabel"
 
 
 func clear_preview() -> void:
 	for label: Label in _slot_labels.values():
-		label.remove_theme_color_override("font_color")
-		label.self_modulate = Color("#FFFFFFFF")
+		label.theme_type_variation = &"SectionLabel"
 
 
 func focus_first_slot() -> void:

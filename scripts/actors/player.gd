@@ -57,6 +57,17 @@ func _ready() -> void:
 	_update_interaction_ray()
 
 
+func get_ui_portrait() -> Texture2D:
+	if player_data != null and player_data.portrait != null:
+		return player_data.portrait
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return null
+	return animated_sprite.sprite_frames.get_frame_texture(
+		animated_sprite.animation,
+		animated_sprite.frame
+	)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled or is_moving:
 		return
@@ -348,10 +359,12 @@ func get_stat_allocation_preview(
 		next_base_spd
 	) + equipment.get_max_mp_bonus()
 
+	var hp_increase := next_max_hp - get_max_hp()
+	var mp_increase := next_max_mp - get_max_mp()
 	return {
-		&"current_hp": current_hp + next_max_hp - get_max_hp(),
+		&"current_hp": current_hp + hp_increase if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE else current_hp,
 		&"max_hp": next_max_hp,
-		&"current_mp": current_mp + next_max_mp - get_max_mp(),
+		&"current_mp": current_mp + mp_increase if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE else current_mp,
 		&"max_mp": next_max_mp,
 		&"fp_recovery": FORMULAS.resolve_base_fp_recovery(
 			base_fp_recovery_spd,
@@ -383,8 +396,12 @@ func apply_stat_allocation(
 	base_def += int(allocation.get(&"def", 0)) * increase
 	base_spd += int(allocation.get(&"spd", 0)) * increase
 	unspent_stat_points -= total_points
-	current_hp = clampf(current_hp + get_max_hp() - previous_max_hp, 0.0, get_max_hp())
-	current_mp = clampf(current_mp + get_max_mp() - previous_max_mp, 0.0, get_max_mp())
+	if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE:
+		current_hp = clampf(current_hp + get_max_hp() - previous_max_hp, 0.0, get_max_hp())
+		current_mp = clampf(current_mp + get_max_mp() - previous_max_mp, 0.0, get_max_mp())
+	else:
+		current_hp = minf(current_hp, get_max_hp())
+		current_mp = minf(current_mp, get_max_mp())
 	stats_changed.emit()
 	return true
 

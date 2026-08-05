@@ -94,6 +94,13 @@ func focus_first_item() -> bool:
 	return true
 
 
+func is_first_item_focused() -> bool:
+	return (
+		not _rows.is_empty()
+		and get_viewport().gui_get_focus_owner() == _rows.front()
+	)
+
+
 func _matches_filter(item: ItemData) -> bool:
 	if _battle_only and not item.usable_in_battle:
 		return false

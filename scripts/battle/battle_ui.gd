@@ -52,6 +52,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not battle_root.visible:
 		return
+	_refresh_action_tab_highlights()
 
 	if _player != null:
 		player_stats.refresh_runtime_resources(
@@ -91,6 +92,7 @@ func open(player: Player, enemy: Enemy) -> void:
 	inventory_panel.bind_inventory(player.inventory)
 	inventory_panel.set_battle_only(true)
 	battle_root.visible = true
+	clear_message()
 	entry_info_panel.clear_info()
 	player_atb_marker.texture = _get_marker_texture(player, player.player_data.portrait)
 	enemy_atb_marker.texture = _get_marker_texture(enemy, enemy.enemy_data.portrait)
@@ -105,6 +107,7 @@ func close() -> void:
 	battle_root.visible = false
 	inventory_panel.bind_inventory(null)
 	entry_info_panel.clear_info()
+	clear_message()
 	_player = null
 	_enemy = null
 
@@ -129,6 +132,12 @@ func set_atb(player_value: float, enemy_value: float) -> void:
 
 func show_message(message: String) -> void:
 	message_label.text = message
+	message_label.visible = not message.is_empty()
+
+
+func clear_message() -> void:
+	message_label.text = ""
+	message_label.visible = false
 
 
 func refresh_stats() -> void:
@@ -142,9 +151,6 @@ func _show_action_page(page: ActionPage, focus_page: bool) -> void:
 	skill_panel.visible = page == ActionPage.SKILLS
 	inventory_panel.visible = page == ActionPage.ITEMS
 	escape_page.visible = page == ActionPage.ESCAPE
-	skills_tab.set_pressed_no_signal(page == ActionPage.SKILLS)
-	items_tab.set_pressed_no_signal(page == ActionPage.ITEMS)
-	escape_tab.set_pressed_no_signal(page == ActionPage.ESCAPE)
 	entry_info_panel.clear_info()
 	refresh_stats()
 	if focus_page:
@@ -180,6 +186,13 @@ func _focus_current_tab() -> void:
 			items_tab.grab_focus()
 		ActionPage.ESCAPE:
 			escape_tab.grab_focus()
+
+
+func _refresh_action_tab_highlights() -> void:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	skills_tab.set_pressed_no_signal(focused_control == skills_tab)
+	items_tab.set_pressed_no_signal(focused_control == items_tab)
+	escape_tab.set_pressed_no_signal(focused_control == escape_tab)
 
 
 func _is_tab_focused() -> bool:
@@ -279,7 +292,7 @@ func _build_player_view() -> ActorStatsViewData:
 		return null
 	var view := ActorStatsViewData.new()
 	view.display_name = _player.player_data.display_name
-	view.portrait = _player.player_data.portrait
+	view.portrait = _player.get_ui_portrait()
 	view.level = _player.level
 	view.experience = _player.experience
 	view.experience_to_next_level = _player.get_experience_for_next_level()
@@ -304,7 +317,8 @@ func _build_enemy_view() -> ActorStatsViewData:
 		return null
 	var view := ActorStatsViewData.new()
 	view.display_name = _enemy.enemy_data.display_name
-	view.portrait = _enemy.enemy_data.portrait
+	view.portrait = _get_marker_texture(_enemy, _enemy.enemy_data.portrait)
+	view.description = _enemy.enemy_data.description
 	view.current_hp = _enemy.current_hp
 	view.max_hp = _enemy.get_max_hp()
 	view.current_mp = _enemy.current_mp

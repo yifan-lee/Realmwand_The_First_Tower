@@ -6,9 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="4_5shg3"]
 [ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="5_wl6yc"]
 [ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="6_fu1vu"]
+[ext_resource type="Resource" uid="uid://bn6k3d2jvsx51" path="res://resources/actors/enemy_atk_lv1.tres" id="6_fv4kh"]
 [ext_resource type="PackedScene" uid="uid://c0wag3rti6imh" path="res://scenes/actors/enemies/enemy_balance_lv1.tscn" id="7_l8omj"]
+[ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="7_n2pbf"]
 [ext_resource type="Resource" uid="uid://cs1gj5asd0b0e" path="res://resources/equipment/blade_lv1.tres" id="7_x8e2u"]
+[ext_resource type="Resource" uid="uid://bhe21ofgj7ote" path="res://resources/actors/enemy_def_lv1.tres" id="8_rm4ur"]
+[ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="9_4igxy"]
 [ext_resource type="Resource" uid="uid://b4l6caihdn1ku" path="res://resources/items/fragment_red_lv1.tres" id="9_mnxw0"]
+[ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="11_3ycjp"]
+[ext_resource type="Resource" uid="uid://bfhk2tg6kleul" path="res://resources/equipment/chest_lv1.tres" id="12_rj6dl"]
+[ext_resource type="Resource" uid="uid://dcite8gsbiu17" path="res://resources/equipment/feet_lv1.tres" id="13_r7vlu"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
@@ -29,7 +36,7 @@ position = Vector2(0, -256)
 
 [node name="WallSwitch" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="0" unique_id=1134718973 instance=ExtResource("2_qyw1v")]
 unique_name_in_owner = true
-position = Vector2(0, 32)
+position = Vector2(-96, -64)
 switch_id = &"wall_passage"
 
 [node name="SwitchRed" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="1" unique_id=1060858094 instance=ExtResource("2_qyw1v")]
@@ -50,31 +57,96 @@ target_floor_id = &"floor_2"
 target_spawn_id = &"FromBelowStair"
 
 [node name="EnemyBalanceLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="0" unique_id=796734484 instance=ExtResource("7_l8omj")]
-position = Vector2(32, 0)
+position = Vector2(-64, -64)
 instance_id = &"floor_1_enemy_01"
 
-[node name="Blade" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
-position = Vector2(-32, 0)
+[node name="EnemyAtkLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="1" unique_id=171337535 instance=ExtResource("7_n2pbf")]
+position = Vector2(-256, -256)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("6_fv4kh")
+
+[node name="EnemyAtkLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="2" unique_id=522290145 instance=ExtResource("7_n2pbf")]
+position = Vector2(-288, -288)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("6_fv4kh")
+
+[node name="EnemyAtkLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="3" unique_id=133114485 instance=ExtResource("7_n2pbf")]
+position = Vector2(-288, -224)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("6_fv4kh")
+
+[node name="EnemyAtkLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="4" unique_id=493847362 instance=ExtResource("7_n2pbf")]
+position = Vector2(-320, -256)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("6_fv4kh")
+
+[node name="EnemyDefLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="5" unique_id=1075241659 instance=ExtResource("7_n2pbf")]
+position = Vector2(0, -480)
+instance_id = &"enemy_def_lv1_01"
+enemy_data = ExtResource("8_rm4ur")
+
+[node name="EnemyDefLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="6" unique_id=2127194361 instance=ExtResource("7_n2pbf")]
+position = Vector2(0, -544)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("8_rm4ur")
+
+[node name="EnemyDefLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="7" unique_id=809454074 instance=ExtResource("7_n2pbf")]
+position = Vector2(32, -512)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("8_rm4ur")
+
+[node name="EnemyDefLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="8" unique_id=1491189230 instance=ExtResource("7_n2pbf")]
+position = Vector2(-32, -512)
+instance_id = &"enemy_def_lv1_04"
+enemy_data = ExtResource("8_rm4ur")
+
+[node name="EnemySpdLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="9" unique_id=185778640 instance=ExtResource("7_n2pbf")]
+position = Vector2(256, -256)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("9_4igxy")
+
+[node name="EnemySpdLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="10" unique_id=480934834 instance=ExtResource("7_n2pbf")]
+position = Vector2(288, -288)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("9_4igxy")
+
+[node name="EnemySpdLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=1115015388 instance=ExtResource("7_n2pbf")]
+position = Vector2(288, -224)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("9_4igxy")
+
+[node name="EnemySpdLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="12" unique_id=1407671429 instance=ExtResource("7_n2pbf")]
+position = Vector2(320, -256)
+instance_id = &"enemy_atk_lv1_01"
+enemy_data = ExtResource("9_4igxy")
+
+[node name="SwordLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
+position = Vector2(-288, -256)
+pickup_id = &"sword_lv1"
+item_data = ExtResource("11_3ycjp")
+
+[node name="ChestLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=629304167 instance=ExtResource("5_wl6yc")]
+position = Vector2(0, -512)
+pickup_id = &"sword_lv1"
+item_data = ExtResource("12_rj6dl")
+
+[node name="FeetLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=1771497956 instance=ExtResource("5_wl6yc")]
+position = Vector2(288, -256)
+pickup_id = &"sword_lv1"
+item_data = ExtResource("13_r7vlu")
+
+[node name="Blade" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=1959763940 instance=ExtResource("5_wl6yc")]
+position = Vector2(-200, 0)
 pickup_id = &"blade_01"
 item_data = ExtResource("7_x8e2u")
 
-[node name="Blade2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=459241467 instance=ExtResource("5_wl6yc")]
-position = Vector2(-64, 0)
-pickup_id = &"blade_02"
-item_data = ExtResource("7_x8e2u")
-
-[node name="HpRecoveryPickup" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=647430724 instance=ExtResource("5_wl6yc")]
-position = Vector2(0, -64)
+[node name="HpRecoveryPickup" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="4" unique_id=647430724 instance=ExtResource("5_wl6yc")]
+position = Vector2(-200, -64)
 pickup_id = &"hp_recovery_01"
 item_data = ExtResource("6_fu1vu")
 
-[node name="HpRecoveryPickup2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=295953893 instance=ExtResource("5_wl6yc")]
-position = Vector2(0, -128)
-pickup_id = &"hp_recovery_01"
-item_data = ExtResource("6_fu1vu")
-
-[node name="RedFragment" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="4" unique_id=633578570 instance=ExtResource("5_wl6yc")]
-position = Vector2(0, -96)
+[node name="RedFragment" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="5" unique_id=633578570 instance=ExtResource("5_wl6yc")]
+position = Vector2(-200, -96)
 pickup_id = &"red_fragment"
 item_data = ExtResource("9_mnxw0")
 

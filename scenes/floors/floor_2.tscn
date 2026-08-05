@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dmpsab2hobft3" path="res://scenes/floors/floor.tscn" id="1_6ha2l"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="2_wiu4o"]
+[ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="3_gkij4"]
+[ext_resource type="Resource" uid="uid://cjh7qfr7pl1ww" path="res://resources/items/stone.tres" id="4_mjnjk"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_6ha2l")]
 floor_id = &"floor_2"
@@ -10,10 +12,13 @@ description = "还没想好"
 default_spawn_id = &"FromBelowStair"
 
 [node name="GroundLayer" parent="." index="0" unique_id=370044564]
-tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAAAAP3/AAAAAAAAAAAAAPz/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPn/AAAAAAAAAAABAPn/AAAAAAAAAAADAPn/AAAAAAAAAAACAPn/AAAAAAAAAAA=")
 
 [node name="WallLayer" parent="." index="1" unique_id=917837273]
-tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAD///3/AAAAAAEAAAAAAP3/AAAAAAEAAAABAP3/AAAAAAEAAAACAP3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAD+/wAAAAAAAAEAAAD+/wEAAAAAAAEAAAD//wEAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAACAP//AAAAAAEAAAACAP7/AAAAAAEAAAA=")
+tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAACAP3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAD+/wAAAAAAAAEAAAD+/wEAAAAAAAEAAAD//wEAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAACAP//AAAAAAEAAAACAP7/AAAAAAEAAAD///3/AAAAAAEAAAD///z/AAAAAAEAAAD///v/AAAAAAEAAAD///r/AAAAAAEAAAD///n/AAAAAAEAAAD///j/AAAAAAEAAAAAAPj/AAAAAAEAAAABAPj/AAAAAAEAAAACAPj/AAAAAAEAAAADAPj/AAAAAAEAAAABAP3/AAAAAAEAAAABAPz/AAAAAAEAAAABAPv/AAAAAAEAAAABAPr/AAAAAAEAAAACAPr/AAAAAAEAAAADAPr/AAAAAAEAAAA=")
+
+[node name="FeatureLayer" parent="." index="2" unique_id=1361208269]
+tile_map_data = PackedByteArray("AAACAPn/AAAAAAIAAAA=")
 
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=145704661]
 
@@ -21,3 +26,18 @@ tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAD///3/AAAAAAEAAAAAAP3/AAAAAAE
 direction = 1
 target_floor_id = &"floor_1"
 target_spawn_id = &"FromAboveStair"
+
+[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("3_gkij4")]
+position = Vector2(0, -64)
+pickup_id = &"stone01"
+item_data = ExtResource("4_mjnjk")
+
+[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=226122769 instance=ExtResource("3_gkij4")]
+position = Vector2(0, -96)
+pickup_id = &"stone01"
+item_data = ExtResource("4_mjnjk")
+
+[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=1735979925 instance=ExtResource("3_gkij4")]
+position = Vector2(0, -128)
+pickup_id = &"stone01"
+item_data = ExtResource("4_mjnjk")

@@ -2,6 +2,7 @@ class_name ActorStatsViewData
 extends RefCounted
 
 var display_name: String = ""
+var description: String = ""
 var portrait: Texture2D
 var level: int = 0
 var experience: int = 0

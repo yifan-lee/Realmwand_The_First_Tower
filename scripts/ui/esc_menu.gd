@@ -60,7 +60,12 @@ func _ready() -> void:
 	skill_panel.skill_focused.connect(_on_skill_focused)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _process(_delta: float) -> void:
+	if menu_root.visible:
+		_refresh_focus_highlights()
+
+
+func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
 		return
 	if event.is_action_pressed(&"ui_left"):
@@ -69,9 +74,20 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed(&"ui_right"):
 		_navigate_horizontal(1)
 		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed(&"ui_down") and _is_main_tab_focused():
-		_focus_current_page()
-		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_up"):
+		if _is_category_focused():
+			_focus_main_tab()
+			get_viewport().set_input_as_handled()
+		elif _current_page == MainPage.INVENTORY and inventory_panel.is_first_item_focused():
+			category_buttons[_current_category].grab_focus()
+			get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(&"ui_down"):
+		if _is_main_tab_focused():
+			_focus_current_page()
+			get_viewport().set_input_as_handled()
+		elif _is_category_focused():
+			inventory_panel.focus_first_item()
+			get_viewport().set_input_as_handled()
 
 
 func bind_player(player: Player) -> void:
@@ -140,9 +156,6 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	inventory_page.visible = page == MainPage.INVENTORY
 	skill_page.visible = page == MainPage.SKILLS
 	system_page.visible = page == MainPage.SYSTEM
-	inventory_tab.set_pressed_no_signal(page == MainPage.INVENTORY)
-	skills_tab.set_pressed_no_signal(page == MainPage.SKILLS)
-	system_tab.set_pressed_no_signal(page == MainPage.SYSTEM)
 	equipment_panel.clear_preview()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
@@ -152,8 +165,6 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 
 func _show_category(index: int, focus_items: bool) -> void:
 	_current_category = posmod(index, CATEGORY_TYPES.size())
-	for button_index: int in category_buttons.size():
-		category_buttons[button_index].set_pressed_no_signal(button_index == _current_category)
 	inventory_panel.set_item_type_filter(CATEGORY_TYPES[_current_category])
 	equipment_panel.clear_preview()
 	entry_info_panel.clear_info()
@@ -193,9 +204,21 @@ func _focus_main_tab() -> void:
 			system_tab.grab_focus()
 
 
+func _refresh_focus_highlights() -> void:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	for tab in [inventory_tab, skills_tab, system_tab]:
+		tab.set_pressed_no_signal(focused_control == tab)
+	for category_button in category_buttons:
+		category_button.set_pressed_no_signal(focused_control == category_button)
+
+
 func _is_main_tab_focused() -> bool:
 	var focus: Control = get_viewport().gui_get_focus_owner()
 	return focus in [inventory_tab, skills_tab, system_tab]
+
+
+func _is_category_focused() -> bool:
+	return get_viewport().gui_get_focus_owner() in category_buttons
 
 
 func _is_in_control(focus: Control, ancestor: Control) -> bool:
@@ -314,7 +337,7 @@ func _choose_equipment_target(item: EquipmentData) -> int:
 func _build_player_view() -> ActorStatsViewData:
 	var view := ActorStatsViewData.new()
 	view.display_name = _player.player_data.display_name
-	view.portrait = _player.player_data.portrait
+	view.portrait = _player.get_ui_portrait()
 	view.level = _player.level
 	view.experience = _player.experience
 	view.experience_to_next_level = _player.get_experience_for_next_level()

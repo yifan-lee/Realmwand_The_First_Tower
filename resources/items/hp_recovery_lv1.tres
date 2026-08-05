@@ -13,4 +13,4 @@ world_texture = ExtResource("1_d1yla")
 usable_from_inventory = true
 usable_in_battle = true
 consumed_on_use = true
-hp_recovery = 100.0
+hp_recovery = 20.0

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://burlvs1omfi2e"]
+
+[ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_nbwpc"]
+[ext_resource type="Texture2D" uid="uid://erll215so0ja" path="res://assets/monsters/spd_tier_1.png" id="1_whu78"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_whu78"]
+[ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_ttwvv"]
+
+[resource]
+script = ExtResource("1_nbwpc")
+id = &"enemy_def_lv1"
+display_name = "一级速度怪"
+description = "速度很快的生物。非常恼人。提高速度之后也许可以抢先出手。"
+atk = 13.0
+def = 13.0
+spd = 44.0
+portrait = ExtResource("1_whu78")
+metadata/_custom_type_script = "uid://dt0hov06fbtv5"

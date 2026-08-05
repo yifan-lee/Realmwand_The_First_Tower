@@ -59,7 +59,6 @@ size_flags_vertical = 3
 theme_override_constants/separation = 16
 
 [node name="PlayerStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=799998403 instance=ExtResource("2_elpkr")]
-custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 
 [node name="CenterColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=786186562]
@@ -83,10 +82,12 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 68)
 layout_mode = 2
 mouse_filter = 2
+theme_type_variation = &"AtbProgressBar"
 value = 100.0
 show_percentage = false
 
 [node name="PlayerMarker" type="TextureRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1224952004]
+z_index = 2
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
 anchor_top = 0.5
@@ -98,6 +99,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="EnemyMarker" type="TextureRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1153709964]
+z_index = 1
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
 anchor_top = 0.5
@@ -172,10 +174,10 @@ custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 
 [node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=37358213 instance=ExtResource("2_elpkr")]
-custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 
 [node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942472126]
+visible = false
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 autowrap_mode = 2

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dcite8gsbiu17"]
+
+[ext_resource type="Texture2D" uid="uid://cfjrurlxind6j" path="res://assets/items/equipment/wearable/feet_spd_tier_1.png" id="1_cccll"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="1_wk223"]
+
+[resource]
+script = ExtResource("1_wk223")
+slot_type = 4
+spd_bonus = 5.0
+id = &"feet_lv1"
+display_name = "一级鞋子"
+description = "增加些许速度的鞋子"
+item_type = 1
+icon = ExtResource("1_cccll")
+world_texture = ExtResource("1_cccll")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

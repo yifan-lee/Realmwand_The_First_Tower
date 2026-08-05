@@ -51,7 +51,7 @@ func refresh_player_stats() -> void:
 	var view_data: ActorStatsViewData = ActorStatsViewData.new()
 
 	view_data.display_name = _player.player_data.display_name
-	view_data.portrait = _player.player_data.portrait
+	view_data.portrait = _player.get_ui_portrait()
 	view_data.level = _player.level
 	view_data.experience = _player.experience
 	view_data.experience_to_next_level = _player.get_experience_for_next_level()

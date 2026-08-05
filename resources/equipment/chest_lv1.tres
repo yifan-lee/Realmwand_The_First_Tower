@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://bfhk2tg6kleul"]
+
+[ext_resource type="Texture2D" uid="uid://bolmj3poov4nx" path="res://assets/items/equipment/wearable/chest_def_tier_1.png" id="1_2rsqd"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="1_wsyjq"]
+
+[resource]
+script = ExtResource("1_wsyjq")
+slot_type = 1
+def_bonus = 5.0
+id = &"chest_lv1"
+display_name = "一级胸甲"
+description = "增加些许防御力的胸甲"
+item_type = 1
+icon = ExtResource("1_2rsqd")
+world_texture = ExtResource("1_2rsqd")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

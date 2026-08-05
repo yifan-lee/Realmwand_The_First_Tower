@@ -11,31 +11,32 @@ const STAT_DISPLAY_NAMES: Dictionary[StringName, String] = {
 }
 const VALUE_COLOR := Color("#D9E5E8FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
-const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const STAT_COLORS := {
-	&"hp": Color("#32FF7DFF"),
-	&"mp": Color("#AA5AFFFF"),
-	&"fp": Color("#FF822DFF"),
 	&"atk": Color("#FF4155FF"),
 	&"def": Color("#FFCD32FF"),
 	&"spd": Color("#00F0FFFF"),
 }
+const GRID_EMPTY_COLOR := Color("#52656DFF")
 
 @onready var level_root: Control = $LevelRoot
+@onready var stats_panel: ActorStatsPanel = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ActorStatsPanel
 @onready var points_label: Label = $LevelRoot/Backdrop/Center/Panel/Margin/Content/PointsLabel
-@onready var hp_label: RichTextLabel = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview/HpLabel
-@onready var mp_label: RichTextLabel = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview/MpLabel
-@onready var fp_label: RichTextLabel = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ResourcePreview/FpLabel
-@onready var hint_label: Label = $LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/HintLabel
+@onready var confirm_button: Button = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ConfirmButton
+@onready var hint_label: Label = $LevelRoot/Backdrop/Center/Panel/Margin/Content/HintLabel
 @onready var value_buttons: Array[Button] = [
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow/ValueButton,
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow/ValueButton,
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow/ValueButton,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow/ValueButton,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow/ValueButton,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow/ValueButton,
 ]
 @onready var stat_displays: Array[RichTextLabel] = [
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/AtkRow/ValueButton/StatDisplay,
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/DefRow/ValueButton/StatDisplay,
-	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/SpdRow/ValueButton/StatDisplay,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow/ValueButton/StatDisplay,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow/ValueButton/StatDisplay,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow/ValueButton/StatDisplay,
+]
+@onready var allocation_grids: Array[RichTextLabel] = [
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow/AllocationGrid,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow/AllocationGrid,
+	$LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow/AllocationGrid,
 ]
 
 var _player: Player
@@ -49,24 +50,23 @@ var _selected_index := 0
 
 func _ready() -> void:
 	for index: int in STAT_IDS.size():
-		var row_path := "LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationCenter/AllocationBlock/AllocationRows/%sRow" % STAT_IDS[index].capitalize()
-		(get_node(row_path + "/MinusButton") as Button).pressed.connect(_change_allocation.bind(index, -1))
-		(get_node(row_path + "/PlusButton") as Button).pressed.connect(_change_allocation.bind(index, 1))
+		value_buttons[index].pressed.connect(_select_row.bind(index))
+	confirm_button.pressed.connect(_confirm_allocation)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not level_root.visible:
 		return
 
 	if event.is_action_pressed(&"move_up"):
-		_select_row(-1)
+		_move_selection(-1)
 	elif event.is_action_pressed(&"move_down"):
-		_select_row(1)
-	elif event.is_action_pressed(&"move_left"):
+		_move_selection(1)
+	elif event.is_action_pressed(&"move_left") and _selected_index < STAT_IDS.size():
 		_change_allocation(_selected_index, -1)
-	elif event.is_action_pressed(&"move_right"):
+	elif event.is_action_pressed(&"move_right") and _selected_index < STAT_IDS.size():
 		_change_allocation(_selected_index, 1)
-	elif event.is_action_pressed(&"ui_accept"):
+	elif event.is_action_pressed(&"ui_accept") and _selected_index == STAT_IDS.size():
 		_confirm_allocation()
 	else:
 		return
@@ -79,7 +79,7 @@ func open(player: Player) -> void:
 	_selected_index = 0
 	level_root.visible = true
 	_refresh_preview()
-	value_buttons[_selected_index].grab_focus()
+	_sync_focus()
 
 
 func close() -> void:
@@ -87,9 +87,19 @@ func close() -> void:
 	_player = null
 
 
-func _select_row(direction: int) -> void:
-	_selected_index = posmod(_selected_index + direction, STAT_IDS.size())
-	value_buttons[_selected_index].grab_focus()
+func _move_selection(direction: int) -> void:
+	if _selected_index == STAT_IDS.size():
+		_selected_index = STAT_IDS.size() - 1
+	elif direction > 0 and _selected_index == STAT_IDS.size() - 1 and _get_remaining_points() == 0:
+		_selected_index = STAT_IDS.size()
+	else:
+		_selected_index = posmod(_selected_index + direction, STAT_IDS.size())
+	_sync_focus()
+
+
+func _select_row(index: int) -> void:
+	_selected_index = index
+	_sync_focus()
 
 
 func _change_allocation(index: int, direction: int) -> void:
@@ -103,14 +113,11 @@ func _change_allocation(index: int, direction: int) -> void:
 		return
 	_allocation[stat_id] = next_value
 	_refresh_preview()
-	value_buttons[index].grab_focus()
+	_sync_focus()
 
 
 func _confirm_allocation() -> void:
-	if _player == null:
-		return
-	if _get_remaining_points() > 0:
-		hint_label.text = "请先分配完所有点数"
+	if _player == null or _get_remaining_points() > 0:
 		return
 	allocation_confirmed.emit(_allocation.duplicate())
 
@@ -124,20 +131,47 @@ func _refresh_preview() -> void:
 		return
 	var preview := _player.get_stat_allocation_preview(_allocation)
 	points_label.text = "剩余点数：%d" % _get_remaining_points()
-	hp_label.text = _format_resource("生命", &"hp", _player.current_hp, _player.get_max_hp(), preview[&"current_hp"], preview[&"max_hp"])
-	mp_label.text = _format_resource("魔力", &"mp", _player.current_mp, _player.get_max_mp(), preview[&"current_mp"], preview[&"max_mp"])
-	fp_label.text = _format_recovery(_player.get_fp_recovery_spd(), preview[&"fp_recovery"])
+	confirm_button.disabled = _get_remaining_points() > 0
+	stats_panel.display_stats(_build_stats_view(preview))
 	for index: int in STAT_IDS.size():
 		var stat_id := STAT_IDS[index]
 		var current_value := _get_current_stat(stat_id)
-		stat_displays[index].text = "[center][color=#%s]%s[/color]    [color=#%s]%d[/color]%s[/center]" % [
+		stat_displays[index].text = "[center][color=#%s]%s[/color] [color=#%s]%d[/color]%s[/center]" % [
 			STAT_COLORS[stat_id].to_html(false),
 			STAT_DISPLAY_NAMES[stat_id],
 			VALUE_COLOR.to_html(false),
 			roundi(current_value),
 			_format_delta(preview[stat_id] - current_value),
 		]
-	hint_label.text = "↑↓ 选择属性   ←→ 分配点数   确认键确认"
+		allocation_grids[index].text = _format_allocation_grid(stat_id)
+	hint_label.text = "点数已分配完，可选择完成。" if _get_remaining_points() == 0 else "↑↓ 选择属性   ←→ 分配点数"
+
+
+func _build_stats_view(preview: Dictionary[StringName, float]) -> ActorStatsViewData:
+	var view := ActorStatsViewData.new()
+	view.display_name = _player.player_data.display_name
+	view.portrait = _player.get_ui_portrait()
+	view.level = _player.level
+	view.experience = _player.experience
+	view.experience_to_next_level = _player.get_experience_for_next_level()
+	view.current_hp = _player.current_hp
+	view.max_hp = _player.get_max_hp()
+	view.current_mp = _player.current_mp
+	view.max_mp = _player.get_max_mp()
+	view.current_fp = _player.current_fp
+	view.max_fp = _player.get_max_fp()
+	view.fp_recovery_spd = _player.get_fp_recovery_spd()
+	view.atk = _player.get_atk()
+	view.def = _player.get_def()
+	view.spd = _player.get_spd()
+	view.current_hp_delta = preview[&"current_hp"] - view.current_hp
+	view.max_hp_delta = preview[&"max_hp"] - view.max_hp
+	view.current_mp_delta = preview[&"current_mp"] - view.current_mp
+	view.max_mp_delta = preview[&"max_mp"] - view.max_mp
+	view.atk_delta = preview[&"atk"] - view.atk
+	view.def_delta = preview[&"def"] - view.def
+	view.spd_delta = preview[&"spd"] - view.spd
+	return view
 
 
 func _get_current_stat(stat_id: StringName) -> float:
@@ -147,32 +181,28 @@ func _get_current_stat(stat_id: StringName) -> float:
 		_: return _player.get_spd()
 
 
-func _format_resource(label: String, color_key: StringName, current: float, maximum: float, preview_current: float, preview_maximum: float) -> String:
-	return "[center][color=#%s]%s[/color] [color=#%s]%d[/color]%s/[color=#%s]%d[/color]%s[/center]" % [
-		STAT_COLORS[color_key].to_html(false),
-		label,
-		VALUE_COLOR.to_html(false),
-		roundi(current),
-		_format_delta(preview_current - current),
-		VALUE_COLOR.to_html(false),
-		roundi(maximum),
-		_format_delta(preview_maximum - maximum),
-	]
-
-
-func _format_recovery(current: float, preview: float) -> String:
-	return "[center][color=#%s]专注[/color] [color=#%s]%.1f[/color]%s[color=#%s]/秒[/color][/center]" % [
-		STAT_COLORS[&"fp"].to_html(false),
-		VALUE_COLOR.to_html(false),
-		current,
-		_format_delta(preview - current),
-		VALUE_COLOR.to_html(false),
+func _format_allocation_grid(stat_id: StringName) -> String:
+	var filled := _allocation[stat_id]
+	var total := _player.unspent_stat_points
+	return "[right][color=#%s]%s[/color][color=#%s]%s[/color][/right]" % [
+		STAT_COLORS[stat_id].to_html(false),
+		"■ ".repeat(filled),
+		GRID_EMPTY_COLOR.to_html(false),
+		"□ ".repeat(maxi(0, total - filled)),
 	]
 
 
 func _format_delta(value: float) -> String:
 	if is_zero_approx(value):
 		return ""
-	var delta_color := PREVIEW_GAIN_COLOR if value > 0.0 else PREVIEW_LOSS_COLOR
 	var delta_text := "%+.1f" % value if not is_equal_approx(value, roundf(value)) else "%+d" % roundi(value)
-	return " [color=#%s](%s)[/color]" % [delta_color.to_html(false), delta_text]
+	return " [color=#%s](%s)[/color]" % [PREVIEW_GAIN_COLOR.to_html(false), delta_text]
+
+
+func _sync_focus() -> void:
+	for index: int in value_buttons.size():
+		value_buttons[index].set_pressed_no_signal(false)
+	if _selected_index == STAT_IDS.size():
+		confirm_button.grab_focus()
+	else:
+		value_buttons[_selected_index].grab_focus()
