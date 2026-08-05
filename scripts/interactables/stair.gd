@@ -21,6 +21,7 @@ var transition_requested: bool = false
 
 
 func _ready() -> void:
+	body_entered.connect(_on_body_entered)
 	_update_visual()
 
 

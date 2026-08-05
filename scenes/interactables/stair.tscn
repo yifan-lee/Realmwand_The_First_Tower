@@ -47,4 +47,3 @@ animation = &"down"
 [node name="TriggerShape" type="CollisionShape2D" parent="." unique_id=535344624]
 shape = SubResource("RectangleShape2D_656nr")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

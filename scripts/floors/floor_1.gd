@@ -14,6 +14,10 @@ var stair_wall_snapshots: Array[Floor.TileCellSnapshot] = []
 
 
 func _ready() -> void:
+	wall_switch.state_changed.connect(_on_floor_switch_state_changed)
+	switch_red.state_changed.connect(_on_floor_switch_state_changed)
+	switch_blue.state_changed.connect(_on_floor_switch_state_changed)
+	switch_yellow.state_changed.connect(_on_floor_switch_state_changed)
 	_cache_switch_terrain()
 	_apply_initial_switch_states()
 

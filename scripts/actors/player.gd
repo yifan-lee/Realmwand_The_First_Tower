@@ -52,6 +52,7 @@ func _ready() -> void:
 		set_process_unhandled_input(false)
 		return
 
+	equipment.equipment_changed.connect(_on_equipment_changed)
 	_initialize_runtime_state()
 	_apply_data_visuals()
 	_update_interaction_ray()

@@ -39,4 +39,3 @@ script = ExtResource("4_7wueq")
 [node name="Equipment" type="Node" parent="." unique_id=1081193953]
 script = ExtResource("5_oomub")
 
-[connection signal="equipment_changed" from="Equipment" to="." method="_on_equipment_changed"]
