@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dr6tg0mdostdd" path="res://scripts/battle/battle_manager.gd" id="4_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cgtdidijthtbh" path="res://scenes/ui/esc_menu.tscn" id="5_eb6dy"]
 [ext_resource type="Script" uid="uid://brxoo6rhyrxm3" path="res://scripts/progression/level_up_manager.gd" id="5_tipki"]
+[ext_resource type="Script" uid="uid://c01ki8y1ygkbo" path="res://scripts/save/save_manager.gd" id="6_choun"]
 [ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="8_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="9_choun"]
 
@@ -33,6 +34,9 @@ script = ExtResource("4_o6xl0")
 
 [node name="LevelUpManager" type="Node" parent="Systems" unique_id=1817577795]
 script = ExtResource("5_tipki")
+
+[node name="SaveManager" type="Node" parent="Systems" unique_id=598261131]
+script = ExtResource("6_choun")
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true

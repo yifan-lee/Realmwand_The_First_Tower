@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bub83saf3uetq"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_bl5n8"]
+[ext_resource type="Script" uid="uid://dknftu1t883rs" path="res://scripts/ui/components/save_slot_row.gd" id="2_i3dxh"]
+
+[node name="SaveSlotRow" type="PanelContainer" unique_id=1396047053]
+custom_minimum_size = Vector2(0, 72)
+theme = ExtResource("1_bl5n8")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("2_i3dxh")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=223323568]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="HBoxContainer" parent="Margin" unique_id=949048596]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="VBoxContainer" parent="Margin/Content" unique_id=2066613151]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="Margin/Content/Info" unique_id=1042131149]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "存档名称"
+
+[node name="DetailLabel" type="Label" parent="Margin/Content/Info" unique_id=1943030214]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "第一层 · 2026-08-04 21:00"
+
+[node name="LoadButton" type="Button" parent="Margin/Content" unique_id=879197436]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "读取"
+
+[node name="OverwriteButton" type="Button" parent="Margin/Content" unique_id=137155971]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "覆盖"
+
+[node name="DeleteButton" type="Button" parent="Margin/Content" unique_id=1814818330]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "删除"

@@ -27,7 +27,7 @@ const CATEGORY_TYPES: Array[int] = [
 @onready var equipment_panel: Node = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/EquipmentPanel
 @onready var inventory_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage
 @onready var skill_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage
-@onready var system_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage
+@onready var system_page: SystemPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage
 @onready var inventory_panel: InventoryPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/InventoryPanel
 @onready var skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanel
 @onready var entry_info_panel: EntryInfoPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/SelectionDetailPanel
@@ -58,6 +58,7 @@ func _ready() -> void:
 	inventory_panel.item_focused.connect(_on_item_focused)
 	inventory_panel.item_selected.connect(_on_item_selected)
 	skill_panel.skill_focused.connect(_on_skill_focused)
+	system_page.save_loaded.connect(close)
 
 
 func _process(_delta: float) -> void:
@@ -93,6 +94,10 @@ func _input(event: InputEvent) -> void:
 func bind_player(player: Player) -> void:
 	_player = player
 	refresh_content()
+
+
+func bind_save_manager(save_manager: SaveManager) -> void:
+	system_page.bind_save_manager(save_manager)
 
 
 func refresh_content() -> void:
@@ -159,6 +164,8 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	equipment_panel.clear_preview()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
+	if page == MainPage.SYSTEM:
+		system_page.refresh_saves()
 	if focus_content:
 		_focus_current_page()
 
@@ -191,7 +198,7 @@ func _focus_current_page() -> void:
 			if not skill_panel.focus_first_skill():
 				skills_tab.grab_focus()
 		MainPage.SYSTEM:
-			system_tab.grab_focus()
+			system_page.focus_first_control()
 
 
 func _focus_main_tab() -> void:

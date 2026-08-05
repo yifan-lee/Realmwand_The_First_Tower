@@ -93,3 +93,29 @@ func get_remaining_capacity(
 		item.max_stack
 		- get_quantity(item.id)
 	)
+
+
+func capture_save_data() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for item: ItemData in get_all_items():
+		if item.resource_path.is_empty():
+			continue
+		result.append({
+			"resource_path": item.resource_path,
+			"quantity": get_quantity(item.id),
+		})
+	return result
+
+
+func restore_save_data(entries_value: Variant) -> void:
+	_items.clear()
+	_quantities.clear()
+	if entries_value is Array:
+		for entry_value: Variant in entries_value:
+			if not (entry_value is Dictionary):
+				continue
+			var path := String(entry_value.get("resource_path", ""))
+			var item := load(path) as ItemData
+			if item != null:
+				add_item(item, int(entry_value.get("quantity", 1)))
+	inventory_changed.emit()

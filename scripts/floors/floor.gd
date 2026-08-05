@@ -157,6 +157,7 @@ func capture_runtime_state() -> Dictionary:
 			"is_defeated": enemy.is_defeated,
 			"current_hp": enemy.current_hp,
 			"current_mp": enemy.current_mp,
+			"current_fp": enemy.current_fp,
 		}
 
 	return {
@@ -326,6 +327,11 @@ func _apply_enemy_states(
 					enemy.current_mp
 				)
 			)
+		)
+
+		enemy.current_fp = maxf(
+			0.0,
+			float(enemy_state.get("current_fp", enemy.current_fp))
 		)
 
 		enemy.set_defeated(

@@ -95,7 +95,7 @@ func change_floor(
 
 	player.set_input_enabled(false)
 
-	_store_current_floor_state()
+	store_current_floor_state()
 
 	if is_instance_valid(current_floor):
 		floor_container.remove_child(current_floor)
@@ -122,7 +122,7 @@ func _on_floor_change_requested(
 	)
 
 
-func _store_current_floor_state() -> void:
+func store_current_floor_state() -> void:
 	if not is_instance_valid(current_floor):
 		return
 
@@ -131,6 +131,44 @@ func _store_current_floor_state() -> void:
 	floor_states[floor_key] = (
 		current_floor.capture_runtime_state()
 	)
+
+
+func capture_save_data() -> Dictionary:
+	store_current_floor_state()
+	var local_position := Vector2.ZERO
+	if is_instance_valid(current_floor):
+		local_position = current_floor.to_local(player.global_position)
+	return {
+		"current_floor_id": String(current_floor_id),
+		"player_local_position": [local_position.x, local_position.y],
+		"floor_states": floor_states.duplicate(true),
+	}
+
+
+func restore_save_data(data: Dictionary) -> bool:
+	var floor_id := StringName(String(data.get("current_floor_id", "")))
+	if floor_id.is_empty():
+		return false
+	var states_value: Variant = data.get("floor_states", {})
+	if not (states_value is Dictionary):
+		return false
+	player.set_input_enabled(false)
+	if is_instance_valid(current_floor):
+		floor_container.remove_child(current_floor)
+		current_floor.queue_free()
+	current_floor = null
+	current_floor_id = &""
+	floor_states = states_value.duplicate(true)
+	change_floor(floor_id, &"")
+	if not is_instance_valid(current_floor):
+		player.set_input_enabled(true)
+		return false
+	var position_value: Variant = data.get("player_local_position", [])
+	if position_value is Array and position_value.size() >= 2:
+		var local_position := Vector2(float(position_value[0]), float(position_value[1]))
+		player.global_position = current_floor.to_global(local_position)
+	player.set_input_enabled(true)
+	return true
 
 func _apply_saved_floor_state(
 	floor: Floor

@@ -10,11 +10,15 @@ extends Node2D
 @onready var level_up_ui: LevelUpUI = $OverlayRoot/LevelUpUI
 @onready var battle_manager: BattleManager = $Systems/BattleManager
 @onready var level_up_manager: LevelUpManager = $Systems/LevelUpManager
+@onready var floor_manager: FloorManager = $Systems/FloorManager
+@onready var save_manager: SaveManager = $Systems/SaveManager
 
 
 func _ready() -> void:
 	game_hud.bind_player(player)
 	esc_menu.bind_player(player)
+	save_manager.setup(player, floor_manager)
+	esc_menu.bind_save_manager(save_manager)
 	battle_manager.setup(player, battle_ui)
 	level_up_manager.setup(player, level_up_ui)
 	battle_manager.battle_finished.connect(

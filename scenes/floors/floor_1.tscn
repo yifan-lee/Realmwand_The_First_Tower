@@ -57,7 +57,7 @@ target_floor_id = &"floor_2"
 target_spawn_id = &"FromBelowStair"
 
 [node name="EnemyBalanceLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="0" unique_id=796734484 instance=ExtResource("7_l8omj")]
-position = Vector2(-64, -64)
+position = Vector2(-300, -64)
 instance_id = &"floor_1_enemy_01"
 
 [node name="EnemyAtkLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="1" unique_id=171337535 instance=ExtResource("7_n2pbf")]

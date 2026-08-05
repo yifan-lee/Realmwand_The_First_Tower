@@ -130,6 +130,30 @@ func get_unique_equipped_items() -> Array[EquipmentData]:
 	return result
 
 
+func capture_save_data() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var captured: Array[EquipmentData] = []
+	for slot: int in _equipped.keys():
+		var item: EquipmentData = _equipped[slot]
+		if captured.has(item) or item.resource_path.is_empty():
+			continue
+		captured.append(item)
+		result.append({"slot": slot, "resource_path": item.resource_path})
+	return result
+
+
+func restore_save_data(entries_value: Variant) -> void:
+	_equipped.clear()
+	if entries_value is Array:
+		for entry_value: Variant in entries_value:
+			if not (entry_value is Dictionary):
+				continue
+			var item := load(String(entry_value.get("resource_path", ""))) as EquipmentData
+			if item != null:
+				equip(item, int(entry_value.get("slot", -1)))
+	equipment_changed.emit()
+
+
 func _can_equip_in_hand(
 	item: EquipmentData,
 	target_slot: int

@@ -68,6 +68,67 @@ func get_ui_portrait() -> Texture2D:
 	)
 
 
+func capture_save_data() -> Dictionary:
+	var skill_paths: Array[String] = []
+	for skill: SkillData in learned_skills:
+		if not skill.resource_path.is_empty():
+			skill_paths.append(skill.resource_path)
+	return {
+		"level": level,
+		"experience": experience,
+		"gold": gold,
+		"unspent_stat_points": unspent_stat_points,
+		"base_max_hp": base_max_hp,
+		"base_max_mp": base_max_mp,
+		"base_max_fp": base_max_fp,
+		"base_start_fp": base_start_fp,
+		"base_fp_recovery_spd": base_fp_recovery_spd,
+		"base_atk": base_atk,
+		"base_def": base_def,
+		"base_spd": base_spd,
+		"current_hp": current_hp,
+		"current_mp": current_mp,
+		"current_fp": current_fp,
+		"facing_direction": [facing_direction.x, facing_direction.y],
+		"learned_skills": skill_paths,
+		"inventory": inventory.capture_save_data(),
+		"equipment": equipment.capture_save_data(),
+	}
+
+
+func restore_save_data(data: Dictionary) -> void:
+	level = maxi(1, int(data.get("level", level)))
+	experience = maxi(0, int(data.get("experience", experience)))
+	gold = maxi(0, int(data.get("gold", gold)))
+	unspent_stat_points = maxi(0, int(data.get("unspent_stat_points", unspent_stat_points)))
+	base_max_hp = float(data.get("base_max_hp", base_max_hp))
+	base_max_mp = float(data.get("base_max_mp", base_max_mp))
+	base_max_fp = float(data.get("base_max_fp", base_max_fp))
+	base_start_fp = float(data.get("base_start_fp", base_start_fp))
+	base_fp_recovery_spd = float(data.get("base_fp_recovery_spd", base_fp_recovery_spd))
+	base_atk = float(data.get("base_atk", base_atk))
+	base_def = float(data.get("base_def", base_def))
+	base_spd = float(data.get("base_spd", base_spd))
+	inventory.restore_save_data(data.get("inventory", []))
+	equipment.restore_save_data(data.get("equipment", []))
+	learned_skills.clear()
+	var skills_value: Variant = data.get("learned_skills", [])
+	if skills_value is Array:
+		for path_value: Variant in skills_value:
+			var skill := load(String(path_value)) as SkillData
+			if skill != null:
+				learned_skills.append(skill)
+	current_hp = clampf(float(data.get("current_hp", current_hp)), 0.0, get_max_hp())
+	current_mp = clampf(float(data.get("current_mp", current_mp)), 0.0, get_max_mp())
+	current_fp = clampf(float(data.get("current_fp", current_fp)), 0.0, get_max_fp())
+	var facing_value: Variant = data.get("facing_direction", [])
+	if facing_value is Array and facing_value.size() >= 2:
+		facing_direction = Vector2(float(facing_value[0]), float(facing_value[1]))
+	_update_interaction_ray()
+	_play_directional_animation(&"idle")
+	stats_changed.emit()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled or is_moving:
 		return
