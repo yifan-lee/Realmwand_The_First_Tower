@@ -24,6 +24,17 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.ACCESSORY_1: $Margin/Content/Slots/Accessory1,
 	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/Slots/Accessory2,
 }
+@onready var _slot_icons: Dictionary[int, TextureRect] = {
+	EquipmentLoadout.Slot.HEAD: $Margin/Content/Slots/Head/Icon,
+	EquipmentLoadout.Slot.CHEST: $Margin/Content/Slots/Chest/Icon,
+	EquipmentLoadout.Slot.HANDS: $Margin/Content/Slots/Hands/Icon,
+	EquipmentLoadout.Slot.LEGS: $Margin/Content/Slots/Legs/Icon,
+	EquipmentLoadout.Slot.FEET: $Margin/Content/Slots/Feet/Icon,
+	EquipmentLoadout.Slot.LEFT_HAND: $Margin/Content/Slots/LeftHand/Icon,
+	EquipmentLoadout.Slot.RIGHT_HAND: $Margin/Content/Slots/RightHand/Icon,
+	EquipmentLoadout.Slot.ACCESSORY_1: $Margin/Content/Slots/Accessory1/Icon,
+	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/Slots/Accessory2/Icon,
+}
 
 var _loadout: EquipmentLoadout
 
@@ -48,9 +59,12 @@ func refresh() -> void:
 	clear_preview()
 	for slot: int in _slot_labels:
 		var label: Label = _slot_labels[slot]
+		var icon: TextureRect = _slot_icons[slot]
 		var item: EquipmentData = null
 		if _loadout != null:
 			item = _loadout.get_equipped(slot)
+		icon.texture = item.icon if item != null else null
+		icon.visible = icon.texture != null
 		label.text = "%s：%s" % [
 			SLOT_NAMES[slot],
 			"—" if item == null else item.display_name,

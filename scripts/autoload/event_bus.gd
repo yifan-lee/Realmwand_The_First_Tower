@@ -9,3 +9,8 @@ signal battle_requested(
 	enemy: Enemy,
 	player: Player
 )
+
+signal npc_interaction_requested(
+	npc: Node,
+	player: Player
+)

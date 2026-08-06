@@ -8,8 +8,10 @@ extends Node2D
 @onready var esc_menu: EscMenu = $OverlayRoot/EscMenu
 @onready var battle_ui: BattleUI = $OverlayRoot/BattleUI
 @onready var level_up_ui: LevelUpUI = $OverlayRoot/LevelUpUI
+@onready var npc_interaction_ui: NpcInteractionUI = $OverlayRoot/NpcInteractionUI
 @onready var battle_manager: BattleManager = $Systems/BattleManager
 @onready var level_up_manager: LevelUpManager = $Systems/LevelUpManager
+@onready var npc_interaction_manager: NpcInteractionManager = $Systems/NpcInteractionManager
 @onready var floor_manager: FloorManager = $Systems/FloorManager
 @onready var save_manager: SaveManager = $Systems/SaveManager
 
@@ -21,6 +23,7 @@ func _ready() -> void:
 	esc_menu.bind_save_manager(save_manager)
 	battle_manager.setup(player, battle_ui)
 	level_up_manager.setup(player, level_up_ui)
+	npc_interaction_manager.setup(player, npc_interaction_ui)
 	battle_manager.battle_finished.connect(
 		_on_battle_finished
 	)
@@ -31,7 +34,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"toggle_menu"):
-		if battle_manager.is_active() or level_up_manager.is_active():
+		if battle_manager.is_active() or level_up_manager.is_active() or npc_interaction_manager.is_active():
 			get_viewport().set_input_as_handled()
 			return
 		esc_menu.toggle()

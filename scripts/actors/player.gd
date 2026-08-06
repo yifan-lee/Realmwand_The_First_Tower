@@ -516,6 +516,64 @@ func apply_stat_allocation(
 	stats_changed.emit()
 	return true
 
+
+func get_permanent_stat_increase_preview(
+	stat_id: StringName,
+	amount: float
+) -> Dictionary[StringName, float]:
+	var next_base_atk := base_atk
+	var next_base_def := base_def
+	var next_base_spd := base_spd
+	if amount > 0.0:
+		match stat_id:
+			&"atk": next_base_atk += amount
+			&"def": next_base_def += amount
+			&"spd": next_base_spd += amount
+
+	var next_max_hp: float = FORMULAS.resolve_base_max_hp(
+		base_max_hp,
+		next_base_def,
+		next_base_spd
+	) + equipment.get_max_hp_bonus()
+	var next_max_mp: float = FORMULAS.resolve_base_max_mp(
+		base_max_mp,
+		next_base_atk,
+		next_base_spd
+	) + equipment.get_max_mp_bonus()
+	var hp_increase := next_max_hp - get_max_hp()
+	var mp_increase := next_max_mp - get_max_mp()
+	return {
+		&"current_hp": current_hp + hp_increase if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE else current_hp,
+		&"max_hp": next_max_hp,
+		&"current_mp": current_mp + mp_increase if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE else current_mp,
+		&"max_mp": next_max_mp,
+		&"atk": next_base_atk + equipment.get_atk_bonus(),
+		&"def": next_base_def + equipment.get_def_bonus(),
+		&"spd": next_base_spd + equipment.get_spd_bonus(),
+	}
+
+
+func apply_permanent_stat_increase(
+	stat_id: StringName,
+	amount: float
+) -> bool:
+	if amount <= 0.0 or stat_id not in [&"atk", &"def", &"spd"]:
+		return false
+	var previous_max_hp := get_max_hp()
+	var previous_max_mp := get_max_mp()
+	match stat_id:
+		&"atk": base_atk += amount
+		&"def": base_def += amount
+		&"spd": base_spd += amount
+	if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE:
+		current_hp = clampf(current_hp + get_max_hp() - previous_max_hp, 0.0, get_max_hp())
+		current_mp = clampf(current_mp + get_max_mp() - previous_max_mp, 0.0, get_max_mp())
+	else:
+		current_hp = minf(current_hp, get_max_hp())
+		current_mp = minf(current_mp, get_max_mp())
+	stats_changed.emit()
+	return true
+
 func equip_item(
 	item_id: StringName,
 	target_slot: int

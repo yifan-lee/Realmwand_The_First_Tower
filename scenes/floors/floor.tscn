@@ -39,3 +39,6 @@ unique_name_in_owner = true
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true
+
+[node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
+unique_name_in_owner = true

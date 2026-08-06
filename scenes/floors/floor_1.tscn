@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="11_3ycjp"]
 [ext_resource type="Resource" uid="uid://bfhk2tg6kleul" path="res://resources/equipment/chest_lv1.tres" id="12_rj6dl"]
 [ext_resource type="Resource" uid="uid://dcite8gsbiu17" path="res://resources/equipment/feet_lv1.tres" id="13_r7vlu"]
+[ext_resource type="PackedScene" uid="uid://c3k0m4ebqo05o" path="res://scenes/actors/npcs/fragment_exchanger.tscn" id="16_o5whu"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
@@ -145,3 +146,6 @@ item_data = ExtResource("6_fu1vu")
 position = Vector2(-200, -96)
 pickup_id = &"red_fragment"
 item_data = ExtResource("9_mnxw0")
+
+[node name="FragmentExchanger" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="0" unique_id=1258533526 instance=ExtResource("16_o5whu")]
+position = Vector2(32, -32)
