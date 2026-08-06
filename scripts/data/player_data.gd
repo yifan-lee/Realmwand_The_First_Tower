@@ -12,3 +12,6 @@ extends ActorData
 @export_group("Starting Content")
 @export var starting_items: Array[ItemData] = []
 @export var starting_skills: Array[SkillData] = []
+
+@export_group("Progression")
+@export var level_skills: Dictionary[int, SkillData] = {}

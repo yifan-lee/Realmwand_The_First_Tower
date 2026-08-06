@@ -156,6 +156,7 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	inventory_page.visible = page == MainPage.INVENTORY
 	skill_page.visible = page == MainPage.SKILLS
 	system_page.visible = page == MainPage.SYSTEM
+	equipment_panel.visible = page != MainPage.SKILLS
 	equipment_panel.clear_preview()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
@@ -385,23 +386,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 			SkillEffectData.EffectType.SPD:
 				view.spd_delta += FORMULAS.skill_effect_delta(view.spd, effect)
 	refresh_player_stats(view)
-	_display_entry_info(skill.display_name, skill.icon, skill.description, [
-		"类型：%s" % _skill_type_label(skill.skill_type),
-		"魔力消耗：%.0f" % skill.mp_cost,
-		"专注消耗：%.0f" % skill.fp_cost,
-		"冷却：%.1f 秒" % skill.cooldown_seconds,
-		"吟唱：行动条倒退 %.0f%%" % (skill.cast_time * 100.0),
-	])
-
-
-func _skill_type_label(skill_type: SkillData.SkillType) -> String:
-	match skill_type:
-		SkillData.SkillType.MAGICAL:
-			return "魔法"
-		SkillData.SkillType.TRANSFORM:
-			return "变换"
-		_:
-			return "物理"
+	_display_entry_info(skill.display_name, skill.icon, skill.description, skill.get_details())
 
 
 func _on_equipment_slot_focused(slot: int) -> void:

@@ -142,12 +142,12 @@ size_flags_vertical = 3
 theme_override_constants/separation = 16
 
 [node name="ListColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=574439855]
-custom_minimum_size = Vector2(390, 300)
+custom_minimum_size = Vector2(345, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="SkillPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn" unique_id=2087337204 instance=ExtResource("3_bgiko")]
-custom_minimum_size = Vector2(390, 300)
+custom_minimum_size = Vector2(345, 300)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -170,8 +170,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EntryInfoPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=446886182 instance=ExtResource("5_bgiko")]
-custom_minimum_size = Vector2(300, 300)
+custom_minimum_size = Vector2(345, 300)
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=37358213 instance=ExtResource("2_elpkr")]
 layout_mode = 2

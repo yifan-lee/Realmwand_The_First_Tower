@@ -24,6 +24,9 @@ func _ready() -> void:
 	battle_manager.battle_finished.connect(
 		_on_battle_finished
 	)
+	level_up_manager.level_up_finished.connect(
+		_on_level_up_finished
+	)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -38,4 +41,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_battle_finished(victory: bool) -> void:
 	game_hud.show_message(
 		"战斗胜利。" if victory else "战斗结束。"
+	)
+
+
+func _on_level_up_finished() -> void:
+	if player.pending_learned_skills.is_empty():
+		return
+	var skill: SkillData = player.pending_learned_skills.pop_front()
+	player.pending_learned_skills.clear()
+	game_hud.show_message(
+		"学会了新技能：【%s】" % skill.display_name
 	)

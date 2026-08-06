@@ -110,35 +110,7 @@ func _focused_row_index(focus: Control) -> int:
 
 
 func _build_row_text(skill: SkillData) -> String:
-	var details: Array[String] = []
-
-	if skill.fp_cost > 0.0:
-		details.append(
-			"专注 %.0f" % skill.fp_cost
-		)
-
-	if skill.mp_cost > 0.0:
-		details.append(
-			"魔力 %.0f" % skill.mp_cost
-		)
-
-	if skill.cooldown_seconds > 0.0:
-		details.append(
-			"%.1f秒" % skill.cooldown_seconds
-		)
-
-	if skill.cast_time > 0.0:
-		details.append(
-			"吟唱 %.0f%%" % (skill.cast_time * 100.0)
-		)
-
-	if details.is_empty():
-		return skill.display_name
-
-	return "%s  %s" % [
-		skill.display_name,
-		" / ".join(details),
-	]
+	return skill.display_name
 
 
 func _sort_skills(

@@ -38,6 +38,7 @@ var current_fp: float = 0.0
 
 
 var learned_skills: Array[SkillData] = []
+var pending_learned_skills: Array[SkillData] = []
 
 var facing_direction: Vector2 = Vector2.DOWN
 var is_moving: bool = false
@@ -416,6 +417,12 @@ func add_experience(amount: int) -> void:
 		base_spd += FORMULAS.AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL
 		unspent_stat_points += FORMULAS.FREE_STAT_POINTS_PER_LEVEL
 		leveled_up = true
+
+		if player_data.level_skills.has(level):
+			var new_skill: SkillData = player_data.level_skills[level]
+			if not learned_skills.has(new_skill):
+				learned_skills.append(new_skill)
+				pending_learned_skills.append(new_skill)
 
 	stats_changed.emit()
 

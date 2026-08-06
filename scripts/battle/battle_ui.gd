@@ -232,14 +232,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 	info.title = skill.display_name
 	info.icon = skill.icon
 	info.description = skill.description
-	info.detail_lines = [
-		"类型：%s" % _skill_type_label(skill.skill_type),
-		"魔力消耗：%.0f" % skill.mp_cost,
-		"专注消耗：%.0f" % skill.fp_cost,
-		"冷却：%.1f 秒" % skill.cooldown_seconds,
-		"吟唱：行动条倒退 %.0f%%" % (skill.cast_time * 100.0),
-		"技能威力：%.0f" % skill.skill_power,
-	]
+	info.detail_lines = skill.get_details()
 	entry_info_panel.display_info(info)
 
 
@@ -381,13 +374,3 @@ func _get_marker_texture(
 		return null
 
 	return sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
-
-
-func _skill_type_label(skill_type: SkillData.SkillType) -> String:
-	match skill_type:
-		SkillData.SkillType.MAGICAL:
-			return "魔法"
-		SkillData.SkillType.TRANSFORM:
-			return "变换"
-		_:
-			return "物理"

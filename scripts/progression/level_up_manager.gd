@@ -1,6 +1,8 @@
 class_name LevelUpManager
 extends Node
 
+signal level_up_finished
+
 var _player: Player
 var _level_up_ui: LevelUpUI
 
@@ -26,3 +28,4 @@ func _on_allocation_confirmed(allocation: Dictionary[StringName, int]) -> void:
 		return
 	_level_up_ui.close()
 	_player.set_input_enabled(true)
+	level_up_finished.emit()

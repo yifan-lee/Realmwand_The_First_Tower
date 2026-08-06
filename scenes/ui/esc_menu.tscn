@@ -184,3 +184,4 @@ size_flags_vertical = 0
 
 [node name="SelectionDetailPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=446886182 instance=ExtResource("6_3axht")]
 layout_mode = 2
+size_flags_vertical = 3

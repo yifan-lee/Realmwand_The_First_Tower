@@ -38,22 +38,18 @@ position = Vector2(0, -256)
 unique_name_in_owner = true
 position = Vector2(-64, -64)
 switch_id = &"switch_first"
-is_active = null
 
 [node name="SwitchRed" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="1" unique_id=1060858094 instance=ExtResource("2_qyw1v")]
 position = Vector2(-256, -256)
 switch_id = &"switch_red"
-is_active = null
 
 [node name="SwitchBlue" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="2" unique_id=1894381403 instance=ExtResource("2_qyw1v")]
 position = Vector2(256, -256)
 switch_id = &"switch_blue"
-is_active = null
 
 [node name="SwitchYellow" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="3" unique_id=1242541849 instance=ExtResource("2_qyw1v")]
 position = Vector2(0, -512)
 switch_id = &"switch_yellow"
-is_active = null
 
 [node name="UpStair" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="4" unique_id=841985626 instance=ExtResource("4_5shg3")]
 position = Vector2(0, -256)
@@ -87,12 +83,12 @@ enemy_data = ExtResource("8_rm4ur")
 
 [node name="EnemyDefLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="5" unique_id=2127194361 instance=ExtResource("7_n2pbf")]
 position = Vector2(0, -480)
-instance_id = &"enemy_atk_lv1_02"
+instance_id = &"enemy_def_lv1_02"
 enemy_data = ExtResource("8_rm4ur")
 
 [node name="EnemyDefLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="6" unique_id=809454074 instance=ExtResource("7_n2pbf")]
 position = Vector2(32, -448)
-instance_id = &"enemy_atk_lv1_03"
+instance_id = &"enemy_def_lv1_03"
 enemy_data = ExtResource("8_rm4ur")
 
 [node name="EnemyDefLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="7" unique_id=1491189230 instance=ExtResource("7_n2pbf")]
@@ -102,22 +98,22 @@ enemy_data = ExtResource("8_rm4ur")
 
 [node name="EnemySpdLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="8" unique_id=185778640 instance=ExtResource("7_n2pbf")]
 position = Vector2(160, -256)
-instance_id = &"enemy_atk_lv1_01"
+instance_id = &"enemy_spd_lv1_01"
 enemy_data = ExtResource("9_4igxy")
 
 [node name="EnemySpdLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="9" unique_id=480934834 instance=ExtResource("7_n2pbf")]
 position = Vector2(192, -288)
-instance_id = &"enemy_atk_lv1_02"
+instance_id = &"enemy_spd_lv1_02"
 enemy_data = ExtResource("9_4igxy")
 
 [node name="EnemySpdLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="10" unique_id=1115015388 instance=ExtResource("7_n2pbf")]
 position = Vector2(192, -224)
-instance_id = &"enemy_atk_lv1_03"
+instance_id = &"enemy_spd_lv1_03"
 enemy_data = ExtResource("9_4igxy")
 
 [node name="EnemySpdLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=1407671429 instance=ExtResource("7_n2pbf")]
 position = Vector2(224, -256)
-instance_id = &"enemy_atk_lv1_04"
+instance_id = &"enemy_spd_lv1_04"
 enemy_data = ExtResource("9_4igxy")
 
 [node name="SwordLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]

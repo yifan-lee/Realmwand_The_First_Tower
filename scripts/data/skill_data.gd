@@ -34,3 +34,24 @@ enum SkillType {
 
 @export_group("Effects")
 @export var effects: Array[SkillEffectData] = []
+
+
+func get_type_name() -> String:
+	match skill_type:
+		SkillType.MAGICAL:
+			return "魔法"
+		SkillType.TRANSFORM:
+			return "变化"
+		_:
+			return "物理"
+
+
+func get_details() -> Array[String]:
+	return [
+		"类型：%s" % get_type_name(),
+		"技能威力：%.0f" % skill_power,
+		"魔力消耗：%.0f" % mp_cost,
+		"专注消耗：%.0f" % fp_cost,
+		"冷却：%.1f 秒" % cooldown_seconds,
+		"吟唱：行动条倒退 %.0f%%" % (cast_time * 100.0),
+	]
