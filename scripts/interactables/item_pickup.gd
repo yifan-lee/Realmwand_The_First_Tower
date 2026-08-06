@@ -68,13 +68,14 @@ func _refresh_visual() -> void:
 	sprite.texture = item_data.world_texture
 
 
+func get_instance_id() -> String:
+	if not pickup_id.is_empty():
+		return pickup_id
+	return IdGenerator.generate_instance_id(self, item_data)
+
+
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
-
-	if pickup_id.is_empty():
-		warnings.append(
-			"ItemPickup requires a unique pickup ID."
-		)
 
 	if item_data == null:
 		warnings.append(

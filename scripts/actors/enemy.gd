@@ -149,13 +149,14 @@ func get_cp() -> float:
 	return FORMULAS.calculate_cp(enemy_data.atk, enemy_data.def, enemy_data.spd)
 
 
+func get_instance_id() -> String:
+	if not instance_id.is_empty():
+		return instance_id
+	return IdGenerator.generate_instance_id(self, enemy_data)
+
+
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
-
-	if instance_id.is_empty():
-		warnings.append(
-			"Enemy requires a unique floor instance ID."
-		)
 
 	if enemy_data == null:
 		warnings.append(

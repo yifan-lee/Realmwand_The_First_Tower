@@ -20,6 +20,10 @@ enum Direction {
 var transition_requested: bool = false
 
 
+func get_instance_id() -> String:
+	return IdGenerator.generate_instance_id(self)
+
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	_update_visual()
