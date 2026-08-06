@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cjmedgjc5lipn"]
+
+[ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_jkdic"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_au5ky"]
+[ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_rf42y"]
+[ext_resource type="Texture2D" uid="uid://bunf67smu628w" path="res://assets/monsters/balanced_tier_2.png" id="4_au5ky"]
+
+[resource]
+script = ExtResource("1_jkdic")
+world_texture = ExtResource("4_au5ky")
+id = &"enemy_balance_lv2"
+display_name = "2级平衡怪"
+atk = 1000.0
+def = 1000.0
+spd = 1000.0
+portrait = ExtResource("4_au5ky")
+metadata/_custom_type_script = "uid://dt0hov06fbtv5"

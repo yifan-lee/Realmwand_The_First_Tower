@@ -9,6 +9,13 @@
 [ext_resource type="Resource" uid="uid://bn6k3d2jvsx51" path="res://resources/actors/enemy_atk_lv1.tres" id="5_bc7h7"]
 [ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="6_4kpf7"]
 [ext_resource type="Resource" uid="uid://b4l6caihdn1ku" path="res://resources/items/fragment_red_lv1.tres" id="6_fb648"]
+[ext_resource type="Resource" uid="uid://c5c5cd7l56mo4" path="res://resources/actors/enemy_atk_lv2.tres" id="6_ipvjm"]
+[ext_resource type="Resource" uid="uid://egc7gignuvc7" path="res://resources/actors/enemy_def_lv2.tres" id="7_qxwyj"]
+[ext_resource type="Resource" uid="uid://c3wjh3yedu4qu" path="res://resources/items/fragment_blue_lv1.tres" id="9_4kpf7"]
+[ext_resource type="Resource" uid="uid://cjmedgjc5lipn" path="res://resources/actors/enemy_balance_lv2.tres" id="9_ealqj"]
+[ext_resource type="Resource" uid="uid://dtsl1psowirp0" path="res://resources/actors/enemy_spd_lv2.tres" id="10_5ti25"]
+[ext_resource type="Resource" uid="uid://2a8073kqq366" path="res://resources/items/fragment_yellow_lv1.tres" id="10_lp7jv"]
+[ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="11_po1ci"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_6ha2l")]
 floor_id = &"floor_2"
@@ -17,7 +24,7 @@ description = "还没想好"
 default_spawn_id = &"FromBelowStair"
 
 [node name="GroundLayer" parent="." index="0" unique_id=370044564]
-tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAHAP7/AAAAAAAAAAAHAP3/AAAAAAAAAAAHAPz/AAAAAAAAAAAHAPv/AAAAAAAAAAAHAPr/AAAAAAAAAAAEAPb/AAAAAAAAAAAFAPf/AAAAAAAAAAAGAPj/AAAAAAAAAAAEAPf/AAAAAAAAAAAEAPj/AAAAAAAAAAAEAPn/AAAAAAAAAAAFAPb/AAAAAAAAAAAFAPj/AAAAAAAAAAAFAPn/AAAAAAAAAAAGAPb/AAAAAAAAAAAGAPf/AAAAAAAAAAAGAPn/AAAAAAAAAAAHAPb/AAAAAAAAAAAHAPf/AAAAAAAAAAAHAPj/AAAAAAAAAAAHAPn/AAAAAAAAAAAGAPH/AAAAAAAAAAAGAPL/AAAAAAAAAAAGAPP/AAAAAAAAAAAGAPT/AAAAAAAAAAAGAPX/AAAAAAAAAAD///b/AAAAAAAAAAAAAPb/AAAAAAAAAAABAPb/AAAAAAAAAAACAPb/AAAAAAAAAAADAPb/AAAAAAAAAAAGAO7/AAAAAAAAAAAGAO//AAAAAAAAAAAGAPD/AAAAAAAAAAAEAO7/AAAAAAAAAAAEAO//AAAAAAAAAAAEAPD/AAAAAAAAAAAFAO7/AAAAAAAAAAAFAO//AAAAAAAAAAAFAPD/AAAAAAAAAAAHAO7/AAAAAAAAAAAHAO//AAAAAAAAAAAHAPD/AAAAAAAAAAAIAO7/AAAAAAAAAAAIAO//AAAAAAAAAAAIAPD/AAAAAAAAAAAJAO7/AAAAAAAAAAAJAO//AAAAAAAAAAAJAPD/AAAAAAAAAAAKAO7/AAAAAAAAAAAKAO//AAAAAAAAAAAKAPD/AAAAAAAAAAALAO7/AAAAAAAAAAALAO//AAAAAAAAAAALAPD/AAAAAAAAAAAMAO7/AAAAAAAAAAAMAO//AAAAAAAAAAAMAPD/AAAAAAAAAAAAAPf/AAAAAAAAAAAAAPj/AAAAAAAAAAAAAPn/AAAAAAAAAAAAAPr/AAAAAAAAAAD9//b/AAAAAAAAAAD+//b/AAAAAAAAAAAAAO7/AAAAAAAAAAABAO7/AAAAAAAAAAACAO7/AAAAAAAAAAADAO7/AAAAAAAAAAAAAPX/AAAAAAAAAAAAAO//AAAAAAAAAAAAAPD/AAAAAAAAAAABAO//AAAAAAAAAAABAPD/AAAAAAAAAAACAO//AAAAAAAAAAACAPD/AAAAAAAAAAADAO//AAAAAAAAAAADAPD/AAAAAAAAAAD7//b/AAAAAAAAAAD7//f/AAAAAAAAAAD7//j/AAAAAAAAAAD7//n/AAAAAAAAAAD7//r/AAAAAAAAAAD7//v/AAAAAAAAAAD7//z/AAAAAAAAAAD8//b/AAAAAAAAAAD8//f/AAAAAAAAAAD8//j/AAAAAAAAAAD8//n/AAAAAAAAAAD8//r/AAAAAAAAAAD8//v/AAAAAAAAAAD8//z/AAAAAAAAAAANAO7/AAAAAAAAAAANAO//AAAAAAAAAAANAPD/AAAAAAAAAAAOAO7/AAAAAAAAAAAOAO//AAAAAAAAAAAOAPD/AAAAAAAAAAAPAO7/AAAAAAAAAAAPAO//AAAAAAAAAAAPAPD/AAAAAAAAAAAQAO7/AAAAAAAAAAAQAO//AAAAAAAAAAAQAPD/AAAAAAAAAAAQAPH/AAAAAAAAAAAQAPL/AAAAAAAAAAAQAPP/AAAAAAAAAAARAO7/AAAAAAAAAAARAO//AAAAAAAAAAARAPD/AAAAAAAAAAARAPH/AAAAAAAAAAARAPL/AAAAAAAAAAARAPP/AAAAAAAAAAD9/+7/AAAAAAAAAAD9/+//AAAAAAAAAAD9//D/AAAAAAAAAAD+/+7/AAAAAAAAAAD+/+//AAAAAAAAAAD+//D/AAAAAAAAAAD//+7/AAAAAAAAAAD//+//AAAAAAAAAAD///D/AAAAAAAAAAD7/+7/AAAAAAAAAAD7/+//AAAAAAAAAAD7//D/AAAAAAAAAAD7//H/AAAAAAAAAAD7//L/AAAAAAAAAAD7//P/AAAAAAAAAAD8/+7/AAAAAAAAAAD8/+//AAAAAAAAAAD8//D/AAAAAAAAAAD8//H/AAAAAAAAAAD8//L/AAAAAAAAAAD8//P/AAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAHAP7/AAAAAAAAAAAHAP3/AAAAAAAAAAAHAPz/AAAAAAAAAAAHAPv/AAAAAAAAAAAHAPr/AAAAAAAAAAAEAPb/AAAAAAAAAAAFAPf/AAAAAAAAAAAGAPj/AAAAAAAAAAAEAPf/AAAAAAAAAAAEAPj/AAAAAAAAAAAEAPn/AAAAAAAAAAAFAPb/AAAAAAAAAAAFAPj/AAAAAAAAAAAFAPn/AAAAAAAAAAAGAPb/AAAAAAAAAAAGAPf/AAAAAAAAAAAGAPn/AAAAAAAAAAAHAPb/AAAAAAAAAAAHAPf/AAAAAAAAAAAHAPj/AAAAAAAAAAAHAPn/AAAAAAAAAAAGAPH/AAAAAAAAAAAGAPL/AAAAAAAAAAAGAPP/AAAAAAAAAAAGAPT/AAAAAAAAAAAGAPX/AAAAAAAAAAD///b/AAAAAAAAAAAAAPb/AAAAAAAAAAABAPb/AAAAAAAAAAACAPb/AAAAAAAAAAADAPb/AAAAAAAAAAAGAO7/AAAAAAAAAAAEAO7/AAAAAAAAAAAFAO7/AAAAAAAAAAAHAO7/AAAAAAAAAAAIAO7/AAAAAAAAAAAJAO7/AAAAAAAAAAAKAO7/AAAAAAAAAAALAO7/AAAAAAAAAAAMAO7/AAAAAAAAAAAAAPf/AAAAAAAAAAAAAPj/AAAAAAAAAAAAAPn/AAAAAAAAAAAAAPr/AAAAAAAAAAD9//b/AAAAAAAAAAD+//b/AAAAAAAAAAAAAO7/AAAAAAAAAAABAO7/AAAAAAAAAAACAO7/AAAAAAAAAAADAO7/AAAAAAAAAAAAAPX/AAAAAAAAAAD7//b/AAAAAAAAAAD7//f/AAAAAAAAAAD7//j/AAAAAAAAAAD7//n/AAAAAAAAAAD7//r/AAAAAAAAAAD7//v/AAAAAAAAAAD7//z/AAAAAAAAAAD8//b/AAAAAAAAAAD8//f/AAAAAAAAAAD8//j/AAAAAAAAAAD8//n/AAAAAAAAAAD8//r/AAAAAAAAAAD8//v/AAAAAAAAAAD8//z/AAAAAAAAAAANAO7/AAAAAAAAAAAOAO7/AAAAAAAAAAAPAO7/AAAAAAAAAAAQAO7/AAAAAAAAAAAQAO//AAAAAAAAAAAQAPD/AAAAAAAAAAAQAPH/AAAAAAAAAAAQAPL/AAAAAAAAAAAQAPP/AAAAAAAAAAARAO7/AAAAAAAAAAARAO//AAAAAAAAAAARAPD/AAAAAAAAAAARAPH/AAAAAAAAAAARAPL/AAAAAAAAAAARAPP/AAAAAAAAAAD9/+7/AAAAAAAAAAD+/+7/AAAAAAAAAAD//+7/AAAAAAAAAAD7/+7/AAAAAAAAAAD7/+//AAAAAAAAAAD7//D/AAAAAAAAAAD7//H/AAAAAAAAAAD7//L/AAAAAAAAAAD7//P/AAAAAAAAAAD8/+7/AAAAAAAAAAD8/+//AAAAAAAAAAD8//D/AAAAAAAAAAD8//H/AAAAAAAAAAD8//L/AAAAAAAAAAD8//P/AAAAAAAAAAAGAO//AAAAAAAAAAAGAPD/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPz/AAAAAAAAAAAKAO//AAAAAAAAAAAKAPD/AAAAAAAAAAAKAPH/AAAAAAAAAAALAO//AAAAAAAAAAALAPD/AAAAAAAAAAALAPH/AAAAAAAAAAAMAO//AAAAAAAAAAAMAPD/AAAAAAAAAAAMAPH/AAAAAAAAAAAAAO//AAAAAAAAAAAAAPD/AAAAAAAAAAAAAPH/AAAAAAAAAAABAO//AAAAAAAAAAABAPD/AAAAAAAAAAABAPH/AAAAAAAAAAACAO//AAAAAAAAAAACAPD/AAAAAAAAAAACAPH/AAAAAAAAAAA=")
 
 [node name="WallLayer" parent="." index="1" unique_id=917837273]
 tile_map_data = PackedByteArray("AAD+//3/AAAAAAEAAAACAP3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAD+/wAAAAAAAAEAAAD+/wEAAAAAAAEAAAD//wEAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAACAP7/AAAAAAEAAAD///3/AAAAAAEAAAABAP3/AAAAAAEAAAAAAP3/AAAAAAEAAAA=")
@@ -40,29 +47,99 @@ instance_id = &"enemy_balance_lv1_1"
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="2" unique_id=1170262162 instance=ExtResource("3_mjnjk")]
-position = Vector2(160, -288)
+position = Vector2(192, -352)
 instance_id = &"enemy_balance_lv1_1"
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="3" unique_id=572895653 instance=ExtResource("3_mjnjk")]
-position = Vector2(128, -256)
+position = Vector2(192, -416)
 instance_id = &"enemy_balance_lv1_1"
 enemy_data = ExtResource("4_25khy")
 
-[node name="EnemyAtkLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="4" unique_id=278586467 instance=ExtResource("3_mjnjk")]
-position = Vector2(160, 0)
+[node name="EnemyBalanceLV105" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="4" unique_id=1457504315 instance=ExtResource("3_mjnjk")]
+position = Vector2(192, -480)
 instance_id = &"enemy_balance_lv1_1"
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyBalanceLV106" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="5" unique_id=940855614 instance=ExtResource("3_mjnjk")]
+position = Vector2(352, -512)
+instance_id = &"enemy_balance_lv1_1"
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyBalanceLV107" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="6" unique_id=123780236 instance=ExtResource("3_mjnjk")]
+position = Vector2(0, -448)
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyBalanceLV108" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="7" unique_id=59256231 instance=ExtResource("3_mjnjk")]
+position = Vector2(32, -512)
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyBalanceLV109" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="8" unique_id=1447597796 instance=ExtResource("3_mjnjk")]
+position = Vector2(320, -480)
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyBalanceLV110" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="9" unique_id=784484577 instance=ExtResource("3_mjnjk")]
+position = Vector2(64, -448)
+enemy_data = ExtResource("4_25khy")
+
+[node name="EnemyAtkLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="10" unique_id=278586467 instance=ExtResource("3_mjnjk")]
+position = Vector2(160, 0)
+instance_id = &"enemy_atk_lv1_1"
 enemy_data = ExtResource("5_bc7h7")
 
-[node name="EnemySpdLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="5" unique_id=2124770074 instance=ExtResource("3_mjnjk")]
+[node name="EnemyAtkLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=424805310 instance=ExtResource("3_mjnjk")]
+position = Vector2(352, -448)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="12" unique_id=1281767509 instance=ExtResource("3_mjnjk")]
+position = Vector2(384, -480)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV203" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="13" unique_id=9610020 instance=ExtResource("3_mjnjk")]
+position = Vector2(0, -512)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV204" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="14" unique_id=270728064 instance=ExtResource("3_mjnjk")]
+position = Vector2(64, -512)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV205" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="15" unique_id=1885499731 instance=ExtResource("3_mjnjk")]
+position = Vector2(32, -480)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemySpdLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="16" unique_id=2124770074 instance=ExtResource("3_mjnjk")]
 position = Vector2(128, 0)
-instance_id = &"enemy_balance_lv1_1"
+instance_id = &"enemy_spd_lv1_1"
 enemy_data = ExtResource("6_4kpf7")
 
-[node name="EnemySpdLV105" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="6" unique_id=1584225713 instance=ExtResource("3_mjnjk")]
+[node name="EnemySpdLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="17" unique_id=1584225713 instance=ExtResource("3_mjnjk")]
 position = Vector2(192, 0)
-instance_id = &"enemy_balance_lv1_1"
+instance_id = &"enemy_spd_lv1_2"
 enemy_data = ExtResource("6_4kpf7")
+
+[node name="EnemyDefLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="18" unique_id=819160527 instance=ExtResource("3_mjnjk")]
+position = Vector2(128, -256)
+enemy_data = ExtResource("7_qxwyj")
+
+[node name="EnemyDefLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="19" unique_id=2026681538 instance=ExtResource("3_mjnjk")]
+position = Vector2(160, -288)
+enemy_data = ExtResource("7_qxwyj")
+
+[node name="EnemyBalLv201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="20" unique_id=1045214944 instance=ExtResource("3_mjnjk")]
+position = Vector2(512, -544)
+enemy_data = ExtResource("9_ealqj")
+
+[node name="EnemyBalLv202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="21" unique_id=41971178 instance=ExtResource("3_mjnjk")]
+position = Vector2(-128, -288)
+enemy_data = ExtResource("9_ealqj")
+
+[node name="EnemySpdLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="22" unique_id=1463981480 instance=ExtResource("3_mjnjk")]
+position = Vector2(-240, 152)
+enemy_data = ExtResource("10_5ti25")
+
+[node name="EnemySpdLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="23" unique_id=133423824 instance=ExtResource("3_mjnjk")]
+position = Vector2(-288, 104)
+enemy_data = ExtResource("10_5ti25")
 
 [node name="FragmentRedLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("3_gkij4")]
 position = Vector2(224, -32)
@@ -71,55 +148,70 @@ item_data = ExtResource("6_fb648")
 
 [node name="FragmentRedLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=758168801 instance=ExtResource("3_gkij4")]
 position = Vector2(224, -64)
-pickup_id = &"red_fragment_lv1_1"
+pickup_id = &"red_fragment_lv1_2"
 item_data = ExtResource("6_fb648")
 
 [node name="FragmentRedLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=2047943441 instance=ExtResource("3_gkij4")]
 position = Vector2(224, -96)
-pickup_id = &"red_fragment_lv1_1"
+pickup_id = &"red_fragment_lv1_3"
 item_data = ExtResource("6_fb648")
 
 [node name="FragmentBlueLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=1610732193 instance=ExtResource("3_gkij4")]
 position = Vector2(224, -256)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+pickup_id = &"fragment_blue_lv1_1"
+item_data = ExtResource("9_4kpf7")
 
 [node name="FragmentBlueLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="4" unique_id=1597134502 instance=ExtResource("3_gkij4")]
 position = Vector2(192, -224)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+pickup_id = &"fragment_blue_lv1_2"
+item_data = ExtResource("9_4kpf7")
 
 [node name="FragmentBlueLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="5" unique_id=1796412926 instance=ExtResource("3_gkij4")]
 position = Vector2(160, -192)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+pickup_id = &"fragment_blue_lv1_3"
+item_data = ExtResource("9_4kpf7")
 
 [node name="FragmentYellowLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="6" unique_id=575672334 instance=ExtResource("3_gkij4")]
-position = Vector2(64, -544)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+position = Vector2(192, -512)
+pickup_id = &"fragment_yellow_lv1_1"
+item_data = ExtResource("10_lp7jv")
 
 [node name="FragmentYellowLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="7" unique_id=1314230591 instance=ExtResource("3_gkij4")]
-position = Vector2(64, -512)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+position = Vector2(192, -448)
+pickup_id = &"fragment_yellow_lv1_12"
+item_data = ExtResource("10_lp7jv")
 
 [node name="FragmentYellowLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="8" unique_id=2040556201 instance=ExtResource("3_gkij4")]
-position = Vector2(64, -480)
-pickup_id = &"red_fragment_lv1_1"
-item_data = ExtResource("6_fb648")
+position = Vector2(192, -384)
+pickup_id = &"fragment_yellow_lv1_3"
+item_data = ExtResource("10_lp7jv")
 
-[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=594253039 instance=ExtResource("3_gkij4")]
+[node name="HPLV101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=977591183 instance=ExtResource("3_gkij4")]
+position = Vector2(320, -448)
+pickup_id = &"hp_lv1_1"
+item_data = ExtResource("11_po1ci")
+
+[node name="HPLV102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=1374842226 instance=ExtResource("3_gkij4")]
+position = Vector2(352, -480)
+pickup_id = &"hp_lv1_2"
+item_data = ExtResource("11_po1ci")
+
+[node name="HPLV103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=2013638040 instance=ExtResource("3_gkij4")]
+position = Vector2(384, -512)
+pickup_id = &"hp_lv1_3"
+item_data = ExtResource("11_po1ci")
+
+[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="12" unique_id=594253039 instance=ExtResource("3_gkij4")]
 position = Vector2(-368, -248)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=226122769 instance=ExtResource("3_gkij4")]
+[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="13" unique_id=226122769 instance=ExtResource("3_gkij4")]
 position = Vector2(-280, -256)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=1735979925 instance=ExtResource("3_gkij4")]
+[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="14" unique_id=1735979925 instance=ExtResource("3_gkij4")]
 position = Vector2(-432, -272)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")

@@ -11,7 +11,7 @@ signal level_up_available
 
 @export_group("Movement")
 @export_range(1.0, 256.0, 1.0) var grid_size: float = 32.0
-@export_range(0.01, 1.0, 0.01) var move_duration: float = 0.16
+@export_range(0.01, 1.0, 0.01) var move_duration: float = 0.25
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var interaction_ray: RayCast2D = $InteractionRay
