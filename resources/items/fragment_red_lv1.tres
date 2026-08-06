@@ -7,7 +7,7 @@
 script = ExtResource("1_x2doi")
 id = &"fragment_red_lv1"
 display_name = "1级红色碎片"
-description = "蕴含着攻击力"
+description = "蕴含着些许攻击的力量"
 item_type = 3
 icon = ExtResource("1_2f0tt")
 world_texture = ExtResource("1_2f0tt")

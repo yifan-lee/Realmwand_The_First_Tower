@@ -69,6 +69,8 @@ func _process(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
 		return
+	if _is_text_input_focused():
+		return
 	if event.is_action_pressed(&"ui_left"):
 		_navigate_horizontal(-1)
 		get_viewport().set_input_as_handled()
@@ -225,7 +227,21 @@ func _is_main_tab_focused() -> bool:
 
 
 func _is_category_focused() -> bool:
-	return get_viewport().gui_get_focus_owner() in category_buttons
+	var focused_button := (
+		get_viewport().gui_get_focus_owner() as Button
+	)
+	return (
+		focused_button != null
+		and category_buttons.has(focused_button)
+	)
+
+
+func _is_text_input_focused() -> bool:
+	var focused_control := get_viewport().gui_get_focus_owner()
+	return (
+		focused_control is LineEdit
+		or focused_control is TextEdit
+	)
 
 
 func _is_in_control(focus: Control, ancestor: Control) -> bool:

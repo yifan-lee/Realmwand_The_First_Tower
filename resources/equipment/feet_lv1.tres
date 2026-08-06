@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_wk223")
 slot_type = 4
-spd_bonus = 5.0
+spd_bonus = 10.0
 id = &"feet_lv1"
 display_name = "一级鞋子"
 description = "增加些许速度的鞋子"

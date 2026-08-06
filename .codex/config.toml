@@ -172,3 +172,9 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.add_resource]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_ui_elements]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.click_button_by_text]
+approval_mode = "approve"

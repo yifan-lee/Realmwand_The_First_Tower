@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_wsyjq")
 slot_type = 1
-def_bonus = 5.0
+def_bonus = 10.0
 id = &"chest_lv1"
 display_name = "一级胸甲"
 description = "增加些许防御力的胸甲"
