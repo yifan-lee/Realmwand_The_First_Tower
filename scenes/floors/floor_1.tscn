@@ -38,18 +38,22 @@ position = Vector2(0, -256)
 unique_name_in_owner = true
 position = Vector2(-64, -64)
 switch_id = &"switch_first"
+is_active = null
 
 [node name="SwitchRed" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="1" unique_id=1060858094 instance=ExtResource("2_qyw1v")]
 position = Vector2(-256, -256)
 switch_id = &"switch_red"
+is_active = null
 
 [node name="SwitchBlue" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="2" unique_id=1894381403 instance=ExtResource("2_qyw1v")]
 position = Vector2(256, -256)
 switch_id = &"switch_blue"
+is_active = null
 
 [node name="SwitchYellow" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="3" unique_id=1242541849 instance=ExtResource("2_qyw1v")]
 position = Vector2(0, -512)
 switch_id = &"switch_yellow"
+is_active = null
 
 [node name="UpStair" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="4" unique_id=841985626 instance=ExtResource("4_5shg3")]
 position = Vector2(0, -256)

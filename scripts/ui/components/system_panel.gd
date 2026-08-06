@@ -49,10 +49,57 @@ func refresh_saves() -> void:
 
 
 func focus_first_control() -> void:
-	if not _rows.is_empty():
-		_rows.front().focus_first_button()
-	else:
-		save_name_input.grab_focus()
+	save_name_input.grab_focus()
+
+
+func has_control_focus(focus: Control) -> bool:
+	if focus == save_name_input or focus == create_button:
+		return true
+	for row: SaveSlotRow in _rows:
+		if row.has_button_focus(focus):
+			return true
+	return false
+
+
+func navigate_focus(direction: Vector2i) -> bool:
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	if focus == save_name_input:
+		if direction.x > 0:
+			create_button.grab_focus()
+		elif direction.y > 0 and not _rows.is_empty():
+			_rows.front().focus_button(0)
+		elif direction.y < 0:
+			return false
+		return true
+
+	if focus == create_button:
+		if direction.x < 0:
+			save_name_input.grab_focus()
+		elif direction.y > 0 and not _rows.is_empty():
+			_rows.front().focus_button(2)
+		elif direction.y < 0:
+			return false
+		return true
+
+	for row_index: int in _rows.size():
+		var button_index := _rows[row_index].get_focused_button_index(focus)
+		if button_index < 0:
+			continue
+		if direction.x != 0:
+			_rows[row_index].focus_button(button_index + direction.x)
+		elif direction.y > 0:
+			if row_index + 1 < _rows.size():
+				_rows[row_index + 1].focus_button(button_index)
+		elif direction.y < 0:
+			if row_index > 0:
+				_rows[row_index - 1].focus_button(button_index)
+			elif button_index == 2:
+				create_button.grab_focus()
+			else:
+				save_name_input.grab_focus()
+		return true
+
+	return false
 
 
 func _on_name_submitted(_text: String) -> void:

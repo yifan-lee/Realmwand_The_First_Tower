@@ -101,6 +101,35 @@ func is_first_item_focused() -> bool:
 	)
 
 
+func has_item_focus(focus: Control = null) -> bool:
+	var resolved_focus := focus
+	if resolved_focus == null:
+		resolved_focus = get_viewport().gui_get_focus_owner()
+	return _focused_row_index(resolved_focus) >= 0
+
+
+func navigate_item_focus(direction: int) -> bool:
+	var current_index := _focused_row_index(
+		get_viewport().gui_get_focus_owner()
+	)
+	if current_index < 0:
+		return false
+	var next_index := clampi(
+		current_index + direction,
+		0,
+		_rows.size() - 1
+	)
+	_rows[next_index].grab_focus()
+	return true
+
+
+func _focused_row_index(focus: Control) -> int:
+	for index: int in _rows.size():
+		if focus == _rows[index]:
+			return index
+	return -1
+
+
 func _matches_filter(item: ItemData) -> bool:
 	if _battle_only and not item.usable_in_battle:
 		return false

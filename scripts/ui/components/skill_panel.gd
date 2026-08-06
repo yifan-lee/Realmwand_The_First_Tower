@@ -73,6 +73,42 @@ func focus_first_skill() -> bool:
 	return true
 
 
+func is_first_skill_focused() -> bool:
+	return (
+		not _rows.is_empty()
+		and get_viewport().gui_get_focus_owner() == _rows.front()
+	)
+
+
+func has_skill_focus(focus: Control = null) -> bool:
+	var resolved_focus := focus
+	if resolved_focus == null:
+		resolved_focus = get_viewport().gui_get_focus_owner()
+	return _focused_row_index(resolved_focus) >= 0
+
+
+func navigate_skill_focus(direction: int) -> bool:
+	var current_index := _focused_row_index(
+		get_viewport().gui_get_focus_owner()
+	)
+	if current_index < 0:
+		return false
+	var next_index := clampi(
+		current_index + direction,
+		0,
+		_rows.size() - 1
+	)
+	_rows[next_index].grab_focus()
+	return true
+
+
+func _focused_row_index(focus: Control) -> int:
+	for index: int in _rows.size():
+		if focus == _rows[index]:
+			return index
+	return -1
+
+
 func _build_row_text(skill: SkillData) -> String:
 	var details: Array[String] = []
 

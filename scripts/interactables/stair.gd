@@ -20,7 +20,7 @@ enum Direction {
 var transition_requested: bool = false
 
 
-func get_instance_id() -> String:
+func get_persistent_id() -> String:
 	return IdGenerator.generate_instance_id(self)
 
 

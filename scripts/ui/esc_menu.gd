@@ -69,28 +69,21 @@ func _process(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
 		return
-	if _is_text_input_focused():
+	if _should_preserve_text_input(event):
 		return
+
+	var direction := Vector2i.ZERO
 	if event.is_action_pressed(&"ui_left"):
-		_navigate_horizontal(-1)
-		get_viewport().set_input_as_handled()
+		direction = Vector2i.LEFT
 	elif event.is_action_pressed(&"ui_right"):
-		_navigate_horizontal(1)
-		get_viewport().set_input_as_handled()
+		direction = Vector2i.RIGHT
 	elif event.is_action_pressed(&"ui_up"):
-		if _is_category_focused():
-			_focus_main_tab()
-			get_viewport().set_input_as_handled()
-		elif _current_page == MainPage.INVENTORY and inventory_panel.is_first_item_focused():
-			category_buttons[_current_category].grab_focus()
-			get_viewport().set_input_as_handled()
+		direction = Vector2i.UP
 	elif event.is_action_pressed(&"ui_down"):
-		if _is_main_tab_focused():
-			_focus_current_page()
-			get_viewport().set_input_as_handled()
-		elif _is_category_focused():
-			inventory_panel.focus_first_item()
-			get_viewport().set_input_as_handled()
+		direction = Vector2i.DOWN
+
+	if direction != Vector2i.ZERO and _navigate_focus(direction):
+		get_viewport().set_input_as_handled()
 
 
 func bind_player(player: Player) -> void:
@@ -182,14 +175,79 @@ func _show_category(index: int, focus_items: bool) -> void:
 		category_buttons[_current_category].grab_focus()
 
 
-func _navigate_horizontal(direction: int) -> void:
+func _navigate_focus(direction: Vector2i) -> bool:
 	var focus: Control = get_viewport().gui_get_focus_owner()
-	if _current_page == MainPage.INVENTORY and _is_in_control(focus, inventory_page):
-		_show_category(_current_category + direction, true)
-		return
-	var next_page: int = posmod(int(_current_page) + direction, MainPage.size())
-	_show_main_page(next_page, false)
-	_focus_main_tab()
+	if direction.x != 0:
+		return _navigate_horizontal_focus(direction.x, focus)
+	return _navigate_vertical_focus(direction.y, focus)
+
+
+func _navigate_horizontal_focus(
+	direction: int,
+	focus: Control
+) -> bool:
+	if _is_main_tab_focused():
+		var next_page: int = posmod(
+			int(_current_page) + direction,
+			MainPage.size()
+		)
+		_show_main_page(next_page, false)
+		_focus_main_tab()
+		return true
+
+	match _current_page:
+		MainPage.INVENTORY:
+			if _is_category_focused():
+				_show_category(_current_category + direction, false)
+				category_buttons[_current_category].grab_focus()
+				return true
+			if inventory_panel.has_item_focus(focus):
+				return true
+		MainPage.SKILLS:
+			if skill_panel.has_skill_focus(focus):
+				return true
+		MainPage.SYSTEM:
+			return system_page.navigate_focus(Vector2i(direction, 0))
+
+	return false
+
+
+func _navigate_vertical_focus(
+	direction: int,
+	focus: Control
+) -> bool:
+	if _is_main_tab_focused():
+		if direction > 0:
+			_focus_current_page()
+		return true
+
+	match _current_page:
+		MainPage.INVENTORY:
+			if _is_category_focused():
+				if direction < 0:
+					_focus_main_tab()
+				else:
+					inventory_panel.focus_first_item()
+				return true
+			if inventory_panel.has_item_focus(focus):
+				if direction < 0 and inventory_panel.is_first_item_focused():
+					category_buttons[_current_category].grab_focus()
+					return true
+				return inventory_panel.navigate_item_focus(direction)
+		MainPage.SKILLS:
+			if skill_panel.has_skill_focus(focus):
+				if direction < 0 and skill_panel.is_first_skill_focused():
+					_focus_main_tab()
+					return true
+				return skill_panel.navigate_skill_focus(direction)
+		MainPage.SYSTEM:
+			if system_page.navigate_focus(Vector2i(0, direction)):
+				return true
+			if direction < 0 and system_page.has_control_focus(focus):
+				_focus_main_tab()
+				return true
+
+	return false
 
 
 func _focus_current_page() -> void:
@@ -244,10 +302,26 @@ func _is_text_input_focused() -> bool:
 	)
 
 
-func _is_in_control(focus: Control, ancestor: Control) -> bool:
-	if focus == null:
+func _should_preserve_text_input(event: InputEvent) -> bool:
+	if not _is_text_input_focused():
 		return false
-	return focus == ancestor or ancestor.is_ancestor_of(focus)
+	var key_event := event as InputEventKey
+	if key_event == null:
+		return false
+	if key_event.unicode > 0:
+		return true
+	if key_event.keycode in [KEY_W, KEY_A, KEY_S, KEY_D]:
+		return true
+	if key_event.physical_keycode in [KEY_W, KEY_A, KEY_S, KEY_D]:
+		return true
+	return key_event.keycode in [
+		KEY_LEFT,
+		KEY_RIGHT,
+		KEY_HOME,
+		KEY_END,
+		KEY_BACKSPACE,
+		KEY_DELETE,
+	]
 
 
 func _on_item_focused(item: ItemData) -> void:

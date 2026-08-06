@@ -42,6 +42,7 @@ var learned_skills: Array[SkillData] = []
 var facing_direction: Vector2 = Vector2.DOWN
 var is_moving: bool = false
 var input_enabled: bool = true
+var _held_directions: Array[Vector2] = []
 
 
 func _ready() -> void:
@@ -131,31 +132,64 @@ func restore_save_data(data: Dictionary) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	var movement_direction := _get_movement_event_direction(event)
+	if movement_direction != Vector2.ZERO:
+		_handle_movement_input(event, movement_direction)
+		return
+
 	if not input_enabled or is_moving:
 		return
 
 	if event.is_action_pressed(&"interact"):
 		_try_interact()
 		get_viewport().set_input_as_handled()
+
+
+func _get_movement_event_direction(event: InputEvent) -> Vector2:
+	if event.is_action(&"move_up"):
+		return Vector2.UP
+	if event.is_action(&"move_down"):
+		return Vector2.DOWN
+	if event.is_action(&"move_left"):
+		return Vector2.LEFT
+	if event.is_action(&"move_right"):
+		return Vector2.RIGHT
+	return Vector2.ZERO
+
+
+func _handle_movement_input(
+	event: InputEvent,
+	direction: Vector2
+) -> void:
+	if event.is_pressed():
+		if event is InputEventKey and (event as InputEventKey).echo:
+			return
+		if not input_enabled:
+			return
+		_remember_held_direction(direction)
+		_set_facing_direction(direction)
+		if not is_moving:
+			_move_one_tile(direction)
+		get_viewport().set_input_as_handled()
 		return
 
-	var direction := Vector2.ZERO
-
-	if event.is_action_pressed(&"move_up"):
-		direction = Vector2.UP
-	elif event.is_action_pressed(&"move_down"):
-		direction = Vector2.DOWN
-	elif event.is_action_pressed(&"move_left"):
-		direction = Vector2.LEFT
-	elif event.is_action_pressed(&"move_right"):
-		direction = Vector2.RIGHT
-
-	if direction == Vector2.ZERO:
-		return
-
-	_set_facing_direction(direction)
-	_move_one_tile(direction)
+	_forget_held_direction(direction)
 	get_viewport().set_input_as_handled()
+
+
+func _remember_held_direction(direction: Vector2) -> void:
+	_held_directions.erase(direction)
+	_held_directions.append(direction)
+
+
+func _forget_held_direction(direction: Vector2) -> void:
+	_held_directions.erase(direction)
+
+
+func _get_latest_held_direction() -> Vector2:
+	if _held_directions.is_empty():
+		return Vector2.ZERO
+	return _held_directions.back()
 
 
 func _initialize_runtime_state() -> void:
@@ -243,8 +277,14 @@ func _move_one_tile(direction: Vector2) -> void:
 
 	global_position = target_position
 	is_moving = false
-	_play_directional_animation(&"idle")
 	movement_finished.emit()
+
+	var next_direction := _get_latest_held_direction()
+	if input_enabled and next_direction != Vector2.ZERO:
+		_set_facing_direction(next_direction)
+		_move_one_tile(next_direction)
+	else:
+		_play_directional_animation(&"idle")
 
 
 func _play_directional_animation(
@@ -298,8 +338,10 @@ func _try_interact() -> void:
 func set_input_enabled(enabled: bool) -> void:
 	input_enabled = enabled
 
-	if not input_enabled and not is_moving:
-		_play_directional_animation(&"idle")
+	if not input_enabled:
+		_held_directions.clear()
+		if not is_moving:
+			_play_directional_animation(&"idle")
 
 func set_current_hp(value: float) -> void:
 	var next_hp: float = clampf(

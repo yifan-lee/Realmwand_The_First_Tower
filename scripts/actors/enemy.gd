@@ -149,7 +149,7 @@ func get_cp() -> float:
 	return FORMULAS.calculate_cp(enemy_data.atk, enemy_data.def, enemy_data.spd)
 
 
-func get_instance_id() -> String:
+func get_persistent_id() -> String:
 	if not instance_id.is_empty():
 		return instance_id
 	return IdGenerator.generate_instance_id(self, enemy_data)

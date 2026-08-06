@@ -178,3 +178,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.click_button_by_text]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_nodes_by_script]
+approval_mode = "approve"

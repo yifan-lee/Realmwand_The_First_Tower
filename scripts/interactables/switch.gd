@@ -17,7 +17,7 @@ signal state_changed(
 )
 
 
-func get_instance_id() -> String:
+func get_persistent_id() -> String:
 	if not switch_id.is_empty():
 		return switch_id
 	return IdGenerator.generate_instance_id(self)

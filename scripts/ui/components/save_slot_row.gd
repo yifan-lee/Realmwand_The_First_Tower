@@ -35,6 +35,34 @@ func focus_first_button() -> void:
 	load_button.grab_focus()
 
 
+func has_button_focus(focus: Control) -> bool:
+	return (
+		focus == load_button
+		or focus == overwrite_button
+		or focus == delete_button
+	)
+
+
+func get_focused_button_index(focus: Control) -> int:
+	if focus == load_button:
+		return 0
+	if focus == overwrite_button:
+		return 1
+	if focus == delete_button:
+		return 2
+	return -1
+
+
+func focus_button(index: int) -> void:
+	match clampi(index, 0, 2):
+		0:
+			load_button.grab_focus()
+		1:
+			overwrite_button.grab_focus()
+		2:
+			delete_button.grab_focus()
+
+
 func _on_load_pressed() -> void:
 	_reset_delete_confirmation()
 	load_requested.emit(slot_id)
