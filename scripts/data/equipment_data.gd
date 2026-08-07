@@ -8,21 +8,22 @@ enum EquipmentSlotType {
 	HANDS,
 	LEGS,
 	FEET,
-	HAND,
+	WEAPON,
 	ACCESSORY,
+	ARMS,
 }
 
-enum HandRule {
+enum WeaponRule {
 	NONE,
-	LEFT_ONLY,
-	RIGHT_ONLY,
-	EITHER_HAND,
+	MAIN_ONLY,
+	SUB_ONLY,
+	EITHER_WEAPON,
 	TWO_HANDED,
 }
 
 @export_group("Equipment")
-@export var slot_type: EquipmentSlotType = EquipmentSlotType.HAND
-@export var hand_rule: HandRule = HandRule.NONE
+@export var slot_type: EquipmentSlotType = EquipmentSlotType.WEAPON
+@export var weapon_rule: WeaponRule = WeaponRule.NONE
 
 
 @export_group("Stat Bonuses")

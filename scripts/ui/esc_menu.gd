@@ -350,8 +350,10 @@ func _on_item_focused(item: ItemData) -> void:
 	else:
 		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), item.hp_recovery)
 		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), item.mp_recovery)
+		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), item.fp_recovery)
 		details.append("生命回复：%.0f" % item.hp_recovery)
 		details.append("魔力回复：%.0f" % item.mp_recovery)
+		details.append("专注回复：%.0f" % item.fp_recovery)
 	refresh_player_stats(view)
 	_display_entry_info(item.display_name, item.icon, item.description, details)
 
@@ -367,6 +369,7 @@ func _on_item_selected(item: ItemData) -> void:
 			return
 		_player.change_hp(item.hp_recovery)
 		_player.change_mp(item.mp_recovery)
+		_player.change_fp(item.fp_recovery)
 		if item.consumed_on_use:
 			_player.inventory.remove_item(item.id)
 	refresh_content()

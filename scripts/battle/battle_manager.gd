@@ -146,6 +146,7 @@ func _on_item_selected(item: ItemData) -> void:
 		return
 	_player.change_hp(item.hp_recovery)
 	_player.change_mp(item.mp_recovery)
+	_player.change_fp(item.fp_recovery)
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
 	_battle_ui.show_message("使用了 %s。" % item.display_name)

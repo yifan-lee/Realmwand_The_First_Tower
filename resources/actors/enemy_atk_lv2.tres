@@ -9,5 +9,8 @@
 script = ExtResource("1_705wo")
 world_texture = ExtResource("1_glimv")
 display_name = "2级攻击怪"
+atk = 80.0
+def = 30.0
+spd = 50.0
 portrait = ExtResource("1_glimv")
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"

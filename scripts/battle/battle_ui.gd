@@ -249,6 +249,11 @@ func _on_item_focused(item: ItemData) -> void:
 		_player.get_max_mp(),
 		item.mp_recovery
 	)
+	player_view.current_fp_delta = FORMULAS.calculate_recovery_delta(
+		_player.current_fp,
+		_player.get_max_fp(),
+		item.fp_recovery
+	)
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
 	var info := EntryInfoViewData.new()
@@ -258,6 +263,7 @@ func _on_item_focused(item: ItemData) -> void:
 	info.detail_lines = [
 		"生命回复：%.0f" % item.hp_recovery,
 		"魔力回复：%.0f" % item.mp_recovery,
+		"专注回复：%.0f" % item.fp_recovery,
 	]
 	entry_info_panel.display_info(info)
 

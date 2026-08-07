@@ -17,10 +17,11 @@ enum Slot {
 	HANDS,
 	LEGS,
 	FEET,
-	LEFT_HAND,
-	RIGHT_HAND,
+	MAIN_WEAPON,
+	SUB_WEAPON,
 	ACCESSORY_1,
 	ACCESSORY_2,
+	ARMS,
 }
 
 var _equipped: Dictionary[int, EquipmentData] = {}
@@ -55,8 +56,8 @@ func can_equip(
 				or target_slot == Slot.ACCESSORY_2
 			)
 
-		EquipmentData.EquipmentSlotType.HAND:
-			return _can_equip_in_hand(
+		EquipmentData.EquipmentSlotType.WEAPON:
+			return _can_equip_weapon(
 				item,
 				target_slot
 			)
@@ -82,11 +83,11 @@ func equip(
 		_remove_equipped_item(displaced_item)
 
 	if (
-		item.slot_type == EquipmentData.EquipmentSlotType.HAND
-		and item.hand_rule == EquipmentData.HandRule.TWO_HANDED
+		item.slot_type == EquipmentData.EquipmentSlotType.WEAPON
+		and item.weapon_rule == EquipmentData.WeaponRule.TWO_HANDED
 	):
-		_equipped[Slot.LEFT_HAND] = item
-		_equipped[Slot.RIGHT_HAND] = item
+		_equipped[Slot.MAIN_WEAPON] = item
+		_equipped[Slot.SUB_WEAPON] = item
 	else:
 		_equipped[target_slot] = item
 
@@ -154,27 +155,27 @@ func restore_save_data(entries_value: Variant) -> void:
 	equipment_changed.emit()
 
 
-func _can_equip_in_hand(
+func _can_equip_weapon(
 	item: EquipmentData,
 	target_slot: int
 ) -> bool:
-	match item.hand_rule:
-		EquipmentData.HandRule.LEFT_ONLY:
-			return target_slot == Slot.LEFT_HAND
+	match item.weapon_rule:
+		EquipmentData.WeaponRule.MAIN_ONLY:
+			return target_slot == Slot.MAIN_WEAPON
 
-		EquipmentData.HandRule.RIGHT_ONLY:
-			return target_slot == Slot.RIGHT_HAND
+		EquipmentData.WeaponRule.SUB_ONLY:
+			return target_slot == Slot.SUB_WEAPON
 
-		EquipmentData.HandRule.EITHER_HAND:
+		EquipmentData.WeaponRule.EITHER_WEAPON:
 			return (
-				target_slot == Slot.LEFT_HAND
-				or target_slot == Slot.RIGHT_HAND
+				target_slot == Slot.MAIN_WEAPON
+				or target_slot == Slot.SUB_WEAPON
 			)
 
-		EquipmentData.HandRule.TWO_HANDED:
+		EquipmentData.WeaponRule.TWO_HANDED:
 			return (
-				target_slot == Slot.LEFT_HAND
-				or target_slot == Slot.RIGHT_HAND
+				target_slot == Slot.MAIN_WEAPON
+				or target_slot == Slot.SUB_WEAPON
 			)
 
 	return false
@@ -189,13 +190,13 @@ func _collect_displaced_items(
 
 	if (
 		item.slot_type
-		== EquipmentData.EquipmentSlotType.HAND
-		and item.hand_rule
-		== EquipmentData.HandRule.TWO_HANDED
+		== EquipmentData.EquipmentSlotType.WEAPON
+		and item.weapon_rule
+		== EquipmentData.WeaponRule.TWO_HANDED
 	):
 		affected_slots = [
-			Slot.LEFT_HAND,
-			Slot.RIGHT_HAND,
+			Slot.MAIN_WEAPON,
+			Slot.SUB_WEAPON,
 		]
 
 	for slot: int in affected_slots:
@@ -320,8 +321,8 @@ func get_affected_slots(
 	var result: Array[int] = [target_slot]
 	if (
 		item != null
-		and item.slot_type == EquipmentData.EquipmentSlotType.HAND
-		and item.hand_rule == EquipmentData.HandRule.TWO_HANDED
+		and item.slot_type == EquipmentData.EquipmentSlotType.WEAPON
+		and item.weapon_rule == EquipmentData.WeaponRule.TWO_HANDED
 	):
-		result = [Slot.LEFT_HAND, Slot.RIGHT_HAND]
+		result = [Slot.MAIN_WEAPON, Slot.SUB_WEAPON]
 	return result

@@ -124,13 +124,13 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LeftHand" type="Label" parent="Margin/Content/Slots" unique_id=1631144394]
+[node name="MainWeapon" type="Label" parent="Margin/Content/Slots" unique_id=1631144394]
 custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
 theme_type_variation = &"SectionLabel"
 text = "—"
 
-[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/LeftHand" unique_id=2082772746]
+[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/MainWeapon" unique_id=2082772746]
 visible = false
 texture_filter = 1
 layout_mode = 0
@@ -144,13 +144,13 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RightHand" type="Label" parent="Margin/Content/Slots" unique_id=286940171]
+[node name="SubWeapon" type="Label" parent="Margin/Content/Slots" unique_id=286940171]
 custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
 theme_type_variation = &"SectionLabel"
 text = "—"
 
-[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/RightHand" unique_id=811713853]
+[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/SubWeapon" unique_id=811713853]
 visible = false
 texture_filter = 1
 layout_mode = 0
@@ -191,6 +191,26 @@ theme_type_variation = &"SectionLabel"
 text = "—"
 
 [node name="Icon" type="TextureRect" parent="Margin/Content/Slots/Accessory2" unique_id=1903870470]
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -26.0
+offset_top = 1.0
+offset_right = -2.0
+offset_bottom = 25.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Arms" type="Label" parent="Margin/Content/Slots" unique_id=1111111111]
+custom_minimum_size = Vector2(174, 26)
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "—"
+
+[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/Arms" unique_id=2222222222]
 visible = false
 texture_filter = 1
 layout_mode = 0

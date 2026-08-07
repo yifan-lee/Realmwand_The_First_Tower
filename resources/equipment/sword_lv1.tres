@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_srcqh")
-hand_rule = 3
+weapon_rule = 3
 atk_bonus = 10.0
 id = &"sword_lv1"
 display_name = "一级剑"
