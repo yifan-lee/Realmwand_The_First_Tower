@@ -16,8 +16,13 @@ var _player: Player
 var _enemy: Enemy
 var _battle_ui: BattleUI
 var _state: BattleState = BattleState.INACTIVE
-var _player_atb := 0.0
-var _enemy_atb := 0.0
+var _player_atb: float = 0.0
+var _enemy_atb: float = 0.0
+
+var _pre_battle_hp: float = 0.0
+var _pre_battle_mp: float = 0.0
+var _pre_battle_fp: float = 0.0
+var _pre_battle_inventory: Array[Dictionary] = []
 var _cooldowns: Dictionary[StringName, float] = {}
 var _enemy_cooldowns: Dictionary[StringName, float] = {}
 var _player_casting_skill: SkillData
@@ -88,6 +93,12 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 		return
 	_enemy = enemy
 	_player = player
+	
+	_pre_battle_hp = _player.current_hp
+	_pre_battle_mp = _player.current_mp
+	_pre_battle_fp = _player.current_fp
+	_pre_battle_inventory = _player.inventory.capture_save_data()
+	
 	_player.set_current_fp(_player.get_start_fp())
 	_enemy.set_current_fp(_enemy.enemy_data.start_fp)
 	_state = BattleState.RUNNING
@@ -109,28 +120,49 @@ func _on_battle_requested(enemy: Enemy, player: Player) -> void:
 	start_battle(enemy, player)
 
 
+func _get_skill_cost(skill: SkillData, type: ActionCostData.CostType) -> float:
+	var total := 0.0
+	for cost: ActionCostData in skill.costs:
+		if cost.cost_type == type:
+			total += cost.value
+	return total
+
+
 func _on_skill_selected(skill: SkillData) -> void:
 	if _state != BattleState.WAITING_FOR_PLAYER or skill == null:
 		return
 	if _cooldowns.get(skill.id, 0.0) > 0.0:
 		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
 		return
-	if _player.current_mp < skill.mp_cost:
+		
+	var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
+	var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
+	var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
+	var cd := _get_skill_cost(skill, ActionCostData.CostType.COOLDOWN)
+	var cast_time := _get_skill_cost(skill, ActionCostData.CostType.CAST_TIME)
+
+	if _player.current_hp <= hp_cost:
+		_battle_ui.show_message("生命不足。")
+		return
+	if _player.current_mp < mp_cost:
 		_battle_ui.show_message("魔力不足。")
 		return
-	if _player.current_fp < skill.fp_cost:
+	if _player.current_fp < fp_cost:
 		_battle_ui.show_message("专注值不足。")
 		return
 
-	_player.change_mp(-skill.mp_cost)
-	_player.change_fp(-skill.fp_cost)
-	_cooldowns[skill.id] = skill.cooldown_seconds
-	if is_zero_approx(skill.cast_time):
+	if hp_cost > 0: _player.change_hp(-hp_cost)
+	if mp_cost > 0: _player.change_mp(-mp_cost)
+	if fp_cost > 0: _player.change_fp(-fp_cost)
+	
+	if cd > 0: _cooldowns[skill.id] = cd
+	
+	if is_zero_approx(cast_time):
 		_release_player_skill(skill)
 		return
 
 	_player_casting_skill = skill
-	_player_atb = FORMULAS.calculate_atb_after_cast(skill.cast_time)
+	_player_atb = FORMULAS.calculate_atb_after_cast(cast_time)
 	_state = BattleState.RUNNING
 	_battle_ui.set_action_available(false)
 	_battle_ui.refresh_stats()
@@ -172,15 +204,23 @@ func _begin_enemy_turn() -> void:
 		_resolve_enemy_attack(null)
 		return
 
-	_enemy.change_mp(-skill.mp_cost)
-	_enemy.change_fp(-skill.fp_cost)
-	_enemy_cooldowns[skill.id] = skill.cooldown_seconds
-	if is_zero_approx(skill.cast_time):
+	var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
+	var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
+	var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
+	var cd := _get_skill_cost(skill, ActionCostData.CostType.COOLDOWN)
+	var cast_time := _get_skill_cost(skill, ActionCostData.CostType.CAST_TIME)
+
+	if hp_cost > 0: _enemy.change_hp(-hp_cost)
+	if mp_cost > 0: _enemy.change_mp(-mp_cost)
+	if fp_cost > 0: _enemy.change_fp(-fp_cost)
+	if cd > 0: _enemy_cooldowns[skill.id] = cd
+	
+	if is_zero_approx(cast_time):
 		_resolve_enemy_attack(skill)
 		return
 
 	_enemy_casting_skill = skill
-	_enemy_atb = FORMULAS.calculate_atb_after_cast(skill.cast_time)
+	_enemy_atb = FORMULAS.calculate_atb_after_cast(cast_time)
 	_battle_ui.refresh_stats()
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
 	_battle_ui.show_message("%s 正在吟唱 %s。" % [_enemy.enemy_data.display_name, skill.display_name])
@@ -312,7 +352,10 @@ func _finish_battle(victory: bool) -> void:
 		_player.gold += _enemy.enemy_data.gold_reward
 		_player.add_experience(reward)
 	else:
-		_player.set_current_hp(maxf(1.0, _player.current_hp))
+		_player.set_current_hp(_pre_battle_hp)
+		_player.set_current_mp(_pre_battle_mp)
+		_player.set_current_fp(_pre_battle_fp)
+		_player.inventory.restore_save_data(_pre_battle_inventory)
 	battle_finished.emit(victory)
 	_enemy = null
 
@@ -353,9 +396,16 @@ func _get_enemy_usable_skill() -> SkillData:
 	for skill: SkillData in _enemy.enemy_data.skills:
 		if _enemy_cooldowns.get(skill.id, 0.0) > 0.0:
 			continue
-		if _enemy.current_mp < skill.mp_cost:
+			
+		var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
+		var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
+		var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
+		
+		if _enemy.current_hp <= hp_cost:
 			continue
-		if _enemy.current_fp < skill.fp_cost:
+		if _enemy.current_mp < mp_cost:
+			continue
+		if _enemy.current_fp < fp_cost:
 			continue
 		return skill
 	return null

@@ -358,14 +358,11 @@ func _on_item_focused(item: ItemData) -> void:
 				mp_rec += effect.value
 			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
 				fp_rec += effect.value
-			var desc := effect.get_description()
-			if desc != "":
-				details.append(desc)
 		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
 		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
 		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
 	refresh_player_stats(view)
-	_display_entry_info(item.display_name, item.icon, item.description, details)
+	_display_entry_info(item.display_name, item.icon, item.description, item.get_details())
 
 
 func _on_item_selected(item: ItemData) -> void:

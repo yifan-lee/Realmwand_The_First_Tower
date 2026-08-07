@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://ccspfh0nkh62d"]
 
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_87of0"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_eoj3j"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_87of0"]
 [ext_resource type="Texture2D" uid="uid://cothqha841mhx" path="res://assets/skills/physical/fist_punch_tier_1.png" id="2_eoj3j"]
 

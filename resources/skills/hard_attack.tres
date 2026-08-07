@@ -1,8 +1,14 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cxjhwknl3wolu"]
 
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_dn1r3"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_hx6h4"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_dn1r3"]
 [ext_resource type="Texture2D" uid="uid://jluvcbvpdirr" path="res://assets/skills/physical/fist_punch_tier_2.png" id="2_hx6h4"]
+
+[sub_resource type="Resource" id="Resource_x2oc7"]
+script = ExtResource("1_hx6h4")
+cost_type = 2
+value = 20.0
 
 [sub_resource type="Resource" id="Resource_eoj3j"]
 script = ExtResource("1_dn1r3")
@@ -18,5 +24,5 @@ display_name = "强力攻击"
 description = "发动一次强力的攻击"
 icon = ExtResource("2_hx6h4")
 unlock_level = 2
-fp_cost = 20.0
+costs = Array[ExtResource("1_hx6h4")]([SubResource("Resource_x2oc7")])
 effects = Array[ExtResource("1_dn1r3")]([SubResource("Resource_eoj3j")])

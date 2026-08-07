@@ -547,6 +547,11 @@ func get_permanent_stat_increase_preview(
 		&"max_hp": next_max_hp,
 		&"current_mp": current_mp + mp_increase if FORMULAS.RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE else current_mp,
 		&"max_mp": next_max_mp,
+		&"fp_recovery": FORMULAS.resolve_base_fp_recovery(
+			base_fp_recovery_spd,
+			next_base_atk,
+			next_base_def
+		),
 		&"atk": next_base_atk + equipment.get_atk_bonus(),
 		&"def": next_base_def + equipment.get_def_bonus(),
 		&"spd": next_base_spd + equipment.get_spd_bonus(),

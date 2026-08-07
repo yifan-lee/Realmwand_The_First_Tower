@@ -176,6 +176,7 @@ theme_override_constants/separation = 12
 [node name="ActorStatsPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=799998403 instance=ExtResource("2_akhel")]
 custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
+fp_display_mode = 1
 
 [node name="EquipmentPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn" unique_id=1086598637 instance=ExtResource("3_viui7")]
 custom_minimum_size = Vector2(0, 230)

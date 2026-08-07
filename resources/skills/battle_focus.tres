@@ -1,8 +1,13 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://fjqww08idma3"]
 
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_drfa4"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_r5wxd"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_0g62r"]
 [ext_resource type="Texture2D" uid="uid://draf8v3mwrxhg" path="res://assets/skills/support/buff_atk_tier_1.png" id="2_drfa4"]
+
+[sub_resource type="Resource" id="Resource_qrxtq"]
+script = ExtResource("1_drfa4")
+value = 15.0
 
 [sub_resource type="Resource" id="Resource_drfa4"]
 script = ExtResource("1_r5wxd")
@@ -15,6 +20,7 @@ display_name = "战斗怒吼"
 description = "提升攻击力"
 icon = ExtResource("2_drfa4")
 unlock_level = 3
-mp_cost = 15.0
+skill_type = 2
+costs = Array[ExtResource("1_drfa4")]([SubResource("Resource_qrxtq")])
 target_type = 1
 effects = Array[ExtResource("1_r5wxd")]([SubResource("Resource_drfa4")])

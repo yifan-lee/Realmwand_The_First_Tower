@@ -23,10 +23,7 @@ enum SkillType {
 
 @export_group("Usage")
 @export var skill_type: SkillType = SkillType.PHYSICAL
-@export_range(0.0, 9999.0, 0.1) var mp_cost: float = 0.0
-@export_range(0.0, 9999.0, 0.1) var fp_cost: float = 0.0
-@export_range(0.0, 9999.0, 0.1) var cooldown_seconds: float = 0.0
-@export_range(0.0, 1.0, 0.05) var cast_time: float = 0.0
+@export var costs: Array[ActionCostData] = []
 @export var target_type: TargetType = TargetType.ENEMY
 
 
@@ -45,11 +42,27 @@ func get_type_name() -> String:
 
 
 func get_details() -> Array[String]:
-	return [
-		"类型：%s" % get_type_name(),
+	var result: Array[String] = []
+	result.append("类型：%s" % get_type_name())
+	
+	var effect_lines: Array[String] = []
+	for effect: ActionEffectData in effects:
+		var desc := effect.get_description()
+		if not desc.is_empty():
+			effect_lines.append(desc)
+			
+	if not effect_lines.is_empty():
+		result.append("\n[color=#A0A0A0]【效果】[/color]")
+		result.append_array(effect_lines)
+		
+	var cost_lines: Array[String] = []
+	for cost: ActionCostData in costs:
+		var desc := cost.get_description()
+		if not desc.is_empty():
+			cost_lines.append(desc)
+			
+	if not cost_lines.is_empty():
+		result.append("\n[color=#A0A0A0]【消耗】[/color]")
+		result.append_array(cost_lines)
 
-		"魔力消耗：%.0f" % mp_cost,
-		"专注消耗：%.0f" % fp_cost,
-		"冷却：%.1f 秒" % cooldown_seconds,
-		"吟唱：行动条倒退 %.0f%%" % (cast_time * 100.0),
-	]
+	return result

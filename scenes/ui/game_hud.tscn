@@ -52,6 +52,7 @@ theme_override_constants/separation = 4
 [node name="ActorStatsPanel" parent="HudRoot/StatsColumn/Content" unique_id=799998403 instance=ExtResource("3_x6mpk")]
 layout_mode = 2
 theme_type_variation = &"TransparentPanelContainer"
+fp_display_mode = 1
 
 [node name="TrackedInventoryHUD" parent="HudRoot/StatsColumn/Content" unique_id=794321377 instance=ExtResource("2_fnxle")]
 custom_minimum_size = Vector2(340, 0)

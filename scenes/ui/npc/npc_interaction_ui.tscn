@@ -59,6 +59,7 @@ horizontal_alignment = 1
 
 [node name="ActorStatsPanel" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("3_eu08y")]
 layout_mode = 2
+fp_display_mode = 1
 
 [node name="DialoguePanel" type="PanelContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1413644256]
 custom_minimum_size = Vector2(0, 390)

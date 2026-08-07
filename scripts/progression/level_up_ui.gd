@@ -171,6 +171,7 @@ func _build_stats_view(preview: Dictionary[StringName, float]) -> ActorStatsView
 	view.atk_delta = preview[&"atk"] - view.atk
 	view.def_delta = preview[&"def"] - view.def
 	view.spd_delta = preview[&"spd"] - view.spd
+	view.fp_recovery_spd_delta = preview.get(&"fp_recovery", view.fp_recovery_spd) - view.fp_recovery_spd
 	return view
 
 

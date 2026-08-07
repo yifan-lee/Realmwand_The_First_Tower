@@ -150,7 +150,15 @@ func refresh_stats() -> void:
 func _can_cast_skill(skill: SkillData) -> bool:
 	if _player == null:
 		return false
-	return _player.current_mp >= skill.mp_cost and _player.current_fp >= skill.fp_cost
+	for cost: ActionCostData in skill.costs:
+		match cost.cost_type:
+			ActionCostData.CostType.HP:
+				if _player.current_hp <= cost.value: return false
+			ActionCostData.CostType.MP:
+				if _player.current_mp < cost.value: return false
+			ActionCostData.CostType.FP:
+				if _player.current_fp < cost.value: return false
+	return true
 
 
 func _show_action_page(page: ActionPage, focus_page: bool) -> void:
@@ -217,11 +225,7 @@ func _on_escape_tab_pressed() -> void:
 func _on_skill_focused(skill: SkillData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
-	player_view.preview_skill_cost(
-		skill.mp_cost,
-		skill.fp_cost,
-		skill.cast_time
-	)
+	player_view.preview_skill_cost(skill.costs)
 	var damage := 0.0
 	for effect in skill.effects:
 		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:

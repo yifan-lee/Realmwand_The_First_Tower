@@ -26,3 +26,30 @@ enum ItemType {
 @export var usable_in_battle: bool = false
 @export var consumed_on_use: bool = false
 @export var effects: Array[ActionEffectData] = []
+@export var costs: Array[ActionCostData] = []
+
+
+func get_details() -> Array[String]:
+	var result: Array[String] = []
+	
+	var effect_lines: Array[String] = []
+	for effect: ActionEffectData in effects:
+		var desc := effect.get_description()
+		if not desc.is_empty():
+			effect_lines.append(desc)
+			
+	if not effect_lines.is_empty():
+		result.append("\n[color=#A0A0A0]【效果】[/color]")
+		result.append_array(effect_lines)
+		
+	var cost_lines: Array[String] = []
+	for cost: ActionCostData in costs:
+		var desc := cost.get_description()
+		if not desc.is_empty():
+			cost_lines.append(desc)
+			
+	if not cost_lines.is_empty():
+		result.append("\n[color=#A0A0A0]【消耗】[/color]")
+		result.append_array(cost_lines)
+
+	return result

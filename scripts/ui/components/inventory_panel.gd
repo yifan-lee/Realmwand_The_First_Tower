@@ -33,6 +33,7 @@ func bind_inventory(inventory: Inventory) -> void:
 
 
 func refresh() -> void:
+	var focused_index := _focused_row_index(get_viewport().gui_get_focus_owner())
 	_rows.clear()
 	for child: Node in item_rows.get_children():
 		item_rows.remove_child(child)
@@ -71,6 +72,11 @@ func refresh() -> void:
 		)
 		row.entry_selected.connect(_on_entry_selected)
 		row.entry_focused.connect(_on_entry_focused)
+
+	if focused_index >= 0:
+		var target_index := clampi(focused_index, 0, _rows.size() - 1)
+		if target_index >= 0 and target_index < _rows.size():
+			_rows[target_index].grab_focus()
 
 
 func set_item_type_filter(item_type: int) -> void:

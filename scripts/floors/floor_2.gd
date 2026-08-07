@@ -7,8 +7,6 @@ extends Floor
 @onready var up_stair: Area2D = $Interactables/StairUp
 
 var switch_first_snapshots: Array[Floor.TileCellSnapshot] = []
-var switch_red_blue_snapshots: Array[Floor.TileCellSnapshot] = []
-var switch_yellow_snapshots: Array[Floor.TileCellSnapshot] = []
 
 
 func _ready() -> void:
@@ -21,7 +19,7 @@ func _cache_switch_terrain() -> void:
 	switch_first_snapshots = capture_tile_cells(
 		wall_layer,
 		[
-			Vector2i(0, -10),
+			Vector2i(0, -11),
 		]
 	)
 
@@ -43,7 +41,7 @@ func _on_floor_switch_state_changed(
 func _update_stairs() -> void:
 	set_tile_cells_removed(
 		wall_layer,
-		switch_yellow_snapshots,
+		switch_first_snapshots,
 		switch_first.is_active
 	)
 	up_stair.visible = switch_first.is_active

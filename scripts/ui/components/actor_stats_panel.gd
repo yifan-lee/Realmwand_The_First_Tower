@@ -1,6 +1,13 @@
 class_name ActorStatsPanel
 extends PanelContainer
 
+enum FpDisplayMode {
+	PROGRESS_BAR,
+	RECOVERY_SPEED,
+}
+
+@export var fp_display_mode: FpDisplayMode = FpDisplayMode.PROGRESS_BAR
+
 const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
 const VALUE_COLOR := Color("#D9E5E8FF")
@@ -52,7 +59,13 @@ func display_stats(
 	_update_resource_bars()
 	hp_value.text = _format_resource(view_data.current_hp, view_data.max_hp, view_data.current_hp_delta, view_data.max_hp_delta)
 	mp_value.text = _format_resource(view_data.current_mp, view_data.max_mp, view_data.current_mp_delta, view_data.max_mp_delta)
-	fp_value.text = _format_resource(view_data.current_fp, view_data.max_fp, view_data.current_fp_delta)
+	
+	if fp_display_mode == FpDisplayMode.RECOVERY_SPEED:
+		fp_bar.visible = false
+		fp_value.text = "[right]%s /s[/right]" % _format_float_stat(view_data.fp_recovery_spd, view_data.fp_recovery_spd_delta)
+	else:
+		fp_bar.visible = true
+		fp_value.text = _format_resource(view_data.current_fp, view_data.max_fp, view_data.current_fp_delta)
 
 	atk_value.text = _format_stat(
 		view_data.atk,
@@ -112,16 +125,26 @@ func refresh_runtime_resources(
 	_update_resource_bars()
 	hp_value.text = _format_resource(current_hp, _view_data.max_hp, _view_data.current_hp_delta, _view_data.max_hp_delta)
 	mp_value.text = _format_resource(current_mp, _view_data.max_mp, _view_data.current_mp_delta, _view_data.max_mp_delta)
-	fp_value.text = _format_resource(current_fp, _view_data.max_fp, _view_data.current_fp_delta)
+	
+	if fp_display_mode == FpDisplayMode.RECOVERY_SPEED:
+		fp_bar.visible = false
+		fp_value.text = "[right]%s /s[/right]" % _format_float_stat(_view_data.fp_recovery_spd, _view_data.fp_recovery_spd_delta)
+	else:
+		fp_bar.visible = true
+		fp_value.text = _format_resource(current_fp, _view_data.max_fp, _view_data.current_fp_delta)
 
 
 func _update_resource_bars() -> void:
 	hp_bar.max_value = _view_data.get_preview_max_hp()
 	mp_bar.max_value = _view_data.get_preview_max_mp()
-	fp_bar.max_value = maxf(_view_data.max_fp, 1.0)
 	_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
 	_update_preview_segment(mp_preview_segment, mp_bar, _view_data.current_mp, _view_data.current_mp_delta)
-	_update_preview_segment(fp_preview_segment, fp_bar, _view_data.current_fp, _view_data.current_fp_delta)
+
+	if fp_display_mode == FpDisplayMode.PROGRESS_BAR:
+		fp_bar.max_value = maxf(_view_data.max_fp, 1.0)
+		_update_preview_segment(fp_preview_segment, fp_bar, _view_data.current_fp, _view_data.current_fp_delta)
+	else:
+		fp_preview_segment.visible = false
 
 
 func _update_preview_segment(
@@ -180,4 +203,22 @@ func _format_stat(
 		rounded_value,
 		delta_color.to_html(false),
 		rounded_delta,
+	]
+
+
+func _format_float_stat(
+	value: float,
+	delta: float
+) -> String:
+	if is_zero_approx(delta):
+		return "[color=#%s]%.1f[/color]" % [VALUE_COLOR.to_html(false), value]
+
+	var delta_color: Color = PREVIEW_GAIN_COLOR if delta > 0 else PREVIEW_LOSS_COLOR
+	var sign_str := "+" if delta > 0 else ""
+	return "[color=#%s]%.1f[/color] [color=#%s](%s%.1f)[/color]" % [
+		VALUE_COLOR.to_html(false),
+		value,
+		delta_color.to_html(false),
+		sign_str,
+		delta,
 	]

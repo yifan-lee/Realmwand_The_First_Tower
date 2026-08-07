@@ -34,6 +34,7 @@ var max_mp_delta: float = 0.0
 var atk_delta: float = 0.0
 var def_delta: float = 0.0
 var spd_delta: float = 0.0
+var fp_recovery_spd_delta: float = 0.0
 
 
 func has_progression() -> bool:
@@ -64,6 +65,7 @@ func has_any_preview() -> bool:
 		or has_atb_change()
 		or not is_zero_approx(max_hp_delta)
 		or not is_zero_approx(max_mp_delta)
+		or not is_zero_approx(fp_recovery_spd_delta)
 	)
 
 
@@ -122,17 +124,22 @@ func get_atb_bar_value(time_sec: float = -1.0) -> float:
 	return lerpf(current_atb, get_preview_atb(), get_flash_pulse(time_sec))
 
 
-func preview_skill_cost(
-	mp_cost: float,
-	fp_cost: float = 0.0,
-	cast_time: float = 0.0
-) -> void:
-	current_mp_delta = -mp_cost
-	current_fp_delta = -fp_cost
-	if cast_time > 0.0:
-		current_atb_delta = -max_atb * cast_time
-	else:
-		current_atb_delta = 0.0
+func preview_skill_cost(costs: Array[ActionCostData]) -> void:
+	current_hp_delta = 0.0
+	current_mp_delta = 0.0
+	current_fp_delta = 0.0
+	current_atb_delta = 0.0
+	for cost: ActionCostData in costs:
+		match cost.cost_type:
+			ActionCostData.CostType.HP:
+				current_hp_delta -= cost.value
+			ActionCostData.CostType.MP:
+				current_mp_delta -= cost.value
+			ActionCostData.CostType.FP:
+				current_fp_delta -= cost.value
+			ActionCostData.CostType.CAST_TIME:
+				if cost.value > 0.0:
+					current_atb_delta -= max_atb * cost.value
 
 
 func preview_damage(damage: float) -> void:
