@@ -1,12 +1,11 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://fjqww08idma3"]
 
-[ext_resource type="Script" uid="uid://6entyihfttjw" path="res://scripts/data/skill_effect_data.gd" id="1_r5wxd"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_r5wxd"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_0g62r"]
 [ext_resource type="Texture2D" uid="uid://draf8v3mwrxhg" path="res://assets/skills/support/buff_atk_tier_1.png" id="2_drfa4"]
 
 [sub_resource type="Resource" id="Resource_drfa4"]
 script = ExtResource("1_r5wxd")
-operation_type = 1
 value = 1.2
 
 [resource]

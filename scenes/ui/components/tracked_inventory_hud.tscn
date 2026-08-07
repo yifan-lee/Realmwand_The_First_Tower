@@ -32,14 +32,10 @@ theme_override_constants/separation = 8
 layout_mode = 2
 item = ExtResource("4_cdld0")
 
-[node name="FragmentBlue" type="HBoxContainer" parent="Content/ItemRows" unique_id=1148602989]
+[node name="FragmentBlue" parent="Content/ItemRows" unique_id=1148602989 instance=ExtResource("3_b3ihe")]
 layout_mode = 2
-script = ExtResource("5_vfqbt")
 item = ExtResource("6_vjsmp")
-metadata/_custom_type_script = "uid://bdr618i520nn4"
 
-[node name="FragmentYellow" type="HBoxContainer" parent="Content/ItemRows" unique_id=1069943216]
+[node name="FragmentYellow" parent="Content/ItemRows" unique_id=1069943216 instance=ExtResource("3_b3ihe")]
 layout_mode = 2
-script = ExtResource("5_vfqbt")
 item = ExtResource("7_p316j")
-metadata/_custom_type_script = "uid://bdr618i520nn4"

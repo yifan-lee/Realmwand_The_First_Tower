@@ -5,6 +5,7 @@
 [ext_resource type="SpriteFrames" uid="uid://rg80tmetdqnu" path="res://resources/actors/player_sprite_frames.tres" id="2_2rsbh"]
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="2_dg3l6"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_2rsbh"]
+[ext_resource type="Resource" uid="uid://fjqww08idma3" path="res://resources/skills/battle_focus.tres" id="3_4l82h"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="4_dg3l6"]
 
 [resource]
@@ -12,7 +13,8 @@ script = ExtResource("1_1rjkp")
 sprite_frames = ExtResource("2_2rsbh")
 starting_skills = Array[ExtResource("3_2rsbh")]([ExtResource("4_dg3l6")])
 level_skills = Dictionary[int, ExtResource("3_2rsbh")]({
-2: ExtResource("2_2hacj")
+2: ExtResource("2_2hacj"),
+3: ExtResource("3_4l82h")
 })
 id = &"player"
 display_name = "TooTwo"

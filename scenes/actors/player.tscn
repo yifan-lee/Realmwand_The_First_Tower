@@ -38,4 +38,3 @@ script = ExtResource("4_7wueq")
 
 [node name="Equipment" type="Node" parent="." unique_id=1081193953]
 script = ExtResource("5_oomub")
-
