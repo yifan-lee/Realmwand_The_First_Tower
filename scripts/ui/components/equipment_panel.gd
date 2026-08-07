@@ -62,12 +62,13 @@ func refresh() -> void:
 	clear_preview()
 	for slot: int in _slot_labels:
 		var label: Label = _slot_labels[slot]
-		var icon: TextureRect = _slot_icons[slot]
+		var icon: TextureRect = _slot_icons.get(slot)
 		var item: EquipmentData = null
 		if _loadout != null:
 			item = _loadout.get_equipped(slot)
-		icon.texture = item.icon if item != null else null
-		icon.visible = icon.texture != null
+		if icon != null:
+			icon.texture = item.icon if item != null else null
+			icon.visible = icon.texture != null
 		label.text = "%s：%s" % [
 			SLOT_NAMES[slot],
 			"—" if item == null else item.display_name,

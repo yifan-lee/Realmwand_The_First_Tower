@@ -348,12 +348,22 @@ func _on_item_focused(item: ItemData) -> void:
 			equipment_panel.preview_slots(affected)
 			details.append("确认后装备；高亮槽位会被占用或替换")
 	else:
-		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), item.hp_recovery)
-		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), item.mp_recovery)
-		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), item.fp_recovery)
-		details.append("生命回复：%.0f" % item.hp_recovery)
-		details.append("魔力回复：%.0f" % item.mp_recovery)
-		details.append("专注回复：%.0f" % item.fp_recovery)
+		var hp_rec := 0.0
+		var mp_rec := 0.0
+		var fp_rec := 0.0
+		for effect: ActionEffectData in item.effects:
+			if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
+				hp_rec += effect.value
+			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
+				mp_rec += effect.value
+			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
+				fp_rec += effect.value
+			var desc := effect.get_description()
+			if desc != "":
+				details.append(desc)
+		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
+		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
+		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
 	refresh_player_stats(view)
 	_display_entry_info(item.display_name, item.icon, item.description, details)
 
@@ -367,9 +377,13 @@ func _on_item_selected(item: ItemData) -> void:
 	else:
 		if not item.usable_from_inventory:
 			return
-		_player.change_hp(item.hp_recovery)
-		_player.change_mp(item.mp_recovery)
-		_player.change_fp(item.fp_recovery)
+		for effect: ActionEffectData in item.effects:
+			if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
+				_player.change_hp(effect.value)
+			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
+				_player.change_mp(effect.value)
+			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
+				_player.change_fp(effect.value)
 		if item.consumed_on_use:
 			_player.inventory.remove_item(item.id)
 	refresh_content()
@@ -378,15 +392,15 @@ func _on_item_selected(item: ItemData) -> void:
 
 func _on_skill_focused(skill: SkillData) -> void:
 	var view := _build_player_view()
-	for effect: SkillEffectData in skill.effects:
-		if effect.target_type != SkillEffectData.TargetType.SELF:
+	for effect: ActionEffectData in skill.effects:
+		if effect.target_type != ActionEffectData.TargetType.SELF:
 			continue
 		match effect.effect_type:
-			SkillEffectData.EffectType.ATK:
+			ActionEffectData.EffectType.ATK:
 				view.atk_delta += FORMULAS.skill_effect_delta(view.atk, effect)
-			SkillEffectData.EffectType.DEF:
+			ActionEffectData.EffectType.DEF:
 				view.def_delta += FORMULAS.skill_effect_delta(view.def, effect)
-			SkillEffectData.EffectType.SPD:
+			ActionEffectData.EffectType.SPD:
 				view.spd_delta += FORMULAS.skill_effect_delta(view.spd, effect)
 	refresh_player_stats(view)
 	_display_entry_info(skill.display_name, skill.icon, skill.description, skill.get_details())

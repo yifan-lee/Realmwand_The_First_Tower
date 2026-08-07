@@ -60,6 +60,7 @@ func _process(_delta: float) -> void:
 			_player.current_mp,
 			_player.current_fp
 		)
+		skill_panel.update_availability(_can_cast_skill)
 	if _enemy != null:
 		enemy_stats.refresh_runtime_resources(
 			_enemy.current_hp,
@@ -144,6 +145,12 @@ func refresh_stats() -> void:
 	player_stats.display_stats(_build_player_view())
 	enemy_stats.display_stats(_build_enemy_view())
 	_update_atb_markers(_player_atb_value, _enemy_atb_value)
+	skill_panel.update_availability(_can_cast_skill)
+
+func _can_cast_skill(skill: SkillData) -> bool:
+	if _player == null:
+		return false
+	return _player.current_mp >= skill.mp_cost and _player.current_fp >= skill.fp_cost
 
 
 func _show_action_page(page: ActionPage, focus_page: bool) -> void:
@@ -215,12 +222,23 @@ func _on_skill_focused(skill: SkillData) -> void:
 		skill.fp_cost,
 		skill.cast_time
 	)
-	if skill.target_type == SkillData.TargetType.ENEMY:
-		enemy_view.preview_damage(FORMULAS.calculate_skill_damage(
-			_player.get_atk(),
-			skill.skill_power,
-			_enemy.enemy_data.def
-		))
+	var damage := 0.0
+	for effect in skill.effects:
+		if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+			var target_def = _enemy.enemy_data.def
+			if effect.target_type == ActionEffectData.TargetType.SELF:
+				target_def = _player.get_def()
+			var dmg = FORMULAS.calculate_skill_damage(
+				_player.get_atk(),
+				effect.value,
+				target_def
+			)
+			if effect.target_type == ActionEffectData.TargetType.ENEMY:
+				damage += dmg
+			else:
+				player_view.preview_damage(dmg)
+	if damage > 0.0:
+		enemy_view.preview_damage(damage)
 	_apply_skill_effect_preview(skill, player_view, enemy_view)
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
@@ -239,20 +257,34 @@ func _on_skill_focused(skill: SkillData) -> void:
 func _on_item_focused(item: ItemData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
+	var hp_rec := 0.0
+	var mp_rec := 0.0
+	var fp_rec := 0.0
+	var details: Array[String] = []
+	for effect: ActionEffectData in item.effects:
+		if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
+			hp_rec += effect.value
+		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
+			mp_rec += effect.value
+		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
+			fp_rec += effect.value
+		var desc := effect.get_description()
+		if desc != "":
+			details.append(desc)
 	player_view.current_hp_delta = FORMULAS.calculate_recovery_delta(
 		_player.current_hp,
 		_player.get_max_hp(),
-		item.hp_recovery
+		hp_rec
 	)
 	player_view.current_mp_delta = FORMULAS.calculate_recovery_delta(
 		_player.current_mp,
 		_player.get_max_mp(),
-		item.mp_recovery
+		mp_rec
 	)
 	player_view.current_fp_delta = FORMULAS.calculate_recovery_delta(
 		_player.current_fp,
 		_player.get_max_fp(),
-		item.fp_recovery
+		fp_rec
 	)
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
@@ -260,11 +292,7 @@ func _on_item_focused(item: ItemData) -> void:
 	info.title = item.display_name
 	info.icon = item.icon
 	info.description = item.description
-	info.detail_lines = [
-		"生命回复：%.0f" % item.hp_recovery,
-		"魔力回复：%.0f" % item.mp_recovery,
-		"专注回复：%.0f" % item.fp_recovery,
-	]
+	info.detail_lines = details
 	entry_info_panel.display_info(info)
 
 
@@ -273,16 +301,16 @@ func _apply_skill_effect_preview(
 	player_view: ActorStatsViewData,
 	enemy_view: ActorStatsViewData
 ) -> void:
-	for effect: SkillEffectData in skill.effects:
+	for effect: ActionEffectData in skill.effects:
 		var target := player_view
-		if effect.target_type == SkillEffectData.TargetType.ENEMY:
+		if effect.target_type == ActionEffectData.TargetType.ENEMY:
 			target = enemy_view
 		match effect.effect_type:
-			SkillEffectData.EffectType.ATK:
+			ActionEffectData.EffectType.ATK:
 				target.atk_delta += FORMULAS.skill_effect_delta(target.atk, effect)
-			SkillEffectData.EffectType.DEF:
+			ActionEffectData.EffectType.DEF:
 				target.def_delta += FORMULAS.skill_effect_delta(target.def, effect)
-			SkillEffectData.EffectType.SPD:
+			ActionEffectData.EffectType.SPD:
 				target.spd_delta += FORMULAS.skill_effect_delta(target.spd, effect)
 
 

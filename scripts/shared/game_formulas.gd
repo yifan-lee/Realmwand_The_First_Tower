@@ -131,11 +131,11 @@ static func stat_point_increase(_stat_id: StringName) -> float:
 
 static func skill_effect_delta(
 	base_value: float,
-	effect: SkillEffectData
+	effect: ActionEffectData
 ) -> float:
 	if effect == null:
 		return 0.0
-	if effect.operation_type == SkillEffectData.OperationType.MULTIPLY:
+	if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
 		return base_value * (effect.value - 1.0)
 	return effect.value
 
@@ -148,10 +148,10 @@ static func calculate_effective_stat(
 	var added_value := 0.0
 	var multiplier := 1.0
 	for active: Dictionary in active_effects:
-		var effect: SkillEffectData = active.get(&"effect") as SkillEffectData
+		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
 		if effect == null or effect.effect_type != effect_type:
 			continue
-		if effect.operation_type == SkillEffectData.OperationType.MULTIPLY:
+		if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
 			multiplier *= effect.value
 		else:
 			added_value += effect.value

@@ -25,6 +25,4 @@ enum ItemType {
 @export var usable_from_inventory: bool = false
 @export var usable_in_battle: bool = false
 @export var consumed_on_use: bool = false
-@export_range(0.0, 999999.0, 1.0) var hp_recovery: float = 0.0
-@export_range(0.0, 999999.0, 1.0) var mp_recovery: float = 0.0
-@export_range(0.0, 999999.0, 1.0) var fp_recovery: float = 0.0
+@export var effects: Array[ActionEffectData] = []

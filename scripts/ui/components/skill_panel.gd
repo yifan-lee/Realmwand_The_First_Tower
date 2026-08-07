@@ -65,6 +65,12 @@ func refresh() -> void:
 			_on_entry_focused
 		)
 
+func update_availability(usability_check: Callable) -> void:
+	for i in range(_skills.size()):
+		if i < _rows.size():
+			var skill: SkillData = _skills[i]
+			_rows[i].disabled = not usability_check.call(skill)
+
 
 func focus_first_skill() -> bool:
 	if _rows.is_empty():

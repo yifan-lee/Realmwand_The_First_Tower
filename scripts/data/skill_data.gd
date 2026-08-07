@@ -29,11 +29,9 @@ enum SkillType {
 @export_range(0.0, 1.0, 0.05) var cast_time: float = 0.0
 @export var target_type: TargetType = TargetType.ENEMY
 
-@export_group("Damage")
-@export_range(0.0, 99999.0, 0.1) var skill_power: float = 0.0
 
 @export_group("Effects")
-@export var effects: Array[SkillEffectData] = []
+@export var effects: Array[ActionEffectData] = []
 
 
 func get_type_name() -> String:
@@ -49,7 +47,7 @@ func get_type_name() -> String:
 func get_details() -> Array[String]:
 	return [
 		"类型：%s" % get_type_name(),
-		"技能威力：%.0f" % skill_power,
+
 		"魔力消耗：%.0f" % mp_cost,
 		"专注消耗：%.0f" % fp_cost,
 		"冷却：%.1f 秒" % cooldown_seconds,

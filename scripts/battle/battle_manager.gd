@@ -57,11 +57,11 @@ func _process(delta: float) -> void:
 
 	_player_atb = minf(
 		FORMULAS.ATB_MAX,
-		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(SkillEffectData.EffectType.SPD), delta)
+		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(ActionEffectData.EffectType.SPD), delta)
 	)
 	_enemy_atb = minf(
 		FORMULAS.ATB_MAX,
-		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(SkillEffectData.EffectType.SPD), delta)
+		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(ActionEffectData.EffectType.SPD), delta)
 	)
 
 	if _player_atb >= FORMULAS.ATB_MAX:
@@ -144,13 +144,17 @@ func _on_item_selected(item: ItemData) -> void:
 	if not item.usable_in_battle:
 		_battle_ui.show_message("这个物品不能在战斗中使用。")
 		return
-	_player.change_hp(item.hp_recovery)
-	_player.change_mp(item.mp_recovery)
-	_player.change_fp(item.fp_recovery)
+	_apply_effects(item.effects, false)
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
 	_battle_ui.show_message("使用了 %s。" % item.display_name)
-	_complete_player_action()
+	
+	var is_free_action := false
+	for effect in item.effects:
+		if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
+			is_free_action = true
+			break
+	_complete_player_action(is_free_action)
 
 
 func _on_escape_requested() -> void:
@@ -200,19 +204,34 @@ func _release_player_skill(skill: SkillData = null) -> void:
 		return
 
 	var applied := 0.0
-	if resolved_skill.target_type == SkillData.TargetType.ENEMY:
-		var damage: float = FORMULAS.calculate_skill_damage(
-			_get_player_stat(SkillEffectData.EffectType.ATK),
-			resolved_skill.skill_power,
-			_get_enemy_stat(SkillEffectData.EffectType.DEF)
-		)
-		applied = _enemy.take_damage(damage)
-	_apply_skill_effects(resolved_skill, false)
+	for effect in resolved_skill.effects:
+		if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+			var target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
+			if effect.target_type == ActionEffectData.TargetType.SELF:
+				target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
+			var damage: float = FORMULAS.calculate_skill_damage(
+				_get_player_stat(ActionEffectData.EffectType.ATK),
+				effect.value,
+				target_def
+			)
+			if effect.target_type == ActionEffectData.TargetType.ENEMY:
+				applied += _enemy.take_damage(damage)
+			else:
+				_player.change_hp(-damage)
+				applied += damage
+	
+	_apply_effects(resolved_skill.effects, false)
 	if applied > 0.0:
 		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [resolved_skill.display_name, applied])
 	else:
 		_battle_ui.show_message("使用了 %s。" % resolved_skill.display_name)
-	_complete_player_action()
+	
+	var is_free_action := false
+	for effect in resolved_skill.effects:
+		if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
+			is_free_action = true
+			break
+	_complete_player_action(is_free_action)
 	if _enemy.is_defeated:
 		_finish_battle(true)
 
@@ -224,30 +243,61 @@ func _release_enemy_skill() -> void:
 
 
 func _resolve_enemy_attack(skill: SkillData) -> void:
-	var power := 0.0
+	var applied := 0.0
 	var skill_name := "攻击"
 	if skill != null:
-		power = skill.skill_power
 		skill_name = skill.display_name
-	var damage: float = FORMULAS.calculate_skill_damage(
-		_get_enemy_stat(SkillEffectData.EffectType.ATK),
-		power,
-		_get_player_stat(SkillEffectData.EffectType.DEF)
-	)
-	_player.change_hp(-damage)
+		for effect in skill.effects:
+			if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+				var target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
+				if effect.target_type == ActionEffectData.TargetType.SELF:
+					target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
+				var damage: float = FORMULAS.calculate_skill_damage(
+					_get_enemy_stat(ActionEffectData.EffectType.ATK),
+					effect.value,
+					target_def
+				)
+				if effect.target_type == ActionEffectData.TargetType.ENEMY:
+					_player.change_hp(-damage)
+					applied += damage
+				else:
+					_enemy.take_damage(damage)
+					applied += damage
+	else:
+		# 普通攻击
+		var damage: float = FORMULAS.calculate_skill_damage(
+			_get_enemy_stat(ActionEffectData.EffectType.ATK),
+			1.0,
+			_get_player_stat(ActionEffectData.EffectType.DEF)
+		)
+		_player.change_hp(-damage)
+		applied = damage
+	var is_free_action := false
 	if skill != null:
-		_apply_skill_effects(skill, true)
-	_enemy_atb = 0.0
+		_apply_effects(skill.effects, true)
+		for effect in skill.effects:
+			if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
+				is_free_action = true
+				break
+	if is_free_action:
+		_enemy_atb = FORMULAS.ATB_MAX
+	else:
+		_enemy_atb = 0.0
 	_battle_ui.refresh_stats()
-	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage])
+	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, applied])
 	if _player.current_hp <= 0.0:
 		_finish_battle(false)
 
 
-func _complete_player_action() -> void:
-	_player_atb = 0.0
-	_state = BattleState.RUNNING
-	_battle_ui.set_action_available(false)
+func _complete_player_action(is_free_action: bool = false) -> void:
+	if is_free_action:
+		_player_atb = FORMULAS.ATB_MAX
+		_state = BattleState.WAITING_FOR_PLAYER
+		_battle_ui.set_action_available(true)
+	else:
+		_player_atb = 0.0
+		_state = BattleState.RUNNING
+		_battle_ui.set_action_available(false)
 	_battle_ui.refresh_stats()
 
 
@@ -311,19 +361,31 @@ func _get_enemy_usable_skill() -> SkillData:
 	return null
 
 
-func _apply_skill_effects(
-	skill: SkillData,
+func _apply_effects(
+	effects: Array[ActionEffectData],
 	caster_is_enemy: bool
 ) -> void:
-	for effect: SkillEffectData in skill.effects:
-		var targets_self := effect.target_type == SkillEffectData.TargetType.SELF
-		var target: Array[Dictionary] = _player_effects
-		if targets_self == caster_is_enemy:
-			target = _enemy_effects
-		target.append({
-			&"effect": effect,
-			&"remaining": effect.duration_seconds,
-		})
+	for effect: ActionEffectData in effects:
+		var targets_self := effect.target_type == ActionEffectData.TargetType.SELF
+		
+		var target_actor = _enemy if caster_is_enemy else _player
+		if not targets_self:
+			target_actor = _player if caster_is_enemy else _enemy
+			
+		if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
+			target_actor.change_hp(effect.value)
+		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
+			target_actor.change_mp(effect.value)
+		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
+			target_actor.change_fp(effect.value)
+		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.DAMAGE:
+			var target_array: Array[Dictionary] = _player_effects
+			if target_actor == _enemy:
+				target_array = _enemy_effects
+			target_array.append({
+				&"effect": effect,
+				&"remaining": effect.duration_seconds,
+			})
 
 
 func _tick_effects(
@@ -341,11 +403,11 @@ func _tick_effects(
 func _get_player_stat(effect_type: int) -> float:
 	var base_value := 0.0
 	match effect_type:
-		SkillEffectData.EffectType.ATK:
+		ActionEffectData.EffectType.ATK:
 			base_value = _player.get_atk()
-		SkillEffectData.EffectType.DEF:
+		ActionEffectData.EffectType.DEF:
 			base_value = _player.get_def()
-		SkillEffectData.EffectType.SPD:
+		ActionEffectData.EffectType.SPD:
 			base_value = _player.get_spd()
 	return FORMULAS.calculate_effective_stat(base_value, _player_effects, effect_type)
 
@@ -353,10 +415,10 @@ func _get_player_stat(effect_type: int) -> float:
 func _get_enemy_stat(effect_type: int) -> float:
 	var base_value := 0.0
 	match effect_type:
-		SkillEffectData.EffectType.ATK:
+		ActionEffectData.EffectType.ATK:
 			base_value = _enemy.enemy_data.atk
-		SkillEffectData.EffectType.DEF:
+		ActionEffectData.EffectType.DEF:
 			base_value = _enemy.enemy_data.def
-		SkillEffectData.EffectType.SPD:
+		ActionEffectData.EffectType.SPD:
 			base_value = _enemy.enemy_data.spd
 	return FORMULAS.calculate_effective_stat(base_value, _enemy_effects, effect_type)
