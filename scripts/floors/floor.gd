@@ -109,12 +109,9 @@ func capture_runtime_state() -> Dictionary:
 		if floor_switch == null:
 			continue
 
-		if floor_switch.switch_id.is_empty():
+		var switch_key := floor_switch.get_persistent_id()
+		if switch_key.is_empty():
 			continue
-
-		var switch_key := String(
-			floor_switch.switch_id
-		)
 
 		switch_states[switch_key] = (
 			floor_switch.is_active
@@ -126,12 +123,9 @@ func capture_runtime_state() -> Dictionary:
 		if item_pickup == null:
 			continue
 
-		if item_pickup.pickup_id.is_empty():
+		var pickup_key := item_pickup.get_persistent_id()
+		if pickup_key.is_empty():
 			continue
-
-		var pickup_key := String(
-			item_pickup.pickup_id
-		)
 
 		pickup_states[pickup_key] = {
 			"is_collected":
@@ -146,12 +140,9 @@ func capture_runtime_state() -> Dictionary:
 		if enemy == null:
 			continue
 
-		if enemy.instance_id.is_empty():
+		var enemy_key := enemy.get_persistent_id()
+		if enemy_key.is_empty():
 			continue
-
-		var enemy_key := String(
-			enemy.instance_id
-		)
 
 		enemy_states[enemy_key] = {
 			"is_defeated": enemy.is_defeated,
@@ -197,9 +188,7 @@ func _apply_switch_states(
 		if floor_switch == null:
 			continue
 
-		var switch_key := String(
-			floor_switch.switch_id
-		)
+		var switch_key := floor_switch.get_persistent_id()
 
 		if not switch_states.has(switch_key):
 			continue
@@ -227,9 +216,7 @@ func _apply_pickup_states(
 		if item_pickup == null:
 			continue
 
-		var pickup_key := String(
-			item_pickup.pickup_id
-		)
+		var pickup_key := item_pickup.get_persistent_id()
 
 		if not pickup_states.has(pickup_key):
 			continue
@@ -241,7 +228,7 @@ func _apply_pickup_states(
 		if not (pickup_state_value is Dictionary):
 			push_error(
 				"Pickup '%s' has invalid state data."
-				% item_pickup.pickup_id
+				% pickup_key
 			)
 			continue
 
@@ -287,9 +274,7 @@ func _apply_enemy_states(
 		if enemy == null:
 			continue
 
-		var enemy_key := String(
-			enemy.instance_id
-		)
+		var enemy_key := enemy.get_persistent_id()
 
 		if not enemy_states.has(enemy_key):
 			continue
@@ -301,7 +286,7 @@ func _apply_enemy_states(
 		if not (enemy_state_value is Dictionary):
 			push_error(
 				"Enemy '%s' has invalid state data."
-				% enemy.instance_id
+				% enemy_key
 			)
 			continue
 
