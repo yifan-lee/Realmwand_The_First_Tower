@@ -224,7 +224,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 	)
 	var damage := 0.0
 	for effect in skill.effects:
-		if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
 			var target_def = _enemy.enemy_data.def
 			if effect.target_type == ActionEffectData.TargetType.SELF:
 				target_def = _player.get_def()

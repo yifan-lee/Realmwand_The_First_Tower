@@ -9,7 +9,9 @@ enum EffectType {
 	RESTORE_MP,
 	RESTORE_FP,
 	FREE_ACTION,
-	DAMAGE,
+	REDUCE_HP,
+	REDUCE_MP,
+	REDUCE_FP,
 }
 
 enum TargetType {
@@ -41,8 +43,12 @@ func get_description() -> String:
 			return "专注回复：%.0f" % value
 		EffectType.FREE_ACTION:
 			return "特性：使用后可立刻再次行动"
-		EffectType.DAMAGE:
+		EffectType.REDUCE_HP:
 			return "造成 %.0f 点技能威力伤害" % value
+		EffectType.REDUCE_MP:
+			return "扣除 %.0f 点魔力" % value
+		EffectType.REDUCE_FP:
+			return "扣除 %.0f 点专注" % value
 		EffectType.ATK:
 			return _get_stat_desc("攻击力")
 		EffectType.DEF:

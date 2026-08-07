@@ -205,7 +205,7 @@ func _release_player_skill(skill: SkillData = null) -> void:
 
 	var applied := 0.0
 	for effect in resolved_skill.effects:
-		if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
 			var target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
 			if effect.target_type == ActionEffectData.TargetType.SELF:
 				target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
@@ -248,7 +248,7 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	if skill != null:
 		skill_name = skill.display_name
 		for effect in skill.effects:
-			if effect.effect_type == ActionEffectData.EffectType.DAMAGE:
+			if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
 				var target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
 				if effect.target_type == ActionEffectData.TargetType.SELF:
 					target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
@@ -378,7 +378,11 @@ func _apply_effects(
 			target_actor.change_mp(effect.value)
 		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
 			target_actor.change_fp(effect.value)
-		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.DAMAGE:
+		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_MP:
+			target_actor.change_mp(-effect.value)
+		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_FP:
+			target_actor.change_fp(-effect.value)
+		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP:
 			var target_array: Array[Dictionary] = _player_effects
 			if target_actor == _enemy:
 				target_array = _enemy_effects
