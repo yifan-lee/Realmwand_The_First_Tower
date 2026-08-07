@@ -23,6 +23,10 @@ var _pre_battle_hp: float = 0.0
 var _pre_battle_mp: float = 0.0
 var _pre_battle_fp: float = 0.0
 var _pre_battle_inventory: Array[Dictionary] = []
+
+var _pre_battle_enemy_hp: float = 0.0
+var _pre_battle_enemy_mp: float = 0.0
+var _pre_battle_enemy_fp: float = 0.0
 var _cooldowns: Dictionary[StringName, float] = {}
 var _enemy_cooldowns: Dictionary[StringName, float] = {}
 var _player_casting_skill: SkillData
@@ -98,6 +102,10 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_pre_battle_mp = _player.current_mp
 	_pre_battle_fp = _player.current_fp
 	_pre_battle_inventory = _player.inventory.capture_save_data()
+	
+	_pre_battle_enemy_hp = _enemy.current_hp
+	_pre_battle_enemy_mp = _enemy.current_mp
+	_pre_battle_enemy_fp = _enemy.current_fp
 	
 	_player.set_current_fp(_player.get_start_fp())
 	_enemy.set_current_fp(_enemy.enemy_data.start_fp)
@@ -356,6 +364,10 @@ func _finish_battle(victory: bool) -> void:
 		_player.set_current_mp(_pre_battle_mp)
 		_player.set_current_fp(_pre_battle_fp)
 		_player.inventory.restore_save_data(_pre_battle_inventory)
+		
+		_enemy.set_current_hp(_pre_battle_enemy_hp)
+		_enemy.set_current_mp(_pre_battle_enemy_mp)
+		_enemy.set_current_fp(_pre_battle_enemy_fp)
 	battle_finished.emit(victory)
 	_enemy = null
 

@@ -83,15 +83,54 @@ func take_damage(amount: float) -> float:
 	return applied_damage
 
 
+func change_hp(amount: float) -> void:
+	if enemy_data == null:
+		return
+		
+	set_current_hp(current_hp + amount)
+
+
+func set_current_hp(value: float) -> void:
+	if enemy_data == null:
+		return
+		
+	var next_hp := clampf(
+		value,
+		0.0,
+		get_max_hp()
+	)
+	if is_equal_approx(current_hp, next_hp):
+		return
+		
+	current_hp = next_hp
+	stats_changed.emit()
+	
+	if current_hp <= 0.0:
+		set_defeated(true)
+	elif current_hp > 0.0 and is_defeated:
+		set_defeated(false)
+
+
 func change_mp(amount: float) -> void:
 	if enemy_data == null:
 		return
 
-	current_mp = clampf(
-		current_mp + amount,
+	set_current_mp(current_mp + amount)
+
+
+func set_current_mp(value: float) -> void:
+	if enemy_data == null:
+		return
+
+	var next_mp := clampf(
+		value,
 		0.0,
 		get_max_mp()
 	)
+	if is_equal_approx(current_mp, next_mp):
+		return
+
+	current_mp = next_mp
 	stats_changed.emit()
 
 

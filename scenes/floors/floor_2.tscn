@@ -22,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://ctl3skm52eury" path="res://resources/items/fp_recovery_lv1.tres" id="18_sbwf3"]
 [ext_resource type="Resource" uid="uid://dkfo3tcwjpfiv" path="res://resources/equipment/hands_lv1.tres" id="19_k8x4f"]
 [ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="20_i81q6"]
+[ext_resource type="Resource" uid="uid://djgmxkplhaese" path="res://resources/items/hp_recovery_lv2.tres" id="20_ktu67"]
 [ext_resource type="Resource" uid="uid://ckv75psohg4uk" path="res://resources/equipment/head_lv1.tres" id="21_0w1qe"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_6ha2l")]
@@ -292,29 +293,33 @@ item_data = ExtResource("11_po1ci")
 position = Vector2(288, -544)
 item_data = ExtResource("11_po1ci")
 
-[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="22" unique_id=594253039 instance=ExtResource("3_gkij4")]
+[node name="HPLV201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="22" unique_id=1144956554 instance=ExtResource("3_gkij4")]
+position = Vector2(64, -288)
+item_data = ExtResource("20_ktu67")
+
+[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="23" unique_id=594253039 instance=ExtResource("3_gkij4")]
 position = Vector2(-368, -248)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="23" unique_id=226122769 instance=ExtResource("3_gkij4")]
+[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="24" unique_id=226122769 instance=ExtResource("3_gkij4")]
 position = Vector2(-280, -256)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="24" unique_id=1735979925 instance=ExtResource("3_gkij4")]
+[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=1735979925 instance=ExtResource("3_gkij4")]
 position = Vector2(-432, -272)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="HandsLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=947615643 instance=ExtResource("3_gkij4")]
+[node name="HandsLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=947615643 instance=ExtResource("3_gkij4")]
 position = Vector2(192, -320)
 item_data = ExtResource("19_k8x4f")
 
-[node name="SwordLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=417538855 instance=ExtResource("3_gkij4")]
+[node name="SwordLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="27" unique_id=417538855 instance=ExtResource("3_gkij4")]
 position = Vector2(384, -448)
 item_data = ExtResource("20_i81q6")
 
-[node name="HeadLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="27" unique_id=897285071 instance=ExtResource("3_gkij4")]
+[node name="HeadLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="28" unique_id=897285071 instance=ExtResource("3_gkij4")]
 position = Vector2(0, -448)
 item_data = ExtResource("21_0w1qe")

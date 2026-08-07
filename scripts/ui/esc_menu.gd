@@ -384,7 +384,6 @@ func _on_item_selected(item: ItemData) -> void:
 		if item.consumed_on_use:
 			_player.inventory.remove_item(item.id)
 	refresh_content()
-	_show_category(_current_category, true)
 
 
 func _on_skill_focused(skill: SkillData) -> void:
