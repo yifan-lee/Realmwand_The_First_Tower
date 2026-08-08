@@ -12,7 +12,10 @@ static func generate_instance_id(node: Node, resource: Resource = null) -> Strin
 	var scene_name := "dynamic"
 	var node_identifier := node.name
 	if node.owner != null:
-		scene_name = node.owner.name
+		if not node.owner.scene_file_path.is_empty():
+			scene_name = node.owner.scene_file_path.get_file().get_basename()
+		else:
+			scene_name = node.owner.name
 		# 针对可能有同名节点深层嵌套的情况，用相对路径最保险
 		node_identifier = str(node.owner.get_path_to(node)).replace("/", "_")
 		
