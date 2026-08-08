@@ -368,6 +368,7 @@ func _on_item_focused(item: ItemData) -> void:
 func _on_item_selected(item: ItemData) -> void:
 	if _player == null:
 		return
+	var was_focused := inventory_panel.has_item_focus()
 	if item is EquipmentData:
 		if _preview_target_slot >= 0:
 			_player.equip_item(item.id, _preview_target_slot)
@@ -384,6 +385,9 @@ func _on_item_selected(item: ItemData) -> void:
 		if item.consumed_on_use:
 			_player.inventory.remove_item(item.id)
 	refresh_content()
+	
+	if was_focused and not inventory_panel.has_item_focus():
+		category_buttons[_current_category].grab_focus()
 
 
 func _on_skill_focused(skill: SkillData) -> void:

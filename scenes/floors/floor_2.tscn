@@ -35,7 +35,7 @@ display_name = "二层：专注"
 tile_map_data = PackedByteArray("AAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAHAP7/AAAAAAAAAAAHAP3/AAAAAAAAAAAHAPz/AAAAAAAAAAAHAPv/AAAAAAAAAAAHAPr/AAAAAAAAAAAEAPb/AAAAAAAAAAAFAPf/AAAAAAAAAAAGAPj/AAAAAAAAAAAEAPf/AAAAAAAAAAAEAPj/AAAAAAAAAAAEAPn/AAAAAAAAAAAFAPb/AAAAAAAAAAAFAPj/AAAAAAAAAAAFAPn/AAAAAAAAAAAGAPb/AAAAAAAAAAAGAPf/AAAAAAAAAAAGAPn/AAAAAAAAAAAHAPb/AAAAAAAAAAAHAPf/AAAAAAAAAAAHAPj/AAAAAAAAAAAHAPn/AAAAAAAAAAAGAPH/AAAAAAAAAAAGAPL/AAAAAAAAAAAGAPP/AAAAAAAAAAAGAPT/AAAAAAAAAAAGAPX/AAAAAAAAAAD///b/AAAAAAAAAAAAAPb/AAAAAAAAAAABAPb/AAAAAAAAAAACAPb/AAAAAAAAAAADAPb/AAAAAAAAAAAGAO7/AAAAAAAAAAAEAO7/AAAAAAAAAAAFAO7/AAAAAAAAAAAHAO7/AAAAAAAAAAAIAO7/AAAAAAAAAAAJAO7/AAAAAAAAAAAKAO7/AAAAAAAAAAALAO7/AAAAAAAAAAAMAO7/AAAAAAAAAAAAAPf/AAAAAAAAAAAAAPj/AAAAAAAAAAAAAPn/AAAAAAAAAAAAAPr/AAAAAAAAAAD9//b/AAAAAAAAAAD+//b/AAAAAAAAAAAAAO7/AAAAAAAAAAABAO7/AAAAAAAAAAACAO7/AAAAAAAAAAADAO7/AAAAAAAAAAAAAPX/AAAAAAAAAAD7//b/AAAAAAAAAAD7//f/AAAAAAAAAAD7//j/AAAAAAAAAAD7//n/AAAAAAAAAAD7//r/AAAAAAAAAAD7//v/AAAAAAAAAAD7//z/AAAAAAAAAAD8//b/AAAAAAAAAAD8//f/AAAAAAAAAAD8//j/AAAAAAAAAAD8//n/AAAAAAAAAAD8//r/AAAAAAAAAAD8//v/AAAAAAAAAAD8//z/AAAAAAAAAAANAO7/AAAAAAAAAAAOAO7/AAAAAAAAAAAPAO7/AAAAAAAAAAAQAO7/AAAAAAAAAAAQAO//AAAAAAAAAAAQAPD/AAAAAAAAAAAQAPH/AAAAAAAAAAAQAPL/AAAAAAAAAAAQAPP/AAAAAAAAAAARAO7/AAAAAAAAAAARAO//AAAAAAAAAAARAPD/AAAAAAAAAAARAPH/AAAAAAAAAAARAPL/AAAAAAAAAAARAPP/AAAAAAAAAAD9/+7/AAAAAAAAAAD+/+7/AAAAAAAAAAD//+7/AAAAAAAAAAD7/+7/AAAAAAAAAAD7/+//AAAAAAAAAAD7//D/AAAAAAAAAAD7//H/AAAAAAAAAAD7//L/AAAAAAAAAAD7//P/AAAAAAAAAAD8/+7/AAAAAAAAAAD8/+//AAAAAAAAAAD8//D/AAAAAAAAAAD8//H/AAAAAAAAAAD8//L/AAAAAAAAAAD8//P/AAAAAAAAAAAGAO//AAAAAAAAAAAGAPD/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPz/AAAAAAAAAAAKAO//AAAAAAAAAAAKAPD/AAAAAAAAAAAKAPH/AAAAAAAAAAALAO//AAAAAAAAAAALAPD/AAAAAAAAAAALAPH/AAAAAAAAAAAMAO//AAAAAAAAAAAMAPD/AAAAAAAAAAAMAPH/AAAAAAAAAAAAAO//AAAAAAAAAAAAAPD/AAAAAAAAAAAAAPH/AAAAAAAAAAABAO//AAAAAAAAAAABAPD/AAAAAAAAAAABAPH/AAAAAAAAAAACAO//AAAAAAAAAAACAPD/AAAAAAAAAAACAPH/AAAAAAAAAAA=")
 
 [node name="WallLayer" parent="." index="1" unique_id=917837273]
-tile_map_data = PackedByteArray("AAADAPD/AAAAAAEAAAAAAPX/AAAAAAEAAAA=")
+tile_map_data = PackedByteArray("AAADAPD/AAAAAAEAAAAAAPX/AAAAAAEAAAD+//3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAD+/wAAAAAAAAEAAAD+/wEAAAAAAAEAAAD//wEAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAACAAEAAAAAAAEAAAACAAAAAAAAAAEAAAADAAAAAAAAAAEAAAAEAAAAAAAAAAEAAAAFAAAAAAAAAAEAAAAGAAAAAAAAAAEAAAAHAAAAAAAAAAEAAAAIAAAAAAAAAAEAAAAIAP//AAAAAAEAAAAIAP7/AAAAAAEAAAAIAP3/AAAAAAEAAAAIAPz/AAAAAAEAAAAIAPv/AAAAAAEAAAAIAPr/AAAAAAEAAAAIAPn/AAAAAAEAAAAIAPj/AAAAAAEAAAAIAPf/AAAAAAEAAAAIAPb/AAAAAAEAAAAIAPX/AAAAAAEAAAAHAPX/AAAAAAEAAAAHAPT/AAAAAAEAAAAHAPP/AAAAAAEAAAAHAPL/AAAAAAEAAAAHAPH/AAAAAAEAAAAHAPD/AAAAAAEAAAAHAO//AAAAAAEAAAAIAO//AAAAAAEAAAAJAO//AAAAAAEAAAAJAPD/AAAAAAEAAAAJAPH/AAAAAAEAAAAJAPL/AAAAAAEAAAAKAPL/AAAAAAEAAAALAPL/AAAAAAEAAAAMAPL/AAAAAAEAAAANAPL/AAAAAAEAAAANAPH/AAAAAAEAAAANAPD/AAAAAAEAAAANAO//AAAAAAEAAAAOAO//AAAAAAEAAAAPAO//AAAAAAEAAAAPAPD/AAAAAAEAAAAPAPH/AAAAAAEAAAAPAPL/AAAAAAEAAAAPAPP/AAAAAAEAAAAPAPT/AAAAAAEAAAAQAPT/AAAAAAEAAAARAPT/AAAAAAEAAAASAPT/AAAAAAEAAAASAPP/AAAAAAEAAAASAPL/AAAAAAEAAAASAPH/AAAAAAEAAAASAPD/AAAAAAEAAAASAO//AAAAAAEAAAASAO7/AAAAAAEAAAASAO3/AAAAAAEAAAARAO3/AAAAAAEAAAAQAO3/AAAAAAEAAAAPAO3/AAAAAAEAAAAOAO3/AAAAAAEAAAANAO3/AAAAAAEAAAAMAO3/AAAAAAEAAAALAO3/AAAAAAEAAAAKAO3/AAAAAAEAAAAJAO3/AAAAAAEAAAAIAO3/AAAAAAEAAAAHAO3/AAAAAAEAAAAGAO3/AAAAAAEAAAAFAO3/AAAAAAEAAAAEAO3/AAAAAAEAAAADAO3/AAAAAAEAAAACAO3/AAAAAAEAAAABAO3/AAAAAAEAAAAAAO3/AAAAAAEAAAD//+3/AAAAAAEAAAD+/+3/AAAAAAEAAAD9/+3/AAAAAAEAAAD8/+3/AAAAAAEAAAD7/+3/AAAAAAEAAAD6/+3/AAAAAAEAAAD6/+7/AAAAAAEAAAD6/+//AAAAAAEAAAD6//D/AAAAAAEAAAD6//H/AAAAAAEAAAD6//L/AAAAAAEAAAD6//P/AAAAAAEAAAD6//T/AAAAAAEAAAD7//T/AAAAAAEAAAD8//T/AAAAAAEAAAD9//T/AAAAAAEAAAD9//P/AAAAAAEAAAD9//L/AAAAAAEAAAD9//H/AAAAAAEAAAD9//D/AAAAAAEAAAD9/+//AAAAAAEAAAD+/+//AAAAAAEAAAD//+//AAAAAAEAAAD///D/AAAAAAEAAAD///H/AAAAAAEAAAD///L/AAAAAAEAAAAAAPL/AAAAAAEAAAABAPL/AAAAAAEAAAACAPL/AAAAAAEAAAADAPL/AAAAAAEAAAADAPH/AAAAAAEAAAADAO//AAAAAAEAAAAEAO//AAAAAAEAAAAFAO//AAAAAAEAAAAFAPD/AAAAAAEAAAAFAPH/AAAAAAEAAAAFAPL/AAAAAAEAAAAFAPP/AAAAAAEAAAAFAPT/AAAAAAEAAAAFAPX/AAAAAAEAAAAEAPX/AAAAAAEAAAADAPX/AAAAAAEAAAACAPX/AAAAAAEAAAABAPX/AAAAAAEAAAD///X/AAAAAAEAAAD+//X/AAAAAAEAAAD9//X/AAAAAAEAAAD8//X/AAAAAAEAAAD7//X/AAAAAAEAAAD6//X/AAAAAAEAAAD6//b/AAAAAAEAAAD6//f/AAAAAAEAAAD6//j/AAAAAAEAAAD6//n/AAAAAAEAAAD6//r/AAAAAAEAAAD6//v/AAAAAAEAAAD6//z/AAAAAAEAAAD6//3/AAAAAAEAAAD7//3/AAAAAAEAAAD8//3/AAAAAAEAAAD9//3/AAAAAAEAAAD9//z/AAAAAAEAAAD9//v/AAAAAAEAAAD9//r/AAAAAAEAAAD9//n/AAAAAAEAAAD9//j/AAAAAAEAAAD9//f/AAAAAAEAAAD+//f/AAAAAAEAAAD///f/AAAAAAEAAAD///j/AAAAAAEAAAD///n/AAAAAAEAAAD///r/AAAAAAEAAAD///v/AAAAAAEAAAD///z/AAAAAAEAAAD///3/AAAAAAEAAAAAAP3/AAAAAAEAAAABAP3/AAAAAAEAAAD+//j/AAAAAAEAAAD+//n/AAAAAAEAAAD+//r/AAAAAAEAAAD+//v/AAAAAAEAAAD+//z/AAAAAAEAAAABAPz/AAAAAAEAAAABAPv/AAAAAAEAAAABAPr/AAAAAAEAAAABAPn/AAAAAAEAAAABAPj/AAAAAAEAAAABAPf/AAAAAAEAAAACAPf/AAAAAAEAAAADAPf/AAAAAAEAAAADAPj/AAAAAAEAAAADAPn/AAAAAAEAAAADAPr/AAAAAAEAAAAEAPr/AAAAAAEAAAAFAPr/AAAAAAEAAAAGAPr/AAAAAAEAAAAGAPv/AAAAAAEAAAAGAPz/AAAAAAEAAAAGAP3/AAAAAAEAAAAGAP7/AAAAAAEAAAAFAP7/AAAAAAEAAAAEAP7/AAAAAAEAAAADAP7/AAAAAAEAAAACAP7/AAAAAAEAAAACAP3/AAAAAAEAAAD///P/AAAAAAEAAAD///T/AAAAAAEAAAAAAPP/AAAAAAEAAAAAAPT/AAAAAAEAAAABAPP/AAAAAAEAAAABAPT/AAAAAAEAAAACAPP/AAAAAAEAAAACAPT/AAAAAAEAAAADAPP/AAAAAAEAAAADAPT/AAAAAAEAAAAEAPD/AAAAAAEAAAAEAPH/AAAAAAEAAAAEAPL/AAAAAAEAAAAEAPP/AAAAAAEAAAAEAPT/AAAAAAEAAAD+//D/AAAAAAEAAAD+//H/AAAAAAEAAAD+//L/AAAAAAEAAAD+//P/AAAAAAEAAAD+//T/AAAAAAEAAAA=")
 
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=145704661]
 
@@ -52,7 +52,7 @@ target_spawn_id = &"FromAboveStair"
 
 [node name="StairUp" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="2" unique_id=444350530 instance=ExtResource("2_wiu4o")]
 visible = false
-position = Vector2(0, -320)
+position = Vector2(0, -384)
 target_floor_id = &"floor_3"
 target_spawn_id = &"FromBelowStair"
 
@@ -61,27 +61,27 @@ position = Vector2(96, -480)
 switch_id = &"switch_first"
 
 [node name="EnemyBalanceLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="0" unique_id=796734484 instance=ExtResource("3_mjnjk")]
-position = Vector2(224, -224)
+position = Vector2(192, -480)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="1" unique_id=1610089443 instance=ExtResource("3_mjnjk")]
-position = Vector2(192, -192)
+position = Vector2(192, -352)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="2" unique_id=1170262162 instance=ExtResource("3_mjnjk")]
-position = Vector2(96, -290)
+position = Vector2(64, -288)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="3" unique_id=572895653 instance=ExtResource("3_mjnjk")]
-position = Vector2(-232, -344)
+position = Vector2(160, 0)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV105" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="4" unique_id=1457504315 instance=ExtResource("3_mjnjk")]
-position = Vector2(-292, -349)
+position = Vector2(128, 0)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV106" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="5" unique_id=940855614 instance=ExtResource("3_mjnjk")]
-position = Vector2(0, -256)
+position = Vector2(320, -480)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV107" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="6" unique_id=123780236 instance=ExtResource("3_mjnjk")]
@@ -89,117 +89,137 @@ position = Vector2(32, -448)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV108" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="7" unique_id=59256231 instance=ExtResource("3_mjnjk")]
-position = Vector2(384, -480)
+position = Vector2(192, 0)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV109" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="8" unique_id=1447597796 instance=ExtResource("3_mjnjk")]
-position = Vector2(352, -448)
+position = Vector2(352, -512)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyBalanceLV110" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="9" unique_id=784484577 instance=ExtResource("3_mjnjk")]
-position = Vector2(0, -480)
+position = Vector2(32, -512)
 enemy_data = ExtResource("4_25khy")
 
 [node name="EnemyAtkLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="10" unique_id=278586467 instance=ExtResource("3_mjnjk")]
-position = Vector2(160, 0)
+position = Vector2(224, -224)
 enemy_data = ExtResource("5_bc7h7")
 
 [node name="EnemyAtkLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=1574079802 instance=ExtResource("3_mjnjk")]
-position = Vector2(192, -352)
+position = Vector2(192, -192)
 enemy_data = ExtResource("5_bc7h7")
 
 [node name="EnemyAtkLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="12" unique_id=1568098145 instance=ExtResource("3_mjnjk")]
-position = Vector2(192, -480)
+position = Vector2(192, -416)
 enemy_data = ExtResource("5_bc7h7")
 
-[node name="EnemyDefLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="13" unique_id=840911004 instance=ExtResource("3_mjnjk")]
-position = Vector2(384, -544)
-enemy_data = ExtResource("7_n7rji")
+[node name="EnemyAtkLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="13" unique_id=1674877661 instance=ExtResource("3_mjnjk")]
+position = Vector2(0, -256)
+enemy_data = ExtResource("5_bc7h7")
 
-[node name="EnemyDefLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="14" unique_id=181223855 instance=ExtResource("3_mjnjk")]
-position = Vector2(192, -416)
-enemy_data = ExtResource("7_n7rji")
-
-[node name="EnemyDefLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="15" unique_id=1584935145 instance=ExtResource("3_mjnjk")]
-position = Vector2(320, -480)
-enemy_data = ExtResource("7_n7rji")
-
-[node name="EnemyAtkLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="16" unique_id=424805310 instance=ExtResource("3_mjnjk")]
-position = Vector2(128, -256)
-enemy_data = ExtResource("6_ipvjm")
-
-[node name="EnemyAtkLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="17" unique_id=1281767509 instance=ExtResource("3_mjnjk")]
-position = Vector2(160, -288)
-enemy_data = ExtResource("6_ipvjm")
-
-[node name="EnemyAtkLV203" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="18" unique_id=9610020 instance=ExtResource("3_mjnjk")]
-position = Vector2(-256, -456)
-enemy_data = ExtResource("6_ipvjm")
-
-[node name="EnemyAtkLV204" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="19" unique_id=270728064 instance=ExtResource("3_mjnjk")]
+[node name="EnemyAtkLV105" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="14" unique_id=397403431 instance=ExtResource("3_mjnjk")]
 position = Vector2(64, -480)
+enemy_data = ExtResource("5_bc7h7")
+
+[node name="EnemyAtkLV106" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="15" unique_id=2140471353 instance=ExtResource("3_mjnjk")]
+position = Vector2(0, -480)
+enemy_data = ExtResource("5_bc7h7")
+
+[node name="EnemyAtkLV107" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="16" unique_id=398340297 instance=ExtResource("3_mjnjk")]
+position = Vector2(384, -480)
+enemy_data = ExtResource("5_bc7h7")
+
+[node name="EnemyAtkLV108" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="17" unique_id=202409029 instance=ExtResource("3_mjnjk")]
+position = Vector2(352, -448)
+enemy_data = ExtResource("5_bc7h7")
+
+[node name="EnemyDefLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="18" unique_id=840911004 instance=ExtResource("3_mjnjk")]
+position = Vector2(-360, 88)
+enemy_data = ExtResource("7_n7rji")
+
+[node name="EnemyDefLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="19" unique_id=181223855 instance=ExtResource("3_mjnjk")]
+position = Vector2(-576, 48)
+enemy_data = ExtResource("7_n7rji")
+
+[node name="EnemyDefLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="20" unique_id=1584935145 instance=ExtResource("3_mjnjk")]
+position = Vector2(-512, 72)
+enemy_data = ExtResource("7_n7rji")
+
+[node name="EnemyAtkLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="21" unique_id=424805310 instance=ExtResource("3_mjnjk")]
+position = Vector2(-512, 120)
 enemy_data = ExtResource("6_ipvjm")
 
-[node name="EnemyAtkLV205" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="20" unique_id=1885499731 instance=ExtResource("3_mjnjk")]
-position = Vector2(32, -512)
+[node name="EnemyAtkLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="22" unique_id=1281767509 instance=ExtResource("3_mjnjk")]
+position = Vector2(-336, 296)
 enemy_data = ExtResource("6_ipvjm")
 
-[node name="EnemySpdLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="21" unique_id=2124770074 instance=ExtResource("3_mjnjk")]
-position = Vector2(128, 0)
+[node name="EnemyAtkLV203" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="23" unique_id=9610020 instance=ExtResource("3_mjnjk")]
+position = Vector2(-288, 200)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV204" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="24" unique_id=270728064 instance=ExtResource("3_mjnjk")]
+position = Vector2(-248, 240)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemyAtkLV205" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="25" unique_id=1885499731 instance=ExtResource("3_mjnjk")]
+position = Vector2(-200, 192)
+enemy_data = ExtResource("6_ipvjm")
+
+[node name="EnemySpdLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="26" unique_id=2124770074 instance=ExtResource("3_mjnjk")]
+position = Vector2(-616, 248)
 enemy_data = ExtResource("6_4kpf7")
 
-[node name="EnemySpdLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="22" unique_id=1584225713 instance=ExtResource("3_mjnjk")]
-position = Vector2(192, 0)
+[node name="EnemySpdLV102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="27" unique_id=1584225713 instance=ExtResource("3_mjnjk")]
+position = Vector2(-392, 232)
 enemy_data = ExtResource("6_4kpf7")
 
-[node name="EnemySpdLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="23" unique_id=1107286018 instance=ExtResource("3_mjnjk")]
-position = Vector2(352, -512)
+[node name="EnemySpdLV103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="28" unique_id=1107286018 instance=ExtResource("3_mjnjk")]
+position = Vector2(-600, -168)
 enemy_data = ExtResource("6_4kpf7")
 
-[node name="EnemySpdLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="24" unique_id=183510442 instance=ExtResource("3_mjnjk")]
-position = Vector2(144, -88)
+[node name="EnemySpdLV104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="29" unique_id=183510442 instance=ExtResource("3_mjnjk")]
+position = Vector2(-472, -80)
 
-[node name="EnemyDefLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="25" unique_id=819160527 instance=ExtResource("3_mjnjk")]
-position = Vector2(408, -304)
+[node name="EnemyDefLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="30" unique_id=819160527 instance=ExtResource("3_mjnjk")]
+position = Vector2(-448, 104)
 enemy_data = ExtResource("7_qxwyj")
 
-[node name="EnemyDefLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="26" unique_id=2026681538 instance=ExtResource("3_mjnjk")]
-position = Vector2(496, -264)
+[node name="EnemyDefLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="31" unique_id=2026681538 instance=ExtResource("3_mjnjk")]
+position = Vector2(-360, 144)
 enemy_data = ExtResource("7_qxwyj")
 
-[node name="EnemyBalLv201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="27" unique_id=1045214944 instance=ExtResource("3_mjnjk")]
+[node name="EnemyBalLv201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="32" unique_id=1045214944 instance=ExtResource("3_mjnjk")]
 position = Vector2(512, -544)
 enemy_data = ExtResource("9_ealqj")
 
-[node name="EnemyBalLv202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="28" unique_id=41971178 instance=ExtResource("3_mjnjk")]
+[node name="EnemyBalLv202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="33" unique_id=41971178 instance=ExtResource("3_mjnjk")]
 position = Vector2(-128, -288)
 enemy_data = ExtResource("9_ealqj")
 
-[node name="EnemySpdLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="29" unique_id=1463981480 instance=ExtResource("3_mjnjk")]
+[node name="EnemySpdLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="34" unique_id=1463981480 instance=ExtResource("3_mjnjk")]
 position = Vector2(-240, 152)
 enemy_data = ExtResource("10_5ti25")
 
-[node name="EnemySpdLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="30" unique_id=133423824 instance=ExtResource("3_mjnjk")]
+[node name="EnemySpdLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="35" unique_id=133423824 instance=ExtResource("3_mjnjk")]
 position = Vector2(-288, 104)
 enemy_data = ExtResource("10_5ti25")
 
 [node name="FragmentRedLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("3_gkij4")]
-position = Vector2(192, -512)
+position = Vector2(0, -192)
 pickup_id = &"red_fragment_lv1_1"
 item_data = ExtResource("6_fb648")
 
 [node name="FragmentRedLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=758168801 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -64)
+position = Vector2(0, -224)
 pickup_id = &"red_fragment_lv1_2"
 item_data = ExtResource("6_fb648")
 
 [node name="FragmentRedLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=2047943441 instance=ExtResource("3_gkij4")]
-position = Vector2(192, -384)
+position = Vector2(0, -160)
 pickup_id = &"red_fragment_lv1_3"
 item_data = ExtResource("6_fb648")
 
 [node name="FragmentBlueLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=1610732193 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -96)
+position = Vector2(384, -512)
 pickup_id = &"fragment_blue_lv1_1"
 item_data = ExtResource("9_4kpf7")
 
@@ -209,7 +229,7 @@ pickup_id = &"fragment_blue_lv1_2"
 item_data = ExtResource("9_4kpf7")
 
 [node name="FragmentBlueLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="5" unique_id=1796412926 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -32)
+position = Vector2(320, -448)
 pickup_id = &"fragment_blue_lv1_3"
 item_data = ExtResource("9_4kpf7")
 
@@ -219,97 +239,105 @@ pickup_id = &"fragment_yellow_lv1_1"
 item_data = ExtResource("10_lp7jv")
 
 [node name="FragmentYellowLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="7" unique_id=1314230591 instance=ExtResource("3_gkij4")]
-position = Vector2(384, -512)
+position = Vector2(192, -512)
 pickup_id = &"fragment_yellow_lv1_12"
 item_data = ExtResource("10_lp7jv")
 
 [node name="FragmentYellowLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="8" unique_id=2040556201 instance=ExtResource("3_gkij4")]
-position = Vector2(320, -448)
+position = Vector2(192, -384)
 pickup_id = &"fragment_yellow_lv1_3"
 item_data = ExtResource("10_lp7jv")
 
 [node name="FPLV101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=608967456 instance=ExtResource("3_gkij4")]
-position = Vector2(32, -480)
+position = Vector2(-352, -392)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=77360329 instance=ExtResource("3_gkij4")]
-position = Vector2(64, -448)
+position = Vector2(-288, -328)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=1234379088 instance=ExtResource("3_gkij4")]
-position = Vector2(0, -512)
+position = Vector2(-416, -456)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="12" unique_id=415248943 instance=ExtResource("3_gkij4")]
-position = Vector2(160, -544)
+position = Vector2(320, -512)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="13" unique_id=490511481 instance=ExtResource("3_gkij4")]
-position = Vector2(96, -544)
+position = Vector2(64, -512)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="14" unique_id=1391104336 instance=ExtResource("3_gkij4")]
-position = Vector2(128, -544)
+position = Vector2(0, -288)
 item_data = ExtResource("18_sbwf3")
 
 [node name="HPLV101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="15" unique_id=977591183 instance=ExtResource("3_gkij4")]
-position = Vector2(160, -192)
+position = Vector2(224, -32)
 pickup_id = &"hp_lv1_1"
 item_data = ExtResource("11_po1ci")
 
 [node name="HPLV102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="16" unique_id=1374842226 instance=ExtResource("3_gkij4")]
-position = Vector2(192, -224)
+position = Vector2(224, -64)
 pickup_id = &"hp_lv1_2"
 item_data = ExtResource("11_po1ci")
 
 [node name="HPLV103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="17" unique_id=2013638040 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -256)
+position = Vector2(224, -96)
 pickup_id = &"hp_lv1_3"
 item_data = ExtResource("11_po1ci")
 
 [node name="HPLV104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="18" unique_id=1946891021 instance=ExtResource("3_gkij4")]
-position = Vector2(128, -288)
+position = Vector2(192, -288)
 item_data = ExtResource("11_po1ci")
 
 [node name="HPLV105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="19" unique_id=1330241102 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -544)
+position = Vector2(160, -256)
 item_data = ExtResource("11_po1ci")
 
 [node name="HPLV106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="20" unique_id=1912156145 instance=ExtResource("3_gkij4")]
-position = Vector2(256, -544)
+position = Vector2(128, -224)
 item_data = ExtResource("11_po1ci")
 
-[node name="HPLV107" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="21" unique_id=1813612585 instance=ExtResource("3_gkij4")]
-position = Vector2(288, -544)
-item_data = ExtResource("11_po1ci")
-
-[node name="HPLV201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="22" unique_id=1144956554 instance=ExtResource("3_gkij4")]
-position = Vector2(64, -288)
+[node name="HPLV202" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="21" unique_id=1813612585 instance=ExtResource("3_gkij4")]
+position = Vector2(64, -448)
 item_data = ExtResource("20_ktu67")
 
-[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="23" unique_id=594253039 instance=ExtResource("3_gkij4")]
+[node name="HPLV203" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="22" unique_id=1557738688 instance=ExtResource("3_gkij4")]
+position = Vector2(32, -480)
+item_data = ExtResource("20_ktu67")
+
+[node name="HPLV204" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="23" unique_id=1351178467 instance=ExtResource("3_gkij4")]
+position = Vector2(0, -512)
+item_data = ExtResource("20_ktu67")
+
+[node name="HPLV201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="24" unique_id=1144956554 instance=ExtResource("3_gkij4")]
+position = Vector2(32, -288)
+item_data = ExtResource("20_ktu67")
+
+[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=594253039 instance=ExtResource("3_gkij4")]
 position = Vector2(-368, -248)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="24" unique_id=226122769 instance=ExtResource("3_gkij4")]
+[node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=226122769 instance=ExtResource("3_gkij4")]
 position = Vector2(-280, -256)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=1735979925 instance=ExtResource("3_gkij4")]
+[node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="27" unique_id=1735979925 instance=ExtResource("3_gkij4")]
 position = Vector2(-432, -272)
 pickup_id = &"stone01"
 item_data = ExtResource("4_mjnjk")
 
-[node name="HandsLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=947615643 instance=ExtResource("3_gkij4")]
-position = Vector2(192, -320)
+[node name="HandsLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="28" unique_id=947615643 instance=ExtResource("3_gkij4")]
+position = Vector2(96, -288)
 item_data = ExtResource("19_k8x4f")
 
-[node name="SwordLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="27" unique_id=417538855 instance=ExtResource("3_gkij4")]
+[node name="SwordLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="29" unique_id=417538855 instance=ExtResource("3_gkij4")]
 position = Vector2(384, -448)
 item_data = ExtResource("20_i81q6")
 
-[node name="HeadLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="28" unique_id=897285071 instance=ExtResource("3_gkij4")]
+[node name="HeadLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="30" unique_id=897285071 instance=ExtResource("3_gkij4")]
 position = Vector2(0, -448)
 item_data = ExtResource("21_0w1qe")

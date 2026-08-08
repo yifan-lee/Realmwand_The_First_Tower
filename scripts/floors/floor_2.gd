@@ -20,6 +20,8 @@ func _cache_switch_terrain() -> void:
 		wall_layer,
 		[
 			Vector2i(0, -11),
+			Vector2i(0, -12),
+			Vector2i(0, -13),
 		]
 	)
 

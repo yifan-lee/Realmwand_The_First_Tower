@@ -7,6 +7,7 @@ const EXPERIENCE_PER_LEVEL: int = 10
 const BASE_EXPERIENCE: int = 50
 const AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL: float = 2.0
 const FREE_STAT_POINTS_PER_LEVEL: int = 6
+const STAT_INCREASE_PER_ALLOCATED_POINT: float = 1.0
 const BASE_MAX_HP_COEFFICIENT: float = 4.0
 const BASE_MAX_MP_COEFFICIENT: float = 2.0
 const BASE_FP_RECOVERY_COEFFICIENT: float = 0.1
@@ -126,7 +127,7 @@ static func default_enemy_experience(
 
 
 static func stat_point_increase(_stat_id: StringName) -> float:
-	return AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL
+	return STAT_INCREASE_PER_ALLOCATED_POINT
 
 
 static func skill_effect_delta(
