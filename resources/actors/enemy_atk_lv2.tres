@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c5c5cd7l56mo4"]
+
+[ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_705wo"]
+[ext_resource type="Texture2D" uid="uid://bsta4h3n67olb" path="res://assets/monsters/atk_tier_2.png" id="1_glimv"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_glimv"]
+[ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_kgnxe"]
+
+[resource]
+script = ExtResource("1_705wo")
+world_texture = ExtResource("1_glimv")
+display_name = "2级攻击怪"
+atk = 80.0
+def = 30.0
+spd = 50.0
+portrait = ExtResource("1_glimv")
+metadata/_custom_type_script = "uid://dt0hov06fbtv5"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cjh7qfr7pl1ww"]
+
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_6yv2l"]
+[ext_resource type="Texture2D" uid="uid://dufjnfdbdm8r8" path="res://assets/items/token/universal_token_tier_1.png" id="1_q1oyt"]
+
+[resource]
+script = ExtResource("1_6yv2l")
+id = &"stone"
+display_name = "多彩小石头"
+description = "散发着多种颜色的小石头"
+item_type = 3
+icon = ExtResource("1_q1oyt")
+world_texture = ExtResource("1_q1oyt")
+metadata/_custom_type_script = "uid://gqps43r1hjs1"

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ctl3skm52eury"]
+
+[ext_resource type="Texture2D" uid="uid://dufjnfdbdm8r8" path="res://assets/items/token/universal_token_tier_1.png" id="1_hht1w"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_ia3im"]
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_uphl2"]
+
+[sub_resource type="Resource" id="Resource_ktu67"]
+script = ExtResource("1_ia3im")
+effect_type = 5
+value = 10.0
+
+[sub_resource type="Resource" id="Resource_ia3im"]
+script = ExtResource("1_ia3im")
+effect_type = 6
+metadata/_custom_type_script = "uid://b1wegwwmokann"
+
+[resource]
+script = ExtResource("1_uphl2")
+id = &"fp_recovery_lv1"
+display_name = "1级专注回复数据"
+description = "回复些许专注"
+icon = ExtResource("1_hht1w")
+world_texture = ExtResource("1_hht1w")
+usable_from_inventory = true
+usable_in_battle = true
+consumed_on_use = true
+effects = Array[ExtResource("1_ia3im")]([SubResource("Resource_ktu67"), SubResource("Resource_ia3im")])
+metadata/_custom_type_script = "uid://gqps43r1hjs1"

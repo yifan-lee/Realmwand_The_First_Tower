@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://38fkrm33mmo4"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_dkq5f"]
+[ext_resource type="Script" uid="uid://bip0oodwwfc5o" path="res://scripts/ui/components/entry_info_panel.gd" id="1_py60k"]
+
+[node name="EntryInfoPanel" type="PanelContainer" unique_id=446886182]
+custom_minimum_size = Vector2(0, 220)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_dkq5f")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("1_py60k")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1718601023]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=61543066]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/Content" unique_id=612899091]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/Content/Header" unique_id=961987820]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content/Header" unique_id=1634111586]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "条目名称"
+vertical_alignment = 1
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="MarginContainer/Content" unique_id=1598442871]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "这里显示物品或技能的主要说明。"
+scroll_active = false
+
+[node name="DetailsSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=1144037436]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DetailsLabel" type="RichTextLabel" parent="MarginContainer/Content" unique_id=717454194]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "效果信息"
+scroll_active = false

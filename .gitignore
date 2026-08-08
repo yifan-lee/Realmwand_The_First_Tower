@@ -1,3 +1,16 @@
 # Godot 4+ specific ignores
 .godot/
+.import/
 /android/
+
+# Local editor and MCP state
+.DS_Store
+.mcp.json
+resources/godot-mcp-pro-server/
+
+# Temporary validation artifacts
+/tmp/*
+!/tmp/.gitkeep
+!/tmp/tests/
+/tmp/tests/*
+!/tmp/tests/.gitkeep

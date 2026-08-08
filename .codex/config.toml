@@ -1,0 +1,183 @@
+[mcp_servers.godot-mcp-pro]
+command = "node"
+args = ["./resources/godot-mcp-pro-server/server/build/index.js"]
+
+[mcp_servers.godot-mcp-pro.tools.get_project_info]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.open_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_tree]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.move_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.save_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.validate_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_editor_errors]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.execute_editor_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.clear_output]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_output_log]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.attach_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.delete_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.rename_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.update_property]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.reload_project]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_exports]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.edit_resource]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.play_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.wait_for_node]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.execute_game_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_action]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.stop_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_scene_tree]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.run_test_scenario]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_screenshot]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_node_properties]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.read_resource]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.read_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_file_content]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.batch_add_nodes]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.create_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.setup_control]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.delete_scene]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_scene_instance]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_auto_dismiss]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.assert_screen_text]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_test_report]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.search_in_files]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_script_references]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_scene_dependencies]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_game_node_properties]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.create_script]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_project_setting]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_open_scripts]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_filesystem_tree]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.batch_get_properties]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.tilemap_get_used_cells]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.tilemap_get_cell]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_project_settings]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_mouse_click]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_anchor_preset]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.get_input_actions]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.set_input_action]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.capture_frames]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_key]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.add_resource]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_ui_elements]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.click_button_by_text]
+approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.find_nodes_by_script]
+approval_mode = "approve"

@@ -1,23 +1,40 @@
 [gd_scene format=3 uid="uid://chy0ch1mjs830"]
 
-[ext_resource type="Texture2D" uid="uid://b1l3nybi3og6y" path="res://icon.svg" id="1_15tap"]
-[ext_resource type="Script" uid="uid://ch1jkr7o8hp6h" path="res://scripts/player.gd" id="1_ru62r"]
+[ext_resource type="SpriteFrames" uid="uid://rg80tmetdqnu" path="res://resources/actors/player_sprite_frames.tres" id="1_15tap"]
+[ext_resource type="Script" uid="uid://joeclpu10qiu" path="res://scripts/actors/player.gd" id="1_ktjr4"]
+[ext_resource type="Resource" uid="uid://busl32dqnk4m7" path="res://resources/actors/player.tres" id="2_7wueq"]
+[ext_resource type="Script" uid="uid://ch3bhi5uh7oog" path="res://scripts/inventory/inventory.gd" id="4_7wueq"]
+[ext_resource type="Script" uid="uid://cpdqspxx7va8u" path="res://scripts/inventory/equipment_loadout.gd" id="5_oomub"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cacbb"]
 size = Vector2(24, 24)
 
-[node name="Player" type="CharacterBody2D" unique_id=1231103014 groups=["player"]]
-script = ExtResource("1_ru62r")
+[node name="Player" type="CharacterBody2D" unique_id=502328232]
+collision_mask = 10
+motion_mode = 1
+script = ExtResource("1_ktjr4")
+player_data = ExtResource("2_7wueq")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1997796568]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("1_15tap")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=596576369]
+z_index = 1
+texture_filter = 1
+scale = Vector2(0.125, 0.125)
+sprite_frames = ExtResource("1_15tap")
+animation = &"idle_down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447536532]
-shape = SubResource("RectangleShape2D_k3a8i")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1924730112]
+shape = SubResource("RectangleShape2D_cacbb")
 
-[node name="InteractionRay" type="RayCast2D" parent="." unique_id=1775540173]
+[node name="InteractionRay" type="RayCast2D" parent="." unique_id=765670773]
 target_position = Vector2(0, 32)
-collision_mask = 2
+collision_mask = 14
 collide_with_areas = true
-collide_with_bodies = false
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1968162179]
+zoom = Vector2(3, 3)
+
+[node name="Inventory" type="Node" parent="." unique_id=1664787739]
+script = ExtResource("4_7wueq")
+
+[node name="Equipment" type="Node" parent="." unique_id=1081193953]
+script = ExtResource("5_oomub")

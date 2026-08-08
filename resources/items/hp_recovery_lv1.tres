@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dp07qcx0dn7k"]
+
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_bllr4"]
+[ext_resource type="Texture2D" uid="uid://cj8tj1soogg8e" path="res://assets/items/token/hp_tier_1.png" id="1_d1yla"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_n1f62"]
+
+[sub_resource type="Resource" id="Resource_ia3im"]
+script = ExtResource("1_n1f62")
+effect_type = 3
+value = 20.0
+metadata/_custom_type_script = "uid://b1wegwwmokann"
+
+[resource]
+script = ExtResource("1_bllr4")
+id = &"hp_recovery_lv1"
+display_name = "1级生命药剂"
+description = "使用后回复生命值"
+icon = ExtResource("1_d1yla")
+world_texture = ExtResource("1_d1yla")
+usable_from_inventory = true
+usable_in_battle = true
+consumed_on_use = true
+effects = Array[ExtResource("1_n1f62")]([SubResource("Resource_ia3im")])

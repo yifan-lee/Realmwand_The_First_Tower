@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dkfo3tcwjpfiv"]
+
+[ext_resource type="Texture2D" uid="uid://b85cyet5ryobq" path="res://assets/items/equipment/wearable/hands_atk_tier_1.png" id="1_qn0y1"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="2_icteg"]
+
+[resource]
+script = ExtResource("2_icteg")
+slot_type = 2
+atk_bonus = 5.0
+def_bonus = 5.0
+id = &"hands_lv1"
+display_name = "一级护手"
+description = "提升攻击力和防御力的护手"
+item_type = 1
+icon = ExtResource("1_qn0y1")
+world_texture = ExtResource("1_qn0y1")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

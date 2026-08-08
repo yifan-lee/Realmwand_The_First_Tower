@@ -1,73 +1,59 @@
-[gd_scene format=4 uid="uid://cgtpywfdgxmdk"]
+[gd_scene format=3 uid="uid://cgtpywfdgxmdk"]
 
-[ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://cli46ma0bo83n" path="res://scripts/main.gd" id="1_tbgi4"]
-[ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_a8y0u"]
-[ext_resource type="PackedScene" uid="uid://c24p8kgmj10qm" path="res://scenes/interactables/pickup.tscn" id="3_sugp2"]
-[ext_resource type="PackedScene" uid="uid://bguxyktnytjmf" path="res://scenes/interactables/door.tscn" id="4_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://km2p83ut3fws" path="res://scenes/canvas_layer.tscn" id="5_tefeu"]
-[ext_resource type="Resource" uid="uid://c5ia12due8vcu" path="res://resources/items/small_potion.tres" id="6_eb6dy"]
-[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="6_tefeu"]
-[ext_resource type="Resource" uid="uid://dpsu2l7g283fl" path="res://resources/items/sword.tres" id="7_trceg"]
-[ext_resource type="PackedScene" uid="uid://dkyhc64ibja1e" path="res://scenes/interactables/exit_stairs.tscn" id="8_tipki"]
-[ext_resource type="PackedScene" uid="uid://3ud0niwb80xb" path="res://scenes/actors/world_enemy.tscn" id="9_85g3d"]
-[ext_resource type="PackedScene" uid="uid://dpvwubclw3iww" path="res://scenes/battle_layer.tscn" id="10_choun"]
-[ext_resource type="Resource" uid="uid://c04hib5kth66g" path="res://resources/enemies/slime.tres" id="12_trceg"]
+[ext_resource type="Script" uid="uid://cpdmgcoiwdyuu" path="res://scripts/main.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://chy0ch1mjs830" path="res://scenes/actors/player.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://ddq8reokgkxpy" path="res://scripts/floors/floor_manager.gd" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://75deq3hlwxqw" path="res://scenes/ui/game_hud.tscn" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://dr6tg0mdostdd" path="res://scripts/battle/battle_manager.gd" id="4_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://cgtdidijthtbh" path="res://scenes/ui/esc_menu.tscn" id="5_eb6dy"]
+[ext_resource type="Script" uid="uid://brxoo6rhyrxm3" path="res://scripts/progression/level_up_manager.gd" id="5_tipki"]
+[ext_resource type="Script" uid="uid://c01ki8y1ygkbo" path="res://scripts/save/save_manager.gd" id="6_choun"]
+[ext_resource type="Script" uid="uid://cedotsk7lkjx7" path="res://scripts/npc/npc_interaction_manager.gd" id="7_dp3eg"]
+[ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="8_85g3d"]
+[ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="9_choun"]
+[ext_resource type="PackedScene" uid="uid://d34cotjf141ol" path="res://scenes/ui/npc/npc_interaction_ui.tscn" id="12_0ld40"]
 
-[node name="Main" type="Node2D" unique_id=1557596140]
-script = ExtResource("1_tbgi4")
+[node name="Main" type="Node2D" unique_id=1313419244]
+script = ExtResource("1_o5qli")
 
-[node name="Map" type="Node2D" parent="." unique_id=456509750]
-position = Vector2(-16, -16)
+[node name="World" type="Node2D" parent="." unique_id=615637697]
 
-[node name="Ground" type="TileMapLayer" parent="Map" unique_id=1445315833]
-texture_filter = 1
-tile_map_data = PackedByteArray("AAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAA=")
-tile_set = ExtResource("2_a8y0u")
+[node name="FloorContainer" type="Node2D" parent="World" unique_id=533456458]
+unique_name_in_owner = true
 
-[node name="Walls" type="TileMapLayer" parent="Map" unique_id=1749324428]
-tile_map_data = PackedByteArray("AAACAAEAAAAAAAEAAAADAAEAAAAAAAEAAAAEAAEAAAAAAAEAAAAFAAEAAAAAAAEAAAAGAAEAAAAAAAEAAAAHAAEAAAACAAEAAFAHAAIAAAAAAAEAAFAHAAMAAAAAAAEAAFAHAAQAAAAAAAEAAFABAAQAAAAAAAEAAGABAAMAAAAAAAEAAGABAAIAAAAAAAEAAGABAAUAAAACAAEAAGACAAUAAAAAAAEAADADAAUAAAAAAAEAADAFAAUAAAAAAAEAADAGAAUAAAAAAAEAADABAAEAAAACAAEAAAAHAAUAAAACAAEAADA=")
-tile_set = ExtResource("2_a8y0u")
+[node name="Player" parent="World" unique_id=502328232 instance=ExtResource("2_0wfyh")]
+unique_name_in_owner = true
 
-[node name="Door" parent="." unique_id=2030626556 instance=ExtResource("4_o6xl0")]
-position = Vector2(128, 160)
+[node name="Systems" type="Node" parent="." unique_id=1391132939]
+unique_name_in_owner = true
 
-[node name="Player" parent="." unique_id=1231103014 instance=ExtResource("1_o5qli")]
-position = Vector2(96, 96)
+[node name="FloorManager" type="Node" parent="Systems" unique_id=1548920082]
+unique_name_in_owner = true
+script = ExtResource("3_sugp2")
 
-[node name="SmallPotion" parent="." unique_id=833630625 instance=ExtResource("3_sugp2")]
-position = Vector2(128, 128)
-item_data = ExtResource("6_eb6dy")
+[node name="BattleManager" type="Node" parent="Systems" unique_id=1581082011]
+script = ExtResource("4_o6xl0")
 
-[node name="Sword" parent="." unique_id=1446857492 instance=ExtResource("3_sugp2")]
-position = Vector2(96, 128)
-item_data = ExtResource("7_trceg")
+[node name="LevelUpManager" type="Node" parent="Systems" unique_id=1817577795]
+script = ExtResource("5_tipki")
 
-[node name="UI" parent="." unique_id=1158568077 instance=ExtResource("5_tefeu")]
-offset = Vector2(16, 16)
-transform = Transform2D(1, 0, 0, 1, 16, 16)
+[node name="SaveManager" type="Node" parent="Systems" unique_id=598261131]
+script = ExtResource("6_choun")
 
-[node name="Switch1" parent="." unique_id=1354980094 instance=ExtResource("6_tefeu")]
-position = Vector2(224, 96)
-switch_id = 1
+[node name="NpcInteractionManager" type="Node" parent="Systems" unique_id=1607828367]
+script = ExtResource("7_dp3eg")
 
-[node name="Switch2" parent="." unique_id=1036974647 instance=ExtResource("6_tefeu")]
-position = Vector2(128, 32)
-switch_id = 2
+[node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
+unique_name_in_owner = true
 
-[node name="Switch3" parent="." unique_id=307478598 instance=ExtResource("6_tefeu")]
-position = Vector2(96, 32)
-switch_id = 3
+[node name="GameHUD" parent="OverlayRoot" unique_id=129955379 instance=ExtResource("4_jyhfs")]
 
-[node name="ExitStairs" parent="." unique_id=394026365 instance=ExtResource("8_tipki")]
-position = Vector2(128, 224)
+[node name="EscMenu" parent="OverlayRoot" unique_id=866050831 instance=ExtResource("5_eb6dy")]
 
-[node name="WorldEnemy1" parent="." unique_id=1359354295 instance=ExtResource("9_85g3d")]
-position = Vector2(128, 96)
-enemy_data = ExtResource("12_trceg")
+[node name="BattleUI" parent="OverlayRoot" unique_id=609410111 instance=ExtResource("8_85g3d")]
+layer = 3
 
-[node name="WorldEnemy2" parent="." unique_id=1395840544 instance=ExtResource("9_85g3d")]
-position = Vector2(128, 192)
-enemy_data = ExtResource("12_trceg")
+[node name="LevelUpUI" parent="OverlayRoot" unique_id=1205088737 instance=ExtResource("9_choun")]
+layer = 4
 
-[node name="BattleLayer" parent="." unique_id=1634381783 instance=ExtResource("10_choun")]
+[node name="NpcInteractionUI" parent="OverlayRoot" unique_id=1522184711 instance=ExtResource("12_0ld40")]

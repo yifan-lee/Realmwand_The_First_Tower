@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://d34cotjf141ol"]
+
+[ext_resource type="Script" uid="uid://c0uwa160ejae" path="res://scripts/npc/npc_interaction_ui.gd" id="1_mromn"]
+[ext_resource type="PackedScene" uid="uid://d0j66d8tiecc6" path="res://scenes/ui/components/selectable_list_row.tscn" id="2_ri78b"]
+[ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_eu08y"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="4_o4vg4"]
+
+[node name="NpcInteractionUI" type="CanvasLayer" unique_id=1522184711]
+layer = 5
+script = ExtResource("1_mromn")
+option_row_scene = ExtResource("2_ri78b")
+
+[node name="InteractionRoot" type="Control" parent="." unique_id=1891679716]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_o4vg4")
+
+[node name="Backdrop" type="ColorRect" parent="InteractionRoot" unique_id=1309469323]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.019607844, 0.039215688, 0.050980393, 0.8)
+
+[node name="Center" type="CenterContainer" parent="InteractionRoot/Backdrop" unique_id=1514105355]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="InteractionRoot/Backdrop/Center" unique_id=163047420]
+custom_minimum_size = Vector2(900, 900)
+layout_mode = 2
+theme_type_variation = &"TerminalPanel"
+
+[node name="Margin" type="MarginContainer" parent="InteractionRoot/Backdrop/Center/Panel" unique_id=1015486482]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="Content" type="VBoxContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin" unique_id=417865287]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1551620305]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "NPC 互动"
+horizontal_alignment = 1
+
+[node name="ActorStatsPanel" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("3_eu08y")]
+layout_mode = 2
+fp_display_mode = 1
+
+[node name="DialoguePanel" type="PanelContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1413644256]
+custom_minimum_size = Vector2(0, 390)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"TerminalInsetPanel"
+
+[node name="DialogueMargin" type="MarginContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel" unique_id=710674309]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="DialogueContent" type="VBoxContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin" unique_id=1041944742]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PromptLabel" type="Label" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=756566367]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "选择你希望进行的交换。"
+autowrap_mode = 3
+
+[node name="OptionsScroll" type="ScrollContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=995617441]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OptionRows" type="VBoxContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/OptionsScroll" unique_id=1462300709]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CancelButton" type="Button" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=606034708]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "取消"
+
+[node name="FeedbackLabel" type="Label" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=179518342]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HintLabel" type="Label" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1268316973]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "↑↓ 选择   确认键兑换   菜单键取消"
+horizontal_alignment = 1

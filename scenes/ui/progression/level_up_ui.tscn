@@ -1,0 +1,178 @@
+[gd_scene format=3 uid="uid://dnrvslgwgxro2"]
+
+[ext_resource type="Script" uid="uid://gm31ypgky8vd" path="res://scripts/progression/level_up_ui.gd" id="1_l57ej"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_rxjkq"]
+[ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_kcv3a"]
+
+[node name="LevelUpUI" type="CanvasLayer" unique_id=1205088737]
+script = ExtResource("1_l57ej")
+
+[node name="LevelRoot" type="Control" parent="." unique_id=1187424346]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_rxjkq")
+
+[node name="Backdrop" type="ColorRect" parent="LevelRoot" unique_id=193025296]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.019607844, 0.039215688, 0.050980393, 0.8)
+
+[node name="Center" type="CenterContainer" parent="LevelRoot/Backdrop" unique_id=1876929391]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="LevelRoot/Backdrop/Center" unique_id=1469509314]
+custom_minimum_size = Vector2(760, 820)
+layout_mode = 2
+theme_type_variation = &"TerminalPanel"
+
+[node name="Margin" type="MarginContainer" parent="LevelRoot/Backdrop/Center/Panel" unique_id=477981902]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="Content" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin" unique_id=1348066907]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=186426385]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "升级加点"
+horizontal_alignment = 1
+
+[node name="ActorStatsPanel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("3_kcv3a")]
+layout_mode = 2
+fp_display_mode = 1
+
+[node name="PointsLabel" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1442395440]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "剩余点数：0"
+horizontal_alignment = 1
+
+[node name="AllocationRows" type="VBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1185520957]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AtkRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows" unique_id=2014505325]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow" unique_id=1403494253]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow/ValueButton" unique_id=566266069]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AllocationGrid" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/AtkRow" unique_id=910865611]
+custom_minimum_size = Vector2(340, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+vertical_alignment = 1
+
+[node name="DefRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows" unique_id=841668481]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow" unique_id=780848258]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow/ValueButton" unique_id=1896157626]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AllocationGrid" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/DefRow" unique_id=1970742142]
+custom_minimum_size = Vector2(340, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+vertical_alignment = 1
+
+[node name="SpdRow" type="HBoxContainer" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows" unique_id=353042752]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ValueButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow" unique_id=13723406]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+
+[node name="StatDisplay" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow/ValueButton" unique_id=1107871000]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AllocationGrid" type="RichTextLabel" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content/AllocationRows/SpdRow" unique_id=1751747874]
+custom_minimum_size = Vector2(340, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+bbcode_enabled = true
+scroll_active = false
+vertical_alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=957014976]
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+disabled = true
+text = "完成"
+
+[node name="HintLabel" type="Label" parent="LevelRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1750703118]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "↑↓ 选择属性   ←→ 分配点数   完成键确认"
+horizontal_alignment = 1

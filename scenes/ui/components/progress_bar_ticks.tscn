@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://b801byk57bi6y"]
+
+[node name="ProgressBarTicks" type="Control" unique_id=939573977]
+z_index = 1
+custom_minimum_size = Vector2(250, 24)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Tick1" type="ColorRect" parent="." unique_id=340186464]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_right = 0.1
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick2" type="ColorRect" parent="." unique_id=1278105505]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick3" type="ColorRect" parent="." unique_id=1183349806]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_right = 0.3
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick4" type="ColorRect" parent="." unique_id=361309962]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick5" type="ColorRect" parent="." unique_id=2065586330]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick6" type="ColorRect" parent="." unique_id=155088636]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick7" type="ColorRect" parent="." unique_id=1585363937]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick8" type="ColorRect" parent="." unique_id=598683148]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_right = 0.8
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)
+
+[node name="Tick9" type="ColorRect" parent="." unique_id=517213825]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_right = 0.9
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.0862745, 0.0941176, 0.105882, 0.55)

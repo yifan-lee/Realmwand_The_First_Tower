@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bbkyugu0r0boc"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_k8e7g"]
+[ext_resource type="Script" uid="uid://bdr618i520nn4" path="res://scripts/ui/components/tracked_item_row.gd" id="1_richu"]
+
+[node name="TrackedItemRow" type="HBoxContainer" unique_id=638465790]
+custom_minimum_size = Vector2(0, 48)
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme = ExtResource("1_k8e7g")
+script = ExtResource("1_richu")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1902079562]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=192792440]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "追踪物品"
+
+[node name="QuantityLabel" type="Label" parent="." unique_id=2011453668]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "×0"

@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/session_start_check_git_hooks.py\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root = git rev-parse --show-toplevel; if ($LASTEXITCODE -ne 0) { exit 0 }; $script = Join-Path $root '.codex/hooks/session_start_check_git_hooks.py'; if (Get-Command python -ErrorAction SilentlyContinue) { python $script } elseif (Get-Command py -ErrorAction SilentlyContinue) { py -3 $script } else { Write-Host '[SessionStart] Python is missing; cannot run Git hook environment check.'; exit 0 }\"",
+            "timeout": 30,
+            "statusMessage": "Checking Git hook environment"
+          }
+        ]
+      }
+    ]
+  }
+}

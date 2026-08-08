@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c3wjh3yedu4qu"]
+
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_1x6vb"]
+[ext_resource type="Texture2D" uid="uid://dj7v4npbbomve" path="res://assets/items/token/spd_token_tier_1.png" id="1_coqkn"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_kkejm"]
+
+[resource]
+script = ExtResource("1_1x6vb")
+id = &"fragment_blue_lv1"
+display_name = "1级蓝色碎片"
+description = "蕴含着些许速度的力量"
+item_type = 3
+icon = ExtResource("1_coqkn")
+world_texture = ExtResource("1_coqkn")
+metadata/_custom_type_script = "uid://gqps43r1hjs1"

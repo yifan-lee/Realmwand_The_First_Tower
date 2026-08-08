@@ -1,0 +1,184 @@
+[gd_scene format=3 uid="uid://8dfbly2wjvyv"]
+
+[ext_resource type="Script" uid="uid://bqlnlmqyrj76q" path="res://scripts/battle/battle_ui.gd" id="1_d43ay"]
+[ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_elpkr"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_keo60"]
+[ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="3_bgiko"]
+[ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="4_keo60"]
+[ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_bgiko"]
+
+[node name="BattleUI" type="CanvasLayer" unique_id=609410111]
+script = ExtResource("1_d43ay")
+
+[node name="BattleRoot" type="Control" parent="." unique_id=1011433119]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_keo60")
+
+[node name="Backdrop" type="ColorRect" parent="BattleRoot" unique_id=881565047]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.019607844, 0.039215688, 0.050980393, 0.72156864)
+
+[node name="Center" type="CenterContainer" parent="BattleRoot/Backdrop" unique_id=125748345]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattlePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center" unique_id=1082741989]
+custom_minimum_size = Vector2(1760, 900)
+layout_mode = 2
+theme_type_variation = &"TerminalPanel"
+
+[node name="Margin" type="MarginContainer" parent="BattleRoot/Backdrop/Center/BattlePanel" unique_id=1053820961]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin" unique_id=1847701958]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BattleBody" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1116893084]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="PlayerStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=799998403 instance=ExtResource("2_elpkr")]
+layout_mode = 2
+
+[node name="CenterColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=786186562]
+custom_minimum_size = Vector2(850, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="SharedAtb" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn" unique_id=1322927492]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AtbLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb" unique_id=1363487546]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "行动进度"
+horizontal_alignment = 1
+
+[node name="Track" type="ProgressBar" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb" unique_id=1346031207]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"AtbProgressBar"
+value = 100.0
+show_percentage = false
+
+[node name="PlayerMarker" type="TextureRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1224952004]
+z_index = 2
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EnemyMarker" type="TextureRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1153709964]
+z_index = 1
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ActionTabs" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn" unique_id=689135324]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SkillsTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs" unique_id=822304724]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+toggle_mode = true
+button_pressed = true
+text = "技能"
+
+[node name="ItemsTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs" unique_id=174970472]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+toggle_mode = true
+text = "道具"
+
+[node name="EscapeTab" type="Button" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs" unique_id=129788017]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+toggle_mode = true
+text = "撤退"
+
+[node name="ActionBody" type="HBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn" unique_id=260623237]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ListColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=574439855]
+custom_minimum_size = Vector2(345, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn" unique_id=2087337204 instance=ExtResource("3_bgiko")]
+custom_minimum_size = Vector2(345, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn" unique_id=1714447019 instance=ExtResource("4_keo60")]
+visible = false
+custom_minimum_size = Vector2(390, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EscapePage" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn" unique_id=1349778439]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"TerminalInsetPanel"
+
+[node name="EscapeHint" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/EscapePage" unique_id=1359532603]
+layout_mode = 2
+text = "按确认键撤退"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EntryInfoPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=446886182 instance=ExtResource("5_bgiko")]
+custom_minimum_size = Vector2(345, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=37358213 instance=ExtResource("2_elpkr")]
+layout_mode = 2
+
+[node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942472126]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+autowrap_mode = 2

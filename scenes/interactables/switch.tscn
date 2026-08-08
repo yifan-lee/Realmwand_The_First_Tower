@@ -1,20 +1,48 @@
 [gd_scene format=3 uid="uid://cheuhwfk50iob"]
 
-[ext_resource type="Script" uid="uid://xv23xnpi5p5s" path="res://scripts/switch.gd" id="1_buhgm"]
-[ext_resource type="Texture2D" uid="uid://b1l3nybi3og6y" path="res://icon.svg" id="1_ioha1"]
+[ext_resource type="Texture2D" uid="uid://w5fx4s7lored" path="res://assets/tileset/tiles/mechanism_on.png" id="1_buhgm"]
+[ext_resource type="Script" uid="uid://bq1mfc8jjx33k" path="res://scripts/interactables/switch.gd" id="1_ol1yo"]
+[ext_resource type="Texture2D" uid="uid://biott6cttjsae" path="res://assets/tileset/tiles/mechanism_off.png" id="2_ol1yo"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
-size = Vector2(24, 24)
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xy86"]
+atlas = ExtResource("1_buhgm")
+region = Rect2(0, 0, 203, 203)
 
-[node name="Switch" type="Area2D" unique_id=1354980094]
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("1_buhgm")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kslyh"]
+atlas = ExtResource("2_ol1yo")
+region = Rect2(0, 0, 203, 203)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=687396798]
-modulate = Color(1, 0.05882353, 1, 1)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("1_ioha1")
+[sub_resource type="SpriteFrames" id="SpriteFrames_t7f3b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xy86")
+}],
+"loop": 0,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kslyh")
+}],
+"loop": 0,
+"name": &"inactive",
+"speed": 5.0
+}]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1335091998]
-shape = SubResource("RectangleShape2D_k3a8i")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_buhgm"]
+size = Vector2(40, 40)
+
+[node name="FloorSwitch" type="Area2D" unique_id=1134718973]
+texture_filter = 2
+collision_layer = 4
+script = ExtResource("1_ol1yo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2091609662]
+scale = Vector2(0.158, 0.158)
+sprite_frames = SubResource("SpriteFrames_t7f3b")
+animation = &"inactive"
+
+[node name="InteractionShape" type="CollisionShape2D" parent="." unique_id=1209316643]
+shape = SubResource("RectangleShape2D_buhgm")

@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://c0u1y4f7xh5lb"]
+
+[ext_resource type="Texture2D" uid="uid://bylk3dfi56u8g" path="res://assets/tileset/tiles/stairs_down.png" id="1_656nr"]
+[ext_resource type="Script" uid="uid://cgtgpyh5xgtkv" path="res://scripts/interactables/stair.gd" id="1_pwt04"]
+[ext_resource type="Texture2D" uid="uid://7ohof71ke3du" path="res://assets/tileset/tiles/stairs_up.png" id="2_pwt04"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_422au"]
+atlas = ExtResource("1_656nr")
+region = Rect2(0, 0, 203, 203)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6p8e"]
+atlas = ExtResource("2_pwt04")
+region = Rect2(0, 0, 203, 203)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yxmmu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_422au")
+}],
+"loop": 0,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y6p8e")
+}],
+"loop": 1,
+"name": &"up",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_656nr"]
+size = Vector2(24, 24)
+
+[node name="Stair" type="Area2D" unique_id=841985626]
+collision_layer = 0
+script = ExtResource("1_pwt04")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1933247738]
+texture_filter = 2
+scale = Vector2(0.158, 0.158)
+sprite_frames = SubResource("SpriteFrames_yxmmu")
+animation = &"down"
+
+[node name="TriggerShape" type="CollisionShape2D" parent="." unique_id=535344624]
+shape = SubResource("RectangleShape2D_656nr")
+

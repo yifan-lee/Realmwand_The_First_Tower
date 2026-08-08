@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://cs8x24knlv251"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1xnwh"]
+[ext_resource type="Script" uid="uid://dvx5cqy2l2dj2" path="res://scripts/ui/components/system_panel.gd" id="2_ibdvy"]
+
+[node name="SystemPanel" type="PanelContainer" unique_id=1878234096]
+custom_minimum_size = Vector2(500, 390)
+theme = ExtResource("1_1xnwh")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("2_ibdvy")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1698838086]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=366297654]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer/Content" unique_id=479754206]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "存档管理"
+
+[node name="NameHint" type="Label" parent="MarginContainer/Content" unique_id=1828569085]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "输入名称后创建新存档"
+
+[node name="InputRow" type="HBoxContainer" parent="MarginContainer/Content" unique_id=1212756251]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SaveNameInput" type="LineEdit" parent="MarginContainer/Content/InputRow" unique_id=2077721832]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "例如：第二层入口"
+max_length = 32
+
+[node name="CreateButton" type="Button" parent="MarginContainer/Content/InputRow" unique_id=204884199]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "新建存档"
+
+[node name="Separator" type="HSeparator" parent="MarginContainer/Content" unique_id=1856932645]
+layout_mode = 2
+
+[node name="ListTitle" type="Label" parent="MarginContainer/Content" unique_id=1358593747]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "已有存档"
+
+[node name="SaveScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1274534234]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SaveRows" type="VBoxContainer" parent="MarginContainer/Content/SaveScroll" unique_id=1734674401]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="EmptyLabel" type="Label" parent="MarginContainer/Content" unique_id=1712276560]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "还没有存档"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/Content" unique_id=563162274]
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+
+[node name="Hint" type="Label" parent="MarginContainer/Content" unique_id=152058364]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "读取会关闭菜单并恢复保存时的楼层与位置"
