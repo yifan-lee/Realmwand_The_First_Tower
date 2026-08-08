@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://2a8073kqq366"]
 
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_g7fau"]
 [ext_resource type="Texture2D" uid="uid://dwcy4duj8fmbg" path="res://assets/items/token/def_token_tier_1.png" id="1_ipd3m"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_yvp5p"]
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="2_yvp5p"]

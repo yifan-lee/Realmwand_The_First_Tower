@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dkfo3tcwjpfiv"]
 
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_jigdp"]
 [ext_resource type="Texture2D" uid="uid://b85cyet5ryobq" path="res://assets/items/equipment/wearable/hands_atk_tier_1.png" id="1_qn0y1"]
 [ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="2_icteg"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_t1onx"]
 
 [resource]
 script = ExtResource("2_icteg")

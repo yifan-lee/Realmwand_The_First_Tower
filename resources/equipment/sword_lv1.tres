@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://c2hia6um6f2f6"]
 
 [ext_resource type="Texture2D" uid="uid://bysw55lbtr5o1" path="res://assets/items/equipment/weapon/one_hand_sword_atk_tier_1.png" id="1_4kdfu"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_a3u4h"]
 [ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="1_srcqh"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_uqkta"]
 
 [resource]
 script = ExtResource("1_srcqh")

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_1x6vb"]
 [ext_resource type="Texture2D" uid="uid://dj7v4npbbomve" path="res://assets/items/token/spd_token_tier_1.png" id="1_coqkn"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_kkejm"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_sgfca"]
 
 [resource]
 script = ExtResource("1_1x6vb")
