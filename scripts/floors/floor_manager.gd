@@ -26,13 +26,10 @@ func _ready() -> void:
 	)
 
 
-func change_floor(
-	target_floor_id: StringName,
-	target_spawn_id: StringName
-) -> void:
+func _instantiate_floor(target_floor_id: StringName) -> Floor:
 	if target_floor_id == &"":
 		push_error("Cannot load a floor with an empty ID.")
-		return
+		return null
 
 	var floor_path := (
 		"%s/%s.tscn"
@@ -47,7 +44,7 @@ func change_floor(
 			"Floor scene does not exist: %s"
 			% floor_path
 		)
-		return
+		return null
 
 	var floor_scene := ResourceLoader.load(
 		floor_path,
@@ -59,9 +56,8 @@ func change_floor(
 			"Failed to load floor scene: %s"
 			% floor_path
 		)
-		return
+		return null
 
-	# Runtime-only: the requested floor is only known during play.
 	var new_floor := floor_scene.instantiate() as Floor
 
 	if new_floor == null:
@@ -69,7 +65,7 @@ func change_floor(
 			"Floor scene root must inherit Floor: %s"
 			% floor_path
 		)
-		return
+		return null
 
 	if new_floor.floor_id != target_floor_id:
 		push_error(
@@ -80,8 +76,38 @@ func change_floor(
 			]
 		)
 		new_floor.queue_free()
+		return null
+		
+	return new_floor
+
+
+func _set_current_floor(new_floor: Floor) -> void:
+	store_current_floor_state()
+
+	if is_instance_valid(current_floor) and current_floor != new_floor:
+		floor_container.remove_child(current_floor)
+		current_floor.queue_free()
+
+	if new_floor.get_parent() != floor_container:
+		if new_floor.get_parent() != null:
+			new_floor.get_parent().remove_child(new_floor)
+		floor_container.add_child(new_floor)
+
+	current_floor = new_floor
+	current_floor_id = new_floor.floor_id
+
+	_apply_saved_floor_state(current_floor)
+
+
+func change_floor(
+	target_floor_id: StringName,
+	target_spawn_id: StringName
+) -> void:
+	var new_floor := _instantiate_floor(target_floor_id)
+	if new_floor == null:
 		return
 
+	# Add to tree temporarily to safely resolve node paths (like markers)
 	floor_container.add_child(new_floor)
 
 	var spawn_point := new_floor.get_spawn_point(
@@ -95,17 +121,7 @@ func change_floor(
 
 	player.set_input_enabled(false)
 
-	store_current_floor_state()
-
-	if is_instance_valid(current_floor):
-		floor_container.remove_child(current_floor)
-		current_floor.queue_free()
-
-	current_floor = new_floor
-	current_floor_id = target_floor_id
-
-	_apply_saved_floor_state(current_floor)
-
+	_set_current_floor(new_floor)
 	
 	player.global_position = spawn_point.global_position
 
@@ -152,23 +168,32 @@ func restore_save_data(data: Dictionary) -> bool:
 	var states_value: Variant = data.get("floor_states", {})
 	if not (states_value is Dictionary):
 		return false
+
+	var new_floor := _instantiate_floor(floor_id)
+	if new_floor == null:
+		return false
+
 	player.set_input_enabled(false)
+	
+	# Clear out current floor before applying state
 	if is_instance_valid(current_floor):
 		floor_container.remove_child(current_floor)
 		current_floor.queue_free()
 	current_floor = null
 	current_floor_id = &""
+	
 	floor_states = states_value.duplicate(true)
-	change_floor(floor_id, &"")
-	if not is_instance_valid(current_floor):
-		player.set_input_enabled(true)
-		return false
+
+	_set_current_floor(new_floor)
+
 	var position_value: Variant = data.get("player_local_position", [])
 	if position_value is Array and position_value.size() >= 2:
 		var local_position := Vector2(float(position_value[0]), float(position_value[1]))
 		player.global_position = current_floor.to_global(local_position)
+	
 	player.set_input_enabled(true)
 	return true
+
 
 func _apply_saved_floor_state(
 	floor: Floor
