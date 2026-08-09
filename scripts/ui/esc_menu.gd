@@ -42,6 +42,8 @@ var _player: Player
 var _current_page: MainPage = MainPage.INVENTORY
 var _current_category := 0
 var _preview_target_slot := -1
+var _equip_selection_mode: bool = false
+var _pending_equip_item: EquipmentData = null
 
 
 func _ready() -> void:
@@ -57,6 +59,8 @@ func _ready() -> void:
 		category_buttons[index].mouse_entered.connect(category_buttons[index].grab_focus)
 	inventory_panel.item_focused.connect(_on_item_focused)
 	inventory_panel.item_selected.connect(_on_item_selected)
+	equipment_panel.slot_focused.connect(_on_equipment_slot_focused)
+	equipment_panel.slot_selected.connect(_on_equipment_slot_selected)
 	skill_panel.skill_focused.connect(_on_skill_focused)
 	system_page.save_loaded.connect(close)
 
@@ -70,6 +74,12 @@ func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
 		return
 	if _should_preserve_text_input(event):
+		return
+
+	if event.is_action_pressed("ui_cancel") and _equip_selection_mode:
+		_cancel_equip_selection_mode()
+		inventory_panel.focus_first_item()
+		get_viewport().set_input_as_handled()
 		return
 
 	var direction := Vector2i.ZERO
@@ -157,7 +167,7 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	skill_page.visible = page == MainPage.SKILLS
 	system_page.visible = page == MainPage.SYSTEM
 	equipment_panel.visible = page != MainPage.SKILLS
-	equipment_panel.clear_preview()
+	_cancel_equip_selection_mode()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
 	if page == MainPage.SYSTEM:
@@ -169,7 +179,7 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 func _show_category(index: int, focus_items: bool) -> void:
 	_current_category = posmod(index, CATEGORY_TYPES.size())
 	inventory_panel.set_item_type_filter(CATEGORY_TYPES[_current_category])
-	equipment_panel.clear_preview()
+	_cancel_equip_selection_mode()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
 	if focus_items and not inventory_panel.focus_first_item():
@@ -203,7 +213,16 @@ func _navigate_horizontal_focus(
 				category_buttons[_current_category].grab_focus()
 				return true
 			if inventory_panel.has_item_focus(focus):
+				if direction > 0 and equipment_panel.focus_first_slot():
+					return true
 				return true
+			if equipment_panel.has_slot_focus(focus):
+				if direction < 0 and equipment_panel.is_first_column_focused(focus):
+					if _equip_selection_mode:
+						_cancel_equip_selection_mode()
+					inventory_panel.focus_first_item()
+					return true
+				return false
 		MainPage.SKILLS:
 			if skill_panel.has_skill_focus(focus):
 				return true
@@ -235,6 +254,8 @@ func _navigate_vertical_focus(
 					category_buttons[_current_category].grab_focus()
 					return true
 				return inventory_panel.navigate_item_focus(direction)
+			if equipment_panel.has_slot_focus(focus):
+				return false
 		MainPage.SKILLS:
 			if skill_panel.has_skill_focus(focus):
 				if direction < 0 and skill_panel.is_first_skill_focused():
@@ -370,7 +391,14 @@ func _on_item_selected(item: ItemData) -> void:
 		return
 	var was_focused := inventory_panel.has_item_focus()
 	if item is EquipmentData:
-		if _preview_target_slot >= 0:
+		var equipment := item as EquipmentData
+		var compatible_slots := _player.equipment.get_compatible_slots(equipment)
+		if compatible_slots.size() > 1:
+			_equip_selection_mode = true
+			_pending_equip_item = equipment
+			equipment_panel.focus_compatible_slot(compatible_slots)
+			return
+		elif _preview_target_slot >= 0:
 			_player.equip_item(item.id, _preview_target_slot)
 	else:
 		if not item.usable_from_inventory:
@@ -420,9 +448,23 @@ func _on_equipment_slot_focused(slot: int) -> void:
 
 
 func _on_equipment_slot_selected(slot: int) -> void:
+	if _equip_selection_mode:
+		if _pending_equip_item != null and _player.equipment.can_equip(_pending_equip_item, slot):
+			_player.equip_item(_pending_equip_item.id, slot)
+			_cancel_equip_selection_mode()
+			refresh_content()
+			inventory_panel.focus_first_item()
+		return
+
 	if _player.unequip_item(slot):
 		refresh_content()
 		equipment_panel.focus_first_slot()
+
+
+func _cancel_equip_selection_mode() -> void:
+	_equip_selection_mode = false
+	_pending_equip_item = null
+	equipment_panel.clear_preview()
 
 
 func _choose_equipment_target(item: EquipmentData) -> int:

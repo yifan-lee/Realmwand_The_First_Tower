@@ -1,6 +1,9 @@
 class_name EquipmentPanel
 extends PanelContainer
 
+signal slot_focused(slot: int)
+signal slot_selected(slot: int)
+
 const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.HEAD: "头部",
 	EquipmentLoadout.Slot.CHEST: "胸甲",
@@ -43,7 +46,21 @@ var _loadout: EquipmentLoadout
 
 
 func _ready() -> void:
-	pass
+	for slot: int in _slot_labels:
+		var label: Label = _slot_labels[slot]
+		label.focus_mode = Control.FOCUS_ALL
+		label.focus_entered.connect(_on_slot_focus_entered.bind(slot))
+		label.gui_input.connect(_on_slot_gui_input.bind(slot))
+
+
+func _on_slot_focus_entered(slot: int) -> void:
+	slot_focused.emit(slot)
+
+
+func _on_slot_gui_input(event: InputEvent, slot: int) -> void:
+	if event.is_action_pressed("ui_accept") or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
+		slot_selected.emit(slot)
+		get_viewport().set_input_as_handled()
 
 
 func bind_loadout(loadout: EquipmentLoadout) -> void:
@@ -87,5 +104,33 @@ func clear_preview() -> void:
 		label.theme_type_variation = &"SectionLabel"
 
 
-func focus_first_slot() -> void:
-	pass
+func focus_first_slot() -> bool:
+	if _slot_labels.has(EquipmentLoadout.Slot.HEAD):
+		_slot_labels[EquipmentLoadout.Slot.HEAD].grab_focus()
+		return true
+	return false
+
+
+func focus_compatible_slot(slots: Array[int]) -> bool:
+	if slots.is_empty():
+		return false
+	if _slot_labels.has(slots[0]):
+		_slot_labels[slots[0]].grab_focus()
+		return true
+	return false
+
+
+func has_slot_focus(focus: Control = null) -> bool:
+	var resolved_focus := focus
+	if resolved_focus == null:
+		resolved_focus = get_viewport().gui_get_focus_owner()
+	return _slot_labels.values().has(resolved_focus)
+
+
+func is_first_column_focused(focus: Control = null) -> bool:
+	var resolved_focus := focus
+	if resolved_focus == null:
+		resolved_focus = get_viewport().gui_get_focus_owner()
+	if resolved_focus != null and _slot_labels.values().has(resolved_focus):
+		return resolved_focus.get_index() % 2 == 0
+	return false
