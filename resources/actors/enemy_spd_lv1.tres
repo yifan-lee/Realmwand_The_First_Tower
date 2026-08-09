@@ -12,6 +12,6 @@ display_name = "一级速度怪"
 description = "速度很快的生物。非常恼人。提高速度之后也许可以抢先出手。"
 atk = 50.0
 def = 30.0
-spd = 55.0
+spd = 80.0
 portrait = ExtResource("1_whu78")
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"

@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_p2ubo"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_kbxsx"]
 [ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="4_dgw2m"]
+[ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="5_uhbfv"]
 [ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="5_wmq0r"]
 [ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="6_wmq0r"]
 [ext_resource type="Resource" uid="uid://djgmxkplhaese" path="res://resources/items/hp_recovery_lv2.tres" id="7_a6ijt"]
@@ -64,20 +65,24 @@ target_spawn_id = &"FromAboveStair"
 unique_name_in_owner = true
 
 [node name="Enemy" parent="Enemies" unique_id=796734484 instance=ExtResource("4_dgw2m")]
+position = Vector2(32, -64)
+enemy_data = ExtResource("5_uhbfv")
 
 [node name="Enemy2" parent="Enemies" unique_id=1436301196 instance=ExtResource("4_dgw2m")]
+position = Vector2(-232, -48)
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true
 
 [node name="ItemPickup" parent="Pickups" unique_id=1816246793 instance=ExtResource("5_wmq0r")]
+position = Vector2(-264, -168)
 
 [node name="SwordLv1" parent="Pickups" unique_id=1405483750 instance=ExtResource("5_wmq0r")]
 position = Vector2(64, -64)
 item_data = ExtResource("6_wmq0r")
 
 [node name="HpRecoveryLv2" parent="Pickups" unique_id=1379067021 instance=ExtResource("5_wmq0r")]
-position = Vector2(-32, -64)
+position = Vector2(0, -192)
 item_data = ExtResource("7_a6ijt")
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c6ds8h0pas85"]
+
+[ext_resource type="Script" uid="uid://diau64006ed6p" path="res://scripts/floors/floor.gd" id="1_hw53x"]
+[ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_bcken"]
+
+[node name="Floor" type="Node2D" unique_id=1021498195]
+script = ExtResource("1_hw53x")
+
+[node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
+unique_name_in_owner = true
+z_index = -10
+texture_filter = 2
+position = Vector2(-16, 16)
+scale = Vector2(0.158, 0.158)
+tile_set = ExtResource("2_bcken")
+
+[node name="WallLayer" type="TileMapLayer" parent="." unique_id=917837273]
+unique_name_in_owner = true
+texture_filter = 2
+position = Vector2(-16, 16)
+scale = Vector2(0.158, 0.158)
+tile_set = ExtResource("2_bcken")
+
+[node name="FeatureLayer" type="TileMapLayer" parent="." unique_id=1361208269]
+unique_name_in_owner = true
+texture_filter = 2
+position = Vector2(-16, 16)
+scale = Vector2(0.158, 0.158)
+tile_set = ExtResource("2_bcken")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=759900]
+unique_name_in_owner = true
+
+[node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" unique_id=1253602632]
+
+[node name="Interactables" type="Node2D" parent="." unique_id=191277635]
+unique_name_in_owner = true
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
+unique_name_in_owner = true
+
+[node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
+unique_name_in_owner = true
+
+[node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
+unique_name_in_owner = true
