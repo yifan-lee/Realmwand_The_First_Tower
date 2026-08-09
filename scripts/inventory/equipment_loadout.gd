@@ -41,6 +41,9 @@ func can_equip(
 		EquipmentData.EquipmentSlotType.CHEST:
 			return target_slot == Slot.CHEST
 
+		EquipmentData.EquipmentSlotType.ARMS:
+			return target_slot == Slot.ARMS
+
 		EquipmentData.EquipmentSlotType.HANDS:
 			return target_slot == Slot.HANDS
 

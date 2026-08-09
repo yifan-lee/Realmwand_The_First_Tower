@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://7rbwof0ffoe5"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_ci4lj"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_tafgh"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="3_j00k2"]
+[ext_resource type="Texture2D" uid="uid://circfpkvjvesa" path="res://assets/items/equipment/wearable/legs_hp_tier_1.png" id="3_tafgh"]
+
+[resource]
+script = ExtResource("3_j00k2")
+slot_type = 3
+def_bonus = 5.0
+spd_bonus = 5.0
+id = &"leg_lv1"
+display_name = "1级裤子"
+item_type = 1
+icon = ExtResource("3_tafgh")
+world_texture = ExtResource("3_tafgh")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

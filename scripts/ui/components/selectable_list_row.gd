@@ -17,7 +17,8 @@ func setup(
 	entry: Resource,
 	entry_text: String,
 	entry_icon: Texture2D,
-	entry_tooltip: String
+	entry_tooltip: String,
+	is_disabled: bool = false
 ) -> void:
 	entry_data = entry
 
@@ -31,7 +32,7 @@ func setup(
 	text = entry_text
 	icon = entry_icon
 	tooltip_text = entry_tooltip
-	disabled = false
+	disabled = is_disabled
 
 
 func _pressed() -> void:

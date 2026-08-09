@@ -254,6 +254,10 @@ func _move_one_tile(direction: Vector2) -> void:
 			(collider as Enemy).request_battle(self)
 			_play_directional_animation(&"idle")
 			return
+		elif collider.has_method(&"begin_interaction") and collider.has_method(&"interact"):
+			collider.call(&"interact", self)
+			_play_directional_animation(&"idle")
+			return
 
 	if test_move(global_transform, motion):
 		_play_directional_animation(&"idle")

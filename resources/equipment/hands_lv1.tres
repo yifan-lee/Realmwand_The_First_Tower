@@ -1,20 +1,24 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://dkfo3tcwjpfiv"]
 
 [ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_jigdp"]
-[ext_resource type="Texture2D" uid="uid://b85cyet5ryobq" path="res://assets/items/equipment/wearable/hands_atk_tier_1.png" id="1_qn0y1"]
 [ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="2_icteg"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_t1onx"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_icteg"]
+load_path = "res://.godot/imported/hands_atk_tier_1.png-4177fbf2312368cf4c0e51fe2eaaac04.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jigdp"]
+load_path = "res://.godot/imported/hands_atk_tier_1.png-4177fbf2312368cf4c0e51fe2eaaac04.ctex"
 
 [resource]
 script = ExtResource("2_icteg")
 slot_type = 2
-atk_bonus = 5.0
-def_bonus = 5.0
+atk_bonus = 10.0
 id = &"hands_lv1"
 display_name = "一级护手"
-description = "提升攻击力和防御力的护手"
+description = "提升攻击力的护手"
 item_type = 1
-icon = ExtResource("1_qn0y1")
-world_texture = ExtResource("1_qn0y1")
+icon = SubResource("CompressedTexture2D_icteg")
+world_texture = SubResource("CompressedTexture2D_jigdp")
 usable_from_inventory = true
 metadata/_custom_type_script = "uid://bbv1l13viq4m2"

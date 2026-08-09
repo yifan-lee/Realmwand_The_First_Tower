@@ -59,7 +59,8 @@ func open_choices(
 	prompt: String,
 	entries: Array[Resource],
 	labels: Array[String],
-	tooltips: Array[String]
+	tooltips: Array[String],
+	disabled_flags: Array[bool] = []
 ) -> void:
 	_mode = Mode.CHOICES
 	title_label.text = npc_name
@@ -69,10 +70,13 @@ func open_choices(
 	options_scroll.visible = true
 	cancel_button.visible = true
 	hint_label.text = "↑↓ 选择   确认键兑换   菜单键取消"
-	_rebuild_rows(entries, labels, tooltips)
+	_rebuild_rows(entries, labels, tooltips, disabled_flags)
 	_selected_index = 0
+	if _selected_index < _rows.size() and _rows[_selected_index].disabled:
+		_move_selection(1)
+	else:
+		_sync_focus()
 	interaction_root.visible = true
-	_sync_focus()
 
 
 func open_dialogue(npc_name: String, dialogue: String) -> void:
@@ -88,9 +92,11 @@ func open_dialogue(npc_name: String, dialogue: String) -> void:
 	interaction_root.visible = true
 
 
-func update_choices(labels: Array[String]) -> void:
+func update_choices(labels: Array[String], disabled_flags: Array[bool] = []) -> void:
 	for index: int in mini(labels.size(), _rows.size()):
 		_rows[index].text = labels[index]
+		if index < disabled_flags.size():
+			_rows[index].disabled = disabled_flags[index]
 
 
 func show_player_stat_preview(player: Player, stat_id: StringName = &"", amount: float = 0.0) -> void:
@@ -114,7 +120,7 @@ func is_open() -> bool:
 	return interaction_root != null and interaction_root.visible
 
 
-func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Array[String]) -> void:
+func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Array[String], disabled_flags: Array[bool]) -> void:
 	_clear_rows()
 	if option_row_scene == null:
 		push_error("NpcInteractionUI requires an option row scene.")
@@ -129,7 +135,8 @@ func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Ar
 		var label := labels[index] if index < labels.size() else ""
 		var tooltip := tooltips[index] if index < tooltips.size() else ""
 		var icon: Texture2D = entry.get("icon") as Texture2D
-		row.setup(entry, label, icon, tooltip)
+		var is_disabled = disabled_flags[index] if index < disabled_flags.size() else false
+		row.setup(entry, label, icon, tooltip, is_disabled)
 		row.entry_selected.connect(_on_row_selected.bind(index))
 		row.entry_focused.connect(_on_row_focused.bind(index))
 
@@ -142,7 +149,12 @@ func _clear_rows() -> void:
 
 
 func _move_selection(direction: int) -> void:
+	var start_index = _selected_index
 	_selected_index = posmod(_selected_index + direction, _rows.size() + 1)
+	var attempts = 0
+	while _selected_index < _rows.size() and _rows[_selected_index].disabled and attempts <= _rows.size():
+		_selected_index = posmod(_selected_index + direction, _rows.size() + 1)
+		attempts += 1
 	feedback_label.text = ""
 	_sync_focus()
 	if _selected_index < _rows.size():
@@ -153,7 +165,8 @@ func _activate_selection() -> void:
 	if _selected_index == _rows.size():
 		close_requested.emit()
 	elif _selected_index >= 0 and _selected_index < _rows.size():
-		option_selected.emit(_selected_index)
+		if not _rows[_selected_index].disabled:
+			option_selected.emit(_selected_index)
 
 
 func _on_row_selected(_entry: Resource, index: int) -> void:

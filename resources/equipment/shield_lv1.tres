@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://b87wn8jjqknxs"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_15wut"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_l34oa"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="3_irmtc"]
+[ext_resource type="Texture2D" uid="uid://btsnsc484gpi6" path="res://assets/items/equipment/weapon/shield_def_tier_1.png" id="3_l34oa"]
+
+[resource]
+script = ExtResource("3_irmtc")
+weapon_rule = 3
+def_bonus = 20.0
+id = &"shield_lv1"
+display_name = "1级盾牌"
+item_type = 1
+icon = ExtResource("3_l34oa")
+world_texture = ExtResource("3_l34oa")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

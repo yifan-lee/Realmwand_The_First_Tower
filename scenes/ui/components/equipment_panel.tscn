@@ -64,6 +64,26 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="Arms" type="Label" parent="Margin/Content/Slots" unique_id=1111111111]
+custom_minimum_size = Vector2(174, 26)
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "—"
+
+[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/Arms" unique_id=2222222222]
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -26.0
+offset_top = 1.0
+offset_right = -2.0
+offset_bottom = 25.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Hands" type="Label" parent="Margin/Content/Slots" unique_id=1954468703]
 custom_minimum_size = Vector2(174, 26)
 layout_mode = 2
@@ -204,22 +224,3 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Arms" type="Label" parent="Margin/Content/Slots" unique_id=1111111111]
-custom_minimum_size = Vector2(174, 26)
-layout_mode = 2
-theme_type_variation = &"SectionLabel"
-text = "—"
-
-[node name="Icon" type="TextureRect" parent="Margin/Content/Slots/Arms" unique_id=2222222222]
-visible = false
-texture_filter = 1
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -26.0
-offset_top = 1.0
-offset_right = -2.0
-offset_bottom = 25.0
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5

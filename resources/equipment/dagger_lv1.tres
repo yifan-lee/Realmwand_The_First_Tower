@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://bwujbcbbbw4tw"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_4tqx8"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_po6x8"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="3_377ee"]
+[ext_resource type="Texture2D" uid="uid://dregho421ayes" path="res://assets/items/equipment/weapon/dagger_spd_tier_1.png" id="3_po6x8"]
+
+[resource]
+script = ExtResource("3_377ee")
+weapon_rule = 3
+spd_bonus = 20.0
+id = &"dagger_lv1"
+display_name = "1级匕首"
+item_type = 1
+icon = ExtResource("3_po6x8")
+world_texture = ExtResource("3_po6x8")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

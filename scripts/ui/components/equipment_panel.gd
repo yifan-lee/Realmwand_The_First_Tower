@@ -4,6 +4,7 @@ extends PanelContainer
 const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.HEAD: "头部",
 	EquipmentLoadout.Slot.CHEST: "胸甲",
+	EquipmentLoadout.Slot.ARMS: "手臂",
 	EquipmentLoadout.Slot.HANDS: "手部",
 	EquipmentLoadout.Slot.LEGS: "腿部",
 	EquipmentLoadout.Slot.FEET: "脚部",
@@ -11,12 +12,12 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.SUB_WEAPON: "副武器",
 	EquipmentLoadout.Slot.ACCESSORY_1: "饰品 1",
 	EquipmentLoadout.Slot.ACCESSORY_2: "饰品 2",
-	EquipmentLoadout.Slot.ARMS: "手臂",
 }
 
 @onready var _slot_labels: Dictionary[int, Label] = {
 	EquipmentLoadout.Slot.HEAD: $Margin/Content/Slots/Head,
 	EquipmentLoadout.Slot.CHEST: $Margin/Content/Slots/Chest,
+	EquipmentLoadout.Slot.ARMS: $Margin/Content/Slots/Arms,
 	EquipmentLoadout.Slot.HANDS: $Margin/Content/Slots/Hands,
 	EquipmentLoadout.Slot.LEGS: $Margin/Content/Slots/Legs,
 	EquipmentLoadout.Slot.FEET: $Margin/Content/Slots/Feet,
@@ -24,11 +25,11 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.SUB_WEAPON: $Margin/Content/Slots/SubWeapon,
 	EquipmentLoadout.Slot.ACCESSORY_1: $Margin/Content/Slots/Accessory1,
 	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/Slots/Accessory2,
-	EquipmentLoadout.Slot.ARMS: $Margin/Content/Slots/Arms,
 }
 @onready var _slot_icons: Dictionary[int, TextureRect] = {
 	EquipmentLoadout.Slot.HEAD: $Margin/Content/Slots/Head/Icon,
 	EquipmentLoadout.Slot.CHEST: $Margin/Content/Slots/Chest/Icon,
+	EquipmentLoadout.Slot.ARMS: $Margin/Content/Slots/Arms/Icon,
 	EquipmentLoadout.Slot.HANDS: $Margin/Content/Slots/Hands/Icon,
 	EquipmentLoadout.Slot.LEGS: $Margin/Content/Slots/Legs/Icon,
 	EquipmentLoadout.Slot.FEET: $Margin/Content/Slots/Feet/Icon,
@@ -36,7 +37,6 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.SUB_WEAPON: $Margin/Content/Slots/SubWeapon/Icon,
 	EquipmentLoadout.Slot.ACCESSORY_1: $Margin/Content/Slots/Accessory1/Icon,
 	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/Slots/Accessory2/Icon,
-	EquipmentLoadout.Slot.ARMS: $Margin/Content/Slots/Arms/Icon,
 }
 
 var _loadout: EquipmentLoadout

@@ -8,7 +8,8 @@
 [resource]
 script = ExtResource("1_v06af")
 slot_type = 0
-def_bonus = 10.0
+atk_bonus = 5.0
+spd_bonus = 5.0
 id = &"head_lv1"
 display_name = "一级头盔"
 item_type = 1

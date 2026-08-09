@@ -20,7 +20,7 @@ func interact(player: Player) -> void:
 
 
 func begin_interaction(ui: NpcInteractionUI, player: Player) -> void:
-	ui.open_choices(NPC_NAME, PROMPT, _get_fragments(), _build_labels(player), _build_tooltips())
+	ui.open_choices(NPC_NAME, PROMPT, _get_fragments(), _build_labels(player), _build_tooltips(), _build_disabled_flags(player))
 	ui.show_player_stat_preview(player, STAT_IDS[0], STAT_AMOUNT)
 
 
@@ -36,7 +36,7 @@ func handle_dialogue_option(index: int, ui: NpcInteractionUI, player: Player) ->
 		ui.show_transaction_result(false, "交换失败，请重试。")
 		return
 	player.apply_permanent_stat_increase(STAT_IDS[index], STAT_AMOUNT)
-	ui.update_choices(_build_labels(player))
+	ui.update_choices(_build_labels(player), _build_disabled_flags(player))
 	ui.show_player_stat_preview(player, STAT_IDS[index], STAT_AMOUNT)
 	ui.show_transaction_result(true, "交换完成：%s +%d" % [STAT_NAMES[index], int(STAT_AMOUNT)])
 
@@ -72,3 +72,10 @@ func _build_tooltips() -> Array[String]:
 		"消耗黄色碎片，永久提高防御力。",
 		"消耗蓝色碎片，永久提高速度。",
 	]
+
+
+func _build_disabled_flags(player: Player) -> Array[bool]:
+	var flags: Array[bool] = []
+	for fragment in _get_fragments():
+		flags.append(not player.inventory.has_item(fragment.id, COST_AMOUNT))
+	return flags

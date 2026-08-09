@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://diau64006ed6p" path="res://scripts/floors/floor.gd" id="1_eetws"]
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_861f6"]
+[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="3_ncy5n"]
+[ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="4_5jr3h"]
+[ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="5_tgydl"]
+[ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="6_kwj10"]
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_eetws")
@@ -31,14 +35,24 @@ tile_set = ExtResource("2_861f6")
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=759900]
 unique_name_in_owner = true
 
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=238372653]
+
 [node name="Interactables" type="Node2D" parent="." unique_id=191277635]
 unique_name_in_owner = true
+
+[node name="FloorSwitch" parent="Interactables" unique_id=1134718973 instance=ExtResource("3_ncy5n")]
+
+[node name="Stair" parent="Interactables" unique_id=841985626 instance=ExtResource("4_5jr3h")]
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true
 
+[node name="Enemy" parent="Enemies" unique_id=796734484 instance=ExtResource("5_tgydl")]
+
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true
+
+[node name="ItemPickup" parent="Pickups" unique_id=1816246793 instance=ExtResource("6_kwj10")]
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true

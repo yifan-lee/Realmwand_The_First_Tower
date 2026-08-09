@@ -10,11 +10,11 @@
 [ext_resource type="Resource" uid="uid://bn6k3d2jvsx51" path="res://resources/actors/enemy_atk_lv1.tres" id="7_rm4ur"]
 [ext_resource type="Resource" uid="uid://bhe21ofgj7ote" path="res://resources/actors/enemy_def_lv1.tres" id="8_rm4ur"]
 [ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="9_4igxy"]
-[ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="11_3ycjp"]
+[ext_resource type="Resource" uid="uid://dkfo3tcwjpfiv" path="res://resources/equipment/hands_lv1.tres" id="11_4igxy"]
 [ext_resource type="Resource" uid="uid://bfhk2tg6kleul" path="res://resources/equipment/chest_lv1.tres" id="12_rj6dl"]
 [ext_resource type="Resource" uid="uid://dcite8gsbiu17" path="res://resources/equipment/feet_lv1.tres" id="13_r7vlu"]
 
-[node name="Floor" unique_id=1021498195 instance=ExtResource("1_m1m67")]
+[node name="Floor2" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
 floor_id = &"floor_1"
 display_name = "一层"
@@ -102,10 +102,10 @@ enemy_data = ExtResource("6_fv4kh")
 position = Vector2(224, -256)
 enemy_data = ExtResource("6_fv4kh")
 
-[node name="SwordLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
+[node name="HandsLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
 position = Vector2(-192, -256)
-pickup_id = &"sword_lv1"
-item_data = ExtResource("11_3ycjp")
+pickup_id = &"hands_lv1"
+item_data = ExtResource("11_4igxy")
 
 [node name="ChestLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=629304167 instance=ExtResource("5_wl6yc")]
 position = Vector2(0, -448)
