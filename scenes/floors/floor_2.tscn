@@ -251,7 +251,7 @@ position = Vector2(-352, -392)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=77360329 instance=ExtResource("3_gkij4")]
-position = Vector2(-288, -328)
+position = Vector2(-288, -327)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=1234379088 instance=ExtResource("3_gkij4")]
@@ -271,7 +271,7 @@ position = Vector2(0, -288)
 item_data = ExtResource("18_sbwf3")
 
 [node name="HPLV101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="15" unique_id=977591183 instance=ExtResource("3_gkij4")]
-position = Vector2(224, -32)
+position = Vector2(224, -31)
 pickup_id = &"hp_lv1_1"
 item_data = ExtResource("11_po1ci")
 
@@ -320,12 +320,12 @@ item_data = ExtResource("4_mjnjk")
 
 [node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=226122769 instance=ExtResource("3_gkij4")]
 position = Vector2(-280, -256)
-pickup_id = &"stone01"
+pickup_id = &"stone02"
 item_data = ExtResource("4_mjnjk")
 
 [node name="Stone3" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="27" unique_id=1735979925 instance=ExtResource("3_gkij4")]
 position = Vector2(-432, -272)
-pickup_id = &"stone01"
+pickup_id = &"stone03"
 item_data = ExtResource("4_mjnjk")
 
 [node name="ArmLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="28" unique_id=947615643 instance=ExtResource("3_gkij4")]

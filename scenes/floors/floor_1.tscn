@@ -109,10 +109,10 @@ item_data = ExtResource("11_4igxy")
 
 [node name="ChestLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=629304167 instance=ExtResource("5_wl6yc")]
 position = Vector2(0, -448)
-pickup_id = &"sword_lv1"
+pickup_id = &"chest_lv1"
 item_data = ExtResource("12_rj6dl")
 
 [node name="FeetLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=1771497956 instance=ExtResource("5_wl6yc")]
 position = Vector2(192, -256)
-pickup_id = &"sword_lv1"
+pickup_id = &"feet_lv1"
 item_data = ExtResource("13_r7vlu")
