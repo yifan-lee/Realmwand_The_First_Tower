@@ -6,8 +6,18 @@
 [ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="4_dgw2m"]
 [ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="5_uhbfv"]
 [ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="5_wmq0r"]
+[ext_resource type="Resource" uid="uid://bhe21ofgj7ote" path="res://resources/actors/enemy_def_lv1.tres" id="6_2hbpx"]
+[ext_resource type="Resource" uid="uid://dia3blq8yoel2" path="res://resources/actors/enemy_balance_lv1.tres" id="6_mguoy"]
 [ext_resource type="Resource" uid="uid://c2hia6um6f2f6" path="res://resources/equipment/sword_lv1.tres" id="6_wmq0r"]
+[ext_resource type="Resource" uid="uid://bn6k3d2jvsx51" path="res://resources/actors/enemy_atk_lv1.tres" id="6_xlqth"]
 [ext_resource type="Resource" uid="uid://djgmxkplhaese" path="res://resources/items/hp_recovery_lv2.tres" id="7_a6ijt"]
+[ext_resource type="Resource" uid="uid://bwujbcbbbw4tw" path="res://resources/equipment/dagger_lv1.tres" id="10_ahe1n"]
+[ext_resource type="Resource" uid="uid://2a8073kqq366" path="res://resources/items/fragment_yellow_lv1.tres" id="11_bcf3a"]
+[ext_resource type="Resource" uid="uid://b87wn8jjqknxs" path="res://resources/equipment/shield_lv1.tres" id="11_cu571"]
+[ext_resource type="Resource" uid="uid://c3wjh3yedu4qu" path="res://resources/items/fragment_blue_lv1.tres" id="13_fkkej"]
+[ext_resource type="Resource" uid="uid://b4l6caihdn1ku" path="res://resources/items/fragment_red_lv1.tres" id="14_2p4y1"]
+[ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="14_ta0wl"]
+[ext_resource type="Resource" uid="uid://0dvg81bt3wru" path="res://resources/items/mp_recovery_lv1.tres" id="15_ta0wl"]
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_kbxsx")
@@ -64,26 +74,284 @@ target_spawn_id = &"FromAboveStair"
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true
 
-[node name="Enemy" parent="Enemies" unique_id=796734484 instance=ExtResource("4_dgw2m")]
-position = Vector2(32, -64)
+[node name="SpdLv101" parent="Enemies" unique_id=796734484 instance=ExtResource("4_dgw2m")]
+position = Vector2(0, -256)
 enemy_data = ExtResource("5_uhbfv")
 
-[node name="Enemy2" parent="Enemies" unique_id=1436301196 instance=ExtResource("4_dgw2m")]
-position = Vector2(-232, -48)
+[node name="SpdLv102" parent="Enemies" unique_id=29129896 instance=ExtResource("4_dgw2m")]
+position = Vector2(-96, -480)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv103" parent="Enemies" unique_id=718334885 instance=ExtResource("4_dgw2m")]
+position = Vector2(96, -96)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv104" parent="Enemies" unique_id=1785257759 instance=ExtResource("4_dgw2m")]
+position = Vector2(224, -64)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv105" parent="Enemies" unique_id=2125384421 instance=ExtResource("4_dgw2m")]
+position = Vector2(192, -448)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv106" parent="Enemies" unique_id=600945372 instance=ExtResource("4_dgw2m")]
+position = Vector2(192, -544)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv107" parent="Enemies" unique_id=1584018940 instance=ExtResource("4_dgw2m")]
+position = Vector2(192, -192)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv108" parent="Enemies" unique_id=1513611093 instance=ExtResource("4_dgw2m")]
+position = Vector2(288, -256)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv109" parent="Enemies" unique_id=2057051417 instance=ExtResource("4_dgw2m")]
+position = Vector2(480, -384)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="SpdLv110" parent="Enemies" unique_id=505522356 instance=ExtResource("4_dgw2m")]
+position = Vector2(384, -352)
+enemy_data = ExtResource("5_uhbfv")
+
+[node name="DefLv101" parent="Enemies" unique_id=674440590 instance=ExtResource("4_dgw2m")]
+position = Vector2(-384, -304)
+enemy_data = ExtResource("6_2hbpx")
+
+[node name="DefLv102" parent="Enemies" unique_id=355156168 instance=ExtResource("4_dgw2m")]
+position = Vector2(96, -128)
+enemy_data = ExtResource("6_2hbpx")
+
+[node name="DefLv103" parent="Enemies" unique_id=477430475 instance=ExtResource("4_dgw2m")]
+position = Vector2(-384, -400)
+enemy_data = ExtResource("6_2hbpx")
+
+[node name="DefLv104" parent="Enemies" unique_id=1679076072 instance=ExtResource("4_dgw2m")]
+position = Vector2(-336, -344)
+enemy_data = ExtResource("6_2hbpx")
+
+[node name="AtkLv101" parent="Enemies" unique_id=232817028 instance=ExtResource("4_dgw2m")]
+position = Vector2(-96, -256)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv102" parent="Enemies" unique_id=1811105936 instance=ExtResource("4_dgw2m")]
+position = Vector2(0, -416)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv103" parent="Enemies" unique_id=1252898236 instance=ExtResource("4_dgw2m")]
+position = Vector2(224, -544)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv104" parent="Enemies" unique_id=319009110 instance=ExtResource("4_dgw2m")]
+position = Vector2(160, -448)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv105" parent="Enemies" unique_id=1765881066 instance=ExtResource("4_dgw2m")]
+position = Vector2(224, -448)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv106" parent="Enemies" unique_id=597157782 instance=ExtResource("4_dgw2m")]
+position = Vector2(480, -416)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv107" parent="Enemies" unique_id=774100133 instance=ExtResource("4_dgw2m")]
+position = Vector2(480, -352)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv108" parent="Enemies" unique_id=1910172649 instance=ExtResource("4_dgw2m")]
+position = Vector2(256, -256)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv109" parent="Enemies" unique_id=837966534 instance=ExtResource("4_dgw2m")]
+position = Vector2(320, -256)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv110" parent="Enemies" unique_id=1272313418 instance=ExtResource("4_dgw2m")]
+position = Vector2(192, -64)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv111" parent="Enemies" unique_id=866583635 instance=ExtResource("4_dgw2m")]
+position = Vector2(256, -64)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="AtkLv112" parent="Enemies" unique_id=1516184928 instance=ExtResource("4_dgw2m")]
+position = Vector2(160, -544)
+enemy_data = ExtResource("6_xlqth")
+
+[node name="BalLv101" parent="Enemies" unique_id=1436301196 instance=ExtResource("4_dgw2m")]
+position = Vector2(0, -224)
+enemy_data = ExtResource("6_mguoy")
+
+[node name="BalLv102" parent="Enemies" unique_id=1752808682 instance=ExtResource("4_dgw2m")]
+position = Vector2(0, -288)
+enemy_data = ExtResource("6_mguoy")
+
+[node name="BalLv103" parent="Enemies" unique_id=1077616942 instance=ExtResource("4_dgw2m")]
+position = Vector2(-96, -288)
+enemy_data = ExtResource("6_mguoy")
+
+[node name="BalLv104" parent="Enemies" unique_id=1625482253 instance=ExtResource("4_dgw2m")]
+position = Vector2(-96, -224)
+enemy_data = ExtResource("6_mguoy")
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true
 
-[node name="ItemPickup" parent="Pickups" unique_id=1816246793 instance=ExtResource("5_wmq0r")]
-position = Vector2(-264, -168)
-
 [node name="SwordLv1" parent="Pickups" unique_id=1405483750 instance=ExtResource("5_wmq0r")]
-position = Vector2(64, -64)
+position = Vector2(384, -192)
 item_data = ExtResource("6_wmq0r")
 
-[node name="HpRecoveryLv2" parent="Pickups" unique_id=1379067021 instance=ExtResource("5_wmq0r")]
-position = Vector2(0, -192)
+[node name="DaggerLv1" parent="Pickups" unique_id=1323454973 instance=ExtResource("5_wmq0r")]
+position = Vector2(-96, -96)
+item_data = ExtResource("10_ahe1n")
+
+[node name="ShieldLv1" parent="Pickups" unique_id=1816246793 instance=ExtResource("5_wmq0r")]
+position = Vector2(32, -160)
+item_data = ExtResource("11_cu571")
+
+[node name="HpRecoveryLv201" parent="Pickups" unique_id=1379067021 instance=ExtResource("5_wmq0r")]
+position = Vector2(592, 8)
 item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv202" parent="Pickups" unique_id=459596612 instance=ExtResource("5_wmq0r")]
+position = Vector2(0, -320)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv203" parent="Pickups" unique_id=1104256071 instance=ExtResource("5_wmq0r")]
+position = Vector2(-64, -64)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv204" parent="Pickups" unique_id=1599757811 instance=ExtResource("5_wmq0r")]
+position = Vector2(288, -64)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv205" parent="Pickups" unique_id=877984277 instance=ExtResource("5_wmq0r")]
+position = Vector2(480, -448)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv206" parent="Pickups" unique_id=1828611389 instance=ExtResource("5_wmq0r")]
+position = Vector2(128, -256)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv207" parent="Pickups" unique_id=1507960915 instance=ExtResource("5_wmq0r")]
+position = Vector2(160, -256)
+item_data = ExtResource("7_a6ijt")
+
+[node name="HpRecoveryLv101" parent="Pickups" unique_id=1835675025 instance=ExtResource("5_wmq0r")]
+position = Vector2(320, -160)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv102" parent="Pickups" unique_id=1462376449 instance=ExtResource("5_wmq0r")]
+position = Vector2(128, -448)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv103" parent="Pickups" unique_id=295170954 instance=ExtResource("5_wmq0r")]
+position = Vector2(256, -448)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv104" parent="Pickups" unique_id=1236149063 instance=ExtResource("5_wmq0r")]
+position = Vector2(128, -160)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv105" parent="Pickups" unique_id=185168734 instance=ExtResource("5_wmq0r")]
+position = Vector2(256, -160)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv106" parent="Pickups" unique_id=1595894563 instance=ExtResource("5_wmq0r")]
+position = Vector2(288, -160)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv107" parent="Pickups" unique_id=1916920709 instance=ExtResource("5_wmq0r")]
+position = Vector2(480, -320)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv108" parent="Pickups" unique_id=1751522753 instance=ExtResource("5_wmq0r")]
+position = Vector2(160, -64)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv109" parent="Pickups" unique_id=297572987 instance=ExtResource("5_wmq0r")]
+position = Vector2(-96, -320)
+item_data = ExtResource("14_ta0wl")
+
+[node name="HpRecoveryLv110" parent="Pickups" unique_id=1469792972 instance=ExtResource("5_wmq0r")]
+position = Vector2(-96, -192)
+item_data = ExtResource("14_ta0wl")
+
+[node name="MpRecoveryLv101" parent="Pickups" unique_id=1167899819 instance=ExtResource("5_wmq0r")]
+position = Vector2(384, -512)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv102" parent="Pickups" unique_id=434380044 instance=ExtResource("5_wmq0r")]
+position = Vector2(384, -96)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv103" parent="Pickups" unique_id=1836153799 instance=ExtResource("5_wmq0r")]
+position = Vector2(192, -256)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv104" parent="Pickups" unique_id=1785613633 instance=ExtResource("5_wmq0r")]
+position = Vector2(96, -256)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv105" parent="Pickups" unique_id=512110682 instance=ExtResource("5_wmq0r")]
+position = Vector2(192, -352)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv106" parent="Pickups" unique_id=1341206107 instance=ExtResource("5_wmq0r")]
+position = Vector2(96, -352)
+item_data = ExtResource("15_ta0wl")
+
+[node name="MpRecoveryLv107" parent="Pickups" unique_id=1256216531 instance=ExtResource("5_wmq0r")]
+position = Vector2(384, -128)
+item_data = ExtResource("15_ta0wl")
+
+[node name="FragmentYellowLv101" parent="Pickups" unique_id=1834790956 instance=ExtResource("5_wmq0r")]
+position = Vector2(-32, -448)
+item_data = ExtResource("11_bcf3a")
+
+[node name="FragmentYellowLv102" parent="Pickups" unique_id=629773710 instance=ExtResource("5_wmq0r")]
+position = Vector2(-64, -448)
+item_data = ExtResource("11_bcf3a")
+
+[node name="FragmentYellowLv103" parent="Pickups" unique_id=2044396255 instance=ExtResource("5_wmq0r")]
+position = Vector2(192, -288)
+item_data = ExtResource("11_bcf3a")
+
+[node name="FragmentYellowLv104" parent="Pickups" unique_id=646574378 instance=ExtResource("5_wmq0r")]
+position = Vector2(192, -320)
+item_data = ExtResource("11_bcf3a")
+
+[node name="FragmentBlueLv101" parent="Pickups" unique_id=2001099770 instance=ExtResource("5_wmq0r")]
+position = Vector2(64, -64)
+item_data = ExtResource("13_fkkej")
+
+[node name="FragmentBlueLv102" parent="Pickups" unique_id=329321137 instance=ExtResource("5_wmq0r")]
+position = Vector2(32, -64)
+item_data = ExtResource("13_fkkej")
+
+[node name="FragmentBlueLv103" parent="Pickups" unique_id=1770964468 instance=ExtResource("5_wmq0r")]
+position = Vector2(128, -352)
+item_data = ExtResource("13_fkkej")
+
+[node name="FragmentBlueLv104" parent="Pickups" unique_id=513012280 instance=ExtResource("5_wmq0r")]
+position = Vector2(160, -352)
+item_data = ExtResource("13_fkkej")
+
+[node name="FragmentRedLv101" parent="Pickups" unique_id=693440774 instance=ExtResource("5_wmq0r")]
+position = Vector2(352, -448)
+item_data = ExtResource("14_2p4y1")
+
+[node name="FragmentRedLv102" parent="Pickups" unique_id=919642583 instance=ExtResource("5_wmq0r")]
+position = Vector2(320, -448)
+item_data = ExtResource("14_2p4y1")
+
+[node name="FragmentRedLv103" parent="Pickups" unique_id=1557664030 instance=ExtResource("5_wmq0r")]
+position = Vector2(96, -320)
+item_data = ExtResource("14_2p4y1")
+
+[node name="FragmentRedLv104" parent="Pickups" unique_id=416790920 instance=ExtResource("5_wmq0r")]
+position = Vector2(96, -288)
+item_data = ExtResource("14_2p4y1")
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true

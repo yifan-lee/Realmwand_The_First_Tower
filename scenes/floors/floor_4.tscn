@@ -5,6 +5,7 @@
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_hw53x")
+floor_id = &"floor_4"
 
 [node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
 unique_name_in_owner = true

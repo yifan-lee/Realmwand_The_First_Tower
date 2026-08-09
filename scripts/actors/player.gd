@@ -121,6 +121,19 @@ func restore_save_data(data: Dictionary) -> void:
 			var skill := load(String(path_value)) as SkillData
 			if skill != null:
 				learned_skills.append(skill)
+				
+	# -- 开发期/版本更新兼容：自动补齐存盘时还不存在，但现在 PlayerData 里有的新技能 --
+	# 补齐初始技能
+	for skill: SkillData in player_data.starting_skills:
+		if skill != null and not learned_skills.has(skill):
+			learned_skills.append(skill)
+			
+	# 补齐因等级提升而应有的技能
+	for i: int in range(1, level + 1):
+		if player_data.level_skills.has(i):
+			var skill: SkillData = player_data.level_skills[i]
+			if skill != null and not learned_skills.has(skill):
+				learned_skills.append(skill)
 	current_hp = clampf(float(data.get("current_hp", current_hp)), 0.0, get_max_hp())
 	current_mp = clampf(float(data.get("current_mp", current_mp)), 0.0, get_max_mp())
 	current_fp = clampf(float(data.get("current_fp", current_fp)), 0.0, get_max_fp())
