@@ -3,10 +3,15 @@
 [ext_resource type="Script" uid="uid://diau64006ed6p" path="res://scripts/floors/floor.gd" id="1_hw53x"]
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_bcken"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_muj50"]
+[ext_resource type="PackedScene" path="res://scenes/actors/enemies/boss.tscn" id="4_i8mcm"]
+[ext_resource type="Resource" uid="uid://7funk5mmnmka" path="res://resources/actors/boss_atk.tres" id="5_pvo1t"]
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_hw53x")
 floor_id = &"floor_4"
+display_name = null
+description = null
+default_spawn_id = null
 
 [node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
 unique_name_in_owner = true
@@ -51,6 +56,11 @@ target_spawn_id = &"FromBelowStair"
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true
+
+[node name="Boss" parent="Enemies" unique_id=323264742 instance=ExtResource("4_i8mcm")]
+position = Vector2(0, -608)
+grid_size = Vector2i(3, 3)
+enemy_data = ExtResource("5_pvo1t")
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true

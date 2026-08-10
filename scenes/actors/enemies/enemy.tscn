@@ -13,7 +13,6 @@ script = ExtResource("1_gejs6")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=548014908]
 z_index = 1
 texture_filter = 1
-scale = Vector2(0.2, 0.2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619728797]
 shape = SubResource("RectangleShape2D_ltqiy")

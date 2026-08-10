@@ -13,6 +13,16 @@ signal stats_changed
 @export_group("Identity")
 @export var instance_id: StringName = &""
 
+@export_group("Layout")
+## 控制敌人占用的地块大小，例如 (1, 1) 代表 1x1，(3, 3) 代表 3x3 Boss
+@export var grid_size: Vector2i = Vector2i(1, 1):
+	set(value):
+		grid_size = value
+		if is_node_ready():
+			_update_size()
+
+const TILE_BASE_SIZE = Vector2(24, 20)
+
 @export_group("Data")
 @export var enemy_data: EnemyData:
 	set(value):
@@ -30,6 +40,7 @@ var _active_collision_layer: int = 0
 
 func _ready() -> void:
 	_refresh_visual()
+	_update_size()
 
 	if Engine.is_editor_hint():
 		return
@@ -231,3 +242,28 @@ func _refresh_visual() -> void:
 		return
 
 	sprite.texture = enemy_data.get_world_texture()
+	
+	if sprite.texture != null:
+		# 按照项目的设定，每个格子是 32px
+		var tile_size = 32.0
+		# 我们希望 sprite 的宽度刚好等于 grid_size.x * tile_size
+		var target_width = grid_size.x * tile_size
+		
+		# 图片原始宽度
+		var texture_width = sprite.texture.get_width()
+		
+		if texture_width > 0:
+			var required_scale = target_width / texture_width
+			sprite.scale = Vector2(required_scale, required_scale)
+
+func _update_size() -> void:
+	var shape_node = get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if shape_node == null:
+		return
+		
+	var rect_shape = shape_node.shape as RectangleShape2D
+	if rect_shape == null:
+		rect_shape = RectangleShape2D.new()
+		shape_node.shape = rect_shape
+		
+	rect_shape.size = Vector2(TILE_BASE_SIZE.x * grid_size.x, TILE_BASE_SIZE.y * grid_size.y)
