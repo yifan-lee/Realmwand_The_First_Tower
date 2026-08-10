@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://c6ds8h0pas85"]
+[gd_scene format=4 uid="uid://c6ds8h0pas85"]
 
 [ext_resource type="Script" uid="uid://diau64006ed6p" path="res://scripts/floors/floor.gd" id="1_hw53x"]
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_bcken"]
+[ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_muj50"]
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_hw53x")
@@ -13,6 +14,7 @@ z_index = -10
 texture_filter = 2
 position = Vector2(-16, 16)
 scale = Vector2(0.158, 0.158)
+tile_map_data = PackedByteArray("AAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAAAAP3/AAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAAAAPz/AAAAAAAAAAAAAPv/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPn/AAAAAAAAAAAAAPj/AAAAAAAAAAAAAPf/AAAAAAAAAAAAAPb/AAAAAAAAAAAAAPX/AAAAAAAAAAAAAPT/AAAAAAAAAAAAAPP/AAAAAAAAAAD7/+v/AAAAAAAAAAD7/+z/AAAAAAAAAAD7/+3/AAAAAAAAAAD7/+7/AAAAAAAAAAD7/+//AAAAAAAAAAD7//D/AAAAAAAAAAD7//H/AAAAAAAAAAD7//L/AAAAAAAAAAD8/+v/AAAAAAAAAAD8/+z/AAAAAAAAAAD8/+3/AAAAAAAAAAD8/+7/AAAAAAAAAAD8/+//AAAAAAAAAAD8//D/AAAAAAAAAAD8//H/AAAAAAAAAAD8//L/AAAAAAAAAAD9/+v/AAAAAAAAAAD9/+z/AAAAAAAAAAD9/+3/AAAAAAAAAAD9/+7/AAAAAAAAAAD9/+//AAAAAAAAAAD9//D/AAAAAAAAAAD9//H/AAAAAAAAAAD9//L/AAAAAAAAAAD+/+v/AAAAAAAAAAD+/+z/AAAAAAAAAAD+/+3/AAAAAAAAAAD+/+7/AAAAAAAAAAD+/+//AAAAAAAAAAD+//D/AAAAAAAAAAD+//H/AAAAAAAAAAD+//L/AAAAAAAAAAD//+v/AAAAAAAAAAD//+z/AAAAAAAAAAD//+3/AAAAAAAAAAD//+7/AAAAAAAAAAD//+//AAAAAAAAAAD///D/AAAAAAAAAAD///H/AAAAAAAAAAD///L/AAAAAAAAAAAAAOv/AAAAAAAAAAAAAOz/AAAAAAAAAAAAAO3/AAAAAAAAAAAAAO7/AAAAAAAAAAAAAO//AAAAAAAAAAAAAPD/AAAAAAAAAAAAAPH/AAAAAAAAAAAAAPL/AAAAAAAAAAABAOv/AAAAAAAAAAABAOz/AAAAAAAAAAABAO3/AAAAAAAAAAABAO7/AAAAAAAAAAABAO//AAAAAAAAAAABAPD/AAAAAAAAAAABAPH/AAAAAAAAAAABAPL/AAAAAAAAAAACAOv/AAAAAAAAAAACAOz/AAAAAAAAAAACAO3/AAAAAAAAAAACAO7/AAAAAAAAAAACAO//AAAAAAAAAAACAPD/AAAAAAAAAAACAPH/AAAAAAAAAAACAPL/AAAAAAAAAAADAOv/AAAAAAAAAAADAOz/AAAAAAAAAAADAO3/AAAAAAAAAAADAO7/AAAAAAAAAAADAO//AAAAAAAAAAADAPD/AAAAAAAAAAADAPH/AAAAAAAAAAADAPL/AAAAAAAAAAAEAOv/AAAAAAAAAAAEAOz/AAAAAAAAAAAEAO3/AAAAAAAAAAAEAO7/AAAAAAAAAAAEAO//AAAAAAAAAAAEAPD/AAAAAAAAAAAEAPH/AAAAAAAAAAAEAPL/AAAAAAAAAAAFAOv/AAAAAAAAAAAFAOz/AAAAAAAAAAAFAO3/AAAAAAAAAAAFAO7/AAAAAAAAAAAFAO//AAAAAAAAAAAFAPD/AAAAAAAAAAAFAPH/AAAAAAAAAAAFAPL/AAAAAAAAAAA=")
 tile_set = ExtResource("2_bcken")
 
 [node name="WallLayer" type="TileMapLayer" parent="." unique_id=917837273]
@@ -37,6 +39,16 @@ unique_name_in_owner = true
 [node name="Interactables" type="Node2D" parent="." unique_id=191277635]
 unique_name_in_owner = true
 
+[node name="StairDown" parent="Interactables" unique_id=841985626 instance=ExtResource("3_muj50")]
+direction = 1
+target_floor_id = &"floor_3"
+target_spawn_id = &"FromAboveStair"
+
+[node name="StairUp" parent="Interactables" unique_id=1832430325 instance=ExtResource("3_muj50")]
+position = Vector2(0, -672)
+target_floor_id = &"floor_5"
+target_spawn_id = &"FromBelowStair"
+
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true
 
@@ -45,3 +57,7 @@ unique_name_in_owner = true
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=662741815]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=148825131]

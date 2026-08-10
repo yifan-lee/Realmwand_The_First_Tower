@@ -33,6 +33,7 @@ var _player_casting_skill: SkillData
 var _enemy_casting_skill: SkillData
 var _player_effects: Array[Dictionary] = []
 var _enemy_effects: Array[Dictionary] = []
+var _enemy_queued_skill: SkillData
 
 
 func setup(player: Player, battle_ui: BattleUI) -> void:
@@ -120,6 +121,7 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_enemy_effects.clear()
 	_player.set_input_enabled(false)
 	_battle_ui.open(_player, _enemy)
+	_queue_enemy_next_skill()
 	_battle_ui.show_message("遭遇 %s，战斗开始。" % _enemy.enemy_data.display_name)
 	battle_started.emit(_enemy)
 
@@ -206,7 +208,8 @@ func _begin_enemy_turn() -> void:
 	if _state != BattleState.RUNNING:
 		return
 
-	var skill := _get_enemy_usable_skill()
+	var skill: SkillData = _enemy_queued_skill
+
 	if skill == null:
 		_enemy_atb = 0.0
 		_resolve_enemy_attack(null)
@@ -331,6 +334,7 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 		_enemy_atb = FORMULAS.ATB_MAX
 	else:
 		_enemy_atb = 0.0
+	_queue_enemy_next_skill()
 	_battle_ui.refresh_stats()
 	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, applied])
 	if _player.current_hp <= 0.0:
@@ -421,6 +425,15 @@ func _get_enemy_usable_skill() -> SkillData:
 			continue
 		return skill
 	return null
+
+
+func _queue_enemy_next_skill() -> void:
+	if _enemy == null or _enemy.is_defeated:
+		_enemy_queued_skill = null
+		_battle_ui.set_enemy_forecast(null)
+		return
+	_enemy_queued_skill = _get_enemy_usable_skill()
+	_battle_ui.set_enemy_forecast(_enemy_queued_skill)
 
 
 func _apply_effects(

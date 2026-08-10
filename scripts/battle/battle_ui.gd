@@ -15,7 +15,7 @@ enum ActionPage {
 
 @onready var battle_root: Control = $BattleRoot
 @onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/PlayerStats
-@onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/EnemyStats
+@onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyStats
 @onready var shared_atb_track: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track
 @onready var player_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker
 @onready var enemy_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker
@@ -146,6 +146,12 @@ func refresh_stats() -> void:
 	enemy_stats.display_stats(_build_enemy_view())
 	_update_atb_markers(_player_atb_value, _enemy_atb_value)
 	skill_panel.update_availability(_can_cast_skill)
+
+
+func set_enemy_forecast(skill: SkillData) -> void:
+	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel")
+	if forecast_panel != null and _enemy != null:
+		forecast_panel.display_forecast(skill, _enemy.enemy_data.display_name)
 
 func _can_cast_skill(skill: SkillData) -> bool:
 	if _player == null:

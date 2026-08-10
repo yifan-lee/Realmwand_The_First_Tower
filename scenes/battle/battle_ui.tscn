@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="3_bgiko"]
 [ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="4_keo60"]
 [ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_bgiko"]
+[ext_resource type="PackedScene" uid="uid://l4sdg3sblxqh" path="res://scenes/ui/components/enemy_forecast_panel.tscn" id="7_xm0oj"]
 
 [node name="BattleUI" type="CanvasLayer" unique_id=609410111]
 script = ExtResource("1_d43ay")
@@ -174,7 +175,13 @@ custom_minimum_size = Vector2(345, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=37358213 instance=ExtResource("2_elpkr")]
+[node name="RightColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=2108736980]
+layout_mode = 2
+
+[node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=37358213 instance=ExtResource("2_elpkr")]
+layout_mode = 2
+
+[node name="EnemyForecastPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1900324266 instance=ExtResource("7_xm0oj")]
 layout_mode = 2
 
 [node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942472126]
