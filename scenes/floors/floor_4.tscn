@@ -57,9 +57,9 @@ target_spawn_id = &"FromBelowStair"
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true
 
-[node name="Boss" parent="Enemies" unique_id=323264742 instance=ExtResource("4_i8mcm")]
+[node name="Boss" parent="Enemies" unique_id=334746824 instance=ExtResource("4_i8mcm")]
 position = Vector2(0, -608)
-grid_size = Vector2i(3, 3)
+visual_scale_multiplier = null
 enemy_data = ExtResource("5_pvo1t")
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
@@ -67,7 +67,3 @@ unique_name_in_owner = true
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=662741815]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=148825131]

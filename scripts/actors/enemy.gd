@@ -21,6 +21,13 @@ signal stats_changed
 		if is_node_ready():
 			_update_size()
 
+## 视觉上的额外缩放系数。如果原图有大量透明留白导致视觉偏小，可以调大此值（如 1.2、1.5）
+@export var visual_scale_multiplier: float = 1.0:
+	set(value):
+		visual_scale_multiplier = value
+		if is_node_ready():
+			_refresh_visual()
+
 const TILE_BASE_SIZE = Vector2(24, 20)
 
 @export_group("Data")
@@ -243,18 +250,7 @@ func _refresh_visual() -> void:
 
 	sprite.texture = enemy_data.get_world_texture()
 	
-	if sprite.texture != null:
-		# 按照项目的设定，每个格子是 32px
-		var tile_size = 32.0
-		# 我们希望 sprite 的宽度刚好等于 grid_size.x * tile_size
-		var target_width = grid_size.x * tile_size
-		
-		# 图片原始宽度
-		var texture_width = sprite.texture.get_width()
-		
-		if texture_width > 0:
-			var required_scale = target_width / texture_width
-			sprite.scale = Vector2(required_scale, required_scale)
+	VisualUtils.auto_scale_sprite(sprite, grid_size, visual_scale_multiplier)
 
 func _update_size() -> void:
 	var shape_node = get_node_or_null("CollisionShape2D") as CollisionShape2D

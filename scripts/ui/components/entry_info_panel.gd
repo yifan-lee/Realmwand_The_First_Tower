@@ -41,3 +41,25 @@ func clear_info() -> void:
 	details_label.text = ""
 	details_label.visible = false
 	details_separator.visible = false
+
+
+func display_item(item: ItemData) -> void:
+	if item == null:
+		clear_info()
+		return
+		
+	var details: Array[String] = []
+	if item is EquipmentData:
+		var equip := item as EquipmentData
+		if equip.max_hp_bonus != 0: details.append("最大生命: %+d" % int(equip.max_hp_bonus))
+		if equip.max_mp_bonus != 0: details.append("最大法力: %+d" % int(equip.max_mp_bonus))
+		if equip.atk_bonus != 0: details.append("物理攻击: %+d" % int(equip.atk_bonus))
+		if equip.def_bonus != 0: details.append("物理防御: %+d" % int(equip.def_bonus))
+		if equip.spd_bonus != 0: details.append("速度: %+d" % int(equip.spd_bonus))
+		
+	var view := EntryInfoViewData.new()
+	view.title = item.display_name
+	view.icon = item.icon
+	view.description = item.description
+	view.detail_lines = details
+	display_info(view)

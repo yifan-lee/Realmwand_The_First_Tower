@@ -224,3 +224,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="EquipPopupMenu" type="PopupMenu" parent="." unique_id=1295325983]
+size = Vector2i(150, 100)
+
+

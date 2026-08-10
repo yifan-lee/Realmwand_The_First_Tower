@@ -12,6 +12,12 @@ signal state_changed(
 @export_group("State")
 @export var is_active: bool = false
 
+@export var visual_scale_multiplier: float = 1.0:
+	set(value):
+		visual_scale_multiplier = value
+		if is_node_ready():
+			_update_visual()
+
 @onready var animated_sprite: AnimatedSprite2D = (
 	$AnimatedSprite2D
 )
@@ -45,3 +51,5 @@ func _update_visual() -> void:
 		animated_sprite.play(&"active")
 	else:
 		animated_sprite.play(&"inactive")
+		
+	VisualUtils.auto_scale_sprite(animated_sprite, Vector2i(1, 1), visual_scale_multiplier)

@@ -13,6 +13,12 @@ enum Direction {
 		direction = value
 		_update_visual()
 
+@export var visual_scale_multiplier: float = 1.0:
+	set(value):
+		visual_scale_multiplier = value
+		if is_node_ready():
+			_update_visual()
+
 @export_group("Destination")
 @export var target_floor_id: StringName = &""
 @export var target_spawn_id: StringName = &""
@@ -83,3 +89,5 @@ func _update_visual() -> void:
 		animated_sprite.animation = &"down"
 
 	animated_sprite.frame = 0
+	
+	VisualUtils.auto_scale_sprite(animated_sprite, Vector2i(1, 1), visual_scale_multiplier)

@@ -3,6 +3,8 @@ extends PanelContainer
 
 signal slot_focused(slot: int)
 signal slot_selected(slot: int)
+signal equip_slot_chosen(slot: int)
+signal equip_slot_previewed(slot: int)
 
 const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.HEAD: "头部",
@@ -42,6 +44,7 @@ const SLOT_NAMES: Dictionary[int, String] = {
 	EquipmentLoadout.Slot.ACCESSORY_2: $Margin/Content/Slots/Accessory2/Icon,
 }
 
+@onready var equip_popup: PopupMenu = $EquipPopupMenu
 var _loadout: EquipmentLoadout
 
 
@@ -51,6 +54,10 @@ func _ready() -> void:
 		label.focus_mode = Control.FOCUS_ALL
 		label.focus_entered.connect(_on_slot_focus_entered.bind(slot))
 		label.gui_input.connect(_on_slot_gui_input.bind(slot))
+		
+	if equip_popup != null:
+		equip_popup.id_pressed.connect(_on_equip_popup_id_pressed)
+		equip_popup.id_focused.connect(_on_equip_popup_id_focused)
 
 
 func _on_slot_focus_entered(slot: int) -> void:
@@ -102,6 +109,32 @@ func preview_slots(slots: Array[int]) -> void:
 func clear_preview() -> void:
 	for label: Label in _slot_labels.values():
 		label.theme_type_variation = &"SectionLabel"
+
+
+func popup_slot_selection(slots: Array[int]) -> void:
+	if equip_popup == null:
+		return
+	equip_popup.clear()
+	for slot: int in slots:
+		if SLOT_NAMES.has(slot):
+			equip_popup.add_item(SLOT_NAMES[slot], slot)
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and focus_owner is Control:
+		var rect := focus_owner.get_global_rect()
+		equip_popup.position = Vector2i(rect.position.x + rect.size.x + 8, rect.position.y)
+		equip_popup.popup()
+		equip_popup.set_focused_item(0)
+	else:
+		equip_popup.popup_centered()
+		equip_popup.set_focused_item(0)
+
+
+func _on_equip_popup_id_pressed(id: int) -> void:
+	equip_slot_chosen.emit(id)
+
+
+func _on_equip_popup_id_focused(id: int) -> void:
+	equip_slot_previewed.emit(id)
 
 
 func focus_first_slot() -> bool:

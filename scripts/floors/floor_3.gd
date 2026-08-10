@@ -1,4 +1,4 @@
-wextends Floor
+extends Floor
 
 @onready var stair_up: Area2D = $Interactables/StairUp
 @onready var from_below_stair: Marker2D = $SpawnPoints/FromBelowStair

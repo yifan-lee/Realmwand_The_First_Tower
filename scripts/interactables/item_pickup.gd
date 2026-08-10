@@ -13,6 +13,12 @@ signal picked_up(item: ItemData, amount: int)
 		item_data = value
 		_refresh_visual()
 
+@export var visual_scale_multiplier: float = 1.0:
+	set(value):
+		visual_scale_multiplier = value
+		if is_node_ready():
+			_refresh_visual()
+
 @export_range(1, 999, 1) var amount: int = 1
 
 var is_collected: bool = false
@@ -66,6 +72,7 @@ func _refresh_visual() -> void:
 		return
 
 	sprite.texture = item_data.world_texture
+	VisualUtils.auto_scale_sprite(sprite, Vector2i(1, 1), visual_scale_multiplier)
 
 
 func get_persistent_id() -> String:

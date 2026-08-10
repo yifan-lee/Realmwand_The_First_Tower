@@ -42,7 +42,6 @@ var _player: Player
 var _current_page: MainPage = MainPage.INVENTORY
 var _current_category := 0
 var _preview_target_slot := -1
-var _equip_selection_mode: bool = false
 var _pending_equip_item: EquipmentData = null
 
 
@@ -61,6 +60,10 @@ func _ready() -> void:
 	inventory_panel.item_selected.connect(_on_item_selected)
 	equipment_panel.slot_focused.connect(_on_equipment_slot_focused)
 	equipment_panel.slot_selected.connect(_on_equipment_slot_selected)
+	equipment_panel.equip_slot_chosen.connect(_on_equip_slot_chosen)
+	equipment_panel.equip_slot_previewed.connect(_on_equip_slot_previewed)
+	if equipment_panel.equip_popup != null:
+		equipment_panel.equip_popup.popup_hide.connect(_on_equip_popup_hide)
 	skill_panel.skill_focused.connect(_on_skill_focused)
 	system_page.save_loaded.connect(close)
 
@@ -74,12 +77,6 @@ func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
 		return
 	if _should_preserve_text_input(event):
-		return
-
-	if event.is_action_pressed("ui_cancel") and _equip_selection_mode:
-		_cancel_equip_selection_mode()
-		inventory_panel.focus_first_item()
-		get_viewport().set_input_as_handled()
 		return
 
 	var direction := Vector2i.ZERO
@@ -167,7 +164,7 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	skill_page.visible = page == MainPage.SKILLS
 	system_page.visible = page == MainPage.SYSTEM
 	equipment_panel.visible = page != MainPage.SKILLS
-	_cancel_equip_selection_mode()
+	_pending_equip_item = null
 	entry_info_panel.clear_info()
 	refresh_player_stats()
 	if page == MainPage.SYSTEM:
@@ -179,7 +176,7 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 func _show_category(index: int, focus_items: bool) -> void:
 	_current_category = posmod(index, CATEGORY_TYPES.size())
 	inventory_panel.set_item_type_filter(CATEGORY_TYPES[_current_category])
-	_cancel_equip_selection_mode()
+	_pending_equip_item = null
 	entry_info_panel.clear_info()
 	refresh_player_stats()
 	if focus_items and not inventory_panel.focus_first_item():
@@ -218,8 +215,6 @@ func _navigate_horizontal_focus(
 				return true
 			if equipment_panel.has_slot_focus(focus):
 				if direction < 0 and equipment_panel.is_first_column_focused(focus):
-					if _equip_selection_mode:
-						_cancel_equip_selection_mode()
 					inventory_panel.focus_first_item()
 					return true
 				return false
@@ -349,25 +344,12 @@ func _should_preserve_text_input(event: InputEvent) -> bool:
 func _on_item_focused(item: ItemData) -> void:
 	equipment_panel.clear_preview()
 	var view := _build_player_view()
-	var details: Array[String] = []
+	var action_hint := ""
 	if item is EquipmentData:
 		var equipment := item as EquipmentData
 		_preview_target_slot = _choose_equipment_target(equipment)
 		if _preview_target_slot >= 0:
-			var displaced: Array[EquipmentData] = _player.equipment.get_displaced_items(equipment, _preview_target_slot)
-			var delta: Dictionary[StringName, float] = FORMULAS.equipment_delta(equipment, displaced)
-			view.max_hp_delta = delta[&"max_hp"]
-			view.max_mp_delta = delta[&"max_mp"]
-			view.atk_delta = delta[&"atk"]
-			view.def_delta = delta[&"def"]
-			view.spd_delta = delta[&"spd"]
-			var affected: Array[int] = _player.equipment.get_affected_slots(equipment, _preview_target_slot)
-			for displaced_item: EquipmentData in displaced:
-				for slot: int in _player.equipment.get_slots_for_item(displaced_item):
-					if not affected.has(slot):
-						affected.append(slot)
-			equipment_panel.preview_slots(affected)
-			details.append("确认后装备；高亮槽位会被占用或替换")
+			_preview_equipment(equipment, _preview_target_slot, view)
 	else:
 		var hp_rec := 0.0
 		var mp_rec := 0.0
@@ -382,8 +364,9 @@ func _on_item_focused(item: ItemData) -> void:
 		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
 		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
 		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
+	
+	entry_info_panel.display_item(item)
 	refresh_player_stats(view)
-	_display_entry_info(item.display_name, item.icon, item.description, item.get_details())
 
 
 func _on_item_selected(item: ItemData) -> void:
@@ -394,9 +377,8 @@ func _on_item_selected(item: ItemData) -> void:
 		var equipment := item as EquipmentData
 		var compatible_slots := _player.equipment.get_compatible_slots(equipment)
 		if compatible_slots.size() > 1:
-			_equip_selection_mode = true
 			_pending_equip_item = equipment
-			equipment_panel.focus_compatible_slot(compatible_slots)
+			equipment_panel.popup_slot_selection(compatible_slots)
 			return
 		elif _preview_target_slot >= 0:
 			_player.equip_item(item.id, _preview_target_slot)
@@ -436,35 +418,66 @@ func _on_skill_focused(skill: SkillData) -> void:
 
 func _on_equipment_slot_focused(slot: int) -> void:
 	equipment_panel.clear_preview()
-	var slots: Array[int] = [slot] # 显式类型声明将数组转换/实例化为 Array[int]
+	_preview_target_slot = -1
+	var slots: Array[int] = [slot]
 	equipment_panel.preview_slots(slots)
 	refresh_player_stats()
 
-	var item: EquipmentData = _player.equipment.get_equipped(slot)
-	if item == null:
-		entry_info_panel.clear_info()
-		return
-	_display_entry_info(item.display_name, item.icon, item.description, ["确认后卸下装备"])
+	var item := _player.equipment.get_equipped(slot)
+	entry_info_panel.display_item(item)
 
 
 func _on_equipment_slot_selected(slot: int) -> void:
-	if _equip_selection_mode:
-		if _pending_equip_item != null and _player.equipment.can_equip(_pending_equip_item, slot):
-			_player.equip_item(_pending_equip_item.id, slot)
-			_cancel_equip_selection_mode()
-			refresh_content()
-			inventory_panel.focus_first_item()
-		return
-
 	if _player.unequip_item(slot):
 		refresh_content()
 		equipment_panel.focus_first_slot()
 
 
-func _cancel_equip_selection_mode() -> void:
-	_equip_selection_mode = false
+func _on_equip_slot_chosen(slot: int) -> void:
+	if _pending_equip_item != null and _player.equipment.can_equip(_pending_equip_item, slot):
+		_player.equip_item(_pending_equip_item.id, slot)
 	_pending_equip_item = null
-	equipment_panel.clear_preview()
+	_preview_target_slot = -1
+	refresh_content()
+	inventory_panel.focus_first_item()
+
+
+func _on_equip_slot_previewed(slot: int) -> void:
+	if _pending_equip_item == null or _player == null:
+		return
+	_preview_target_slot = slot
+	var view := _build_player_view()
+	_preview_equipment(_pending_equip_item, slot, view)
+	refresh_player_stats(view)
+
+func _preview_equipment(equipment: EquipmentData, target_slot: int, view: ActorStatsViewData) -> void:
+	var displaced: Array[EquipmentData] = _player.equipment.get_displaced_items(equipment, target_slot)
+	var delta: Dictionary[StringName, float] = FORMULAS.equipment_delta(equipment, displaced)
+	view.max_hp_delta = delta[&"max_hp"]
+	view.max_mp_delta = delta[&"max_mp"]
+	view.atk_delta = delta[&"atk"]
+	view.def_delta = delta[&"def"]
+	view.spd_delta = delta[&"spd"]
+	
+	var affected: Array[int] = _player.equipment.get_affected_slots(equipment, target_slot)
+	for displaced_item: EquipmentData in displaced:
+		for s: int in _player.equipment.get_slots_for_item(displaced_item):
+			if not affected.has(s):
+				affected.append(s)
+	equipment_panel.preview_slots(affected)
+	refresh_player_stats(view)
+
+
+func _on_equip_popup_hide() -> void:
+	call_deferred("_handle_popup_hide")
+
+func _handle_popup_hide() -> void:
+	if _pending_equip_item != null:
+		_pending_equip_item = null
+		_preview_target_slot = -1
+		if is_open() and _current_page == MainPage.INVENTORY:
+			inventory_panel.focus_first_item()
+			refresh_player_stats()
 
 
 func _choose_equipment_target(item: EquipmentData) -> int:
