@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bvg00qubiwf61"]
+
+[ext_resource type="Script" uid="uid://bquud6nfvt2og" path="res://scripts/ui/components/floor_info_hud.gd" id="2_qcqbg"]
+
+[node name="FloorInfoHUD" type="PanelContainer" unique_id=1060678807]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_right = 224.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_type_variation = &"TerminalPanel"
+script = ExtResource("2_qcqbg")
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=1103382564]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="Content" unique_id=615966641]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+
+[node name="DescLabel" type="Label" parent="Content" unique_id=662490160]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+autowrap_mode = 3

@@ -5,6 +5,8 @@ signal floor_change_requested(
 	target_spawn_id: StringName
 )
 
+signal floor_changed(floor: Node)
+
 signal battle_requested(
 	enemy: Enemy,
 	player: Player

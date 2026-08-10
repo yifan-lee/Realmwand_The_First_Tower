@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b2r6mtmyrj37t" path="res://scenes/ui/components/game_message_panel.tscn" id="3_el006"]
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_x6mpk"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="4_ehshv"]
+[ext_resource type="PackedScene" uid="uid://bvg00qubiwf61" path="res://scenes/ui/components/floor_info_hud.tscn" id="5_floorinfo"]
 
 [node name="GameHUD" type="CanvasLayer" unique_id=129955379]
 script = ExtResource("1_8n052")
@@ -58,3 +59,5 @@ fp_display_mode = 1
 custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 theme_type_variation = &"TransparentPanelContainer"
+
+[node name="FloorInfoHUD" parent="HudRoot" unique_id=1125122122 instance=ExtResource("5_floorinfo")]

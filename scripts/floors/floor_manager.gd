@@ -20,7 +20,8 @@ func _ready() -> void:
 		_on_floor_change_requested
 	)
 
-	change_floor(
+	call_deferred(
+		"change_floor",
 		starting_floor_id,
 		starting_spawn_id
 	)
@@ -97,6 +98,7 @@ func _set_current_floor(new_floor: Floor) -> void:
 	current_floor_id = new_floor.floor_id
 
 	_apply_saved_floor_state(current_floor)
+	EventBus.floor_changed.emit(current_floor)
 
 
 func change_floor(
