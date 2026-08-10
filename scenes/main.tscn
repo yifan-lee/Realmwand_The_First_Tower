@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cedotsk7lkjx7" path="res://scripts/npc/npc_interaction_manager.gd" id="7_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="8_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="9_choun"]
+[ext_resource type="Script" uid="uid://dvkhyscrk8kui" path="res://scripts/tutorial/tutorial_manager.gd" id="9_o7ddy"]
 [ext_resource type="PackedScene" uid="uid://d34cotjf141ol" path="res://scenes/ui/npc/npc_interaction_ui.tscn" id="12_0ld40"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
@@ -42,6 +43,9 @@ script = ExtResource("6_choun")
 
 [node name="NpcInteractionManager" type="Node" parent="Systems" unique_id=1607828367]
 script = ExtResource("7_dp3eg")
+
+[node name="TutorialManager" type="Node" parent="Systems" unique_id=902893882]
+script = ExtResource("9_o7ddy")
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true

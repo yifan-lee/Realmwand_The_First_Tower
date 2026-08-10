@@ -14,11 +14,16 @@ extends Node2D
 @onready var npc_interaction_manager: NpcInteractionManager = $Systems/NpcInteractionManager
 @onready var floor_manager: FloorManager = $Systems/FloorManager
 @onready var save_manager: SaveManager = $Systems/SaveManager
+@onready var tutorial_manager: TutorialManager = $Systems/TutorialManager
 
 
 func _ready() -> void:
 	game_hud.bind_player(player)
 	esc_menu.bind_player(player)
+	tutorial_manager.setup(
+		player,
+		esc_menu
+	)
 	save_manager.setup(player, floor_manager)
 	esc_menu.bind_save_manager(save_manager)
 	battle_manager.setup(player, battle_ui)

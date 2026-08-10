@@ -116,3 +116,9 @@ item_data = ExtResource("12_rj6dl")
 position = Vector2(192, -256)
 pickup_id = &"feet_lv1"
 item_data = ExtResource("13_r7vlu")
+
+[node name="FeetLv1" parent="Pickups/FeetLv1" index="2" unique_id=322391170 instance=ExtResource("5_wl6yc")]
+position = Vector2(-224, 224)
+pickup_id = &"feet_lv1"
+item_data = ExtResource("13_r7vlu")
+metadata/_edit_group_ = true

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://85suawpth3l7"]
+
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1s6jd"]
+
+[node name="TutorialUI" type="CanvasLayer" unique_id=1962839863]
+
+[node name="TutorialRoot" type="Control" parent="." unique_id=1721555095]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="TutorialRoot" unique_id=1581917302]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="PanelContainer" parent="TutorialRoot/CenterContainer" unique_id=1959123385]
+layout_mode = 2
+theme = ExtResource("1_1s6jd")
+
+[node name="Margin" type="MarginContainer" parent="TutorialRoot/CenterContainer/Panel" unique_id=1369734726]
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="TutorialRoot/CenterContainer/Panel/Margin" unique_id=58920765]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=1827588076]
+layout_mode = 2
+text = "教程提示"
+
+[node name="MessageLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=1965801342]
+layout_mode = 2
+text = "这里显示教程内容。"
+autowrap_mode = 3
+
+[node name="ContinueLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=742588336]
+layout_mode = 2
+text = "按确认键继续"
