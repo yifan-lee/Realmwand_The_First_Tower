@@ -15,6 +15,7 @@ extends Node2D
 @onready var floor_manager: FloorManager = $Systems/FloorManager
 @onready var save_manager: SaveManager = $Systems/SaveManager
 @onready var tutorial_manager: TutorialManager = $Systems/TutorialManager
+@onready var tutorial_ui: TutorialUI = $OverlayRoot/TutorialUI
 
 
 func _ready() -> void:
@@ -22,7 +23,8 @@ func _ready() -> void:
 	esc_menu.bind_player(player)
 	tutorial_manager.setup(
 		player,
-		esc_menu
+		esc_menu,
+		tutorial_ui
 	)
 	save_manager.setup(player, floor_manager)
 	esc_menu.bind_save_manager(save_manager)

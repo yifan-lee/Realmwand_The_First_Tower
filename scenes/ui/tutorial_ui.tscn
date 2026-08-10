@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://85suawpth3l7"]
 
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1s6jd"]
+[ext_resource type="Script" uid="uid://b5h5b6mn3n4wq" path="res://scripts/ui/tutorial_ui.gd" id="1_uiqtt"]
 
 [node name="TutorialUI" type="CanvasLayer" unique_id=1962839863]
+script = ExtResource("1_uiqtt")
 
 [node name="TutorialRoot" type="Control" parent="." unique_id=1721555095]
 visible = false
