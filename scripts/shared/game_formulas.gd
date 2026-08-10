@@ -160,6 +160,27 @@ static func calculate_effective_stat(
 	return maxf(0.0, (base_value + added_value) * multiplier)
 
 
+static func calculate_skill_power_modifier(
+	base_power: float,
+	active_effects: Array[Dictionary],
+	skill_type: int
+) -> float:
+	var added_value := 0.0
+	var multiplier := 1.0
+	for active: Dictionary in active_effects:
+		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
+		if effect == null or effect.effect_type != ActionEffectData.EffectType.SKILL_POWER:
+			continue
+		if effect.restrict_skill_type and effect.target_skill_type != skill_type:
+			continue
+			
+		if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
+			multiplier *= effect.value
+		else:
+			added_value += effect.value
+	return maxf(0.0, (base_power + added_value) * multiplier)
+
+
 static func equipment_delta(
 	candidate: EquipmentData,
 	displaced_items: Array[EquipmentData]

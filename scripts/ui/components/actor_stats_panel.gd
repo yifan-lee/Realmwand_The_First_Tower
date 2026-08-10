@@ -31,6 +31,7 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 @onready var atk_value: RichTextLabel = $MarginContainer/Content/CombatStats/AtkGroup/AtkValue
 @onready var def_value: RichTextLabel = $MarginContainer/Content/CombatStats/DefGroup/DefValue
 @onready var spd_value: RichTextLabel = $MarginContainer/Content/CombatStats/SpdGroup/SpdValue
+@onready var buffs_container: VBoxContainer = %BuffsContainer
 
 var _view_data: ActorStatsViewData
 
@@ -80,6 +81,8 @@ func display_stats(
 		view_data.spd_delta
 	)
 
+	_refresh_buffs(view_data.active_effects)
+
 
 func clear_stats() -> void:
 	_view_data = null
@@ -104,6 +107,7 @@ func clear_stats() -> void:
 	mp_bar.value = 0.0
 	fp_bar.value = 0.0
 	_hide_preview_segments()
+	_refresh_buffs([])
 
 
 func _process(_delta: float) -> void:
@@ -222,3 +226,26 @@ func _format_float_stat(
 		sign_str,
 		delta,
 	]
+
+
+func _refresh_buffs(effects: Array[Dictionary]) -> void:
+	for child in buffs_container.get_children():
+		child.queue_free()
+	
+	if effects.is_empty():
+		buffs_container.visible = false
+		return
+		
+	buffs_container.visible = true
+	for active: Dictionary in effects:
+		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
+		if effect == null: continue
+		var desc := effect.get_description()
+		if desc.is_empty(): continue
+		var remaining: int = active.get(&"remaining_count", 0)
+		var label := Label.new()
+		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_color_override("font_color", Color("#A0D8EF"))
+		label.text = "• %s (剩余 %d 次)" % [desc, remaining]
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		buffs_container.add_child(label)

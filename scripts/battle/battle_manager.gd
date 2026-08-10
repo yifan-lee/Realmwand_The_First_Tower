@@ -57,9 +57,6 @@ func _process(delta: float) -> void:
 	if _state != BattleState.RUNNING or _enemy == null:
 		return
 
-	_tick_cooldowns(delta)
-	_tick_effects(_player_effects, delta)
-	_tick_effects(_enemy_effects, delta)
 	_recover_focus_points(delta)
 	if _enemy_atb >= FORMULAS.ATB_MAX:
 		_resolve_ready_enemy_turn()
@@ -67,11 +64,11 @@ func _process(delta: float) -> void:
 
 	_player_atb = minf(
 		FORMULAS.ATB_MAX,
-		_player_atb + FORMULAS.calculate_atb_gain(_get_player_stat(ActionEffectData.EffectType.SPD), delta)
+		_player_atb + FORMULAS.calculate_atb_gain(get_player_stat(ActionEffectData.EffectType.SPD), delta)
 	)
 	_enemy_atb = minf(
 		FORMULAS.ATB_MAX,
-		_enemy_atb + FORMULAS.calculate_atb_gain(_get_enemy_stat(ActionEffectData.EffectType.SPD), delta)
+		_enemy_atb + FORMULAS.calculate_atb_gain(get_enemy_stat(ActionEffectData.EffectType.SPD), delta)
 	)
 
 	if _player_atb >= FORMULAS.ATB_MAX:
@@ -120,7 +117,7 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_player_effects.clear()
 	_enemy_effects.clear()
 	_player.set_input_enabled(false)
-	_battle_ui.open(_player, _enemy)
+	_battle_ui.open(_player, _enemy, self)
 	_queue_enemy_next_skill()
 	_battle_ui.show_message("遭遇 %s，战斗开始。" % _enemy.enemy_data.display_name)
 	battle_started.emit(_enemy)
@@ -186,6 +183,7 @@ func _on_item_selected(item: ItemData) -> void:
 	if not item.usable_in_battle:
 		_battle_ui.show_message("这个物品不能在战斗中使用。")
 		return
+	_consume_action_charges(false)
 	_apply_effects(item.effects, false)
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
@@ -257,12 +255,13 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	var applied := 0.0
 	for effect in resolved_skill.effects:
 		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
-			var target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
+			var target_def = get_enemy_stat(ActionEffectData.EffectType.DEF)
 			if effect.target_type == ActionEffectData.TargetType.SELF:
-				target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
+				target_def = get_player_stat(ActionEffectData.EffectType.DEF)
+			var skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _player_effects, resolved_skill.skill_type)
 			var damage: float = FORMULAS.calculate_skill_damage(
-				_get_player_stat(ActionEffectData.EffectType.ATK),
-				effect.value,
+				get_player_stat(ActionEffectData.EffectType.ATK),
+				skill_power,
 				target_def
 			)
 			if effect.target_type == ActionEffectData.TargetType.ENEMY:
@@ -271,6 +270,7 @@ func _release_player_skill(skill: SkillData = null) -> void:
 				_player.change_hp(-damage)
 				applied += damage
 	
+	_consume_action_charges(false)
 	_apply_effects(resolved_skill.effects, false)
 	if applied > 0.0:
 		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [resolved_skill.display_name, applied])
@@ -300,12 +300,13 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 		skill_name = skill.display_name
 		for effect in skill.effects:
 			if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
-				var target_def = _get_player_stat(ActionEffectData.EffectType.DEF)
+				var target_def = get_player_stat(ActionEffectData.EffectType.DEF)
 				if effect.target_type == ActionEffectData.TargetType.SELF:
-					target_def = _get_enemy_stat(ActionEffectData.EffectType.DEF)
+					target_def = get_enemy_stat(ActionEffectData.EffectType.DEF)
+				var skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _enemy_effects, skill.skill_type)
 				var damage: float = FORMULAS.calculate_skill_damage(
-					_get_enemy_stat(ActionEffectData.EffectType.ATK),
-					effect.value,
+					get_enemy_stat(ActionEffectData.EffectType.ATK),
+					skill_power,
 					target_def
 				)
 				if effect.target_type == ActionEffectData.TargetType.ENEMY:
@@ -317,12 +318,14 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	else:
 		# 普通攻击
 		var damage: float = FORMULAS.calculate_skill_damage(
-			_get_enemy_stat(ActionEffectData.EffectType.ATK),
+			get_enemy_stat(ActionEffectData.EffectType.ATK),
 			1.0,
-			_get_player_stat(ActionEffectData.EffectType.DEF)
+			get_player_stat(ActionEffectData.EffectType.DEF)
 		)
 		_player.change_hp(-damage)
 		applied = damage
+	_consume_action_charges(true)
+	
 	var is_free_action := false
 	if skill != null:
 		_apply_effects(skill.effects, true)
@@ -386,11 +389,32 @@ func _get_experience_reward() -> int:
 	)
 
 
-func _tick_cooldowns(delta: float) -> void:
-	for skill_id: StringName in _cooldowns.keys():
-		_cooldowns[skill_id] = maxf(0.0, _cooldowns[skill_id] - delta)
-	for skill_id: StringName in _enemy_cooldowns.keys():
-		_enemy_cooldowns[skill_id] = maxf(0.0, _enemy_cooldowns[skill_id] - delta)
+func get_player_effects() -> Array[Dictionary]:
+	return _player_effects
+
+
+func get_enemy_effects() -> Array[Dictionary]:
+	return _enemy_effects
+
+
+func _consume_action_charges(is_enemy: bool) -> void:
+	var effects = _enemy_effects if is_enemy else _player_effects
+	var cds = _enemy_cooldowns if is_enemy else _cooldowns
+	
+	for index: int in range(effects.size() - 1, -1, -1):
+		var remaining = int(effects[index].get(&"remaining_count", 0)) - 1
+		if remaining <= 0:
+			effects.remove_at(index)
+		else:
+			effects[index][&"remaining_count"] = remaining
+
+	var cd_keys = cds.keys()
+	for skill_id in cd_keys:
+		var remaining = int(cds[skill_id]) - 1
+		if remaining <= 0:
+			cds.erase(skill_id)
+		else:
+			cds[skill_id] = remaining
 
 
 func _recover_focus_points(delta: float) -> void:
@@ -458,28 +482,17 @@ func _apply_effects(
 		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_FP:
 			target_actor.change_fp(-effect.value)
 		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP:
-			var target_array: Array[Dictionary] = _player_effects
-			if target_actor == _enemy:
-				target_array = _enemy_effects
-			target_array.append({
-				&"effect": effect,
-				&"remaining": effect.duration_seconds,
-			})
+			if effect.duration_count > 0:
+				var target_array: Array[Dictionary] = _player_effects
+				if target_actor == _enemy:
+					target_array = _enemy_effects
+				target_array.append({
+					&"effect": effect,
+					&"remaining_count": effect.duration_count,
+				})
 
 
-func _tick_effects(
-	effects: Array[Dictionary],
-	delta: float
-) -> void:
-	for index: int in range(effects.size() - 1, -1, -1):
-		var remaining: float = float(effects[index].get(&"remaining", 0.0)) - delta
-		if remaining <= 0.0:
-			effects.remove_at(index)
-		else:
-			effects[index][&"remaining"] = remaining
-
-
-func _get_player_stat(effect_type: int) -> float:
+func get_player_stat(effect_type: int) -> float:
 	var base_value := 0.0
 	match effect_type:
 		ActionEffectData.EffectType.ATK:
@@ -491,7 +504,7 @@ func _get_player_stat(effect_type: int) -> float:
 	return FORMULAS.calculate_effective_stat(base_value, _player_effects, effect_type)
 
 
-func _get_enemy_stat(effect_type: int) -> float:
+func get_enemy_stat(effect_type: int) -> float:
 	var base_value := 0.0
 	match effect_type:
 		ActionEffectData.EffectType.ATK:

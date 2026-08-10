@@ -36,6 +36,8 @@ var def_delta: float = 0.0
 var spd_delta: float = 0.0
 var fp_recovery_spd_delta: float = 0.0
 
+var active_effects: Array[Dictionary] = []
+
 
 func has_progression() -> bool:
 	return level > 0

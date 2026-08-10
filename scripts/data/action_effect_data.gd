@@ -12,6 +12,7 @@ enum EffectType {
 	REDUCE_HP,
 	REDUCE_MP,
 	REDUCE_FP,
+	SKILL_POWER,
 }
 
 enum TargetType {
@@ -31,7 +32,11 @@ enum OperationType {
 
 @export_group("Value")
 @export var value: float = 0.0
-@export_range(0.0, 999.0, 0.1) var duration_seconds: float = 0.0
+@export_range(0, 100, 1) var duration_count: int = 1
+
+@export_group("Skill Restriction")
+@export var restrict_skill_type: bool = false
+@export var target_skill_type: SkillData.SkillType = SkillData.SkillType.PHYSICAL
 
 func get_description() -> String:
 	match effect_type:
@@ -55,13 +60,22 @@ func get_description() -> String:
 			return _get_stat_desc("防御力")
 		EffectType.SPD:
 			return _get_stat_desc("速度")
+		EffectType.SKILL_POWER:
+			return _get_stat_desc("技能威力")
 	return ""
 
 func _get_stat_desc(stat_name: String) -> String:
 	var prefix = "提升" if operation_type == OperationType.ADD and value > 0 else "降低"
+	var type_prefix = ""
+	if restrict_skill_type:
+		match target_skill_type:
+			SkillData.SkillType.PHYSICAL: type_prefix = "物理"
+			SkillData.SkillType.MAGICAL: type_prefix = "魔法"
+			SkillData.SkillType.TRANSFORM: type_prefix = "变化"
+			
 	if operation_type == OperationType.MULTIPLY:
 		prefix = "提升" if value > 1.0 else "降低"
 		var pct = absf(value - 1.0) * 100.0
-		return "%s %s %.0f%% (持续 %.1f 秒)" % [prefix, stat_name, pct, duration_seconds]
+		return "%s %s%s %.0f%% (剩余 %d 次)" % [prefix, type_prefix, stat_name, pct, duration_count]
 	else:
-		return "%s %s %.0f (持续 %.1f 秒)" % [prefix, stat_name, absf(value), duration_seconds]
+		return "%s %s%s %.0f (剩余 %d 次)" % [prefix, type_prefix, stat_name, absf(value), duration_count]

@@ -22,7 +22,7 @@ func get_description() -> String:
 		CostType.FP:
 			return "消耗专注：%.0f" % value
 		CostType.COOLDOWN:
-			return "冷却：%.1f 秒" % value
+			return "冷却：%.0f 次行动" % value
 		CostType.CAST_TIME:
 			return "吟唱：行动条倒退 %.0f%%" % (value * 100.0)
 	return ""

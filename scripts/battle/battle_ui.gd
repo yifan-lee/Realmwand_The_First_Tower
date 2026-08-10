@@ -34,6 +34,7 @@ var _action_available := false
 var _current_page: ActionPage = ActionPage.SKILLS
 var _player_atb_value := 0.0
 var _enemy_atb_value := 0.0
+var _battle_manager: BattleManager
 
 
 func _ready() -> void:
@@ -86,9 +87,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-func open(player: Player, enemy: Enemy) -> void:
+func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) -> void:
 	_player = player
 	_enemy = enemy
+	_battle_manager = battle_manager
 	skill_panel.display_skills(player.learned_skills)
 	inventory_panel.bind_inventory(player.inventory)
 	inventory_panel.set_battle_only(true)
@@ -111,6 +113,7 @@ func close() -> void:
 	clear_message()
 	_player = null
 	_enemy = null
+	_battle_manager = null
 
 
 func set_action_available(available: bool) -> void:
@@ -236,11 +239,21 @@ func _on_skill_focused(skill: SkillData) -> void:
 	for effect in skill.effects:
 		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
 			var target_def = _enemy.enemy_data.def
+			var attacker_atk = _player.get_atk()
+			var skill_power = effect.value
+			if _battle_manager != null:
+				target_def = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.DEF)
+				attacker_atk = _battle_manager.get_player_stat(ActionEffectData.EffectType.ATK)
+				skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _battle_manager.get_player_effects(), skill.skill_type)
+			
 			if effect.target_type == ActionEffectData.TargetType.SELF:
 				target_def = _player.get_def()
+				if _battle_manager != null:
+					target_def = _battle_manager.get_player_stat(ActionEffectData.EffectType.DEF)
+					
 			var dmg = FORMULAS.calculate_skill_damage(
-				_player.get_atk(),
-				effect.value,
+				attacker_atk,
+				skill_power,
 				target_def
 			)
 			if effect.target_type == ActionEffectData.TargetType.ENEMY:
@@ -343,9 +356,15 @@ func _build_player_view() -> ActorStatsViewData:
 	view.fp_recovery_spd = _player.get_fp_recovery_spd()
 	view.current_atb = _player_atb_value
 	view.max_atb = FORMULAS.ATB_MAX
-	view.atk = _player.get_atk()
-	view.def = _player.get_def()
-	view.spd = _player.get_spd()
+	if _battle_manager != null:
+		view.active_effects = _battle_manager.get_player_effects()
+		view.atk = _battle_manager.get_player_stat(ActionEffectData.EffectType.ATK)
+		view.def = _battle_manager.get_player_stat(ActionEffectData.EffectType.DEF)
+		view.spd = _battle_manager.get_player_stat(ActionEffectData.EffectType.SPD)
+	else:
+		view.atk = _player.get_atk()
+		view.def = _player.get_def()
+		view.spd = _player.get_spd()
 	return view
 
 
@@ -366,9 +385,15 @@ func _build_enemy_view() -> ActorStatsViewData:
 	view.fp_recovery_spd = _enemy.get_fp_recovery_spd()
 	view.current_atb = _enemy_atb_value
 	view.max_atb = FORMULAS.ATB_MAX
-	view.atk = _enemy.enemy_data.atk
-	view.def = _enemy.enemy_data.def
-	view.spd = _enemy.enemy_data.spd
+	if _battle_manager != null:
+		view.active_effects = _battle_manager.get_enemy_effects()
+		view.atk = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.ATK)
+		view.def = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.DEF)
+		view.spd = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.SPD)
+	else:
+		view.atk = _enemy.enemy_data.atk
+		view.def = _enemy.enemy_data.def
+		view.spd = _enemy.enemy_data.spd
 	return view
 
 
