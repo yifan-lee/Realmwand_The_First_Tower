@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TutorialSequenceData" format=3 uid="uid://c7i1f2tyq0r54"]
+
+[ext_resource type="Script" uid="uid://cqueyypuxxsvf" path="res://resources/tutorial/tutorial_sequence_data.gd" id="1_75ash"]
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="2_wt7gg"]
+[ext_resource type="Resource" uid="uid://dbx6ixgmaio0a" path="res://resources/tutorial/steps/show_fp_recovery.tres" id="3_0aoi6"]
+[ext_resource type="Resource" uid="uid://cvf38s5ettwbi" path="res://resources/tutorial/steps/open_inventory.tres" id="4_scef8"]
+[ext_resource type="Resource" uid="uid://cvn1rkmoq1oix" path="res://resources/tutorial/steps/focus_fp_recovery.tres" id="5_qvhxq"]
+[ext_resource type="Resource" uid="uid://8sm3ddtnyg08" path="res://resources/tutorial/steps/select_fp_recovery.tres" id="6_vh8dt"]
+
+[resource]
+script = ExtResource("1_75ash")
+sequence_id = &"fp_recovery_tutorial"
+steps = Array[ExtResource("2_wt7gg")]([ExtResource("3_0aoi6"), ExtResource("4_scef8"), ExtResource("5_qvhxq"), ExtResource("6_vh8dt")])
+trigger_item_id = &"fp_recovery_lv1"
+trigger_cost_type = 2
+metadata/_custom_type_script = "uid://cqueyypuxxsvf"

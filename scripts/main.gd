@@ -3,6 +3,7 @@ extends Node2D
 ## 顶层场景入口：只负责连接世界、系统与 UI。
 ## 具体玩法逻辑保留在各自模块中。
 
+
 @onready var player: Player = $World/Player
 @onready var game_hud: GameHUD = $OverlayRoot/GameHUD
 @onready var esc_menu: EscMenu = $OverlayRoot/EscMenu
@@ -17,7 +18,7 @@ extends Node2D
 @onready var tutorial_manager: TutorialManager = $Systems/TutorialManager
 @onready var tutorial_ui: TutorialUI = $OverlayRoot/TutorialUI
 @onready var intro_video: IntroVideo = $OverlayRoot/IntroVideo
-
+@onready var feature_unlock_state: FeatureUnlockState = get_node("/root/FeatureUnlocks")
 
 
 func _ready() -> void:
@@ -32,7 +33,9 @@ func _ready() -> void:
 	tutorial_manager.setup(
 		player,
 		esc_menu,
-		tutorial_ui
+		tutorial_ui,
+		feature_unlock_state,
+		battle_manager
 	)
 	save_manager.setup(player, floor_manager)
 	esc_menu.bind_save_manager(save_manager)
@@ -48,7 +51,6 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-
 	if intro_video.is_playing_intro():
 		get_viewport().set_input_as_handled()
 		return

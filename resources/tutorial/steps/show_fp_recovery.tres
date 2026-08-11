@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://dbx6ixgmaio0a"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_0yhsu"]
+
+[resource]
+script = ExtResource("1_0yhsu")
+step_id = &"show_fp_recovery"
+prompt_text = "这是专注力恢复道具，可以恢复 FP。按 ESC 打开菜单查看它。"
+target_item_id = &"fp_recovery_lv1"
+metadata/_custom_type_script = "uid://cgci5684mnyy8"

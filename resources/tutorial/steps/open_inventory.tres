@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_nsfwr")
 step_id = &"open_inventory"
-prompt_text = "获得了装备。
+prompt_text = "获得了物品。
 按 ESC 打开背包。"
 completion_event = 1
-next_step_id = &"focus_equipment"

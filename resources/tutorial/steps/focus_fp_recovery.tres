@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://cvn1rkmoq1oix"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_lmg3d"]
+
+[resource]
+script = ExtResource("1_lmg3d")
+step_id = &"focus_fp_recovery"
+prompt_text = "移动光标，选中背包中的专注力恢复道具。"
+completion_event = 2
+target_item_id = &"fp_recovery_lv1"
+metadata/_custom_type_script = "uid://cgci5684mnyy8"

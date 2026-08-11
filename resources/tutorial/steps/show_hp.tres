@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://dra3ipp1rwi8a"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_xq1nl"]
+
+[resource]
+script = ExtResource("1_xq1nl")
+step_id = &"show_hp"
+prompt_text = "生命值代表角色当前还能承受多少伤害。"
+unlock_feature_id = &"hp"
+wait_for_confirmation = true
+metadata/_custom_type_script = "uid://cgci5684mnyy8"

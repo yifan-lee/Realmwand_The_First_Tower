@@ -8,8 +8,12 @@
 [ext_resource type="Script" uid="uid://c01ki8y1ygkbo" path="res://scripts/save/save_manager.gd" id="6_wct3f"]
 [ext_resource type="Script" uid="uid://cedotsk7lkjx7" path="res://scripts/npc/npc_interaction_manager.gd" id="7_omobw"]
 [ext_resource type="PackedScene" uid="uid://75deq3hlwxqw" path="res://scenes/ui/game_hud.tscn" id="8_48k7o"]
+[ext_resource type="Resource" uid="uid://ccn701bweu3bu" path="res://resources/tutorial/equipment_tutorial.tres" id="8_666aa"]
 [ext_resource type="PackedScene" uid="uid://cgtdidijthtbh" path="res://scenes/ui/esc_menu.tscn" id="9_sqy1y"]
+[ext_resource type="Resource" uid="uid://b4ab3fd2kehcy" path="res://resources/tutorial/battle_tutorial.tres" id="9_wct3f"]
+[ext_resource type="Resource" uid="uid://c7dw0ej305yju" path="res://resources/tutorial/mp_tutorial.tres" id="10_omobw"]
 [ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="10_u7ndf"]
+[ext_resource type="Resource" uid="uid://u3y1mxeoq423" path="res://resources/tutorial/fp_tutorial.tres" id="11_48k7o"]
 [ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="11_fr461"]
 [ext_resource type="PackedScene" uid="uid://d34cotjf141ol" path="res://scenes/ui/npc/npc_interaction_ui.tscn" id="12_mu3g0"]
 
@@ -45,6 +49,10 @@ script = ExtResource("7_omobw")
 
 [node name="TutorialManager" type="Node" parent="Systems" unique_id=1864790316]
 script = ExtResource("1_ts762")
+equipment_tutorial = ExtResource("8_666aa")
+battle_tutorial = ExtResource("9_wct3f")
+mp_tutorial = ExtResource("10_omobw")
+fp_tutorial = ExtResource("11_48k7o")
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true

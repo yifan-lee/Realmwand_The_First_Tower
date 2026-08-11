@@ -11,6 +11,15 @@ enum FpDisplayMode {
 const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
 const VALUE_COLOR := Color("#D9E5E8FF")
+const FEATURE_IDS: Array[StringName] = [
+	&"hp",
+	&"mp",
+	&"fp",
+	&"atk",
+	&"def",
+	&"spd",
+]
+
 
 @onready var portrait: TextureRect = $MarginContainer/Content/Header/Portrait
 @onready var name_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/NameLabel
@@ -41,6 +50,17 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 
 var _view_data: ActorStatsViewData
 var _feature_visibility: Dictionary = {}
+var _feature_unlock_state: FeatureUnlockState
+
+
+func _ready() -> void:
+	var feature_unlock_state := (
+		get_node_or_null("/root/FeatureUnlocks")
+		as FeatureUnlockState
+	)
+
+	if feature_unlock_state != null:
+		bind_feature_unlock_state(feature_unlock_state)
 
 
 func display_stats(
@@ -60,12 +80,12 @@ func display_stats(
 	var show_progression := view_data.has_progression()
 	level_label.visible = (
 		show_progression
-		and _is_feature_visible(&"level")
+		# and _is_feature_visible(&"level")
 	)
 
 	experience_row.visible = (
 		show_progression
-		and _is_feature_visible(&"exp")
+		# and _is_feature_visible(&"exp")
 	)
 	if show_progression:
 		level_label.text = "等级 %d" % view_data.level
@@ -293,6 +313,33 @@ func _is_feature_visible(
 	feature_id: StringName
 ) -> bool:
 	return _feature_visibility.get(
+		feature_id,
+		false
+	)
+
+
+func bind_feature_unlock_state(
+	feature_unlock_state: FeatureUnlockState
+) -> void:
+	_feature_unlock_state = feature_unlock_state
+
+	if _feature_unlock_state == null:
+		return
+
+	_feature_unlock_state.feature_unlocked.connect(
+		_on_feature_unlocked
+	)
+
+	for feature_id: StringName in FEATURE_IDS:
+		set_feature_visibility(
+			feature_id,
+			_feature_unlock_state.is_unlocked(feature_id)
+		)
+
+func _on_feature_unlocked(
+	feature_id: StringName
+) -> void:
+	set_feature_visibility(
 		feature_id,
 		true
 	)

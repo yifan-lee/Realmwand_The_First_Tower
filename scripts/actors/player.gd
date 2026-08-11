@@ -6,6 +6,7 @@ const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 signal movement_finished
 signal stats_changed
 signal level_up_available
+signal skill_learned(skill: SkillData)
 
 @export var player_data: PlayerData
 
@@ -440,6 +441,7 @@ func add_experience(amount: int) -> void:
 			if not learned_skills.has(new_skill):
 				learned_skills.append(new_skill)
 				pending_learned_skills.append(new_skill)
+				skill_learned.emit(new_skill)
 
 	stats_changed.emit()
 

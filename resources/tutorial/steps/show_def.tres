@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://nytjlxcptarg"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_u33dy"]
+
+[resource]
+script = ExtResource("1_u33dy")
+step_id = &"show_def"
+prompt_text = "防御力可以减少你受到的伤害。
+伤害公式时：攻击力 * 技能威力 / 防御力"
+unlock_feature_id = &"def"
+wait_for_confirmation = true
+metadata/_custom_type_script = "uid://cgci5684mnyy8"

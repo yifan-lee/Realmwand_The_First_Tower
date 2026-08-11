@@ -14,4 +14,5 @@ enum CompletionEvent {
 @export_multiline var prompt_text: String
 @export var completion_event: CompletionEvent
 @export var target_item_id: StringName
-@export var next_step_id: StringName
+@export var unlock_feature_id: StringName
+@export var wait_for_confirmation: bool = false

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://clir8qnbpeqmf"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_66hc8"]
+
+[resource]
+script = ExtResource("1_66hc8")
+step_id = &"show_spd"
+prompt_text = "速度决定角色在战斗中的行动节奏。
+每100 / 速度 秒，玩家可以行动一次"
+unlock_feature_id = &"spd"
+wait_for_confirmation = true
+metadata/_custom_type_script = "uid://cgci5684mnyy8"
