@@ -58,6 +58,7 @@ battle_tutorial = ExtResource("10_dp3eg")
 mp_tutorial = ExtResource("11_dp3eg")
 fp_tutorial = ExtResource("12_gqmmt")
 fp_recovery_tutorial = ExtResource("13_gqmmt")
+hp_recovery_tutorial = "res://resources/tutorial/hp_recovery_tutorial.tres"
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true

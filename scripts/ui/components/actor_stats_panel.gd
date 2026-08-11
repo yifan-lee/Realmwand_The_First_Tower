@@ -287,26 +287,26 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 
 func set_feature_visibility(
 	feature_id: StringName,
-	is_visible: bool
+	should_show: bool
 ) -> void:
-	_feature_visibility[feature_id] = is_visible
+	_feature_visibility[feature_id] = should_show
 	match feature_id:
 		&"hp":
-			hp_row.visible = is_visible
+			hp_row.visible = should_show
 		&"mp":
-			mp_row.visible = is_visible
+			mp_row.visible = should_show
 		&"fp":
-			fp_row.visible = is_visible
+			fp_row.visible = should_show
 		&"atk":
-			atk_group.visible = is_visible
+			atk_group.visible = should_show
 		&"def":
-			def_group.visible = is_visible
+			def_group.visible = should_show
 		&"spd":
-			spd_group.visible = is_visible
+			spd_group.visible = should_show
 		&"exp":
-			experience_row.visible = is_visible
+			experience_row.visible = should_show
 		&"level":
-			level_label.visible = is_visible
+			level_label.visible = should_show
 
 
 func _is_feature_visible(

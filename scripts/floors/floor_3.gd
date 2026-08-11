@@ -13,8 +13,27 @@ var _pending_teleport: bool = false
 
 
 func _ready() -> void:
+	stair_up.body_entered.connect(
+		_on_stair_up_body_entered
+	)
+
 	# 延迟一帧获取 Player 节点并绑定移动信号
 	call_deferred("_setup_player_listener")
+
+
+func _exit_tree() -> void:
+	if (
+		is_instance_valid(_player)
+		and _player.movement_finished.is_connected(
+			_on_player_movement_finished
+		)
+	):
+		_player.movement_finished.disconnect(
+			_on_player_movement_finished
+		)
+
+	_pending_teleport = false
+	_player = null
 
 
 func _setup_player_listener() -> void:
@@ -22,7 +41,30 @@ func _setup_player_listener() -> void:
 		
 	if _player != null:
 		_last_facing = _player.facing_direction
-		_player.movement_finished.connect(_on_player_movement_finished)
+		if not _player.movement_finished.is_connected(
+			_on_player_movement_finished
+		):
+			_player.movement_finished.connect(
+				_on_player_movement_finished
+			)
+
+
+func capture_runtime_state() -> Dictionary:
+	var state := super()
+	state["is_rule_active"] = is_rule_active
+	return state
+
+
+func apply_runtime_state(state: Dictionary) -> void:
+	super(state)
+	is_rule_active = bool(
+		state.get("is_rule_active", is_rule_active)
+	)
+
+
+func _on_stair_up_body_entered(body: Node2D) -> void:
+	if body is Player:
+		unlock_rule()
 
 
 func _input(event: InputEvent) -> void:
@@ -126,5 +168,9 @@ func _fail_and_teleport_to_start() -> void:
 
 ## 当触发了解密机关/StairUp 时的回调
 func unlock_rule() -> void:
+	if not is_rule_active:
+		return
+
 	is_rule_active = false
+	_pending_teleport = false
 	print("Floor 3 迷宫规则已解除！")

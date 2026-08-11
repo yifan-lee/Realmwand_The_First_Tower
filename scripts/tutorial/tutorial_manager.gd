@@ -6,6 +6,7 @@ extends Node
 @export var mp_tutorial: TutorialSequenceData
 @export var fp_tutorial: TutorialSequenceData
 @export var fp_recovery_tutorial: TutorialSequenceData
+@export var hp_recovery_tutorial: TutorialSequenceData
 enum TutorialState {
 	WAITING_FOR_EQUIPMENT,
 	WAITING_FOR_INVENTORY,
@@ -28,6 +29,7 @@ var _active_tutorial: TutorialSequenceData
 var _battle_manager: BattleManager
 var _battle_tutorial_completed: bool = false
 var _fp_recovery_tutorial_completed: bool = false
+var _hp_recovery_tutorial_completed: bool = false
 
 
 func setup(
@@ -89,12 +91,29 @@ func _on_item_added(
 	item: ItemData,
 	_amount: int
 ) -> void:
+	if item == null:
+		return
+
+	if (
+		hp_recovery_tutorial != null
+		and hp_recovery_tutorial.trigger_event
+			== TutorialSequenceData.TriggerEvent.ITEM_ADDED
+		and item.id == hp_recovery_tutorial.trigger_item_id
+		and (_active_tutorial == null or current_state == TutorialState.COMPLETED)
+		and not _hp_recovery_tutorial_completed
+	):
+		_active_tutorial = hp_recovery_tutorial
+		current_step_index = 0
+		current_state = TutorialState.WAITING_FOR_ITEM_TUTORIAL
+		_show_current_step()
+		return
+
 	if (
 		fp_recovery_tutorial != null
 		and fp_recovery_tutorial.trigger_event
 			== TutorialSequenceData.TriggerEvent.ITEM_ADDED
 		and item.id == fp_recovery_tutorial.trigger_item_id
-		and current_state == TutorialState.COMPLETED
+		and (_active_tutorial == null or current_state == TutorialState.COMPLETED)
 		and not _fp_recovery_tutorial_completed
 	):
 		_active_tutorial = fp_recovery_tutorial
@@ -110,9 +129,6 @@ func _on_item_added(
 		return
 
 	if equipment_tutorial.trigger_event != TutorialSequenceData.TriggerEvent.ITEM_ADDED:
-		return
-
-	if item == null:
 		return
 
 	if item.item_type != equipment_tutorial.trigger_item_type:
@@ -293,7 +309,10 @@ func _on_tutorial_confirmed() -> void:
 		if confirmed_state == TutorialState.WAITING_FOR_BATTLE_CONFIRM:
 			_battle_tutorial_completed = true
 		elif confirmed_state == TutorialState.WAITING_FOR_ITEM_CONFIRM:
-			_fp_recovery_tutorial_completed = true
+			if _active_tutorial == fp_recovery_tutorial:
+				_fp_recovery_tutorial_completed = true
+			elif _active_tutorial == hp_recovery_tutorial:
+				_hp_recovery_tutorial_completed = true
 
 		if _tutorial_ui != null:
 			_tutorial_ui.hide_prompt()

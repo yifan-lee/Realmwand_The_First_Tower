@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://w1jhcsj33ip"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_hux2t"]
+
+[resource]
+script = ExtResource("1_hux2t")
+step_id = &"focus_hp_recovery"
+prompt_text = "移动光标，选中背包中的生命恢复道具。"
+completion_event = 2
+target_item_id = &"hp_recovery_lv1"
