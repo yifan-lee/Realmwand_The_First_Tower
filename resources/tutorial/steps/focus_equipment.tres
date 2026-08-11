@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://i56nekjupdua"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_5gee7"]
+
+[resource]
+script = ExtResource("1_5gee7")
+step_id = &"focus_equipment"
+prompt_text = "移动光标，选择刚才获得的装备。"
+completion_event = 2

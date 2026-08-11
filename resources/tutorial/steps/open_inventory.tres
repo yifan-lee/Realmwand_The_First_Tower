@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://cvf38s5ettwbi"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_nsfwr"]
+
+[resource]
+script = ExtResource("1_nsfwr")
+step_id = &"open_inventory"
+prompt_text = "获得了装备。
+按 ESC 打开背包。"
+completion_event = 1

@@ -6,6 +6,7 @@ enum TutorialState {
 	WAITING_FOR_EQUIPMENT,
 	WAITING_FOR_INVENTORY,
 	WAITING_FOR_EQUIPMENT_FOCUS,
+	WAITING_FOR_EQUIPMENT_CONFIRM,
 	COMPLETED,
 }
 
@@ -38,6 +39,10 @@ func setup(
 
 	_esc_menu.inventory_panel.item_focused.connect(
 		_on_item_focused
+	)
+
+	_esc_menu.inventory_panel.item_selected.connect(
+		_on_item_selected
 	)
 
 
@@ -87,9 +92,31 @@ func _on_item_focused(item: ItemData) -> void:
 	if item.item_type != ItemData.ItemType.EQUIPMENT:
 		return
 
+	current_state = (
+		TutorialState.WAITING_FOR_EQUIPMENT_CONFIRM
+	)
+
+	if _tutorial_ui != null:
+		_tutorial_ui.show_prompt(
+            "按确认键装备这件装备。"
+		)
+
+
+func _on_item_selected(item: ItemData) -> void:
+	if current_state != (
+		TutorialState.WAITING_FOR_EQUIPMENT_CONFIRM
+	):
+		return
+
+	if item == null:
+		return
+
+	if item.item_type != ItemData.ItemType.EQUIPMENT:
+		return
+
 	current_state = TutorialState.COMPLETED
 
 	if _tutorial_ui != null:
 		_tutorial_ui.hide_prompt()
 
-	print("Tutorial: equipment focused")
+	print("Tutorial: equipment confirmed")

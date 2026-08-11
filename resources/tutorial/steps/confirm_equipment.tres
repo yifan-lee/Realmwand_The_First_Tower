@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TutorialStepData" format=3 uid="uid://b3rth7j1jvbsl"]
+
+[ext_resource type="Script" uid="uid://cgci5684mnyy8" path="res://scripts/tutorial/tutorial_step_data.gd" id="1_vmam1"]
+
+[resource]
+script = ExtResource("1_vmam1")
+step_id = &"confirm_equipment"
+prompt_text = "按确认键装备这件装备。"
+completion_event = 3
