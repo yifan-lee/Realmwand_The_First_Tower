@@ -11,9 +11,12 @@
 [ext_resource type="Script" uid="uid://cedotsk7lkjx7" path="res://scripts/npc/npc_interaction_manager.gd" id="7_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://8dfbly2wjvyv" path="res://scenes/battle/battle_ui.tscn" id="8_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dnrvslgwgxro2" path="res://scenes/ui/progression/level_up_ui.tscn" id="9_choun"]
+[ext_resource type="Resource" uid="uid://ccn701bweu3bu" path="res://resources/tutorial/equipment_tutorial.tres" id="9_jkv2x"]
 [ext_resource type="Script" uid="uid://dvkhyscrk8kui" path="res://scripts/tutorial/tutorial_manager.gd" id="9_o7ddy"]
+[ext_resource type="Script" uid="uid://d3164aes71py7" path="res://scripts/tutorial/feature_unlock_state.gd" id="10_muem4"]
 [ext_resource type="PackedScene" uid="uid://d34cotjf141ol" path="res://scenes/ui/npc/npc_interaction_ui.tscn" id="12_0ld40"]
 [ext_resource type="PackedScene" uid="uid://85suawpth3l7" path="res://scenes/ui/tutorial_ui.tscn" id="14_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://bfa8faveibvt2" path="res://scenes/tutorial/intro_video.tscn" id="16_jbj1t"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
@@ -47,6 +50,10 @@ script = ExtResource("7_dp3eg")
 
 [node name="TutorialManager" type="Node" parent="Systems" unique_id=902893882]
 script = ExtResource("9_o7ddy")
+equipment_tutorial = ExtResource("9_jkv2x")
+
+[node name="FeatureUnlockState" type="Node" parent="Systems" unique_id=238145508]
+script = ExtResource("10_muem4")
 
 [node name="OverlayRoot" type="Node" parent="." unique_id=1987740534]
 unique_name_in_owner = true
@@ -65,3 +72,5 @@ layer = 4
 
 [node name="TutorialUI" parent="OverlayRoot" unique_id=1962839863 instance=ExtResource("14_a8y0u")]
 layer = 5
+
+[node name="IntroVideo" parent="OverlayRoot" unique_id=1408244493 instance=ExtResource("16_jbj1t")]

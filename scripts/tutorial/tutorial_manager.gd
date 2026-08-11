@@ -1,7 +1,7 @@
 class_name TutorialManager
 extends Node
 
-
+@export var equipment_tutorial: TutorialSequenceData
 enum TutorialState {
 	WAITING_FOR_EQUIPMENT,
 	WAITING_FOR_INVENTORY,
@@ -10,7 +10,7 @@ enum TutorialState {
 	COMPLETED,
 }
 
-
+var current_step_index: int = 0
 var current_state: TutorialState = TutorialState.WAITING_FOR_EQUIPMENT
 var _player: Player
 var _esc_menu: EscMenu
@@ -26,7 +26,12 @@ func setup(
 	_esc_menu = esc_menu
 	_tutorial_ui = tutorial_ui
 
-	if _player == null:
+
+	if (
+		_player == null
+		or _esc_menu == null
+		or _tutorial_ui == null
+	):
 		return
 
 	_player.inventory.item_added.connect(
@@ -41,8 +46,9 @@ func setup(
 		_on_item_focused
 	)
 
-	_esc_menu.inventory_panel.item_selected.connect(
-		_on_item_selected
+
+	_player.equipment.item_equipped.connect(
+		_on_item_equipped
 	)
 
 
@@ -53,18 +59,23 @@ func _on_item_added(
 	if current_state != TutorialState.WAITING_FOR_EQUIPMENT:
 		return
 
+	if equipment_tutorial == null:
+		return
+
+	if equipment_tutorial.trigger_event != TutorialSequenceData.TriggerEvent.ITEM_ADDED:
+		return
+
 	if item == null:
 		return
 
-	if item.item_type != ItemData.ItemType.EQUIPMENT:
+	if item.item_type != equipment_tutorial.trigger_item_type:
 		return
 
 	current_state = TutorialState.WAITING_FOR_INVENTORY
 
-	if _tutorial_ui != null:
-		_tutorial_ui.show_prompt(
-            "获得了装备。\n按 ESC 打开背包。"
-		)
+	current_step_index = 0
+	_show_current_step()
+
 
 func _on_menu_opened() -> void:
 	if current_state != TutorialState.WAITING_FOR_INVENTORY:
@@ -74,11 +85,9 @@ func _on_menu_opened() -> void:
 		TutorialState.WAITING_FOR_EQUIPMENT_FOCUS
 	)
 
-	if _tutorial_ui != null:
-		_tutorial_ui.show_prompt(
-            "移动光标，选择刚才获得的装备。"
-		)
-
+	_advance_step()
+	_show_current_step()
+	
 
 func _on_item_focused(item: ItemData) -> void:
 	if current_state != (
@@ -96,13 +105,14 @@ func _on_item_focused(item: ItemData) -> void:
 		TutorialState.WAITING_FOR_EQUIPMENT_CONFIRM
 	)
 
-	if _tutorial_ui != null:
-		_tutorial_ui.show_prompt(
-            "按确认键装备这件装备。"
-		)
+	_advance_step()
+	_show_current_step()
 
 
-func _on_item_selected(item: ItemData) -> void:
+func _on_item_equipped(
+	_slot: int,
+	item: EquipmentData
+) -> void:
 	if current_state != (
 		TutorialState.WAITING_FOR_EQUIPMENT_CONFIRM
 	):
@@ -111,8 +121,6 @@ func _on_item_selected(item: ItemData) -> void:
 	if item == null:
 		return
 
-	if item.item_type != ItemData.ItemType.EQUIPMENT:
-		return
 
 	current_state = TutorialState.COMPLETED
 
@@ -120,3 +128,36 @@ func _on_item_selected(item: ItemData) -> void:
 		_tutorial_ui.hide_prompt()
 
 	print("Tutorial: equipment confirmed")
+
+
+func _show_current_step() -> void:
+	if equipment_tutorial == null:
+		return
+
+	if current_step_index < 0:
+		return
+
+	if current_step_index >= equipment_tutorial.steps.size():
+		return
+
+	var step: TutorialStepData = (
+		equipment_tutorial.steps[current_step_index]
+	)
+
+	if step == null:
+		return
+
+	if _tutorial_ui != null:
+		_tutorial_ui.show_prompt(
+			step.prompt_text
+		)
+
+
+func _advance_step() -> void:
+	if equipment_tutorial == null:
+		return
+
+	if current_step_index >= equipment_tutorial.steps.size():
+		return
+
+	current_step_index += 1

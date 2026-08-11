@@ -7,3 +7,4 @@ script = ExtResource("1_5gee7")
 step_id = &"focus_equipment"
 prompt_text = "移动光标，选择刚才获得的装备。"
 completion_event = 2
+next_step_id = &"confirm_equipment"

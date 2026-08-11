@@ -16,9 +16,17 @@ extends Node2D
 @onready var save_manager: SaveManager = $Systems/SaveManager
 @onready var tutorial_manager: TutorialManager = $Systems/TutorialManager
 @onready var tutorial_ui: TutorialUI = $OverlayRoot/TutorialUI
+@onready var intro_video: IntroVideo = $OverlayRoot/IntroVideo
+
 
 
 func _ready() -> void:
+	player.set_input_enabled(false)
+
+	intro_video.intro_finished.connect(
+		_on_intro_finished
+	)
+	intro_video.play_intro()
 	game_hud.bind_player(player)
 	esc_menu.bind_player(player)
 	tutorial_manager.setup(
@@ -40,6 +48,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+
+	if intro_video.is_playing_intro():
+		get_viewport().set_input_as_handled()
+		return
+		
 	if event.is_action_pressed(&"toggle_menu"):
 		if battle_manager.is_active() or level_up_manager.is_active() or npc_interaction_manager.is_active():
 			get_viewport().set_input_as_handled()
@@ -62,3 +75,7 @@ func _on_level_up_finished() -> void:
 	game_hud.show_message(
 		"学会了新技能：【%s】" % skill.display_name
 	)
+
+
+func _on_intro_finished() -> void:
+	player.set_input_enabled(true)

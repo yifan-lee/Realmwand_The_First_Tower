@@ -16,8 +16,6 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 @onready var name_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/NameLabel
 @onready var description_label: Label = $MarginContainer/Content/Header/HeaderDetails/DescriptionLabel
 @onready var header_details: VBoxContainer = $MarginContainer/Content/Header/HeaderDetails
-@onready var level_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/LevelLabel
-@onready var experience_row: HBoxContainer = $MarginContainer/Content/Header/HeaderDetails/ExperienceRow
 @onready var experience_value: Label = $MarginContainer/Content/Header/HeaderDetails/ExperienceRow/ExperienceValue
 @onready var hp_bar: ProgressBar = $MarginContainer/Content/Resources/HpRow/HpBar
 @onready var mp_bar: ProgressBar = $MarginContainer/Content/Resources/MpRow/MpBar
@@ -32,8 +30,17 @@ const VALUE_COLOR := Color("#D9E5E8FF")
 @onready var def_value: RichTextLabel = $MarginContainer/Content/CombatStats/DefGroup/DefValue
 @onready var spd_value: RichTextLabel = $MarginContainer/Content/CombatStats/SpdGroup/SpdValue
 @onready var buffs_container: VBoxContainer = %BuffsContainer
+@onready var level_label: Label = $MarginContainer/Content/Header/HeaderDetails/TitleRow/LevelLabel
+@onready var experience_row: HBoxContainer = $MarginContainer/Content/Header/HeaderDetails/ExperienceRow
+@onready var hp_row: Control = $MarginContainer/Content/Resources/HpRow
+@onready var mp_row: Control = $MarginContainer/Content/Resources/MpRow
+@onready var fp_row: Control = $MarginContainer/Content/Resources/FpRow
+@onready var atk_group: Control = $MarginContainer/Content/CombatStats/AtkGroup
+@onready var def_group: Control = $MarginContainer/Content/CombatStats/DefGroup
+@onready var spd_group: Control = $MarginContainer/Content/CombatStats/SpdGroup
 
 var _view_data: ActorStatsViewData
+var _feature_visibility: Dictionary = {}
 
 
 func display_stats(
@@ -51,8 +58,15 @@ func display_stats(
 	description_label.text = view_data.description
 	description_label.visible = not view_data.description.is_empty()
 	var show_progression := view_data.has_progression()
-	level_label.visible = show_progression
-	experience_row.visible = show_progression
+	level_label.visible = (
+		show_progression
+		and _is_feature_visible(&"level")
+	)
+
+	experience_row.visible = (
+		show_progression
+		and _is_feature_visible(&"exp")
+	)
 	if show_progression:
 		level_label.text = "等级 %d" % view_data.level
 		experience_value.text = "%d/%d" % [view_data.experience, view_data.experience_to_next_level]
@@ -249,3 +263,36 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 		label.text = "• %s (剩余 %d 次)" % [desc, remaining]
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		buffs_container.add_child(label)
+
+
+func set_feature_visibility(
+	feature_id: StringName,
+	is_visible: bool
+) -> void:
+	_feature_visibility[feature_id] = is_visible
+	match feature_id:
+		&"hp":
+			hp_row.visible = is_visible
+		&"mp":
+			mp_row.visible = is_visible
+		&"fp":
+			fp_row.visible = is_visible
+		&"atk":
+			atk_group.visible = is_visible
+		&"def":
+			def_group.visible = is_visible
+		&"spd":
+			spd_group.visible = is_visible
+		&"exp":
+			experience_row.visible = is_visible
+		&"level":
+			level_label.visible = is_visible
+
+
+func _is_feature_visible(
+	feature_id: StringName
+) -> bool:
+	return _feature_visibility.get(
+		feature_id,
+		true
+	)
