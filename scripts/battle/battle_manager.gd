@@ -34,6 +34,7 @@ var _enemy_casting_skill: SkillData
 var _player_effects: Array[Dictionary] = []
 var _enemy_effects: Array[Dictionary] = []
 var _enemy_queued_skill: SkillData
+var _is_paused: bool = false
 
 
 func setup(player: Player, battle_ui: BattleUI) -> void:
@@ -54,7 +55,7 @@ func is_waiting_for_player() -> bool:
 
 
 func _process(delta: float) -> void:
-	if _state != BattleState.RUNNING or _enemy == null:
+	if _is_paused or _state != BattleState.RUNNING or _enemy == null:
 		return
 
 	_recover_focus_points(delta)
@@ -544,3 +545,15 @@ func is_player_casting() -> bool:
 
 func is_enemy_casting() -> bool:
 	return _enemy_casting_skill != null
+
+
+func pause_battle() -> void:
+	_is_paused = true
+	if _battle_ui != null:
+		_battle_ui.set_action_available(false)
+
+
+func resume_battle() -> void:
+	_is_paused = false
+	if _state == BattleState.WAITING_FOR_PLAYER and _battle_ui != null:
+		_battle_ui.set_action_available(true)

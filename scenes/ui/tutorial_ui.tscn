@@ -32,9 +32,9 @@ theme = ExtResource("1_1s6jd")
 [node name="Margin" type="MarginContainer" parent="TutorialRoot/CenterContainer/Panel" unique_id=1369734726]
 layout_mode = 2
 theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_bottom = 12
 
 [node name="Content" type="VBoxContainer" parent="TutorialRoot/CenterContainer/Panel/Margin" unique_id=58920765]
 layout_mode = 2
@@ -45,7 +45,7 @@ layout_mode = 2
 text = "教程提示"
 
 [node name="MessageLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=1965801342]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 6
 text = "这里显示教程内容。"

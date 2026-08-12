@@ -22,6 +22,25 @@ func show_prompt(
 func hide_prompt() -> void:
 	_wait_for_confirmation = false
 	tutorial_root.visible = false
+	var panel = $TutorialRoot/CenterContainer/Panel
+	if panel:
+		panel.top_level = false
+
+
+func show_prompt_at(
+	message: String,
+	target_control: Control,
+	wait_for_confirmation: bool = false
+) -> void:
+	show_prompt(message, wait_for_confirmation)
+	
+	if target_control != null:
+		var panel = $TutorialRoot/CenterContainer/Panel
+		if panel:
+			panel.top_level = true
+			# 简单地把提示框放在目标控件的右侧
+			panel.global_position = target_control.global_position + Vector2(target_control.size.x + 20, 0)
+
 
 func _input(event: InputEvent) -> void:
 	if not tutorial_root.visible:
