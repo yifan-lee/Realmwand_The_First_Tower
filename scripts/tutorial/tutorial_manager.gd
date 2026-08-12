@@ -123,9 +123,12 @@ func _on_item_added(
 		_show_current_step()
 		return
 
+	if _equipment_tutorial_completed:
+		return
+
 	if (
-		current_state != TutorialState.WAITING_FOR_EQUIPMENT
-		or _equipment_tutorial_completed
+		_active_tutorial != null
+		and current_state != TutorialState.COMPLETED
 	):
 		return
 
