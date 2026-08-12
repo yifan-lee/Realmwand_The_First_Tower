@@ -99,7 +99,7 @@ position = Vector2(192, -224)
 enemy_data = ExtResource("6_fv4kh")
 
 [node name="EnemyBalLv111" parent="Enemies/EnemyBalLv111" index="2" unique_id=796734484 instance=ExtResource("7_n2pbf")]
-position = Vector2(-224, 160)
+position = Vector2(-560, 280)
 enemy_data = ExtResource("6_fv4kh")
 
 [node name="EnemyBalLv112" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=1407671429 instance=ExtResource("7_n2pbf")]
@@ -122,7 +122,7 @@ pickup_id = &"feet_lv1"
 item_data = ExtResource("13_r7vlu")
 
 [node name="FeetLv1" parent="Pickups/FeetLv1" index="2" unique_id=322391170 instance=ExtResource("5_wl6yc")]
-position = Vector2(-224, 224)
+position = Vector2(-568, 344)
 pickup_id = &"feet_lv1"
 item_data = ExtResource("13_r7vlu")
 metadata/_edit_group_ = true

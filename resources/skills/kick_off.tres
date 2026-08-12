@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_k11ut"]
 script = ExtResource("1_ibhqy")
 cost_type = 2
-value = 50.0
+value = 20.0
 metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
 [sub_resource type="Resource" id="Resource_vn8x5"]
@@ -17,10 +17,17 @@ cost_type = 3
 value = 5.0
 metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
+[sub_resource type="Resource" id="Resource_3c7a8"]
+script = ExtResource("2_3c7a8")
+effect_type = 11
+target_type = 1
+metadata/_custom_type_script = "uid://b1wegwwmokann"
+
 [resource]
 script = ExtResource("3_vn8x5")
 id = &"kick_off"
 display_name = "打断"
 icon = ExtResource("3_3c7a8")
 costs = Array[ExtResource("1_ibhqy")]([SubResource("Resource_k11ut"), SubResource("Resource_vn8x5")])
+effects = Array[ExtResource("2_3c7a8")]([SubResource("Resource_3c7a8")])
 metadata/_custom_type_script = "uid://dg3w5qs5rpxbg"

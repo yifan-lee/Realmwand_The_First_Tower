@@ -37,6 +37,7 @@ var _enemy_atb_value := 0.0
 var _battle_manager: BattleManager
 
 
+
 func _ready() -> void:
 	skill_panel.skill_selected.connect(skill_selected.emit)
 	skill_panel.skill_focused.connect(_on_skill_focused)
@@ -234,9 +235,16 @@ func _on_escape_tab_pressed() -> void:
 func _on_skill_focused(skill: SkillData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
+	var extra_details: Array[String] = []
 	player_view.preview_skill_cost(skill.costs)
 	var damage := 0.0
 	for effect in skill.effects:
+		if effect.effect_type == ActionEffectData.EffectType.INTERRUPT:
+			if effect.target_type == ActionEffectData.TargetType.ENEMY:
+				if _battle_manager.is_enemy_casting():
+					extra_details.append("打断敌人的吟唱，敌方行动条归零")
+				else:
+					extra_details.append("当前敌人没有正在吟唱的技能")
 		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
 			var target_def = _enemy.enemy_data.def
 			var attacker_atk = _player.get_atk()
@@ -274,6 +282,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 	info.icon = skill.icon
 	info.description = skill.description
 	info.detail_lines = skill.get_details()
+	info.detail_lines.append_array(extra_details)
 	entry_info_panel.display_info(info)
 
 

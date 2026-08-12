@@ -30,6 +30,13 @@ signal stats_changed
 
 const TILE_BASE_SIZE = Vector2(24, 20)
 
+## 碰撞体每个网格的基础尺寸。普通敌人保持旧值；特殊敌人可通过 get_collision_tile_size() 覆盖。
+@export var collision_tile_size: Vector2 = TILE_BASE_SIZE:
+	set(value):
+		collision_tile_size = value
+		if is_node_ready():
+			_update_size()
+
 @export_group("Data")
 @export var enemy_data: EnemyData:
 	set(value):
@@ -262,4 +269,12 @@ func _update_size() -> void:
 		rect_shape = RectangleShape2D.new()
 		shape_node.shape = rect_shape
 		
-	rect_shape.size = Vector2(TILE_BASE_SIZE.x * grid_size.x, TILE_BASE_SIZE.y * grid_size.y)
+	var tile_size := get_collision_tile_size()
+	rect_shape.size = Vector2(
+		tile_size.x * grid_size.x,
+		tile_size.y * grid_size.y
+	)
+
+
+func get_collision_tile_size() -> Vector2:
+	return collision_tile_size

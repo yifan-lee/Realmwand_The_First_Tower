@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cnkanuw4q3icv"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_7llpx"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_rfug7"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_8hho2"]
+
+[sub_resource type="Resource" id="Resource_v7wxn"]
+script = ExtResource("1_7llpx")
+cost_type = 2
+value = 20.0
+metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
+
+[sub_resource type="Resource" id="Resource_g6mqr"]
+script = ExtResource("1_7llpx")
+cost_type = 4
+value = 1.0
+metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
+
+[sub_resource type="Resource" id="Resource_7llpx"]
+script = ExtResource("2_rfug7")
+effect_type = 7
+target_type = 1
+operation_type = 1
+value = 1000.0
+duration_count = 0
+metadata/_custom_type_script = "uid://b1wegwwmokann"
+
+[resource]
+script = ExtResource("3_8hho2")
+id = &"overflow"
+display_name = "湮灭"
+description = "伤害极高的技能，请及时打断"
+skill_type = 1
+costs = Array[ExtResource("1_7llpx")]([SubResource("Resource_v7wxn"), SubResource("Resource_g6mqr")])
+effects = Array[ExtResource("2_rfug7")]([SubResource("Resource_7llpx")])
+metadata/_custom_type_script = "uid://dg3w5qs5rpxbg"

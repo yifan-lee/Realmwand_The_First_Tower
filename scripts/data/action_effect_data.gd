@@ -13,6 +13,7 @@ enum EffectType {
 	REDUCE_MP,
 	REDUCE_FP,
 	SKILL_POWER,
+	INTERRUPT,
 }
 
 enum TargetType {

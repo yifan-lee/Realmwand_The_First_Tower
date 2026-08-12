@@ -470,7 +470,7 @@ func _apply_effects(
 		var target_actor = _enemy if caster_is_enemy else _player
 		if not targets_self:
 			target_actor = _player if caster_is_enemy else _enemy
-			
+
 		if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
 			target_actor.change_hp(effect.value)
 		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
@@ -481,6 +481,8 @@ func _apply_effects(
 			target_actor.change_mp(-effect.value)
 		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_FP:
 			target_actor.change_fp(-effect.value)
+		elif effect.effect_type == ActionEffectData.EffectType.INTERRUPT:
+			_interrupt_actor(target_actor)
 		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP:
 			if effect.duration_count > 0:
 				var target_array: Array[Dictionary] = _player_effects
@@ -490,6 +492,7 @@ func _apply_effects(
 					&"effect": effect,
 					&"remaining_count": effect.duration_count,
 				})
+		
 
 
 func get_player_stat(effect_type: int) -> float:
@@ -514,3 +517,30 @@ func get_enemy_stat(effect_type: int) -> float:
 		ActionEffectData.EffectType.SPD:
 			base_value = _enemy.enemy_data.spd
 	return FORMULAS.calculate_effective_stat(base_value, _enemy_effects, effect_type)
+
+
+func _interrupt_actor(target_actor: Node) -> bool:
+	if target_actor == _player:
+		if _player_casting_skill == null:
+			return false
+
+		_player_casting_skill = null
+		_player_atb = 0.0
+		return true
+
+	if target_actor == _enemy:
+		if _enemy_casting_skill == null:
+			return false
+
+		_enemy_casting_skill = null
+		_enemy_atb = 0.0
+		return true
+
+	return false
+
+func is_player_casting() -> bool:
+	return _player_casting_skill != null
+
+
+func is_enemy_casting() -> bool:
+	return _enemy_casting_skill != null

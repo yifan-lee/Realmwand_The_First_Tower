@@ -3,14 +3,16 @@
 [ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_th28a"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_s8kpe"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_0xcip"]
+[ext_resource type="Resource" uid="uid://cnkanuw4q3icv" path="res://resources/skills/overflow.tres" id="3_cvfpw"]
 [ext_resource type="Texture2D" uid="uid://jh78sifvr3hj" path="res://assets/monsters/boss/boss_atk_3x3.png" id="4_s8kpe"]
 
 [resource]
 script = ExtResource("1_th28a")
+skills = Array[ExtResource("2_s8kpe")]([ExtResource("3_cvfpw"), ExtResource("3_0xcip")])
 world_texture = ExtResource("4_s8kpe")
 id = &"boss_atk"
 display_name = "战斗型boss"
-atk = 1000.0
-def = 1000.0
-spd = 1000.0
+atk = 100.0
+def = 100.0
+spd = 100.0
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"
