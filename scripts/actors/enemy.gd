@@ -22,15 +22,13 @@ signal stats_changed
 			_update_size()
 
 ## 视觉上的额外缩放系数。如果原图有大量透明留白导致视觉偏小，可以调大此值（如 1.2、1.5）
-@export var visual_scale_multiplier: float = 1.0:
-	set(value):
-		visual_scale_multiplier = value
-		if is_node_ready():
-			_refresh_visual()
-
-const TILE_BASE_SIZE = Vector2(24, 20)
+const TILE_BASE_SIZE = Vector2(24, 24)
 
 ## 碰撞体每个网格的基础尺寸。普通敌人保持旧值；特殊敌人可通过 get_collision_tile_size() 覆盖。
+## Legacy scene field retained only so existing .tscn files load; data resources are authoritative.
+@export_storage var visual_scale_multiplier: float = 1.0
+
+
 @export var collision_tile_size: Vector2 = TILE_BASE_SIZE:
 	set(value):
 		collision_tile_size = value
@@ -257,7 +255,11 @@ func _refresh_visual() -> void:
 
 	sprite.texture = enemy_data.get_world_texture()
 	
-	VisualUtils.auto_scale_sprite(sprite, grid_size, visual_scale_multiplier)
+	VisualUtils.auto_scale_sprite(
+		sprite,
+		grid_size,
+		enemy_data.visual_scale_multiplier
+	)
 
 func _update_size() -> void:
 	var shape_node = get_node_or_null("CollisionShape2D") as CollisionShape2D

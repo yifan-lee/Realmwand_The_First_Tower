@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://egc7gignuvc7"]
 
-[ext_resource type="Texture2D" uid="uid://d22t86jde2hej" path="res://assets/monsters/def_tier_2.png" id="1_aou76"]
+[ext_resource type="Texture2D" uid="uid://d22t86jde2hej" path="res://assets/monsters/enemy/def_tier_2.png" id="1_aou76"]
 [ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_fay6q"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_aou76"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_bafff"]

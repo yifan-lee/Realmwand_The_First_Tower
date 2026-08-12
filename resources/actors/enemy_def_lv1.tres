@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://bhe21ofgj7ote"]
 
 [ext_resource type="Script" uid="uid://dt0hov06fbtv5" path="res://scripts/data/enemy_data.gd" id="1_7rj2e"]
-[ext_resource type="Texture2D" uid="uid://cx2dni2s7yq1c" path="res://assets/monsters/def_tier_1.png" id="1_502dx"]
+[ext_resource type="Texture2D" uid="uid://cx2dni2s7yq1c" path="res://assets/monsters/enemy/def_tier_1.png" id="1_502dx"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_502dx"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_vhc1m"]
 
 [resource]
 script = ExtResource("1_7rj2e")
+visual_scale_multiplier = 1.2000000000000002
 id = &"enemy_def_lv1"
 display_name = "一级防御怪"
 description = "防御极高的生物，最好提升攻击力之后再来。"
