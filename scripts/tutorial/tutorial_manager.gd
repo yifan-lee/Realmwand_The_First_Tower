@@ -27,6 +27,7 @@ var _tutorial_ui: TutorialUI
 var _feature_unlock_state: FeatureUnlockState
 var _active_tutorial: TutorialSequenceData
 var _battle_manager: BattleManager
+var _equipment_tutorial_completed: bool = false
 var _battle_tutorial_completed: bool = false
 var _fp_recovery_tutorial_completed: bool = false
 var _hp_recovery_tutorial_completed: bool = false
@@ -122,7 +123,10 @@ func _on_item_added(
 		_show_current_step()
 		return
 
-	if current_state != TutorialState.WAITING_FOR_EQUIPMENT:
+	if (
+		current_state != TutorialState.WAITING_FOR_EQUIPMENT
+		or _equipment_tutorial_completed
+	):
 		return
 
 	if equipment_tutorial == null:
@@ -219,6 +223,7 @@ func _on_item_equipped(
 
 
 	current_state = TutorialState.COMPLETED
+	_equipment_tutorial_completed = true
 
 	if _tutorial_ui != null:
 		_tutorial_ui.hide_prompt()
@@ -393,3 +398,46 @@ func _on_item_selected(item: ItemData) -> void:
 
 	current_state = TutorialState.WAITING_FOR_ITEM_CONFIRM
 	_show_current_step()
+
+
+func capture_save_data() -> Dictionary:
+	return {
+		"equipment_tutorial_completed": _equipment_tutorial_completed,
+		"battle_tutorial_completed": _battle_tutorial_completed,
+		"fp_recovery_tutorial_completed": _fp_recovery_tutorial_completed,
+		"hp_recovery_tutorial_completed": _hp_recovery_tutorial_completed,
+		"feature_unlocks": (
+			_feature_unlock_state.capture_save_data()
+			if _feature_unlock_state != null
+			else []
+		),
+	}
+
+
+func restore_save_data(data: Variant) -> void:
+	_equipment_tutorial_completed = false
+	_battle_tutorial_completed = false
+	_fp_recovery_tutorial_completed = false
+	_hp_recovery_tutorial_completed = false
+
+	if data is Dictionary:
+		_equipment_tutorial_completed = bool(
+			data.get("equipment_tutorial_completed", false)
+		)
+		_battle_tutorial_completed = bool(
+			data.get("battle_tutorial_completed", false)
+		)
+		_fp_recovery_tutorial_completed = bool(
+			data.get("fp_recovery_tutorial_completed", false)
+		)
+		_hp_recovery_tutorial_completed = bool(
+			data.get("hp_recovery_tutorial_completed", false)
+		)
+
+		if _feature_unlock_state != null:
+			_feature_unlock_state.restore_save_data(
+				data.get("feature_unlocks", [])
+			)
+
+	if _equipment_tutorial_completed:
+		current_state = TutorialState.COMPLETED

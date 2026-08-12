@@ -37,7 +37,7 @@ func _ready() -> void:
 		feature_unlock_state,
 		battle_manager
 	)
-	save_manager.setup(player, floor_manager)
+	save_manager.setup(player, floor_manager, tutorial_manager)
 	esc_menu.bind_save_manager(save_manager)
 	battle_manager.setup(player, battle_ui)
 	level_up_manager.setup(player, level_up_ui)

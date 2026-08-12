@@ -9,11 +9,17 @@ const SAVE_EXTENSION := ".json"
 
 var _player: Player
 var _floor_manager: FloorManager
+var _tutorial_manager: TutorialManager
 
 
-func setup(player: Player, floor_manager: FloorManager) -> void:
+func setup(
+	player: Player,
+	floor_manager: FloorManager,
+	tutorial_manager: TutorialManager
+) -> void:
 	_player = player
 	_floor_manager = floor_manager
+	_tutorial_manager = tutorial_manager
 	DirAccess.make_dir_recursive_absolute(
 		ProjectSettings.globalize_path(SAVE_DIRECTORY)
 	)
@@ -42,8 +48,11 @@ func load_save(slot_id: String) -> bool:
 		return false
 	var player_data_value: Variant = data.get("player", {})
 	var world_data_value: Variant = data.get("world", {})
+	var tutorial_data_value: Variant = data.get("tutorial", {})
 	if not (player_data_value is Dictionary) or not (world_data_value is Dictionary):
 		return false
+	if _tutorial_manager != null:
+		_tutorial_manager.restore_save_data(tutorial_data_value)
 	_player.restore_save_data(player_data_value)
 	if not _floor_manager.restore_save_data(world_data_value):
 		return false
@@ -100,6 +109,11 @@ func _write_save(slot_id: String, display_name: String) -> bool:
 		"floor_id": String(_floor_manager.current_floor_id),
 		"player": _player.capture_save_data(),
 		"world": _floor_manager.capture_save_data(),
+		"tutorial": (
+			_tutorial_manager.capture_save_data()
+			if _tutorial_manager != null
+			else {}
+		),
 	}
 	var file := FileAccess.open(_get_save_path(slot_id), FileAccess.WRITE)
 	if file == null:
