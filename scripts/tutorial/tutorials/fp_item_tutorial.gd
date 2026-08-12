@@ -24,7 +24,6 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 func start() -> void:
 	current_step = Step.WAIT_FOR_MENU
 	
-	if _manager._player != null:
 		
 	_ui.show_prompt("你获得了FP恢复药水！请按 ESC 键打开背包查看。", true)
 
@@ -46,5 +45,4 @@ func _on_ui_confirmed() -> void:
 			if _ui.confirmed.is_connected(_on_ui_confirmed):
 				_ui.confirmed.disconnect(_on_ui_confirmed)
 			_ui.hide_prompt()
-			if _manager._player != null:
 			complete()

@@ -23,7 +23,6 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 func start() -> void:
 	current_step = Step.INTRO
 	
-	if _manager._player != null:
 		
 	_ui.show_prompt("你学会了踢击！在战斗中，如果敌人正在吟唱法术，你可以用它来打断敌人的施法。", true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
@@ -41,5 +40,4 @@ func _on_ui_confirmed() -> void:
 			if _ui.confirmed.is_connected(_on_ui_confirmed):
 				_ui.confirmed.disconnect(_on_ui_confirmed)
 			_ui.hide_prompt()
-			if _manager._player != null:
 			complete()

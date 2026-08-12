@@ -27,7 +27,6 @@ func should_trigger(event_name: StringName, _event_data: Variant) -> bool:
 func start() -> void:
 	current_step = Step.INTRO
 	
-	if _manager._player != null:
 		
 	# Pause the battle ATB timer
 	if _manager._battle_manager != null:
@@ -91,7 +90,6 @@ func _on_ui_confirmed() -> void:
 				
 			_ui.hide_prompt()
 			
-			if _manager._player != null:
 			
 			# Resume battle
 			if _manager._battle_manager != null:

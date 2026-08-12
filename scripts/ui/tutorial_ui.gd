@@ -39,7 +39,7 @@ func show_prompt_at(
 		if panel:
 			panel.top_level = true
 			# 简单地把提示框放在目标控件的右侧
-			panel.global_position = target_control.global_position + Vector2(target_control.size.x + 20, 0)
+			panel.global_position = target_control.global_position + Vector2(target_control.size.x, 64)
 
 
 func _input(event: InputEvent) -> void:

@@ -17,15 +17,20 @@ grow_vertical = 2
 
 [node name="CenterContainer" type="MarginContainer" parent="TutorialRoot" unique_id=1650741590]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -407.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.0
+offset_top = -215.5
+offset_right = 694.0
+offset_bottom = 215.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="TutorialRoot/CenterContainer" unique_id=1959123385]
+custom_minimum_size = Vector2(400, 200)
 layout_mode = 2
 theme = ExtResource("1_1s6jd")
 
@@ -45,7 +50,6 @@ layout_mode = 2
 text = "教程提示"
 
 [node name="MessageLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=1965801342]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 6
 text = "这里显示教程内容。"

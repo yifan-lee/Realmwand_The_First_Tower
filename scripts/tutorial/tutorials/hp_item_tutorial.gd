@@ -23,7 +23,6 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 func start() -> void:
 	current_step = Step.WAIT_FOR_MENU
 	
-	if _manager._player != null:
 		
 	_ui.show_prompt("你获得了HP恢复药水！请按 ESC 键打开背包查看。", true)
 
@@ -34,5 +33,4 @@ func handle_event(event_name: StringName, _event_data: Variant) -> void:
 			if event_name == &"menu_opened":
 				current_step = Step.FINISH
 				_ui.hide_prompt()
-				if _manager._player != null:
 				complete()

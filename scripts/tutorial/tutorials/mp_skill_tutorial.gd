@@ -23,7 +23,6 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 func start() -> void:
 	current_step = Step.INTRO
 	
-	if _manager._player != null:
 		
 	if _manager._feature_unlock_state != null:
 		_manager._feature_unlock_state.unlock(&"mp")
@@ -49,5 +48,4 @@ func _on_ui_confirmed() -> void:
 			if _ui.confirmed.is_connected(_on_ui_confirmed):
 				_ui.confirmed.disconnect(_on_ui_confirmed)
 			_ui.hide_prompt()
-			if _manager._player != null:
 			complete()
