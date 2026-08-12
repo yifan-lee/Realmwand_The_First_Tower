@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://b08pjyxkk3rbq"]
 
+[ext_resource type="FontFile" uid="uid://770tdjinfs33" path="res://assets/fonts/SourceHanSans-VF.ttf" id="1_u0iqd"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg8i1"]
 bg_color = Color(0.14901961, 0.20392157, 0.22745098, 1)
 border_width_left = 1
@@ -175,12 +177,8 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_86rhs"]
 
-[sub_resource type="SystemFont" id="SystemFont_71r0s"]
-font_names = PackedStringArray("Rajdhani", "DIN Condensed", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", "Arial")
-font_weight = 500
-
 [resource]
-default_font = SubResource("SystemFont_71r0s")
+default_font = ExtResource("1_u0iqd")
 default_font_size = 20
 AtbProgressBar/base_type = &"ProgressBar"
 AtbProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
