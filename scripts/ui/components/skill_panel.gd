@@ -72,6 +72,13 @@ func update_availability(usability_check: Callable) -> void:
 			_rows[i].disabled = not usability_check.call(skill)
 
 
+func get_skill_row(skill_id: StringName) -> Control:
+	for i in range(_skills.size()):
+		if _skills[i].id == skill_id and i < _rows.size():
+			return _rows[i]
+	return null
+
+
 func focus_first_skill() -> bool:
 	if _rows.is_empty():
 		return false

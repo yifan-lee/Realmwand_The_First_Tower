@@ -72,7 +72,7 @@ func _on_ui_confirmed() -> void:
 			var target: Control = null
 			if battle_ui != null and battle_ui.player_stats != null:
 				target = battle_ui.player_stats.def_group
-			_ui.show_prompt_at("DEF 决定了你受到的物理伤害减免。", target, true)
+			_ui.show_prompt_at("DEF 决定了你受到的物理伤害减免。\n伤害计算公式是 atk * 技能伤害 / def", target, true)
 
 		Step.DEF:
 			current_step = Step.ATB
@@ -81,7 +81,7 @@ func _on_ui_confirmed() -> void:
 			var target: Control = null
 			if battle_ui != null and battle_ui.shared_atb_track != null:
 				target = battle_ui.shared_atb_track
-			_ui.show_prompt_at("SPD 决定 ATB 读条速度。当标记到达右侧，即可行动！", target, true)
+			_ui.show_prompt_at("SPD 决定 ATB 读条速度。当标记到达右侧即可行动！\n每次行动需要花费的时间是 100 / spd", target, true)
 
 		Step.ATB:
 			current_step = Step.FINISH

@@ -64,13 +64,11 @@ unique_name_in_owner = true
 
 [node name="StairUp" parent="Interactables" unique_id=841985626 instance=ExtResource("3_kbxsx")]
 position = Vector2(384, 0)
-visual_scale_multiplier = null
 target_floor_id = &"floor_4"
 target_spawn_id = &"FromBelowStair"
 
 [node name="StairDown" parent="Interactables" unique_id=1490281072 instance=ExtResource("3_kbxsx")]
 direction = 1
-visual_scale_multiplier = null
 target_floor_id = &"floor_2"
 target_spawn_id = &"FromAboveStair"
 
@@ -79,167 +77,134 @@ unique_name_in_owner = true
 
 [node name="SpdLv101" parent="Enemies" unique_id=796734484 instance=ExtResource("4_dgw2m")]
 position = Vector2(0, -256)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv102" parent="Enemies" unique_id=29129896 instance=ExtResource("4_dgw2m")]
 position = Vector2(-96, -480)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv103" parent="Enemies" unique_id=718334885 instance=ExtResource("4_dgw2m")]
 position = Vector2(96, -96)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv104" parent="Enemies" unique_id=1785257759 instance=ExtResource("4_dgw2m")]
 position = Vector2(224, -64)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv105" parent="Enemies" unique_id=2125384421 instance=ExtResource("4_dgw2m")]
 position = Vector2(192, -448)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv106" parent="Enemies" unique_id=600945372 instance=ExtResource("4_dgw2m")]
 position = Vector2(192, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv111" parent="Enemies" unique_id=1668010572 instance=ExtResource("4_dgw2m")]
 position = Vector2(0, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="AtkLv113" parent="Enemies" unique_id=1273847079 instance=ExtResource("4_dgw2m")]
 position = Vector2(32, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv114" parent="Enemies" unique_id=1359016742 instance=ExtResource("4_dgw2m")]
 position = Vector2(-32, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="SpdLv107" parent="Enemies" unique_id=1584018940 instance=ExtResource("4_dgw2m")]
 position = Vector2(192, -192)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv108" parent="Enemies" unique_id=1513611093 instance=ExtResource("4_dgw2m")]
 position = Vector2(288, -256)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv109" parent="Enemies" unique_id=2057051417 instance=ExtResource("4_dgw2m")]
 position = Vector2(480, -384)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="SpdLv110" parent="Enemies" unique_id=505522356 instance=ExtResource("4_dgw2m")]
 position = Vector2(384, -352)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_uhbfv")
 
 [node name="DefLv101" parent="Enemies" unique_id=674440590 instance=ExtResource("4_dgw2m")]
 position = Vector2(-384, -304)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv102" parent="Enemies" unique_id=355156168 instance=ExtResource("4_dgw2m")]
 position = Vector2(96, -128)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv103" parent="Enemies" unique_id=477430475 instance=ExtResource("4_dgw2m")]
 position = Vector2(-384, -400)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv104" parent="Enemies" unique_id=1679076072 instance=ExtResource("4_dgw2m")]
 position = Vector2(-336, -344)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="AtkLv101" parent="Enemies" unique_id=232817028 instance=ExtResource("4_dgw2m")]
 position = Vector2(-96, -256)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv102" parent="Enemies" unique_id=1811105936 instance=ExtResource("4_dgw2m")]
 position = Vector2(0, -416)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv103" parent="Enemies" unique_id=1252898236 instance=ExtResource("4_dgw2m")]
 position = Vector2(224, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv104" parent="Enemies" unique_id=319009110 instance=ExtResource("4_dgw2m")]
 position = Vector2(160, -448)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv105" parent="Enemies" unique_id=1765881066 instance=ExtResource("4_dgw2m")]
 position = Vector2(224, -448)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv106" parent="Enemies" unique_id=597157782 instance=ExtResource("4_dgw2m")]
 position = Vector2(480, -416)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv107" parent="Enemies" unique_id=774100133 instance=ExtResource("4_dgw2m")]
 position = Vector2(480, -352)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv108" parent="Enemies" unique_id=1910172649 instance=ExtResource("4_dgw2m")]
 position = Vector2(256, -256)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv109" parent="Enemies" unique_id=837966534 instance=ExtResource("4_dgw2m")]
 position = Vector2(320, -256)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv110" parent="Enemies" unique_id=1272313418 instance=ExtResource("4_dgw2m")]
 position = Vector2(192, -64)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv111" parent="Enemies" unique_id=866583635 instance=ExtResource("4_dgw2m")]
 position = Vector2(256, -64)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv112" parent="Enemies" unique_id=1516184928 instance=ExtResource("4_dgw2m")]
 position = Vector2(160, -544)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_xlqth")
 
 [node name="BalLv101" parent="Enemies" unique_id=1436301196 instance=ExtResource("4_dgw2m")]
 position = Vector2(0, -224)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_mguoy")
 
 [node name="BalLv102" parent="Enemies" unique_id=1752808682 instance=ExtResource("4_dgw2m")]
 position = Vector2(0, -288)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_mguoy")
 
 [node name="BalLv103" parent="Enemies" unique_id=1077616942 instance=ExtResource("4_dgw2m")]
 position = Vector2(-96, -288)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_mguoy")
 
 [node name="BalLv104" parent="Enemies" unique_id=1625482253 instance=ExtResource("4_dgw2m")]
 position = Vector2(-96, -224)
-visual_scale_multiplier = null
 enemy_data = ExtResource("6_mguoy")
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
@@ -248,222 +213,178 @@ unique_name_in_owner = true
 [node name="SwordLv1" parent="Pickups" unique_id=1405483750 instance=ExtResource("5_wmq0r")]
 position = Vector2(384, -192)
 item_data = ExtResource("6_wmq0r")
-visual_scale_multiplier = null
 
 [node name="DaggerLv1" parent="Pickups" unique_id=1323454973 instance=ExtResource("5_wmq0r")]
 position = Vector2(-96, -96)
 item_data = ExtResource("10_ahe1n")
-visual_scale_multiplier = null
 
 [node name="ShieldLv1" parent="Pickups" unique_id=1816246793 instance=ExtResource("5_wmq0r")]
 position = Vector2(32, -160)
 item_data = ExtResource("11_cu571")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv111" parent="Pickups" unique_id=704840100 instance=ExtResource("5_wmq0r")]
 position = Vector2(-64, -544)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv112" parent="Pickups" unique_id=882880828 instance=ExtResource("5_wmq0r")]
 position = Vector2(64, -544)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv201" parent="Pickups" unique_id=1379067021 instance=ExtResource("5_wmq0r")]
-position = Vector2(-336, -184)
+position = Vector2(160, -64)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv202" parent="Pickups" unique_id=459596612 instance=ExtResource("5_wmq0r")]
 position = Vector2(0, -320)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv203" parent="Pickups" unique_id=1104256071 instance=ExtResource("5_wmq0r")]
 position = Vector2(-64, -64)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv204" parent="Pickups" unique_id=1599757811 instance=ExtResource("5_wmq0r")]
 position = Vector2(288, -64)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv205" parent="Pickups" unique_id=877984277 instance=ExtResource("5_wmq0r")]
 position = Vector2(480, -448)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv206" parent="Pickups" unique_id=1828611389 instance=ExtResource("5_wmq0r")]
 position = Vector2(128, -256)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv207" parent="Pickups" unique_id=1507960915 instance=ExtResource("5_wmq0r")]
 position = Vector2(160, -256)
 item_data = ExtResource("7_a6ijt")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv101" parent="Pickups" unique_id=1835675025 instance=ExtResource("5_wmq0r")]
 position = Vector2(320, -160)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv102" parent="Pickups" unique_id=1462376449 instance=ExtResource("5_wmq0r")]
 position = Vector2(128, -544)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv103" parent="Pickups" unique_id=295170954 instance=ExtResource("5_wmq0r")]
 position = Vector2(256, -544)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv104" parent="Pickups" unique_id=1236149063 instance=ExtResource("5_wmq0r")]
 position = Vector2(128, -160)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv105" parent="Pickups" unique_id=185168734 instance=ExtResource("5_wmq0r")]
 position = Vector2(256, -160)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv106" parent="Pickups" unique_id=1595894563 instance=ExtResource("5_wmq0r")]
 position = Vector2(288, -160)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv107" parent="Pickups" unique_id=1916920709 instance=ExtResource("5_wmq0r")]
 position = Vector2(480, -320)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv108" parent="Pickups" unique_id=1751522753 instance=ExtResource("5_wmq0r")]
-position = Vector2(160, -64)
+position = Vector2(-368, -80)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv109" parent="Pickups" unique_id=297572987 instance=ExtResource("5_wmq0r")]
 position = Vector2(-96, -320)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv110" parent="Pickups" unique_id=1469792972 instance=ExtResource("5_wmq0r")]
 position = Vector2(-96, -192)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv115" parent="Pickups" unique_id=747562838 instance=ExtResource("5_wmq0r")]
 position = Vector2(-192, -384)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv114" parent="Pickups" unique_id=470844840 instance=ExtResource("5_wmq0r")]
 position = Vector2(-264, -472)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="HpRecoveryLv113" parent="Pickups" unique_id=333399188 instance=ExtResource("5_wmq0r")]
 position = Vector2(-256, -320)
 item_data = ExtResource("14_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv101" parent="Pickups" unique_id=1167899819 instance=ExtResource("5_wmq0r")]
 position = Vector2(384, -512)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv102" parent="Pickups" unique_id=434380044 instance=ExtResource("5_wmq0r")]
 position = Vector2(384, -320)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv103" parent="Pickups" unique_id=1836153799 instance=ExtResource("5_wmq0r")]
 position = Vector2(192, -256)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv104" parent="Pickups" unique_id=1785613633 instance=ExtResource("5_wmq0r")]
 position = Vector2(96, -256)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv105" parent="Pickups" unique_id=512110682 instance=ExtResource("5_wmq0r")]
 position = Vector2(192, -352)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv106" parent="Pickups" unique_id=1341206107 instance=ExtResource("5_wmq0r")]
 position = Vector2(96, -352)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="MpRecoveryLv107" parent="Pickups" unique_id=1256216531 instance=ExtResource("5_wmq0r")]
 position = Vector2(384, -384)
 item_data = ExtResource("15_ta0wl")
-visual_scale_multiplier = null
 
 [node name="FragmentYellowLv101" parent="Pickups" unique_id=1834790956 instance=ExtResource("5_wmq0r")]
 position = Vector2(-32, -448)
 item_data = ExtResource("11_bcf3a")
-visual_scale_multiplier = null
 
 [node name="FragmentYellowLv102" parent="Pickups" unique_id=629773710 instance=ExtResource("5_wmq0r")]
 position = Vector2(-64, -448)
 item_data = ExtResource("11_bcf3a")
-visual_scale_multiplier = null
 
 [node name="FragmentYellowLv103" parent="Pickups" unique_id=2044396255 instance=ExtResource("5_wmq0r")]
 position = Vector2(192, -288)
 item_data = ExtResource("11_bcf3a")
-visual_scale_multiplier = null
 
 [node name="FragmentYellowLv104" parent="Pickups" unique_id=646574378 instance=ExtResource("5_wmq0r")]
 position = Vector2(192, -320)
 item_data = ExtResource("11_bcf3a")
-visual_scale_multiplier = null
 
 [node name="FragmentBlueLv101" parent="Pickups" unique_id=2001099770 instance=ExtResource("5_wmq0r")]
 position = Vector2(64, -64)
 item_data = ExtResource("13_fkkej")
-visual_scale_multiplier = null
 
 [node name="FragmentBlueLv102" parent="Pickups" unique_id=329321137 instance=ExtResource("5_wmq0r")]
 position = Vector2(32, -64)
 item_data = ExtResource("13_fkkej")
-visual_scale_multiplier = null
 
 [node name="FragmentBlueLv103" parent="Pickups" unique_id=1770964468 instance=ExtResource("5_wmq0r")]
 position = Vector2(128, -352)
 item_data = ExtResource("13_fkkej")
-visual_scale_multiplier = null
 
 [node name="FragmentBlueLv104" parent="Pickups" unique_id=513012280 instance=ExtResource("5_wmq0r")]
 position = Vector2(160, -352)
 item_data = ExtResource("13_fkkej")
-visual_scale_multiplier = null
 
 [node name="FragmentRedLv101" parent="Pickups" unique_id=693440774 instance=ExtResource("5_wmq0r")]
 position = Vector2(352, -448)
 item_data = ExtResource("14_2p4y1")
-visual_scale_multiplier = null
 
 [node name="FragmentRedLv102" parent="Pickups" unique_id=919642583 instance=ExtResource("5_wmq0r")]
 position = Vector2(320, -448)
 item_data = ExtResource("14_2p4y1")
-visual_scale_multiplier = null
 
 [node name="FragmentRedLv103" parent="Pickups" unique_id=1557664030 instance=ExtResource("5_wmq0r")]
 position = Vector2(96, -320)
 item_data = ExtResource("14_2p4y1")
-visual_scale_multiplier = null
 
 [node name="FragmentRedLv104" parent="Pickups" unique_id=416790920 instance=ExtResource("5_wmq0r")]
 position = Vector2(96, -288)
 item_data = ExtResource("14_2p4y1")
-visual_scale_multiplier = null
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true

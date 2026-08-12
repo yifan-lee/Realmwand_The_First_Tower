@@ -47,6 +47,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "这里显示物品或技能的主要说明。"
+fit_content = true
 scroll_active = false
 
 [node name="DetailsSeparator" type="HSeparator" parent="MarginContainer/Content" unique_id=1144037436]
@@ -60,4 +61,5 @@ layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "效果信息"
+fit_content = true
 scroll_active = false

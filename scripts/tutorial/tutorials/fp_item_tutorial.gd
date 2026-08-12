@@ -33,7 +33,7 @@ func handle_event(event_name: StringName, _event_data: Variant) -> void:
 		Step.WAIT_FOR_MENU:
 			if event_name == &"menu_opened":
 				current_step = Step.EXPLAIN_FREE_ACTION
-				_ui.show_prompt("请注意，在战斗中使用恢复药水是不消耗回合的 Free Action！", true)
+				_ui.show_prompt("请注意，在战斗中使用FP恢复药水是不消耗回合的 Free Action！", true)
 				if not _ui.confirmed.is_connected(_on_ui_confirmed):
 					_ui.confirmed.connect(_on_ui_confirmed)
 
