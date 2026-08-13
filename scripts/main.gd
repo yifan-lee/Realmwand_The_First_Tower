@@ -19,6 +19,17 @@ extends Node2D
 @onready var tutorial_ui: TutorialUI = $OverlayRoot/TutorialUI
 @onready var intro_video: IntroVideo = $OverlayRoot/IntroVideo
 @onready var feature_unlock_state: FeatureUnlockState = get_node("/root/FeatureUnlocks")
+@onready var bgm_player: AudioStreamPlayer = $BgmPlayer
+
+const BGM_INTRO = preload("res://assets/audios/intro.ogg")
+const BGM_BATTLE = preload("res://assets/audios/battle.ogg")
+const BGM_GENERAL = preload("res://assets/audios/general.ogg")
+
+func play_bgm(stream: AudioStream) -> void:
+	if bgm_player.stream == stream and bgm_player.playing:
+		return
+	bgm_player.stream = stream
+	bgm_player.play()
 
 
 func _ready() -> void:
@@ -27,6 +38,7 @@ func _ready() -> void:
 	intro_video.intro_finished.connect(
 		_on_intro_finished
 	)
+	play_bgm(BGM_INTRO)
 	intro_video.play_intro()
 	game_hud.bind_player(player)
 	esc_menu.bind_player(player)
@@ -42,6 +54,9 @@ func _ready() -> void:
 	battle_manager.setup(player, battle_ui)
 	level_up_manager.setup(player, level_up_ui)
 	npc_interaction_manager.setup(player, npc_interaction_ui)
+	battle_manager.battle_started.connect(
+		_on_battle_started
+	)
 	battle_manager.battle_finished.connect(
 		_on_battle_finished
 	)
@@ -67,6 +82,7 @@ func _on_battle_finished(victory: bool) -> void:
 	game_hud.show_message(
 		"战斗胜利。" if victory else "战斗结束。"
 	)
+	play_bgm(BGM_GENERAL)
 
 
 func _on_level_up_finished() -> void:
@@ -81,3 +97,8 @@ func _on_level_up_finished() -> void:
 
 func _on_intro_finished() -> void:
 	player.set_input_enabled(true)
+	play_bgm(BGM_GENERAL)
+
+
+func _on_battle_started(_enemy: Enemy) -> void:
+	play_bgm(BGM_BATTLE)

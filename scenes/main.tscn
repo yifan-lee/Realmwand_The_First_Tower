@@ -19,6 +19,8 @@
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
 
+[node name="BgmPlayer" type="AudioStreamPlayer" parent="." unique_id=1234567890]
+
 [node name="World" type="Node2D" parent="." unique_id=615637697]
 
 [node name="FloorContainer" type="Node2D" parent="World" unique_id=533456458]
