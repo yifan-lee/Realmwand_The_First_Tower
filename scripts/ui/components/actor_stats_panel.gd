@@ -11,6 +11,7 @@ enum FpDisplayMode {
 const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
 const VALUE_COLOR := Color("#D9E5E8FF")
+const BUFF_LABEL_SCENE := preload("res://scenes/ui/components/buff_label.tscn")
 const FEATURE_IDS: Array[StringName] = [
 	&"hp",
 	&"mp",
@@ -277,11 +278,8 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 		var desc := effect.get_description()
 		if desc.is_empty(): continue
 		var remaining: int = active.get(&"remaining_count", 0)
-		var label := Label.new()
-		label.add_theme_font_size_override("font_size", 14)
-		label.add_theme_color_override("font_color", Color("#A0D8EF"))
+		var label := BUFF_LABEL_SCENE.instantiate() as Label
 		label.text = "• %s (剩余 %d 次)" % [desc, remaining]
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		buffs_container.add_child(label)
 
 

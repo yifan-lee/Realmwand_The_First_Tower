@@ -29,9 +29,9 @@ func _on_allocation_confirmed(allocation: Dictionary[StringName, int]) -> void:
 	_level_up_ui.close()
 	_player.set_input_enabled(true)
 	
-	if not _player.pending_learned_skills.is_empty():
-		var skill: SkillData = _player.pending_learned_skills.pop_front()
-		_player.pending_learned_skills.clear()
+	if not _player.progression.pending_learned_skills.is_empty():
+		var skill: SkillData = _player.progression.pending_learned_skills.pop_front()
+		_player.progression.pending_learned_skills.clear()
 		EventBus.system_message_requested.emit(
 			"学会了新技能：【%s】" % skill.display_name
 		)

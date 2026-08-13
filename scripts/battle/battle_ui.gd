@@ -52,25 +52,9 @@ func _ready() -> void:
 	items_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ITEMS, false))
 	escape_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ESCAPE, false))
 	
-	_player_casting_label = _create_casting_label(player_atb_marker, Color(0.5, 0.8, 1.0))
-	_enemy_casting_label = _create_casting_label(enemy_atb_marker, Color(1.0, 0.4, 0.4))
+	_player_casting_label = player_atb_marker.get_node("PlayerCastingLabel")
+	_enemy_casting_label = enemy_atb_marker.get_node("EnemyCastingLabel")
 
-
-func _create_casting_label(parent: Control, color: Color) -> Label:
-	var label = Label.new()
-	label.text = "吟唱中"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-	label.add_theme_font_size_override("font_size", 20)
-	label.add_theme_color_override("font_color", color)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 6)
-	label.visible = false
-	parent.add_child(label)
-	
-	label.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	label.position.y = -28
-	return label
 
 
 func _process(_delta: float) -> void:
@@ -88,18 +72,18 @@ func _process(_delta: float) -> void:
 		var p_casting = _battle_manager.is_player_casting()
 		_player_casting_label.visible = p_casting
 		if p_casting:
-			player_atb_marker.modulate = Color(0.6, 0.8, 1.0)
+			player_atb_marker.modulate = Color("#99CCFFFF")
 			player_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
 		else:
-			player_atb_marker.modulate = Color.WHITE
+			player_atb_marker.modulate = Color("#FFFFFFFF")
 			
 		var e_casting = _battle_manager.is_enemy_casting()
 		_enemy_casting_label.visible = e_casting
 		if e_casting:
-			enemy_atb_marker.modulate = Color(1.0, 0.4, 0.4)
+			enemy_atb_marker.modulate = Color("#FF6666FF")
 			enemy_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
 		else:
-			enemy_atb_marker.modulate = Color.WHITE
+			enemy_atb_marker.modulate = Color("#FFFFFFFF")
 
 	if _player != null:
 		player_stats.refresh_runtime_resources(
@@ -300,8 +284,8 @@ func _on_skill_focused(skill: SkillData) -> void:
 			player_view.atk_delta = player_delta.atk_delta
 			player_view.def_delta = player_delta.def_delta
 			player_view.spd_delta = player_delta.spd_delta
-			if player_delta.atb_delta > 0.0:
-				player_view.preview_atb = player_delta.atb_delta
+			if player_delta.atb_delta < 0.0:
+				player_view.current_atb_delta = player_delta.atb_delta
 				
 		var enemy_delta = preview.actor_deltas.get(_enemy, null)
 		if enemy_delta != null:

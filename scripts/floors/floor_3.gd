@@ -44,7 +44,7 @@ func _setup_player_listener() -> void:
 	_player = get_tree().get_root().find_child("Player", true, false) as Player
 		
 	if _player != null:
-		_last_facing = _player.facing_direction
+		_last_facing = _player.movement.facing_direction
 		if not _player.movement_finished.is_connected(
 			_on_player_movement_finished
 		):
@@ -72,7 +72,7 @@ func _on_stair_up_body_entered(body: Node2D) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not is_rule_active or _player == null or not _player.input_enabled:
+	if not is_rule_active or _player == null or not _player.movement.input_enabled:
 		return
 
 	var direction := Vector2.ZERO
@@ -111,7 +111,7 @@ func _input(event: InputEvent) -> void:
 		# 阻断玩家当前的持键状态，防止继续执行非法操作
 		_player.set_input_enabled(false)
 		
-		if _player.is_moving:
+		if _player.movement.is_moving:
 			# 如果玩家正在合法移动的过程中按下了非法按键，则等当前移动完毕后传送
 			_pending_teleport = true
 		else:
@@ -130,7 +130,7 @@ func _on_player_movement_finished() -> void:
 		_player.set_input_enabled(true)
 		return
 
-	var current_facing := _player.facing_direction
+	var current_facing := _player.movement.facing_direction
 	
 	var forward_dir := _last_facing
 	var right_dir := Vector2.ZERO
@@ -163,7 +163,7 @@ func _fail_and_teleport_to_start() -> void:
 	# 瞬间重置玩家位置到起点
 	_player.global_position = from_below_stair.global_position
 	# 重置朝向记录
-	_player.facing_direction = Vector2.UP
+	_player.movement.facing_direction = Vector2.UP
 	_last_facing = Vector2.UP
 	
 	# 可选：如果在战斗管理器或 UI 中有消息提示面板，可以提示玩家

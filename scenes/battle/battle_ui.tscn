@@ -99,6 +99,25 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="PlayerCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.0
+offset_top = -28.0
+offset_right = 30.0
+offset_bottom = -5.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.501961, 0.8, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "吟唱中"
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="EnemyMarker" type="TextureRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1153709964]
 z_index = 1
 custom_minimum_size = Vector2(60, 60)
@@ -110,6 +129,25 @@ offset_bottom = 30.0
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="EnemyCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.0
+offset_top = -28.0
+offset_right = 30.0
+offset_bottom = -5.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "吟唱中"
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="PlayerCastPreviewMarker" type="ColorRect" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track" unique_id=1382496774]
 visible = false

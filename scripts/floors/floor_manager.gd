@@ -14,6 +14,8 @@ var current_floor: Floor
 var current_floor_id: StringName = &""
 var floor_states: Dictionary = {}
 
+var _is_changing_floor: bool = false
+
 
 func _ready() -> void:
 	EventBus.floor_change_requested.connect(
@@ -105,6 +107,10 @@ func change_floor(
 	target_floor_id: StringName,
 	target_spawn_id: StringName
 ) -> void:
+	if _is_changing_floor:
+		return
+	_is_changing_floor = true
+	
 	player.set_input_enabled(false)
 	
 	EventBus.screen_fade_out_started.emit()
@@ -112,7 +118,10 @@ func change_floor(
 
 	var new_floor := _instantiate_floor(target_floor_id)
 	if new_floor == null:
+		EventBus.screen_fade_in_with_info_started.emit("", "")
+		await EventBus.screen_fade_in_finished
 		player.set_input_enabled(true)
+		_is_changing_floor = false
 		return
 
 	# Add to tree temporarily to safely resolve node paths (like markers)
@@ -125,7 +134,10 @@ func change_floor(
 	if spawn_point == null:
 		floor_container.remove_child(new_floor)
 		new_floor.queue_free()
+		EventBus.screen_fade_in_with_info_started.emit("", "")
+		await EventBus.screen_fade_in_finished
 		player.set_input_enabled(true)
+		_is_changing_floor = false
 		return
 
 
@@ -139,6 +151,7 @@ func change_floor(
 	await EventBus.screen_fade_in_finished
 
 	player.set_input_enabled(true)
+	_is_changing_floor = false
 
 
 func _on_floor_change_requested(
@@ -172,6 +185,21 @@ func capture_save_data() -> Dictionary:
 		"player_local_position": [local_position.x, local_position.y],
 		"floor_states": floor_states.duplicate(true),
 	}
+
+
+func can_restore_save_data(data: Dictionary) -> bool:
+	var floor_id := StringName(String(data.get("current_floor_id", "")))
+	if floor_id.is_empty():
+		return false
+	var states_value: Variant = data.get("floor_states", {})
+	if not (states_value is Dictionary):
+		return false
+
+	var test_floor := _instantiate_floor(floor_id)
+	if test_floor == null:
+		return false
+	test_floor.queue_free()
+	return true
 
 
 func restore_save_data(data: Dictionary) -> bool:

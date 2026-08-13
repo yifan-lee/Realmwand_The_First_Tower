@@ -11,11 +11,22 @@ static func evaluate_skill(
 	battle_manager: BattleManager
 ) -> BattleActionPreview:
 	var preview := BattleActionPreview.new()
-	
 	if skill == null or caster == null:
 		return preview
+	
+	evaluate_skill_costs(skill, caster, preview)
+	evaluate_skill_effects(skill, caster, targets, battle_manager, preview)
+	return preview
+
+
+static func evaluate_skill_costs(
+	skill: SkillData,
+	caster: Node,
+	preview: BattleActionPreview
+) -> void:
+	if skill == null or caster == null:
+		return
 		
-	# 1. Evaluate Costs (applied to caster)
 	var caster_delta := preview.get_or_create_delta(caster)
 	for cost: ActionCostData in skill.costs:
 		match cost.cost_type:
@@ -26,9 +37,20 @@ static func evaluate_skill(
 			ActionCostData.CostType.FP:
 				caster_delta.fp_delta -= cost.value
 			ActionCostData.CostType.CAST_TIME:
-				caster_delta.atb_delta = FORMULAS.calculate_atb_after_cast(cost.value)
-				
-	# 2. Evaluate Effects (applied to targets or self)
+				if cost.value > 0.0:
+					caster_delta.atb_delta -= FORMULAS.ATB_MAX * cost.value
+
+
+static func evaluate_skill_effects(
+	skill: SkillData,
+	caster: Node,
+	targets: Array[Node],
+	battle_manager: BattleManager,
+	preview: BattleActionPreview
+) -> void:
+	if skill == null or caster == null:
+		return
+		
 	var total_applied_damage := 0.0
 	
 	for effect: ActionEffectData in skill.effects:

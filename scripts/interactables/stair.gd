@@ -47,7 +47,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if transition_requested:
 		return
 
-	if not player.is_moving:
+	if not player.movement.is_moving:
 		return
 
 	if target_floor_id == &"":

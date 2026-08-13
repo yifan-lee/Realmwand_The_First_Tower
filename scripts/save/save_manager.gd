@@ -51,11 +51,13 @@ func load_save(slot_id: String) -> bool:
 	var tutorial_data_value: Variant = data.get("tutorial", {})
 	if not (player_data_value is Dictionary) or not (world_data_value is Dictionary):
 		return false
+	if not _floor_manager.can_restore_save_data(world_data_value):
+		return false
+		
 	if _tutorial_manager != null:
 		_tutorial_manager.restore_save_data(tutorial_data_value)
 	_player.restore_save_data(player_data_value)
-	if not _floor_manager.restore_save_data(world_data_value):
-		return false
+	_floor_manager.restore_save_data(world_data_value)
 	return true
 
 

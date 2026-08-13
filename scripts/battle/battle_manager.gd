@@ -165,7 +165,7 @@ func _on_skill_selected(skill: SkillData) -> void:
 	if mp_cost > 0: _player.change_mp(-mp_cost)
 	if fp_cost > 0: _player.change_fp(-fp_cost)
 	
-	if cd > 0: _cooldowns[skill.id] = cd
+	if cd > 0: _cooldowns[skill.id] = cd + 1
 	
 	if is_zero_approx(cast_time):
 		_release_player_skill(skill)
@@ -228,7 +228,7 @@ func _begin_enemy_turn() -> void:
 	if hp_cost > 0: _enemy.change_hp(-hp_cost)
 	if mp_cost > 0: _enemy.change_mp(-mp_cost)
 	if fp_cost > 0: _enemy.change_fp(-fp_cost)
-	if cd > 0: _enemy_cooldowns[skill.id] = cd
+	if cd > 0: _enemy_cooldowns[skill.id] = cd + 1
 	
 	if is_zero_approx(cast_time):
 		_resolve_enemy_attack(skill)
@@ -259,7 +259,8 @@ func _release_player_skill(skill: SkillData = null) -> void:
 		return
 
 	_consume_action_charges(false)
-	var preview = BattleCalculator.evaluate_skill(resolved_skill, _player, [_enemy], self)
+	var preview := BattleActionPreview.new()
+	BattleCalculator.evaluate_skill_effects(resolved_skill, _player, [_enemy], self, preview)
 	_apply_preview(preview, resolved_skill.effects, false)
 	
 	var message = "使用了 %s。" % resolved_skill.display_name
@@ -287,7 +288,8 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	if skill != null:
 		skill_name = skill.display_name
 		
-	var preview = BattleCalculator.evaluate_skill(skill, _enemy, [_player], self)
+	var preview := BattleActionPreview.new()
+	BattleCalculator.evaluate_skill_effects(skill, _enemy, [_player], self, preview)
 	_consume_action_charges(true)
 	
 	if skill == null:
