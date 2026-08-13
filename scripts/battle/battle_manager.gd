@@ -380,6 +380,9 @@ func _finish_battle(victory: bool) -> void:
 		_enemy.set_current_fp(_pre_battle_enemy_fp)
 	battle_finished.emit(victory)
 	_enemy = null
+	EventBus.system_message_requested.emit(
+		"战斗胜利。" if victory else "战斗结束。"
+	)
 
 
 func _get_experience_reward() -> int:
@@ -496,7 +499,6 @@ func _apply_effects(
 					&"remaining_count": effect.duration_count,
 				})
 		
-
 
 func get_player_stat(effect_type: int) -> float:
 	var base_value := 0.0

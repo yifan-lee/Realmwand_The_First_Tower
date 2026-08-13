@@ -71,6 +71,7 @@ func _update_wall_passage_first() -> void:
 		switch_first_snapshots,
 		switch_first.is_active
 	)
+	EventBus.system_message_requested.emit("前方的墙壁降下了。")
 
 
 func _update_wall_passage_second() -> void:
@@ -83,10 +84,13 @@ func _update_wall_passage_second() -> void:
 		switch_red_blue_snapshots,
 		all_active
 	)
+	if switch_red.is_active and switch_blue.is_active:
+		EventBus.system_message_requested.emit("两座机关产生共鸣，通道被打开了！")
+	else:
+		EventBus.system_message_requested.emit("机关被激活了，但好像还需要启动另一个...")
 
 
 func _update_stairs() -> void:
-
 	set_tile_cells_removed(
 		wall_layer,
 		switch_yellow_snapshots,
@@ -95,3 +99,4 @@ func _update_stairs() -> void:
 	up_stair.visible = switch_yellow.is_active
 	up_stair.monitoring = switch_yellow.is_active
 	up_stair.monitorable = switch_yellow.is_active
+	EventBus.system_message_requested.emit("某处的墙壁消失了，显露出了楼梯。")

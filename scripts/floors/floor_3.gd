@@ -1,7 +1,9 @@
 extends Floor
 
+@onready var wall_layer: TileMapLayer = %WallLayer
 @onready var stair_up: Area2D = $Interactables/StairUp
 @onready var from_below_stair: Marker2D = $SpawnPoints/FromBelowStair
+@onready var switch1: FloorSwitch = $Interactables/Switch1
 
 # 规则激活状态（解密成功后设为 false）
 var is_rule_active: bool = true
@@ -10,12 +12,14 @@ var is_rule_active: bool = true
 var _last_facing: Vector2 = Vector2.UP
 var _player: Player = null
 var _pending_teleport: bool = false
+var switch1_snapshots: Array[Floor.TileCellSnapshot] = []
 
 
 func _ready() -> void:
 	stair_up.body_entered.connect(
 		_on_stair_up_body_entered
 	)
+	switch1.state_changed.connect(_on_floor_switch_state_changed)
 
 	# 延迟一帧获取 Player 节点并绑定移动信号
 	call_deferred("_setup_player_listener")
@@ -174,3 +178,30 @@ func unlock_rule() -> void:
 	is_rule_active = false
 	_pending_teleport = false
 	print("Floor 3 迷宫规则已解除！")
+
+
+func _on_floor_switch_state_changed(
+	switch_id: StringName,
+	_is_active: bool
+) -> void:
+	match switch_id:
+		&"switch1":
+			_update_wall_passage_first()
+
+func _update_wall_passage_first() -> void:
+	set_tile_cells_removed(
+		wall_layer,
+		switch1_snapshots,
+		switch1.is_active
+	)
+	EventBus.system_message_requested.emit("某处的墙壁降下了，露出了捷径。")
+
+
+func _cache_switch_terrain() -> void:
+	switch1_snapshots = capture_tile_cells(
+		wall_layer,
+		[
+			Vector2i(-1, -5),
+			Vector2i(-2, -5),
+		]
+	)

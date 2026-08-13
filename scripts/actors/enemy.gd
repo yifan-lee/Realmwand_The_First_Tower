@@ -4,30 +4,21 @@ extends StaticBody2D
 
 const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 
-signal battle_requested(
-	enemy: Enemy,
-	player: Player
-)
+signal battle_requested(enemy: Enemy, player: Player)
 signal stats_changed
 
 @export_group("Identity")
 @export var instance_id: StringName = &""
 
 @export_group("Layout")
-## 控制敌人占用的地块大小，例如 (1, 1) 代表 1x1，(3, 3) 代表 3x3 Boss
 @export var grid_size: Vector2i = Vector2i(1, 1):
 	set(value):
 		grid_size = value
 		if is_node_ready():
 			_update_size()
 
-## 视觉上的额外缩放系数。如果原图有大量透明留白导致视觉偏小，可以调大此值（如 1.2、1.5）
 const TILE_BASE_SIZE = Vector2(24, 24)
-
-## 碰撞体每个网格的基础尺寸。普通敌人保持旧值；特殊敌人可通过 get_collision_tile_size() 覆盖。
-## Legacy scene field retained only so existing .tscn files load; data resources are authoritative.
 @export_storage var visual_scale_multiplier: float = 1.0
-
 
 @export var collision_tile_size: Vector2 = TILE_BASE_SIZE:
 	set(value):
@@ -42,12 +33,23 @@ const TILE_BASE_SIZE = Vector2(24, 24)
 		_refresh_visual()
 
 
-var current_hp: float = 0.0
-var current_mp: float = 0.0
-var current_fp: float = 0.0
-var is_defeated: bool = false
+@onready var stats: EnemyStats = $EnemyStats
 
+var is_defeated: bool = false
 var _active_collision_layer: int = 0
+
+# Proxy properties
+var current_hp: float:
+	get(): return stats.current_hp if stats else 0.0
+	set(v): if stats: stats.set_current_hp(v)
+
+var current_mp: float:
+	get(): return stats.current_mp if stats else 0.0
+	set(v): if stats: stats.set_current_mp(v)
+
+var current_fp: float:
+	get(): return stats.current_fp if stats else 0.0
+	set(v): if stats: stats.set_current_fp(v)
 
 
 func _ready() -> void:
@@ -60,19 +62,12 @@ func _ready() -> void:
 	_active_collision_layer = collision_layer
 
 	if enemy_data == null:
-		push_error(
-			"Enemy requires an EnemyData resource."
-		)
+		push_error("Enemy requires an EnemyData resource.")
 		set_defeated(true)
 		return
 
-	current_hp = get_max_hp()
-	current_mp = get_max_mp()
-	current_fp = clampf(
-		enemy_data.start_fp,
-		0.0,
-		get_max_fp()
-	)
+	stats.initialize(enemy_data)
+	stats.stats_changed.connect(_on_stats_changed)
 
 
 func interact(player: Player) -> void:
@@ -82,133 +77,22 @@ func interact(player: Player) -> void:
 func request_battle(player: Player) -> void:
 	if is_defeated:
 		return
-
 	battle_requested.emit(self, player)
 	EventBus.battle_requested.emit(self, player)
-
-
-func take_damage(amount: float) -> float:
-	if is_defeated or amount <= 0.0:
-		return 0.0
-
-	var applied_damage: float = minf(
-		amount,
-		current_hp
-	)
-
-	current_hp -= applied_damage
-	stats_changed.emit()
-
-	if current_hp <= 0.0:
-		current_hp = 0.0
-		set_defeated(true)
-
-	return applied_damage
-
-
-func change_hp(amount: float) -> void:
-	if enemy_data == null:
-		return
-		
-	set_current_hp(current_hp + amount)
-
-
-func set_current_hp(value: float) -> void:
-	if enemy_data == null:
-		return
-		
-	var next_hp := clampf(
-		value,
-		0.0,
-		get_max_hp()
-	)
-	if is_equal_approx(current_hp, next_hp):
-		return
-		
-	current_hp = next_hp
-	stats_changed.emit()
-	
-	if current_hp <= 0.0:
-		set_defeated(true)
-	elif current_hp > 0.0 and is_defeated:
-		set_defeated(false)
-
-
-func change_mp(amount: float) -> void:
-	if enemy_data == null:
-		return
-
-	set_current_mp(current_mp + amount)
-
-
-func set_current_mp(value: float) -> void:
-	if enemy_data == null:
-		return
-
-	var next_mp := clampf(
-		value,
-		0.0,
-		get_max_mp()
-	)
-	if is_equal_approx(current_mp, next_mp):
-		return
-
-	current_mp = next_mp
-	stats_changed.emit()
-
-
-func change_fp(amount: float) -> void:
-	if enemy_data == null:
-		return
-
-	set_current_fp(current_fp + amount)
-
-
-func set_current_fp(value: float) -> void:
-	if enemy_data == null:
-		return
-
-	var next_fp := clampf(
-		value,
-		0.0,
-		get_max_fp()
-	)
-	if is_equal_approx(current_fp, next_fp):
-		return
-
-	current_fp = next_fp
-	stats_changed.emit()
 
 
 func set_defeated(defeated: bool) -> void:
 	is_defeated = defeated
 	visible = not is_defeated
-
-	set_deferred(
-		"collision_layer",
-		0 if is_defeated
-		else _active_collision_layer
-	)
+	set_deferred("collision_layer", 0 if is_defeated else _active_collision_layer)
 
 
-func get_max_hp() -> float:
-	return FORMULAS.resolve_base_max_hp(enemy_data.max_hp, enemy_data.def, enemy_data.spd)
-
-
-func get_max_mp() -> float:
-	return FORMULAS.resolve_base_max_mp(enemy_data.max_mp, enemy_data.atk, enemy_data.spd)
-
-
-func get_max_fp() -> float:
-	return enemy_data.max_fp
-
-
-func get_fp_recovery_spd() -> float:
-	return FORMULAS.resolve_base_fp_recovery(enemy_data.fp_recovery_spd, enemy_data.atk, enemy_data.def)
-
-
-func get_cp() -> float:
-	return FORMULAS.calculate_cp(enemy_data.atk, enemy_data.def, enemy_data.spd)
+func _on_stats_changed() -> void:
+	stats_changed.emit()
+	if stats.current_hp <= 0.0:
+		set_defeated(true)
+	elif stats.current_hp > 0.0 and is_defeated:
+		set_defeated(false)
 
 
 func get_persistent_id() -> String:
@@ -219,64 +103,56 @@ func get_persistent_id() -> String:
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
-
 	if enemy_data == null:
-		warnings.append(
-			"Enemy requires an EnemyData resource."
-		)
+		warnings.append("Enemy requires an EnemyData resource.")
 	elif enemy_data.id.is_empty():
-		warnings.append(
-			"EnemyData requires a non-empty ID."
-		)
+		warnings.append("EnemyData requires a non-empty ID.")
 
-
-	if (
-		enemy_data != null
-		and enemy_data.get_world_texture() == null
-	):
-		warnings.append(
-			"EnemyData requires a world texture or portrait."
-		)
-
+	if enemy_data != null and enemy_data.get_world_texture() == null:
+		warnings.append("EnemyData requires a world texture or portrait.")
 	return warnings
 
 
 func _refresh_visual() -> void:
-	var sprite := get_node_or_null(
-		"Sprite2D"
-	) as Sprite2D
-
+	var sprite := get_node_or_null("Sprite2D") as Sprite2D
 	if sprite == null:
 		return
-
 	if enemy_data == null:
 		sprite.texture = null
 		return
-
 	sprite.texture = enemy_data.get_world_texture()
-	
-	VisualUtils.auto_scale_sprite(
-		sprite,
-		grid_size,
-		enemy_data.visual_scale_multiplier
-	)
+	VisualUtils.auto_scale_sprite(sprite, grid_size, enemy_data.visual_scale_multiplier)
+
 
 func _update_size() -> void:
 	var shape_node = get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if shape_node == null:
 		return
-		
 	var rect_shape = shape_node.shape as RectangleShape2D
 	if rect_shape == null:
 		rect_shape = RectangleShape2D.new()
 		shape_node.shape = rect_shape
-		
 	var tile_size := get_collision_tile_size()
-	rect_shape.size = Vector2(
-		tile_size.x * grid_size.x,
-		tile_size.y * grid_size.y
-	)
+	rect_shape.size = Vector2(tile_size.x * grid_size.x, tile_size.y * grid_size.y)
 
 
 func get_collision_tile_size() -> Vector2:
 	return collision_tile_size
+
+# Proxy methods
+func take_damage(amount: float) -> float: return stats.take_damage(amount)
+func change_hp(amount: float) -> void: stats.change_hp(amount)
+func set_current_hp(value: float) -> void: stats.set_current_hp(value)
+func change_mp(amount: float) -> void: stats.change_mp(amount)
+func set_current_mp(value: float) -> void: stats.set_current_mp(value)
+func change_fp(amount: float) -> void: stats.change_fp(amount)
+func set_current_fp(value: float) -> void: stats.set_current_fp(value)
+
+func get_max_hp() -> float: return stats.get_max_hp()
+func get_max_mp() -> float: return stats.get_max_mp()
+func get_max_fp() -> float: return stats.get_max_fp()
+func get_fp_recovery_spd() -> float: return stats.get_fp_recovery_spd()
+func get_cp() -> float: return stats.get_cp()
+func get_atk() -> float: return stats.get_atk()
+func get_def() -> float: return stats.get_def()
+func get_spd() -> float: return stats.get_spd()

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://rsqfakubom7k" path="res://scripts/floors/floor_3.gd" id="1_kbxsx"]
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_p2ubo"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_kbxsx"]
+[ext_resource type="PackedScene" uid="uid://cheuhwfk50iob" path="res://scenes/interactables/switch.tscn" id="4_137w6"]
 [ext_resource type="PackedScene" uid="uid://bbqsrkhswj4yn" path="res://scenes/actors/enemies/enemy.tscn" id="4_dgw2m"]
 [ext_resource type="Resource" uid="uid://burlvs1omfi2e" path="res://resources/actors/enemy_spd_lv1.tres" id="5_uhbfv"]
 [ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="5_wmq0r"]
@@ -71,6 +72,10 @@ target_spawn_id = &"FromBelowStair"
 direction = 1
 target_floor_id = &"floor_2"
 target_spawn_id = &"FromAboveStair"
+
+[node name="Switch1" parent="Interactables" unique_id=1134718973 instance=ExtResource("4_137w6")]
+position = Vector2(64, -96)
+switch_id = &"switch1"
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1020133424]
 unique_name_in_owner = true

@@ -39,7 +39,6 @@ func _on_floor_switch_state_changed(
 			_update_stairs()
 
 
-
 func _update_stairs() -> void:
 	set_tile_cells_removed(
 		wall_layer,
@@ -49,3 +48,4 @@ func _update_stairs() -> void:
 	up_stair.visible = switch_first.is_active
 	up_stair.monitoring = switch_first.is_active
 	up_stair.monitorable = switch_first.is_active
+	EventBus.system_message_requested.emit("某处的墙壁消失了，显露出了楼梯。")

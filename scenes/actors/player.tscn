@@ -5,6 +5,9 @@
 [ext_resource type="Resource" uid="uid://busl32dqnk4m7" path="res://resources/actors/player.tres" id="2_7wueq"]
 [ext_resource type="Script" uid="uid://ch3bhi5uh7oog" path="res://scripts/inventory/inventory.gd" id="4_7wueq"]
 [ext_resource type="Script" uid="uid://cpdqspxx7va8u" path="res://scripts/inventory/equipment_loadout.gd" id="5_oomub"]
+[ext_resource type="Script" uid="uid://ckgv8u3ut5g48" path="res://scripts/actors/components/player_stats.gd" id="6_stats"]
+[ext_resource type="Script" uid="uid://db0x0ckp4oec5" path="res://scripts/actors/components/player_progression.gd" id="7_prog"]
+[ext_resource type="Script" uid="uid://d35jxjuymvv01" path="res://scripts/actors/components/player_movement.gd" id="8_move"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cacbb"]
 size = Vector2(24, 24)
@@ -38,3 +41,12 @@ script = ExtResource("4_7wueq")
 
 [node name="Equipment" type="Node" parent="." unique_id=1081193953]
 script = ExtResource("5_oomub")
+
+[node name="PlayerStats" type="Node" parent="." unique_id=307609064]
+script = ExtResource("6_stats")
+
+[node name="PlayerProgression" type="Node" parent="." unique_id=1569988738]
+script = ExtResource("7_prog")
+
+[node name="PlayerMovement" type="Node" parent="." unique_id=958261956]
+script = ExtResource("8_move")

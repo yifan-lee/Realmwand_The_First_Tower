@@ -43,13 +43,4 @@ func handle_event(event_name: StringName, event_data: Variant) -> void:
 					
 		Step.WAITING_FOR_EQUIP:
 			if event_name == &"item_equipped":
-				_ui.show_prompt("穿戴成功！教程结束。", true)
-				# 等待玩家按下确认键 (通过 tutorial_ui 的 confirmed 信号触发)
-				if not _ui.confirmed.is_connected(_on_ui_confirmed):
-					_ui.confirmed.connect(_on_ui_confirmed)
-
-
-func _on_ui_confirmed() -> void:
-	if _ui.confirmed.is_connected(_on_ui_confirmed):
-		_ui.confirmed.disconnect(_on_ui_confirmed)
-	complete()
+				complete()

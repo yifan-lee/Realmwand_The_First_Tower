@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bbqsrkhswj4yn"]
 
 [ext_resource type="Script" uid="uid://bggw6i6808viq" path="res://scripts/actors/enemy.gd" id="1_gejs6"]
+[ext_resource type="Script" path="res://scripts/actors/components/enemy_stats.gd" id="2_stats"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ltqiy"]
 size = Vector2(24, 20)
@@ -16,3 +17,6 @@ texture_filter = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619728797]
 shape = SubResource("RectangleShape2D_ltqiy")
+
+[node name="EnemyStats" type="Node" parent="."]
+script = ExtResource("2_stats")

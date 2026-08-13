@@ -8,6 +8,10 @@ extends PanelContainer
 var _message_token := 0
 
 
+func _ready() -> void:
+	EventBus.system_message_requested.connect(show_message)
+
+
 func show_message(message: String) -> void:
 	_message_token += 1
 	message_label.text = message

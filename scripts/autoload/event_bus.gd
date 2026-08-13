@@ -1,6 +1,7 @@
 extends Node
 
 signal game_event(event_name: StringName, event_data: Variant)
+signal system_message_requested(message: String)
 
 signal floor_change_requested(
 	target_floor_id: StringName,
