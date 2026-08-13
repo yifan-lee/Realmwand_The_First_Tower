@@ -105,8 +105,14 @@ func change_floor(
 	target_floor_id: StringName,
 	target_spawn_id: StringName
 ) -> void:
+	player.set_input_enabled(false)
+	
+	EventBus.screen_fade_out_started.emit()
+	await EventBus.screen_fade_out_finished
+
 	var new_floor := _instantiate_floor(target_floor_id)
 	if new_floor == null:
+		player.set_input_enabled(true)
 		return
 
 	# Add to tree temporarily to safely resolve node paths (like markers)
@@ -119,13 +125,18 @@ func change_floor(
 	if spawn_point == null:
 		floor_container.remove_child(new_floor)
 		new_floor.queue_free()
+		player.set_input_enabled(true)
 		return
 
-	player.set_input_enabled(false)
 
 	_set_current_floor(new_floor)
 	
 	player.global_position = spawn_point.global_position
+
+	var f_name = new_floor.get("display_name") if "display_name" in new_floor else ""
+	var f_desc = new_floor.get("description") if "description" in new_floor else ""
+	EventBus.screen_fade_in_with_info_started.emit(f_name, f_desc)
+	await EventBus.screen_fade_in_finished
 
 	player.set_input_enabled(true)
 

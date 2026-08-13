@@ -5,12 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_muj50"]
 [ext_resource type="PackedScene" path="res://scenes/actors/enemies/boss.tscn" id="4_i8mcm"]
 [ext_resource type="Resource" uid="uid://7funk5mmnmka" path="res://resources/actors/boss_atk.tres" id="5_pvo1t"]
+[ext_resource type="PackedScene" uid="uid://cn4w53wcxrhf7" path="res://scenes/interactables/item_pickup.tscn" id="6_sd13j"]
+[ext_resource type="Resource" uid="uid://djgmxkplhaese" path="res://resources/items/hp_recovery_lv2.tres" id="7_wwa7h"]
 
 [node name="Floor" type="Node2D" unique_id=1021498195]
 script = ExtResource("1_hw53x")
 floor_id = &"floor_4"
-display_name = null
-description = null
+display_name = "四层：攻击之王"
+description = "打断。说你呢。打断啊！打断啊啊啊！"
 default_spawn_id = null
 
 [node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
@@ -59,11 +61,42 @@ unique_name_in_owner = true
 
 [node name="Boss" parent="Enemies" unique_id=334746824 instance=ExtResource("4_i8mcm")]
 position = Vector2(0, -608)
-visual_scale_multiplier = null
 enemy_data = ExtResource("5_pvo1t")
 
 [node name="Pickups" type="Node2D" parent="." unique_id=1104918386]
 unique_name_in_owner = true
+
+[node name="HPRecoveryLv201" parent="Pickups" unique_id=1816246793 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -32)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv202" parent="Pickups" unique_id=1464297194 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -64)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv203" parent="Pickups" unique_id=382470154 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -96)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv204" parent="Pickups" unique_id=844148010 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -128)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv205" parent="Pickups" unique_id=2051863383 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -160)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv206" parent="Pickups" unique_id=518816957 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -192)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv207" parent="Pickups" unique_id=55053437 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -224)
+item_data = ExtResource("7_wwa7h")
+
+[node name="HPRecoveryLv208" parent="Pickups" unique_id=1811365605 instance=ExtResource("6_sd13j")]
+position = Vector2(0, -256)
+item_data = ExtResource("7_wwa7h")
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
 unique_name_in_owner = true

@@ -12,6 +12,6 @@ id = &"enemy_balance_lv2"
 display_name = "2级平衡怪"
 atk = 1000.0
 def = 1000.0
-spd = 1000.0
+spd = 50.0
 portrait = ExtResource("4_au5ky")
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"

@@ -19,6 +19,7 @@ enum ActionPage {
 @onready var shared_atb_track: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track
 @onready var player_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker
 @onready var enemy_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker
+@onready var player_atb_preview_marker: ColorRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerCastPreviewMarker
 @onready var skills_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/SkillsTab
 @onready var items_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/ItemsTab
 @onready var escape_tab: Button = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionTabs/EscapeTab
@@ -35,7 +36,8 @@ var _current_page: ActionPage = ActionPage.SKILLS
 var _player_atb_value := 0.0
 var _enemy_atb_value := 0.0
 var _battle_manager: BattleManager
-
+var _player_casting_label: Label
+var _enemy_casting_label: Label
 
 
 func _ready() -> void:
@@ -49,6 +51,26 @@ func _ready() -> void:
 	skills_tab.focus_entered.connect(_show_action_page.bind(ActionPage.SKILLS, false))
 	items_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ITEMS, false))
 	escape_tab.focus_entered.connect(_show_action_page.bind(ActionPage.ESCAPE, false))
+	
+	_player_casting_label = _create_casting_label(player_atb_marker, Color(0.5, 0.8, 1.0))
+	_enemy_casting_label = _create_casting_label(enemy_atb_marker, Color(1.0, 0.4, 0.4))
+
+
+func _create_casting_label(parent: Control, color: Color) -> Label:
+	var label = Label.new()
+	label.text = "吟唱中"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
+	label.visible = false
+	parent.add_child(label)
+	
+	label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	label.position.y = -18
+	return label
 
 
 func _process(_delta: float) -> void:
@@ -56,13 +78,36 @@ func _process(_delta: float) -> void:
 		return
 	_refresh_action_tab_highlights()
 
+	if player_atb_preview_marker != null and player_atb_preview_marker.visible:
+		var time_sec = Time.get_ticks_msec() / 1000.0
+		player_atb_preview_marker.modulate.a = (sin(time_sec * 8.0) + 1.0) * 0.5 + 0.2
+
+	if _battle_manager != null:
+		var time_sec = Time.get_ticks_msec() / 1000.0
+		
+		var p_casting = _battle_manager.is_player_casting()
+		_player_casting_label.visible = p_casting
+		if p_casting:
+			player_atb_marker.modulate = Color(0.6, 0.8, 1.0)
+			player_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
+		else:
+			player_atb_marker.modulate = Color.WHITE
+			
+		var e_casting = _battle_manager.is_enemy_casting()
+		_enemy_casting_label.visible = e_casting
+		if e_casting:
+			enemy_atb_marker.modulate = Color(1.0, 0.4, 0.4)
+			enemy_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
+		else:
+			enemy_atb_marker.modulate = Color.WHITE
+
 	if _player != null:
 		player_stats.refresh_runtime_resources(
 			_player.current_hp,
 			_player.current_mp,
 			_player.current_fp
 		)
-		skill_panel.update_availability(_can_cast_skill)
+		skill_panel.update_availability(_can_cast_skill, _get_skill_cd)
 	if _enemy != null:
 		enemy_stats.refresh_runtime_resources(
 			_enemy.current_hp,
@@ -149,7 +194,7 @@ func refresh_stats() -> void:
 	player_stats.display_stats(_build_player_view())
 	enemy_stats.display_stats(_build_enemy_view())
 	_update_atb_markers(_player_atb_value, _enemy_atb_value)
-	skill_panel.update_availability(_can_cast_skill)
+	skill_panel.update_availability(_can_cast_skill, _get_skill_cd)
 
 
 func set_enemy_forecast(skill: SkillData) -> void:
@@ -157,8 +202,16 @@ func set_enemy_forecast(skill: SkillData) -> void:
 	if forecast_panel != null and _enemy != null:
 		forecast_panel.display_forecast(skill, _enemy.enemy_data.display_name)
 
+func _get_skill_cd(skill: SkillData) -> int:
+	if _battle_manager != null:
+		return _battle_manager.get_skill_cooldown(skill.id)
+	return 0
+
+
 func _can_cast_skill(skill: SkillData) -> bool:
 	if _player == null:
+		return false
+	if _get_skill_cd(skill) > 0:
 		return false
 	for cost: ActionCostData in skill.costs:
 		match cost.cost_type:
@@ -275,7 +328,8 @@ func _on_skill_focused(skill: SkillData) -> void:
 	enemy_stats.display_stats(enemy_view)
 	_update_atb_markers(
 		player_view.get_atb_bar_value(),
-		enemy_view.get_atb_bar_value()
+		enemy_view.get_atb_bar_value(),
+		player_view.get_preview_atb() if player_view.has_atb_change() else -1.0
 	)
 	var info := EntryInfoViewData.new()
 	info.title = skill.display_name
@@ -320,6 +374,11 @@ func _on_item_focused(item: ItemData) -> void:
 	)
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
+	_update_atb_markers(
+		player_view.get_atb_bar_value(),
+		enemy_view.get_atb_bar_value(),
+		player_view.get_preview_atb() if player_view.has_atb_change() else -1.0
+	)
 	var info := EntryInfoViewData.new()
 	info.title = item.display_name
 	info.icon = item.icon
@@ -408,19 +467,41 @@ func _build_enemy_view() -> ActorStatsViewData:
 
 func _update_atb_markers(
 	player_value: float,
-	enemy_value: float
+	enemy_value: float,
+	player_preview_value: float = -1.0
 ) -> void:
 	if shared_atb_track == null:
 		return
 
-	_set_atb_marker(player_atb_marker, player_value, -0.5)
-	_set_atb_marker(enemy_atb_marker, enemy_value, 0.5)
+	_set_atb_marker(player_atb_marker, player_value)
+	_set_atb_marker(enemy_atb_marker, enemy_value)
+
+	if player_atb_preview_marker != null:
+		if player_preview_value >= 0.0:
+			player_atb_preview_marker.visible = true
+			var travel_distance := maxf(
+				0.0,
+				shared_atb_track.size.x - player_atb_preview_marker.size.x
+			)
+			var marker_x := clampf(
+				travel_distance * clampf(
+					player_preview_value / FORMULAS.ATB_MAX,
+					0.0,
+					1.0
+				),
+				0.0,
+				travel_distance
+			)
+
+			player_atb_preview_marker.offset_left = marker_x
+			player_atb_preview_marker.offset_right = marker_x + 3.0
+		else:
+			player_atb_preview_marker.visible = false
 
 
 func _set_atb_marker(
 	marker: TextureRect,
-	value: float,
-	lane_offset: float
+	value: float
 ) -> void:
 	if marker == null:
 		return
@@ -434,7 +515,7 @@ func _set_atb_marker(
 		value / FORMULAS.ATB_MAX,
 		0.0,
 		1.0
-		) + marker.size.x * lane_offset,
+		),
 		0.0,
 		travel_distance
 	)

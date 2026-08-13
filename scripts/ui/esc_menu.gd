@@ -439,8 +439,9 @@ func _on_equip_slot_chosen(slot: int) -> void:
 	_pending_equip_item = null
 	_preview_target_slot = -1
 	refresh_content()
-	inventory_panel.focus_first_item()
-
+	if not inventory_panel.focus_first_item():
+		if is_open() and _current_page == MainPage.INVENTORY:
+			category_buttons[_current_category].grab_focus()
 
 func _on_equip_slot_previewed(slot: int) -> void:
 	if _pending_equip_item == null or _player == null:

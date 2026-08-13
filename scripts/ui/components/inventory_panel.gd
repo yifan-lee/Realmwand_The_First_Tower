@@ -73,10 +73,12 @@ func refresh() -> void:
 		row.entry_selected.connect(_on_entry_selected)
 		row.entry_focused.connect(_on_entry_focused)
 
-	if focused_index >= 0:
+	if focused_index >= 0 and not _rows.is_empty():
 		var target_index := clampi(focused_index, 0, _rows.size() - 1)
-		if target_index >= 0 and target_index < _rows.size():
-			_rows[target_index].grab_focus()
+		_rows[target_index].grab_focus()
+	elif focused_index >= 0 and _rows.is_empty():
+		get_viewport().gui_release_focus()
+
 
 
 func set_item_type_filter(item_type: int) -> void:

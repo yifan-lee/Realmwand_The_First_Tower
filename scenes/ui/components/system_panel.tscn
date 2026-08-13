@@ -56,6 +56,7 @@ text = "已有存档"
 [node name="SaveScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1274534234]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
+follow_focus = true
 size_flags_vertical = 3
 
 [node name="SaveRows" type="VBoxContainer" parent="MarginContainer/Content/SaveScroll" unique_id=1734674401]

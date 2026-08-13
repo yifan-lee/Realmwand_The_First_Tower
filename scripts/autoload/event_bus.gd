@@ -9,6 +9,11 @@ signal floor_change_requested(
 
 signal floor_changed(floor: Node)
 
+signal screen_fade_out_started
+signal screen_fade_out_finished
+signal screen_fade_in_with_info_started(floor_name: String, floor_desc: String)
+signal screen_fade_in_finished
+
 signal battle_requested(
 	enemy: Enemy,
 	player: Player

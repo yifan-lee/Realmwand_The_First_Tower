@@ -313,10 +313,10 @@ item_data = ExtResource("20_ktu67")
 position = Vector2(32, -288)
 item_data = ExtResource("20_ktu67")
 
-[node name="Stone" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=594253039 instance=ExtResource("3_gkij4")]
-position = Vector2(-368, -248)
+[node name="HPLV205" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=594253039 instance=ExtResource("3_gkij4")]
+position = Vector2(-376, -176)
 pickup_id = &"stone01"
-item_data = ExtResource("4_mjnjk")
+item_data = ExtResource("20_ktu67")
 
 [node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=226122769 instance=ExtResource("3_gkij4")]
 position = Vector2(-280, -256)

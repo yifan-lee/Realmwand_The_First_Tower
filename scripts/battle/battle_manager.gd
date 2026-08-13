@@ -5,6 +5,7 @@ const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 
 signal battle_started(enemy: Enemy)
 signal battle_finished(victory: bool)
+signal player_turn_started
 
 enum BattleState {
 	INACTIVE,
@@ -82,6 +83,7 @@ func _process(delta: float) -> void:
 			_battle_ui.set_action_available(true)
 			_battle_ui.show_message("轮到你行动，战斗时间已暂停。")
 			_battle_ui.set_atb(_player_atb, _enemy_atb)
+			player_turn_started.emit()
 			return
 
 	if _enemy_atb >= FORMULAS.ATB_MAX:
@@ -535,6 +537,7 @@ func _interrupt_actor(target_actor: Node) -> bool:
 
 		_enemy_casting_skill = null
 		_enemy_atb = 0.0
+		_queue_enemy_next_skill()
 		return true
 
 	return false
@@ -545,6 +548,10 @@ func is_player_casting() -> bool:
 
 func is_enemy_casting() -> bool:
 	return _enemy_casting_skill != null
+
+
+func get_skill_cooldown(skill_id: StringName) -> int:
+	return int(_cooldowns.get(skill_id, 0.0))
 
 
 func pause_battle() -> void:

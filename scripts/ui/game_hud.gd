@@ -11,8 +11,16 @@ extends CanvasLayer
 @onready var game_message_panel: GameMessagePanel = (
 	$HudRoot/MessageArea/GameMessagePanel
 )
+@onready var screen_fade: ColorRect = $HudRoot/ScreenFade
+@onready var floor_info_hud: FloorInfoHUD = $HudRoot/FloorInfoHUD
 
 var _player: Player
+var _floor_info_original_pos: Vector2
+
+
+func _ready() -> void:
+	EventBus.screen_fade_out_started.connect(_on_screen_fade_out_started)
+	EventBus.screen_fade_in_with_info_started.connect(_on_screen_fade_in_with_info_started)
 
 
 func bind_player(player: Player) -> void:
@@ -77,3 +85,38 @@ func show_message(message: String) -> void:
 
 func clear_message() -> void:
 	game_message_panel.clear_message()
+
+
+func _on_screen_fade_out_started() -> void:
+	var tween := create_tween()
+	tween.tween_property(screen_fade, "modulate:a", 1.0, 0.5)
+	tween.finished.connect(func(): EventBus.screen_fade_out_finished.emit())
+
+
+func _on_screen_fade_in_with_info_started(floor_name: String, floor_desc: String) -> void:
+	floor_info_hud.set_info(floor_name, floor_desc)
+	
+	# Wait one frame for the PanelContainer to recalculate its height based on the new text
+	await get_tree().process_frame
+	
+	_floor_info_original_pos = floor_info_hud.position
+	
+	# Initial scale and center position
+	floor_info_hud.scale = Vector2(1.5, 1.5)
+	var screen_size = get_viewport().get_visible_rect().size
+	var target_center = (screen_size - floor_info_hud.size * floor_info_hud.scale) / 2.0
+	floor_info_hud.position = target_center
+
+	var tween := create_tween()
+	
+	# Wait in the center for 2 seconds
+	tween.tween_interval(1.5)
+	
+	# Shrink and move
+	tween.tween_property(floor_info_hud, "scale", Vector2(1.0, 1.0), 1.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(floor_info_hud, "position", _floor_info_original_pos, 1.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	
+	# Fade in screen (fade out the black rect)
+	tween.parallel().tween_property(screen_fade, "modulate:a", 0.0, 1.5).set_trans(Tween.TRANS_LINEAR)
+	
+	tween.tween_callback(func(): EventBus.screen_fade_in_finished.emit())

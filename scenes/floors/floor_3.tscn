@@ -251,11 +251,11 @@ position = Vector2(480, -448)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv206" parent="Pickups" unique_id=1828611389 instance=ExtResource("5_wmq0r")]
-position = Vector2(128, -256)
+position = Vector2(128, -352)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv207" parent="Pickups" unique_id=1507960915 instance=ExtResource("5_wmq0r")]
-position = Vector2(160, -256)
+position = Vector2(160, -352)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv101" parent="Pickups" unique_id=1835675025 instance=ExtResource("5_wmq0r")]
@@ -363,11 +363,11 @@ position = Vector2(32, -64)
 item_data = ExtResource("13_fkkej")
 
 [node name="FragmentBlueLv103" parent="Pickups" unique_id=1770964468 instance=ExtResource("5_wmq0r")]
-position = Vector2(128, -352)
+position = Vector2(128, -256)
 item_data = ExtResource("13_fkkej")
 
 [node name="FragmentBlueLv104" parent="Pickups" unique_id=513012280 instance=ExtResource("5_wmq0r")]
-position = Vector2(160, -352)
+position = Vector2(160, -256)
 item_data = ExtResource("13_fkkej")
 
 [node name="FragmentRedLv101" parent="Pickups" unique_id=693440774 instance=ExtResource("5_wmq0r")]

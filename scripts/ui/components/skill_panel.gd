@@ -35,7 +35,6 @@ func refresh() -> void:
 		skill_rows.remove_child(child)
 		child.queue_free()
 
-	_skills.sort_custom(_sort_skills)
 	empty_label.visible = _skills.is_empty()
 
 	for skill: SkillData in _skills:
@@ -65,11 +64,17 @@ func refresh() -> void:
 			_on_entry_focused
 		)
 
-func update_availability(usability_check: Callable) -> void:
+func update_availability(usability_check: Callable, cd_check: Callable = Callable()) -> void:
 	for i in range(_skills.size()):
 		if i < _rows.size():
 			var skill: SkillData = _skills[i]
 			_rows[i].disabled = not usability_check.call(skill)
+			var text = _build_row_text(skill)
+			if not cd_check.is_null():
+				var cd = cd_check.call(skill)
+				if cd > 0:
+					text += " (CD: %d)" % cd
+			_rows[i].text = text
 
 
 func get_skill_row(skill_id: StringName) -> Control:

@@ -5,13 +5,10 @@ extends PanelContainer
 @onready var desc_label: Label = $Content/DescLabel
 
 func _ready() -> void:
-	EventBus.floor_changed.connect(_on_floor_changed)
 	title_label.text = ""
 	desc_label.text = ""
 	
-func _on_floor_changed(floor: Node) -> void:
-	if floor == null:
-		return
-	title_label.text = floor.get("display_name") if "display_name" in floor else ""
-	desc_label.text = floor.get("description") if "description" in floor else ""
+func set_info(title: String, desc: String) -> void:
+	title_label.text = title
+	desc_label.text = desc
 

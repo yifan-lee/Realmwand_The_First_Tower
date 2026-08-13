@@ -25,6 +25,7 @@ layout_mode = 2
 
 [node name="SkillScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1406423143]
 layout_mode = 2
+follow_focus = true
 size_flags_vertical = 3
 
 [node name="SkillRows" type="VBoxContainer" parent="MarginContainer/Content/SkillScroll" unique_id=445359442]

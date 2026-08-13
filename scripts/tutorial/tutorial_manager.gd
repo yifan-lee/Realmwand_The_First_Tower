@@ -41,6 +41,7 @@ func setup(
 		
 	if _battle_manager != null:
 		_battle_manager.battle_started.connect(func(enemy): EventBus.game_event.emit(&"battle_started", enemy))
+		_battle_manager.player_turn_started.connect(func(): EventBus.game_event.emit(&"player_turn_started", null))
 	
 	_load_tutorials()
 
@@ -54,6 +55,7 @@ func _load_tutorials() -> void:
 	var tut5 = preload("res://scripts/tutorial/tutorials/hp_item_tutorial.gd").new()
 	var tut6 = preload("res://scripts/tutorial/tutorials/fp_item_tutorial.gd").new()
 	var tut7 = preload("res://scripts/tutorial/tutorials/interrupt_tutorial.gd").new()
+	var tut8 = preload("res://scripts/tutorial/tutorials/cast_time_tutorial.gd").new()
 	all_tutorials.append(tut1)
 	all_tutorials.append(tut2)
 	all_tutorials.append(tut3)
@@ -61,6 +63,7 @@ func _load_tutorials() -> void:
 	all_tutorials.append(tut5)
 	all_tutorials.append(tut6)
 	all_tutorials.append(tut7)
+	all_tutorials.append(tut8)
 	
 	for tut in all_tutorials:
 		tut.setup(self, _tutorial_ui)

@@ -60,4 +60,15 @@ custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 theme_type_variation = &"TransparentPanelContainer"
 
+[node name="ScreenFade" type="ColorRect" parent="HudRoot"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="FloorInfoHUD" parent="HudRoot" unique_id=1125122122 instance=ExtResource("5_floorinfo")]

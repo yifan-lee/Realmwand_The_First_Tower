@@ -1,9 +1,16 @@
 [gd_scene format=3 uid="uid://bed4t2ru8s5n2"]
 
+[ext_resource type="Script" uid="uid://diau64006ed6p" path="res://scripts/floors/floor.gd" id="1_bq4r8"]
 [ext_resource type="TileSet" uid="uid://c5uw1i2xllhe2" path="res://resources/tilesets/tower_tileset.tres" id="2_bq4r8"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="3_bq4r8"]
 
-[node name="Floor" type="Node2D" unique_id=1021498195]
+[node name="Floor" type="Node2D" unique_id=141402115]
+visible = false
+script = ExtResource("1_bq4r8")
+floor_id = &"floor_5"
+display_name = "五层"
+description = "我还没想好"
+metadata/_custom_type_script = "uid://diau64006ed6p"
 
 [node name="GroundLayer" type="TileMapLayer" parent="." unique_id=370044564]
 unique_name_in_owner = true

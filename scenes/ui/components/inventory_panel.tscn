@@ -26,6 +26,7 @@ theme_override_constants/separation = 12
 
 [node name="ItemScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1908676095]
 layout_mode = 2
+follow_focus = true
 size_flags_vertical = 3
 
 [node name="ItemRows" type="VBoxContainer" parent="MarginContainer/Content/ItemScroll" unique_id=1204182463]

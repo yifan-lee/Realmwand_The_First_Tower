@@ -121,9 +121,7 @@ func get_fp_bar_value(time_sec: float = -1.0) -> float:
 
 
 func get_atb_bar_value(time_sec: float = -1.0) -> float:
-	if not has_atb_change():
-		return current_atb
-	return lerpf(current_atb, get_preview_atb(), get_flash_pulse(time_sec))
+	return current_atb
 
 
 func preview_skill_cost(costs: Array[ActionCostData]) -> void:
