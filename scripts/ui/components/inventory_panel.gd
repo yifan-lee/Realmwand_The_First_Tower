@@ -6,7 +6,7 @@ signal item_focused(item: ItemData)
 
 @export var row_scene: PackedScene
 
-@onready var item_rows: VBoxContainer = (
+@onready var item_rows: FocusableList = (
 	$MarginContainer/Content/ItemScroll/ItemRows
 )
 @onready var empty_label: Label = (
@@ -16,7 +16,6 @@ signal item_focused(item: ItemData)
 var _inventory: Inventory
 var _item_type_filter: int = -1
 var _battle_only: bool = false
-var _rows: Array[SelectableListRow] = []
 
 
 func bind_inventory(inventory: Inventory) -> void:
@@ -33,11 +32,8 @@ func bind_inventory(inventory: Inventory) -> void:
 
 
 func refresh() -> void:
-	var focused_index := _focused_row_index(get_viewport().gui_get_focus_owner())
-	_rows.clear()
-	for child: Node in item_rows.get_children():
-		item_rows.remove_child(child)
-		child.queue_free()
+	var focused_index := item_rows.get_focused_row_index(get_viewport().gui_get_focus_owner())
+	item_rows.clear_rows()
 
 	if _inventory == null:
 		empty_label.visible = true
@@ -59,8 +55,7 @@ func refresh() -> void:
 			push_error("InventoryPanel row_scene has an invalid root.")
 			return
 
-		item_rows.add_child(row)
-		_rows.append(row)
+		item_rows.add_row(row)
 		row.setup(
 			item,
 			"%s  ×%d" % [
@@ -73,10 +68,10 @@ func refresh() -> void:
 		row.entry_selected.connect(_on_entry_selected)
 		row.entry_focused.connect(_on_entry_focused)
 
-	if focused_index >= 0 and not _rows.is_empty():
-		var target_index := clampi(focused_index, 0, _rows.size() - 1)
-		_rows[target_index].grab_focus()
-	elif focused_index >= 0 and _rows.is_empty():
+	if focused_index >= 0 and not item_rows.is_empty():
+		var target_index := clampi(focused_index, 0, item_rows.get_rows().size() - 1)
+		item_rows.get_rows()[target_index].grab_focus()
+	elif focused_index >= 0 and item_rows.is_empty():
 		get_viewport().gui_release_focus()
 
 
@@ -93,49 +88,6 @@ func clear_filter() -> void:
 func set_battle_only(enabled: bool) -> void:
 	_battle_only = enabled
 	refresh()
-
-
-func focus_first_item() -> bool:
-	if _rows.is_empty():
-		return false
-	_rows.front().grab_focus()
-	return true
-
-
-func is_first_item_focused() -> bool:
-	return (
-		not _rows.is_empty()
-		and get_viewport().gui_get_focus_owner() == _rows.front()
-	)
-
-
-func has_item_focus(focus: Control = null) -> bool:
-	var resolved_focus := focus
-	if resolved_focus == null:
-		resolved_focus = get_viewport().gui_get_focus_owner()
-	return _focused_row_index(resolved_focus) >= 0
-
-
-func navigate_item_focus(direction: int) -> bool:
-	var current_index := _focused_row_index(
-		get_viewport().gui_get_focus_owner()
-	)
-	if current_index < 0:
-		return false
-	var next_index := clampi(
-		current_index + direction,
-		0,
-		_rows.size() - 1
-	)
-	_rows[next_index].grab_focus()
-	return true
-
-
-func _focused_row_index(focus: Control) -> int:
-	for index: int in _rows.size():
-		if focus == _rows[index]:
-			return index
-	return -1
 
 
 func _matches_filter(item: ItemData) -> bool:

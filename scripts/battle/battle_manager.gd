@@ -66,11 +66,11 @@ func _process(delta: float) -> void:
 
 	_player_atb = minf(
 		FORMULAS.ATB_MAX,
-		_player_atb + FORMULAS.calculate_atb_gain(get_player_stat(ActionEffectData.EffectType.SPD), delta)
+		_player_atb + FORMULAS.calculate_atb_gain(get_actor_stat(_player, ActionEffectData.EffectType.SPD), delta)
 	)
 	_enemy_atb = minf(
 		FORMULAS.ATB_MAX,
-		_enemy_atb + FORMULAS.calculate_atb_gain(get_enemy_stat(ActionEffectData.EffectType.SPD), delta)
+		_enemy_atb + FORMULAS.calculate_atb_gain(get_actor_stat(_enemy, ActionEffectData.EffectType.SPD), delta)
 	)
 
 	if _player_atb >= FORMULAS.ATB_MAX:
@@ -141,7 +141,7 @@ func _get_skill_cost(skill: SkillData, type: ActionCostData.CostType) -> float:
 func _on_skill_selected(skill: SkillData) -> void:
 	if _state != BattleState.WAITING_FOR_PLAYER or skill == null:
 		return
-	if _cooldowns.get(skill.id, 0.0) > 0.0:
+	if get_skill_cooldown(skill.id, false) > 0.0:
 		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
 		return
 		
@@ -186,17 +186,20 @@ func _on_item_selected(item: ItemData) -> void:
 	if not item.usable_in_battle:
 		_battle_ui.show_message("这个物品不能在战斗中使用。")
 		return
+		
 	_consume_action_charges(false)
-	_apply_effects(item.effects, false)
+	
+	var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], self)
+	_apply_preview(preview)
+	
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
 	_battle_ui.show_message("使用了 %s。" % item.display_name)
 	
-	var is_free_action := false
-	for effect in item.effects:
-		if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
-			is_free_action = true
-			break
+	var player_delta = preview.actor_deltas.get(_player, null)
+	var is_free_action = false
+	if player_delta != null and player_delta.is_free_action:
+		is_free_action = true
 	_complete_player_action(is_free_action)
 
 
@@ -255,36 +258,19 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	if resolved_skill == null:
 		return
 
-	var applied := 0.0
-	for effect in resolved_skill.effects:
-		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
-			var target_def = get_enemy_stat(ActionEffectData.EffectType.DEF)
-			if effect.target_type == ActionEffectData.TargetType.SELF:
-				target_def = get_player_stat(ActionEffectData.EffectType.DEF)
-			var skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _player_effects, resolved_skill.skill_type)
-			var damage: float = FORMULAS.calculate_skill_damage(
-				get_player_stat(ActionEffectData.EffectType.ATK),
-				skill_power,
-				target_def
-			)
-			if effect.target_type == ActionEffectData.TargetType.ENEMY:
-				applied += _enemy.take_damage(damage)
-			else:
-				_player.change_hp(-damage)
-				applied += damage
-	
 	_consume_action_charges(false)
-	_apply_effects(resolved_skill.effects, false)
-	if applied > 0.0:
-		_battle_ui.show_message("%s 造成了 %.0f 点伤害。" % [resolved_skill.display_name, applied])
-	else:
-		_battle_ui.show_message("使用了 %s。" % resolved_skill.display_name)
+	var preview = BattleCalculator.evaluate_skill(resolved_skill, _player, [_enemy], self)
+	_apply_preview(preview, resolved_skill.effects, false)
 	
-	var is_free_action := false
-	for effect in resolved_skill.effects:
-		if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
-			is_free_action = true
-			break
+	var message = "使用了 %s。" % resolved_skill.display_name
+	for extra in preview.extra_messages:
+		message += "\n" + extra
+	_battle_ui.show_message(message)
+	
+	var player_delta = preview.actor_deltas.get(_player, null)
+	var is_free_action = false
+	if player_delta != null and player_delta.is_free_action:
+		is_free_action = true
 	_complete_player_action(is_free_action)
 	if _enemy.is_defeated:
 		_finish_battle(true)
@@ -297,54 +283,72 @@ func _release_enemy_skill() -> void:
 
 
 func _resolve_enemy_attack(skill: SkillData) -> void:
-	var applied := 0.0
 	var skill_name := "攻击"
 	if skill != null:
 		skill_name = skill.display_name
-		for effect in skill.effects:
-			if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
-				var target_def = get_player_stat(ActionEffectData.EffectType.DEF)
-				if effect.target_type == ActionEffectData.TargetType.SELF:
-					target_def = get_enemy_stat(ActionEffectData.EffectType.DEF)
-				var skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _enemy_effects, skill.skill_type)
-				var damage: float = FORMULAS.calculate_skill_damage(
-					get_enemy_stat(ActionEffectData.EffectType.ATK),
-					skill_power,
-					target_def
-				)
-				if effect.target_type == ActionEffectData.TargetType.ENEMY:
-					_player.change_hp(-damage)
-					applied += damage
-				else:
-					_enemy.take_damage(damage)
-					applied += damage
-	else:
-		# 普通攻击
-		var damage: float = FORMULAS.calculate_skill_damage(
-			get_enemy_stat(ActionEffectData.EffectType.ATK),
-			1.0,
-			get_player_stat(ActionEffectData.EffectType.DEF)
-		)
-		_player.change_hp(-damage)
-		applied = damage
+		
+	var preview = BattleCalculator.evaluate_skill(skill, _enemy, [_player], self)
 	_consume_action_charges(true)
 	
-	var is_free_action := false
-	if skill != null:
-		_apply_effects(skill.effects, true)
-		for effect in skill.effects:
-			if effect.effect_type == ActionEffectData.EffectType.FREE_ACTION:
-				is_free_action = true
-				break
+	if skill == null:
+		# Fallback to basic attack if no skill
+		var damage: float = FORMULAS.calculate_skill_damage(
+			get_actor_stat(_enemy, ActionEffectData.EffectType.ATK),
+			1.0,
+			get_actor_stat(_player, ActionEffectData.EffectType.DEF)
+		)
+		_player.change_hp(-damage)
+		_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage])
+	else:
+		_apply_preview(preview, skill.effects, true)
+		var message = "%s 使用了 %s。" % [_enemy.enemy_data.display_name, skill_name]
+		for extra in preview.extra_messages:
+			message += "\n" + extra
+		_battle_ui.show_message(message)
+	
+	var enemy_delta = preview.actor_deltas.get(_enemy, null)
+	var is_free_action = false
+	if enemy_delta != null and enemy_delta.is_free_action:
+		is_free_action = true
+		
 	if is_free_action:
 		_enemy_atb = FORMULAS.ATB_MAX
 	else:
 		_enemy_atb = 0.0
+		
 	_queue_enemy_next_skill()
 	_battle_ui.refresh_stats()
-	_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, applied])
+	
 	if _player.current_hp <= 0.0:
 		_finish_battle(false)
+
+
+func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[ActionEffectData] = [], caster_is_enemy: bool = false) -> void:
+	for actor in preview.actor_deltas.keys():
+		var delta = preview.actor_deltas[actor]
+		actor.change_hp(delta.hp_delta)
+		actor.change_mp(delta.mp_delta)
+		actor.change_fp(delta.fp_delta)
+		if delta.is_interrupted:
+			_interrupt_actor(actor)
+			
+	# Apply buff/debuff effect data
+	for effect: ActionEffectData in effects_to_apply:
+		if effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_MP and effect.effect_type != ActionEffectData.EffectType.RESTORE_FP and effect.effect_type != ActionEffectData.EffectType.REDUCE_MP and effect.effect_type != ActionEffectData.EffectType.REDUCE_FP and effect.effect_type != ActionEffectData.EffectType.INTERRUPT:
+			if effect.duration_count > 0:
+				var targets_self := effect.target_type == ActionEffectData.TargetType.SELF
+				var target_actor = _enemy if caster_is_enemy else _player
+				if not targets_self:
+					target_actor = _player if caster_is_enemy else _enemy
+					
+				var target_array: Array[Dictionary] = _player_effects
+				if target_actor == _enemy:
+					target_array = _enemy_effects
+					
+				target_array.append({
+					&"effect": effect,
+					&"remaining_count": effect.duration_count,
+				})
 
 
 func _complete_player_action(is_free_action: bool = false) -> void:
@@ -395,12 +399,13 @@ func _get_experience_reward() -> int:
 	)
 
 
-func get_player_effects() -> Array[Dictionary]:
-	return _player_effects
-
-
-func get_enemy_effects() -> Array[Dictionary]:
-	return _enemy_effects
+# New generalized actor functions
+func get_actor_effects(actor: Node) -> Array[Dictionary]:
+	if actor == _player:
+		return _player_effects
+	elif actor == _enemy:
+		return _enemy_effects
+	return []
 
 
 func _consume_action_charges(is_enemy: bool) -> void:
@@ -438,90 +443,35 @@ func _recover_focus_points(delta: float) -> void:
 	)
 
 
-func _get_enemy_usable_skill() -> SkillData:
-	for skill: SkillData in _enemy.enemy_data.skills:
-		if _enemy_cooldowns.get(skill.id, 0.0) > 0.0:
-			continue
-			
-		var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
-		var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
-		var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
-		
-		if _enemy.current_hp <= hp_cost:
-			continue
-		if _enemy.current_mp < mp_cost:
-			continue
-		if _enemy.current_fp < fp_cost:
-			continue
-		return skill
-	return null
-
-
 func _queue_enemy_next_skill() -> void:
 	if _enemy == null or _enemy.is_defeated:
 		_enemy_queued_skill = null
 		_battle_ui.set_enemy_forecast(null)
 		return
-	_enemy_queued_skill = _get_enemy_usable_skill()
+	_enemy_queued_skill = BattleEnemyAI.choose_skill(_enemy, self)
 	_battle_ui.set_enemy_forecast(_enemy_queued_skill)
 
 
-func _apply_effects(
-	effects: Array[ActionEffectData],
-	caster_is_enemy: bool
-) -> void:
-	for effect: ActionEffectData in effects:
-		var targets_self := effect.target_type == ActionEffectData.TargetType.SELF
-		
-		var target_actor = _enemy if caster_is_enemy else _player
-		if not targets_self:
-			target_actor = _player if caster_is_enemy else _enemy
-
-		if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
-			target_actor.change_hp(effect.value)
-		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
-			target_actor.change_mp(effect.value)
-		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
-			target_actor.change_fp(effect.value)
-		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_MP:
-			target_actor.change_mp(-effect.value)
-		elif effect.effect_type == ActionEffectData.EffectType.REDUCE_FP:
-			target_actor.change_fp(-effect.value)
-		elif effect.effect_type == ActionEffectData.EffectType.INTERRUPT:
-			_interrupt_actor(target_actor)
-		elif effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP:
-			if effect.duration_count > 0:
-				var target_array: Array[Dictionary] = _player_effects
-				if target_actor == _enemy:
-					target_array = _enemy_effects
-				target_array.append({
-					&"effect": effect,
-					&"remaining_count": effect.duration_count,
-				})
-		
-
-func get_player_stat(effect_type: int) -> float:
+func get_actor_stat(actor: Node, effect_type: int) -> float:
 	var base_value := 0.0
-	match effect_type:
-		ActionEffectData.EffectType.ATK:
-			base_value = _player.get_atk()
-		ActionEffectData.EffectType.DEF:
-			base_value = _player.get_def()
-		ActionEffectData.EffectType.SPD:
-			base_value = _player.get_spd()
-	return FORMULAS.calculate_effective_stat(base_value, _player_effects, effect_type)
-
-
-func get_enemy_stat(effect_type: int) -> float:
-	var base_value := 0.0
-	match effect_type:
-		ActionEffectData.EffectType.ATK:
-			base_value = _enemy.enemy_data.atk
-		ActionEffectData.EffectType.DEF:
-			base_value = _enemy.enemy_data.def
-		ActionEffectData.EffectType.SPD:
-			base_value = _enemy.enemy_data.spd
-	return FORMULAS.calculate_effective_stat(base_value, _enemy_effects, effect_type)
+	var effects := get_actor_effects(actor)
+	if actor == _player:
+		match effect_type:
+			ActionEffectData.EffectType.ATK:
+				base_value = _player.get_atk()
+			ActionEffectData.EffectType.DEF:
+				base_value = _player.get_def()
+			ActionEffectData.EffectType.SPD:
+				base_value = _player.get_spd()
+	elif actor == _enemy:
+		match effect_type:
+			ActionEffectData.EffectType.ATK:
+				base_value = _enemy.enemy_data.atk
+			ActionEffectData.EffectType.DEF:
+				base_value = _enemy.enemy_data.def
+			ActionEffectData.EffectType.SPD:
+				base_value = _enemy.enemy_data.spd
+	return FORMULAS.calculate_effective_stat(base_value, effects, effect_type)
 
 
 func _interrupt_actor(target_actor: Node) -> bool:
@@ -544,15 +494,22 @@ func _interrupt_actor(target_actor: Node) -> bool:
 
 	return false
 
+func is_actor_casting(actor: Node) -> bool:
+	if actor == _player:
+		return _player_casting_skill != null
+	elif actor == _enemy:
+		return _enemy_casting_skill != null
+	return false
+
 func is_player_casting() -> bool:
 	return _player_casting_skill != null
-
 
 func is_enemy_casting() -> bool:
 	return _enemy_casting_skill != null
 
-
-func get_skill_cooldown(skill_id: StringName) -> int:
+func get_skill_cooldown(skill_id: StringName, is_enemy: bool = false) -> int:
+	if is_enemy:
+		return int(_enemy_cooldowns.get(skill_id, 0.0))
 	return int(_cooldowns.get(skill_id, 0.0))
 
 

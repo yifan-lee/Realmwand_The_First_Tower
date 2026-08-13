@@ -6,7 +6,7 @@ signal skill_focused(skill: SkillData)
 
 @export var row_scene: PackedScene
 
-@onready var skill_rows: VBoxContainer = (
+@onready var skill_rows: FocusableList = (
 	$MarginContainer/Content/SkillScroll/SkillRows
 )
 @onready var empty_label: Label = (
@@ -14,7 +14,6 @@ signal skill_focused(skill: SkillData)
 )
 
 var _skills: Array[SkillData] = []
-var _rows: Array[SelectableListRow] = []
 
 
 func display_skills(
@@ -30,10 +29,8 @@ func clear_skills() -> void:
 
 
 func refresh() -> void:
-	_rows.clear()
-	for child: Node in skill_rows.get_children():
-		skill_rows.remove_child(child)
-		child.queue_free()
+	var focused_index := skill_rows.get_focused_row_index(get_viewport().gui_get_focus_owner())
+	skill_rows.clear_rows()
 
 	empty_label.visible = _skills.is_empty()
 
@@ -49,8 +46,7 @@ func refresh() -> void:
 			)
 			return
 
-		skill_rows.add_child(row)
-		_rows.append(row)
+		skill_rows.add_row(row)
 		row.setup(
 			skill,
 			_build_row_text(skill),
@@ -64,67 +60,33 @@ func refresh() -> void:
 			_on_entry_focused
 		)
 
+	if focused_index >= 0 and not skill_rows.is_empty():
+		var target_index := clampi(focused_index, 0, skill_rows.get_rows().size() - 1)
+		skill_rows.get_rows()[target_index].grab_focus()
+	elif focused_index >= 0 and skill_rows.is_empty():
+		get_viewport().gui_release_focus()
+
+
 func update_availability(usability_check: Callable, cd_check: Callable = Callable()) -> void:
+	var rows = skill_rows.get_rows()
 	for i in range(_skills.size()):
-		if i < _rows.size():
+		if i < rows.size():
 			var skill: SkillData = _skills[i]
-			_rows[i].disabled = not usability_check.call(skill)
+			rows[i].disabled = not usability_check.call(skill)
 			var text = _build_row_text(skill)
 			if not cd_check.is_null():
 				var cd = cd_check.call(skill)
 				if cd > 0:
 					text += " (CD: %d)" % cd
-			_rows[i].text = text
+			rows[i].text = text
 
 
 func get_skill_row(skill_id: StringName) -> Control:
+	var rows = skill_rows.get_rows()
 	for i in range(_skills.size()):
-		if _skills[i].id == skill_id and i < _rows.size():
-			return _rows[i]
+		if _skills[i].id == skill_id and i < rows.size():
+			return rows[i]
 	return null
-
-
-func focus_first_skill() -> bool:
-	if _rows.is_empty():
-		return false
-	_rows.front().grab_focus()
-	return true
-
-
-func is_first_skill_focused() -> bool:
-	return (
-		not _rows.is_empty()
-		and get_viewport().gui_get_focus_owner() == _rows.front()
-	)
-
-
-func has_skill_focus(focus: Control = null) -> bool:
-	var resolved_focus := focus
-	if resolved_focus == null:
-		resolved_focus = get_viewport().gui_get_focus_owner()
-	return _focused_row_index(resolved_focus) >= 0
-
-
-func navigate_skill_focus(direction: int) -> bool:
-	var current_index := _focused_row_index(
-		get_viewport().gui_get_focus_owner()
-	)
-	if current_index < 0:
-		return false
-	var next_index := clampi(
-		current_index + direction,
-		0,
-		_rows.size() - 1
-	)
-	_rows[next_index].grab_focus()
-	return true
-
-
-func _focused_row_index(focus: Control) -> int:
-	for index: int in _rows.size():
-		if focus == _rows[index]:
-			return index
-	return -1
 
 
 func _build_row_text(skill: SkillData) -> String:

@@ -7,12 +7,11 @@ const SAVE_SLOT_ROW_SCENE := preload("res://scenes/ui/components/save_slot_row.t
 
 @onready var save_name_input: LineEdit = $MarginContainer/Content/InputRow/SaveNameInput
 @onready var create_button: Button = $MarginContainer/Content/InputRow/CreateButton
-@onready var save_rows: VBoxContainer = $MarginContainer/Content/SaveScroll/SaveRows
+@onready var save_rows: FocusableList = $MarginContainer/Content/SaveScroll/SaveRows
 @onready var empty_label: Label = $MarginContainer/Content/EmptyLabel
 @onready var status_label: Label = $MarginContainer/Content/StatusLabel
 
 var _save_manager: SaveManager
-var _rows: Array[SaveSlotRow] = []
 
 
 func _ready() -> void:
@@ -30,22 +29,18 @@ func bind_save_manager(save_manager: SaveManager) -> void:
 
 
 func refresh_saves() -> void:
-	for row: SaveSlotRow in _rows:
-		row.queue_free()
-	_rows.clear()
+	save_rows.clear_rows()
 	var saves: Array[Dictionary] = []
 	if _save_manager != null:
 		saves = _save_manager.list_saves()
 	for save_data: Dictionary in saves:
-		# Runtime-only: row count depends on the user's save files.
 		var row := SAVE_SLOT_ROW_SCENE.instantiate() as SaveSlotRow
-		save_rows.add_child(row)
+		save_rows.add_row(row)
 		row.display_save(save_data)
 		row.load_requested.connect(_on_load_requested)
 		row.overwrite_requested.connect(_on_overwrite_requested)
 		row.delete_requested.connect(_on_delete_requested)
-		_rows.append(row)
-	empty_label.visible = _rows.is_empty()
+	empty_label.visible = save_rows.is_empty()
 
 
 func focus_first_control() -> void:
@@ -55,10 +50,7 @@ func focus_first_control() -> void:
 func has_control_focus(focus: Control) -> bool:
 	if focus == save_name_input or focus == create_button:
 		return true
-	for row: SaveSlotRow in _rows:
-		if row.has_button_focus(focus):
-			return true
-	return false
+	return save_rows.has_row_focus(focus)
 
 
 func navigate_focus(direction: Vector2i) -> bool:
@@ -66,8 +58,8 @@ func navigate_focus(direction: Vector2i) -> bool:
 	if focus == save_name_input:
 		if direction.x > 0:
 			create_button.grab_focus()
-		elif direction.y > 0 and not _rows.is_empty():
-			_rows.front().focus_button(0)
+		elif direction.y > 0 and not save_rows.is_empty():
+			save_rows.focus_first_row(0)
 		elif direction.y < 0:
 			return false
 		return true
@@ -75,28 +67,20 @@ func navigate_focus(direction: Vector2i) -> bool:
 	if focus == create_button:
 		if direction.x < 0:
 			save_name_input.grab_focus()
-		elif direction.y > 0 and not _rows.is_empty():
-			_rows.front().focus_button(2)
+		elif direction.y > 0 and not save_rows.is_empty():
+			save_rows.focus_first_row(2)
 		elif direction.y < 0:
 			return false
 		return true
 
-	for row_index: int in _rows.size():
-		var button_index := _rows[row_index].get_focused_button_index(focus)
-		if button_index < 0:
-			continue
-		if direction.x != 0:
-			_rows[row_index].focus_button(button_index + direction.x)
-		elif direction.y > 0:
-			if row_index + 1 < _rows.size():
-				_rows[row_index + 1].focus_button(button_index)
-		elif direction.y < 0:
-			if row_index > 0:
-				_rows[row_index - 1].focus_button(button_index)
-			elif button_index == 2:
-				create_button.grab_focus()
-			else:
-				save_name_input.grab_focus()
+	if save_rows.has_row_focus(focus):
+		if not save_rows.navigate_focus(direction):
+			if direction.y < 0:
+				var button_index = save_rows.get_focused_button_index(focus)
+				if button_index == 2:
+					create_button.grab_focus()
+				else:
+					save_name_input.grab_focus()
 		return true
 
 	return false

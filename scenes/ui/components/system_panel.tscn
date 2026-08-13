@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1xnwh"]
 [ext_resource type="Script" uid="uid://dvx5cqy2l2dj2" path="res://scripts/ui/components/system_panel.gd" id="2_ibdvy"]
+[ext_resource type="Script" path="res://scripts/ui/components/focusable_list.gd" id="FocusableList"]
 
 [node name="SystemPanel" type="PanelContainer" unique_id=1878234096]
 custom_minimum_size = Vector2(500, 390)
@@ -60,6 +61,7 @@ follow_focus = true
 size_flags_vertical = 3
 
 [node name="SaveRows" type="VBoxContainer" parent="MarginContainer/Content/SaveScroll" unique_id=1734674401]
+script = ExtResource("FocusableList")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8

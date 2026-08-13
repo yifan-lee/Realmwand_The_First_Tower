@@ -39,6 +39,29 @@ var fp_recovery_spd_delta: float = 0.0
 var active_effects: Array[Dictionary] = []
 
 
+static func from_player(player: Player) -> ActorStatsViewData:
+	if player == null or player.player_data == null:
+		return null
+	var view := ActorStatsViewData.new()
+	view.display_name = player.player_data.display_name
+	view.portrait = player.get_ui_portrait()
+	view.level = player.level
+	view.experience = player.experience
+	view.experience_to_next_level = player.get_experience_for_next_level()
+	view.current_hp = player.current_hp
+	view.max_hp = player.get_max_hp()
+	view.current_mp = player.current_mp
+	view.max_mp = player.get_max_mp()
+	view.current_fp = player.current_fp
+	view.max_fp = player.get_max_fp()
+	view.start_fp = player.get_start_fp()
+	view.fp_recovery_spd = player.get_fp_recovery_spd()
+	view.atk = player.get_atk()
+	view.def = player.get_def()
+	view.spd = player.get_spd()
+	return view
+
+
 func has_progression() -> bool:
 	return level > 0
 

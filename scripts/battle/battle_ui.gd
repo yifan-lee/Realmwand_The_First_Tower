@@ -247,10 +247,10 @@ func _cycle_action_page(direction: int) -> void:
 func _focus_current_page() -> void:
 	match _current_page:
 		ActionPage.SKILLS:
-			if not skill_panel.focus_first_skill():
+			if not skill_panel.skill_rows.focus_first_row(0):
 				skills_tab.grab_focus()
 		ActionPage.ITEMS:
-			if not inventory_panel.focus_first_item():
+			if not inventory_panel.item_rows.focus_first_row(0):
 				items_tab.grab_focus()
 		ActionPage.ESCAPE:
 			escape_tab.grab_focus()
@@ -288,42 +288,32 @@ func _on_escape_tab_pressed() -> void:
 func _on_skill_focused(skill: SkillData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
-	var extra_details: Array[String] = []
-	player_view.preview_skill_cost(skill.costs)
-	var damage := 0.0
-	for effect in skill.effects:
-		if effect.effect_type == ActionEffectData.EffectType.INTERRUPT:
-			if effect.target_type == ActionEffectData.TargetType.ENEMY:
-				if _battle_manager.is_enemy_casting():
-					extra_details.append("打断敌人的吟唱，敌方行动条归零")
-				else:
-					extra_details.append("当前敌人没有正在吟唱的技能")
-		if effect.effect_type == ActionEffectData.EffectType.REDUCE_HP:
-			var target_def = _enemy.enemy_data.def
-			var attacker_atk = _player.get_atk()
-			var skill_power = effect.value
-			if _battle_manager != null:
-				target_def = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.DEF)
-				attacker_atk = _battle_manager.get_player_stat(ActionEffectData.EffectType.ATK)
-				skill_power = FORMULAS.calculate_skill_power_modifier(effect.value, _battle_manager.get_player_effects(), skill.skill_type)
-			
-			if effect.target_type == ActionEffectData.TargetType.SELF:
-				target_def = _player.get_def()
-				if _battle_manager != null:
-					target_def = _battle_manager.get_player_stat(ActionEffectData.EffectType.DEF)
-					
-			var dmg = FORMULAS.calculate_skill_damage(
-				attacker_atk,
-				skill_power,
-				target_def
-			)
-			if effect.target_type == ActionEffectData.TargetType.ENEMY:
-				damage += dmg
-			else:
-				player_view.preview_damage(dmg)
-	if damage > 0.0:
-		enemy_view.preview_damage(damage)
-	_apply_skill_effect_preview(skill, player_view, enemy_view)
+	
+	if _battle_manager != null:
+		var preview = BattleCalculator.evaluate_skill(skill, _player, [_enemy], _battle_manager)
+		
+		var player_delta = preview.actor_deltas.get(_player, null)
+		if player_delta != null:
+			player_view.current_hp_delta = player_delta.hp_delta
+			player_view.current_mp_delta = player_delta.mp_delta
+			player_view.current_fp_delta = player_delta.fp_delta
+			player_view.atk_delta = player_delta.atk_delta
+			player_view.def_delta = player_delta.def_delta
+			player_view.spd_delta = player_delta.spd_delta
+			if player_delta.atb_delta > 0.0:
+				player_view.preview_atb = player_delta.atb_delta
+				
+		var enemy_delta = preview.actor_deltas.get(_enemy, null)
+		if enemy_delta != null:
+			enemy_view.current_hp_delta = enemy_delta.hp_delta
+			enemy_view.current_mp_delta = enemy_delta.mp_delta
+			enemy_view.current_fp_delta = enemy_delta.fp_delta
+			enemy_view.atk_delta = enemy_delta.atk_delta
+			enemy_view.def_delta = enemy_delta.def_delta
+			enemy_view.spd_delta = enemy_delta.spd_delta
+	else:
+		player_view.preview_skill_cost(skill.costs)
+
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
 	_update_atb_markers(
@@ -336,42 +326,39 @@ func _on_skill_focused(skill: SkillData) -> void:
 	info.icon = skill.icon
 	info.description = skill.description
 	info.detail_lines = skill.get_details()
-	info.detail_lines.append_array(extra_details)
 	entry_info_panel.display_info(info)
 
 
 func _on_item_focused(item: ItemData) -> void:
 	var player_view := _build_player_view()
 	var enemy_view := _build_enemy_view()
-	var hp_rec := 0.0
-	var mp_rec := 0.0
-	var fp_rec := 0.0
 	var details: Array[String] = []
+	
 	for effect: ActionEffectData in item.effects:
-		if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
-			hp_rec += effect.value
-		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
-			mp_rec += effect.value
-		elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
-			fp_rec += effect.value
 		var desc := effect.get_description()
 		if desc != "":
 			details.append(desc)
-	player_view.current_hp_delta = FORMULAS.calculate_recovery_delta(
-		_player.current_hp,
-		_player.get_max_hp(),
-		hp_rec
-	)
-	player_view.current_mp_delta = FORMULAS.calculate_recovery_delta(
-		_player.current_mp,
-		_player.get_max_mp(),
-		mp_rec
-	)
-	player_view.current_fp_delta = FORMULAS.calculate_recovery_delta(
-		_player.current_fp,
-		_player.get_max_fp(),
-		fp_rec
-	)
+			
+	if _battle_manager != null:
+		var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], _battle_manager)
+		var player_delta = preview.actor_deltas.get(_player, null)
+		if player_delta != null:
+			player_view.current_hp_delta = player_delta.hp_delta
+			player_view.current_mp_delta = player_delta.mp_delta
+			player_view.current_fp_delta = player_delta.fp_delta
+			player_view.atk_delta = player_delta.atk_delta
+			player_view.def_delta = player_delta.def_delta
+			player_view.spd_delta = player_delta.spd_delta
+
+		var enemy_delta = preview.actor_deltas.get(_enemy, null)
+		if enemy_delta != null:
+			enemy_view.current_hp_delta = enemy_delta.hp_delta
+			enemy_view.current_mp_delta = enemy_delta.mp_delta
+			enemy_view.current_fp_delta = enemy_delta.fp_delta
+			enemy_view.atk_delta = enemy_delta.atk_delta
+			enemy_view.def_delta = enemy_delta.def_delta
+			enemy_view.spd_delta = enemy_delta.spd_delta
+			
 	player_stats.display_stats(player_view)
 	enemy_stats.display_stats(enemy_view)
 	_update_atb_markers(
@@ -387,52 +374,17 @@ func _on_item_focused(item: ItemData) -> void:
 	entry_info_panel.display_info(info)
 
 
-func _apply_skill_effect_preview(
-	skill: SkillData,
-	player_view: ActorStatsViewData,
-	enemy_view: ActorStatsViewData
-) -> void:
-	for effect: ActionEffectData in skill.effects:
-		var target := player_view
-		if effect.target_type == ActionEffectData.TargetType.ENEMY:
-			target = enemy_view
-		match effect.effect_type:
-			ActionEffectData.EffectType.ATK:
-				target.atk_delta += FORMULAS.skill_effect_delta(target.atk, effect)
-			ActionEffectData.EffectType.DEF:
-				target.def_delta += FORMULAS.skill_effect_delta(target.def, effect)
-			ActionEffectData.EffectType.SPD:
-				target.spd_delta += FORMULAS.skill_effect_delta(target.spd, effect)
-
-
 func _build_player_view() -> ActorStatsViewData:
-	if _player == null or _player.player_data == null:
+	var view := ActorStatsViewData.from_player(_player)
+	if view == null:
 		return null
-	var view := ActorStatsViewData.new()
-	view.display_name = _player.player_data.display_name
-	view.portrait = _player.get_ui_portrait()
-	view.level = _player.level
-	view.experience = _player.experience
-	view.experience_to_next_level = _player.get_experience_for_next_level()
-	view.current_hp = _player.current_hp
-	view.max_hp = _player.get_max_hp()
-	view.current_mp = _player.current_mp
-	view.max_mp = _player.get_max_mp()
-	view.current_fp = _player.current_fp
-	view.max_fp = _player.get_max_fp()
-	view.start_fp = _player.get_start_fp()
-	view.fp_recovery_spd = _player.get_fp_recovery_spd()
 	view.current_atb = _player_atb_value
 	view.max_atb = FORMULAS.ATB_MAX
 	if _battle_manager != null:
-		view.active_effects = _battle_manager.get_player_effects()
-		view.atk = _battle_manager.get_player_stat(ActionEffectData.EffectType.ATK)
-		view.def = _battle_manager.get_player_stat(ActionEffectData.EffectType.DEF)
-		view.spd = _battle_manager.get_player_stat(ActionEffectData.EffectType.SPD)
-	else:
-		view.atk = _player.get_atk()
-		view.def = _player.get_def()
-		view.spd = _player.get_spd()
+		view.active_effects = _battle_manager.get_actor_effects(_player)
+		view.atk = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.ATK)
+		view.def = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.DEF)
+		view.spd = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.SPD)
 	return view
 
 
@@ -454,10 +406,10 @@ func _build_enemy_view() -> ActorStatsViewData:
 	view.current_atb = _enemy_atb_value
 	view.max_atb = FORMULAS.ATB_MAX
 	if _battle_manager != null:
-		view.active_effects = _battle_manager.get_enemy_effects()
-		view.atk = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.ATK)
-		view.def = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.DEF)
-		view.spd = _battle_manager.get_enemy_stat(ActionEffectData.EffectType.SPD)
+		view.active_effects = _battle_manager.get_actor_effects(_enemy)
+		view.atk = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.ATK)
+		view.def = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.DEF)
+		view.spd = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.SPD)
 	else:
 		view.atk = _enemy.enemy_data.atk
 		view.def = _enemy.enemy_data.def

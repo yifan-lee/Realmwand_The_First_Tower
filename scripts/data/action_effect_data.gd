@@ -50,7 +50,7 @@ func get_description() -> String:
 		EffectType.FREE_ACTION:
 			return "特性：使用后可立刻再次行动"
 		EffectType.REDUCE_HP:
-			return "造成 %.0f 点技能威力伤害" % value
+			return ""
 		EffectType.REDUCE_MP:
 			return "扣除 %.0f 点魔力" % value
 		EffectType.REDUCE_FP:

@@ -179,7 +179,7 @@ func _show_category(index: int, focus_items: bool) -> void:
 	_pending_equip_item = null
 	entry_info_panel.clear_info()
 	refresh_player_stats()
-	if focus_items and not inventory_panel.focus_first_item():
+	if focus_items and not inventory_panel.item_rows.focus_first_row():
 		category_buttons[_current_category].grab_focus()
 
 
@@ -209,17 +209,17 @@ func _navigate_horizontal_focus(
 				_show_category(_current_category + direction, false)
 				category_buttons[_current_category].grab_focus()
 				return true
-			if inventory_panel.has_item_focus(focus):
+			if inventory_panel.item_rows.has_row_focus(focus):
 				if direction > 0 and equipment_panel.focus_first_slot():
 					return true
 				return true
 			if equipment_panel.has_slot_focus(focus):
 				if direction < 0 and equipment_panel.is_first_column_focused(focus):
-					inventory_panel.focus_first_item()
+					inventory_panel.item_rows.focus_first_row()
 					return true
 				return false
 		MainPage.SKILLS:
-			if skill_panel.has_skill_focus(focus):
+			if skill_panel.skill_rows.has_row_focus(focus):
 				return true
 		MainPage.SYSTEM:
 			return system_page.navigate_focus(Vector2i(direction, 0))
@@ -242,21 +242,21 @@ func _navigate_vertical_focus(
 				if direction < 0:
 					_focus_main_tab()
 				else:
-					inventory_panel.focus_first_item()
+					inventory_panel.item_rows.focus_first_row()
 				return true
-			if inventory_panel.has_item_focus(focus):
-				if direction < 0 and inventory_panel.is_first_item_focused():
+			if inventory_panel.item_rows.has_row_focus(focus):
+				if direction < 0 and inventory_panel.item_rows.is_first_row_focused():
 					category_buttons[_current_category].grab_focus()
 					return true
-				return inventory_panel.navigate_item_focus(direction)
+				return inventory_panel.item_rows.navigate_focus(Vector2i(0, direction))
 			if equipment_panel.has_slot_focus(focus):
 				return false
 		MainPage.SKILLS:
-			if skill_panel.has_skill_focus(focus):
-				if direction < 0 and skill_panel.is_first_skill_focused():
+			if skill_panel.skill_rows.has_row_focus(focus):
+				if direction < 0 and skill_panel.skill_rows.is_first_row_focused():
 					_focus_main_tab()
 					return true
-				return skill_panel.navigate_skill_focus(direction)
+				return skill_panel.skill_rows.navigate_focus(Vector2i(0, direction))
 		MainPage.SYSTEM:
 			if system_page.navigate_focus(Vector2i(0, direction)):
 				return true
@@ -272,7 +272,7 @@ func _focus_current_page() -> void:
 		MainPage.INVENTORY:
 			category_buttons[_current_category].grab_focus()
 		MainPage.SKILLS:
-			if not skill_panel.focus_first_skill():
+			if not skill_panel.skill_rows.focus_first_row():
 				skills_tab.grab_focus()
 		MainPage.SYSTEM:
 			system_page.focus_first_control()
@@ -372,7 +372,7 @@ func _on_item_focused(item: ItemData) -> void:
 func _on_item_selected(item: ItemData) -> void:
 	if _player == null:
 		return
-	var was_focused := inventory_panel.has_item_focus()
+	var was_focused := inventory_panel.item_rows.has_row_focus()
 	if item is EquipmentData:
 		var equipment := item as EquipmentData
 		var compatible_slots := _player.equipment.get_compatible_slots(equipment)
@@ -396,7 +396,7 @@ func _on_item_selected(item: ItemData) -> void:
 			_player.inventory.remove_item(item.id)
 	refresh_content()
 	
-	if was_focused and not inventory_panel.has_item_focus():
+	if was_focused and not inventory_panel.item_rows.has_row_focus():
 		category_buttons[_current_category].grab_focus()
 
 
@@ -439,7 +439,7 @@ func _on_equip_slot_chosen(slot: int) -> void:
 	_pending_equip_item = null
 	_preview_target_slot = -1
 	refresh_content()
-	if not inventory_panel.focus_first_item():
+	if not inventory_panel.item_rows.focus_first_row():
 		if is_open() and _current_page == MainPage.INVENTORY:
 			category_buttons[_current_category].grab_focus()
 
@@ -477,7 +477,7 @@ func _handle_popup_hide() -> void:
 		_pending_equip_item = null
 		_preview_target_slot = -1
 		if is_open() and _current_page == MainPage.INVENTORY:
-			inventory_panel.focus_first_item()
+			inventory_panel.item_rows.focus_first_row()
 			refresh_player_stats()
 
 
@@ -490,24 +490,7 @@ func _choose_equipment_target(item: EquipmentData) -> int:
 
 
 func _build_player_view() -> ActorStatsViewData:
-	var view := ActorStatsViewData.new()
-	view.display_name = _player.player_data.display_name
-	view.portrait = _player.get_ui_portrait()
-	view.level = _player.level
-	view.experience = _player.experience
-	view.experience_to_next_level = _player.get_experience_for_next_level()
-	view.current_hp = _player.current_hp
-	view.max_hp = _player.get_max_hp()
-	view.current_mp = _player.current_mp
-	view.max_mp = _player.get_max_mp()
-	view.current_fp = _player.current_fp
-	view.max_fp = _player.get_max_fp()
-	view.start_fp = _player.get_start_fp()
-	view.fp_recovery_spd = _player.get_fp_recovery_spd()
-	view.atk = _player.get_atk()
-	view.def = _player.get_def()
-	view.spd = _player.get_spd()
-	return view
+	return ActorStatsViewData.from_player(_player)
 
 
 func _display_entry_info(

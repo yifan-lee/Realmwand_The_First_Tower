@@ -3,6 +3,7 @@
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_xod05"]
 [ext_resource type="Script" uid="uid://cr4um5c4e0ndp" path="res://scripts/ui/components/inventory_panel.gd" id="2_o2b44"]
 [ext_resource type="PackedScene" uid="uid://d0j66d8tiecc6" path="res://scenes/ui/components/selectable_list_row.tscn" id="3_o2b44"]
+[ext_resource type="Script" path="res://scripts/ui/components/focusable_list.gd" id="FocusableList"]
 
 [node name="InventoryPanel" type="PanelContainer" unique_id=1714447019]
 custom_minimum_size = Vector2(500, 390)
@@ -30,6 +31,7 @@ follow_focus = true
 size_flags_vertical = 3
 
 [node name="ItemRows" type="VBoxContainer" parent="MarginContainer/Content/ItemScroll" unique_id=1204182463]
+script = ExtResource("FocusableList")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
