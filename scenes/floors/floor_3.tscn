@@ -140,7 +140,7 @@ position = Vector2(-384, -400)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv104" parent="Enemies" unique_id=1679076072 instance=ExtResource("4_dgw2m")]
-position = Vector2(-336, -344)
+position = Vector2(-392, -344)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="AtkLv101" parent="Enemies" unique_id=232817028 instance=ExtResource("4_dgw2m")]
@@ -299,15 +299,15 @@ position = Vector2(-96, -192)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv115" parent="Pickups" unique_id=747562838 instance=ExtResource("5_wmq0r")]
-position = Vector2(-192, -384)
+position = Vector2(-392, -440)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv114" parent="Pickups" unique_id=470844840 instance=ExtResource("5_wmq0r")]
-position = Vector2(-264, -472)
+position = Vector2(-384, -488)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv113" parent="Pickups" unique_id=333399188 instance=ExtResource("5_wmq0r")]
-position = Vector2(-256, -320)
+position = Vector2(-384, -544)
 item_data = ExtResource("14_ta0wl")
 
 [node name="MpRecoveryLv101" parent="Pickups" unique_id=1167899819 instance=ExtResource("5_wmq0r")]

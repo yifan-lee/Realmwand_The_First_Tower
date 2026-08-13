@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bfa8faveibvt2"]
 
 [ext_resource type="Script" uid="uid://ctfo7lkc4wj0b" path="res://scripts/tutorial/intro_video.gd" id="1_suv8g"]
+[ext_resource type="VideoStream" uid="uid://cl8kda8d4fc5o" path="res://assets/intro.ogv" id="2_2m0f4"]
 
 [node name="IntroVideo" type="CanvasLayer" unique_id=1408244493]
 layer = 10
@@ -30,6 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+stream = ExtResource("2_2m0f4")
 
 [node name="SkipHint" type="Label" parent="IntroRoot" unique_id=806078963]
 layout_mode = 0

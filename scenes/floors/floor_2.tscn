@@ -150,15 +150,15 @@ position = Vector2(-336, 296)
 enemy_data = ExtResource("6_ipvjm")
 
 [node name="EnemyAtkLV203" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="23" unique_id=9610020 instance=ExtResource("3_mjnjk")]
-position = Vector2(-288, 200)
+position = Vector2(-344, 224)
 enemy_data = ExtResource("6_ipvjm")
 
 [node name="EnemyAtkLV204" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="24" unique_id=270728064 instance=ExtResource("3_mjnjk")]
-position = Vector2(-248, 240)
+position = Vector2(-408, 200)
 enemy_data = ExtResource("6_ipvjm")
 
 [node name="EnemyAtkLV205" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="25" unique_id=1885499731 instance=ExtResource("3_mjnjk")]
-position = Vector2(-200, 192)
+position = Vector2(-536, 176)
 enemy_data = ExtResource("6_ipvjm")
 
 [node name="EnemySpdLV101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="26" unique_id=2124770074 instance=ExtResource("3_mjnjk")]
@@ -194,11 +194,11 @@ position = Vector2(-32, -544)
 enemy_data = ExtResource("9_ealqj")
 
 [node name="EnemySpdLV201" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="34" unique_id=1463981480 instance=ExtResource("3_mjnjk")]
-position = Vector2(-240, 152)
+position = Vector2(-480, 224)
 enemy_data = ExtResource("10_5ti25")
 
 [node name="EnemySpdLV202" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="35" unique_id=133423824 instance=ExtResource("3_mjnjk")]
-position = Vector2(-288, 104)
+position = Vector2(-472, 168)
 enemy_data = ExtResource("10_5ti25")
 
 [node name="FragmentRedLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("3_gkij4")]
@@ -247,15 +247,15 @@ pickup_id = &"fragment_yellow_lv1_3"
 item_data = ExtResource("10_lp7jv")
 
 [node name="FPLV101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=608967456 instance=ExtResource("3_gkij4")]
-position = Vector2(-352, -392)
+position = Vector2(-520, -392)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=77360329 instance=ExtResource("3_gkij4")]
-position = Vector2(-288, -327)
+position = Vector2(-640, -352)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=1234379088 instance=ExtResource("3_gkij4")]
-position = Vector2(-416, -456)
+position = Vector2(-528, -448)
 item_data = ExtResource("18_sbwf3")
 
 [node name="FPLV104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="12" unique_id=415248943 instance=ExtResource("3_gkij4")]
@@ -314,12 +314,12 @@ position = Vector2(32, -288)
 item_data = ExtResource("20_ktu67")
 
 [node name="HPLV205" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="25" unique_id=594253039 instance=ExtResource("3_gkij4")]
-position = Vector2(-376, -176)
+position = Vector2(-480, -184)
 pickup_id = &"stone01"
 item_data = ExtResource("20_ktu67")
 
 [node name="Stone2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="26" unique_id=226122769 instance=ExtResource("3_gkij4")]
-position = Vector2(-280, -256)
+position = Vector2(-656, -272)
 pickup_id = &"stone02"
 item_data = ExtResource("4_mjnjk")
 
