@@ -258,9 +258,10 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	if resolved_skill == null:
 		return
 
-	_consume_action_charges(false)
+	
 	var preview := BattleActionPreview.new()
 	BattleCalculator.evaluate_skill_effects(resolved_skill, _player, [_enemy], self, preview)
+	_consume_action_charges(false)
 	_apply_preview(preview, resolved_skill.effects, false)
 	
 	var message = "使用了 %s。" % resolved_skill.display_name

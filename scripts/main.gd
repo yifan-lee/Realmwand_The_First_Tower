@@ -3,6 +3,7 @@ extends Node2D
 ## 顶层场景入口：只负责连接世界、系统与 UI。
 ## 具体玩法逻辑保留在各自模块中。
 
+@export var debug_skip_intro_and_bgm: bool = false
 
 @onready var player: Player = $World/Player
 @onready var game_hud: GameHUD = $OverlayRoot/GameHUD
@@ -26,6 +27,8 @@ const BGM_BATTLE = preload("res://assets/audios/battle.ogg")
 const BGM_GENERAL = preload("res://assets/audios/general.ogg")
 
 func play_bgm(stream: AudioStream) -> void:
+	if debug_skip_intro_and_bgm:
+		return
 	if bgm_player.stream == stream and bgm_player.playing:
 		return
 	bgm_player.stream = stream
@@ -38,8 +41,13 @@ func _ready() -> void:
 	intro_video.intro_finished.connect(
 		_on_intro_finished
 	)
-	play_bgm(BGM_INTRO)
-	intro_video.play_intro()
+	
+	if debug_skip_intro_and_bgm:
+		intro_video.hide()
+		_on_intro_finished()
+	else:
+		play_bgm(BGM_INTRO)
+		intro_video.play_intro()
 	game_hud.bind_player(player)
 	esc_menu.bind_player(player)
 	tutorial_manager.setup(

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bguxyktnytjmf"]
+
+[ext_resource type="Script" uid="uid://bbo8juhbuxj3x" path="res://scripts/interactables/door.gd" id="1_qq3h0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fnoyy"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qq3h0"]
+size = Vector2(40, 40)
+
+[node name="FloorDoor" type="StaticBody2D" unique_id=310524603]
+texture_filter = 2
+collision_layer = 2
+script = ExtResource("1_qq3h0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2070735058]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=735584536]
+shape = SubResource("RectangleShape2D_fnoyy")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=177895071]
+collision_layer = 4
+
+[node name="InteractionShape" type="CollisionShape2D" parent="." unique_id=750552337]
+shape = SubResource("RectangleShape2D_qq3h0")

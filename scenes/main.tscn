@@ -19,6 +19,7 @@
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
+debug_skip_intro_and_bgm = true
 
 [node name="BgmPlayer" type="AudioStreamPlayer" parent="." unique_id=1234567890]
 

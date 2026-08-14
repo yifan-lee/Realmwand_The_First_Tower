@@ -1,10 +1,10 @@
 @tool
-class_name FloorSwitch
-extends Area2D
+class_name FloorDoor
+extends StaticBody2D
 
 signal state_changed(
-	switch_id: StringName,
-	is_active: bool
+	door_id: StringName,
+	is_open: bool
 )
 
 enum AttributeType {
@@ -19,11 +19,11 @@ enum AttributeType {
 
 const ATLAS_TEXTURE_PATH: String = "res://assets/tileset/tiles_attribute_color.png"
 const CELL_SIZE: int = 203
-const COL_INACTIVE: int = 3
-const COL_ACTIVE: int = 4
+const COL_LOCKED: int = 0
+const COL_OPEN: int = 1
 
 @export_group("Identity")
-@export var switch_id: StringName = &""
+@export var door_id: StringName = &""
 
 @export_group("Visual & Attribute")
 @export var attribute: AttributeType = AttributeType.NEUTRAL:
@@ -37,41 +37,55 @@ const COL_ACTIVE: int = 4
 		_update_visual()
 
 @export_group("State")
-@export var is_active: bool = false:
+@export var is_open: bool = false:
 	set(value):
-		if is_active != value:
-			is_active = value
+		if is_open != value:
+			is_open = value
 			_update_visual()
+			_update_collision()
 			if not Engine.is_editor_hint():
-				state_changed.emit(switch_id, is_active)
+				state_changed.emit(door_id, is_open)
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var interaction_area: Area2D = $InteractionArea
 var _atlas_texture: AtlasTexture
 
 
 func get_persistent_id() -> String:
-	if not switch_id.is_empty():
-		return switch_id
+	if not door_id.is_empty():
+		return door_id
 	return IdGenerator.generate_instance_id(self)
 
 
 func _ready() -> void:
 	_init_texture()
 	_update_visual()
+	_update_collision()
 
 
 func interact(_player: Node) -> void:
-	set_active(not is_active)
+	if not is_open:
+		EventBus.system_message_requested.emit("这扇门紧锁着，需要通过机关打开。")
 
 
-func set_active(active: bool) -> void:
-	if is_active == active:
+func set_open(open: bool) -> void:
+	if is_open == open:
 		return
 
-	is_active = active
+	is_open = open
 	_update_visual()
+	_update_collision()
 	if not Engine.is_editor_hint():
-		state_changed.emit(switch_id, is_active)
+		state_changed.emit(door_id, is_open)
+
+
+func open() -> void:
+	set_open(true)
+
+
+func close() -> void:
+	set_open(false)
 
 
 func _init_texture() -> void:
@@ -86,13 +100,24 @@ func _init_texture() -> void:
 		sprite.texture = _atlas_texture
 
 
+func _update_collision() -> void:
+	if collision_shape == null:
+		collision_shape = get_node_or_null("CollisionShape2D") as CollisionShape2D
+
+	if collision_shape != null:
+		if Engine.is_editor_hint():
+			collision_shape.disabled = is_open
+		else:
+			collision_shape.set_deferred("disabled", is_open)
+
+
 func _update_visual() -> void:
 	if not is_node_ready() and not Engine.is_editor_hint():
 		return
 
 	_init_texture()
 	if _atlas_texture != null:
-		var col_idx = COL_ACTIVE if is_active else COL_INACTIVE
+		var col_idx = COL_OPEN if is_open else COL_LOCKED
 		var row_idx = clampi(int(attribute), 0, 6)
 		_atlas_texture.region = Rect2(
 			col_idx * CELL_SIZE,
