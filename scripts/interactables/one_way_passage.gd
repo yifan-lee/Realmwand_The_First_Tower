@@ -143,25 +143,27 @@ func get_push_direction_vector() -> Vector2:
 func _on_trigger_area_body_entered(body: Node2D) -> void:
 	if not (body is Player) or _is_sliding_player:
 		return
-	var player = body as Player
+	var player := body as Player
 	call_deferred("_handle_player_slide", player)
 
 
 func _handle_player_slide(player: Player) -> void:
-	if _is_sliding_player or player == null:
+	if _is_sliding_player or player == null or not is_instance_valid(player):
 		return
 
 	if player.movement.is_moving:
 		await player.movement.movement_finished
 
-	if player.global_position.distance_to(global_position) > 16.0:
+	# Check distance to passage center (with slight tolerance)
+	if player.global_position.distance_to(global_position) > 20.0:
 		return
 
 	_is_sliding_player = true
+	player.set_input_enabled(false)
+
 	var push_dir := get_push_direction_vector()
 	var target_pos := global_position + push_dir * GRID_SIZE
 
-	player.set_input_enabled(false)
 	player.movement.is_moving = true
 	player.movement.facing_direction = push_dir
 	player.movement.play_directional_animation(&"walk")
@@ -178,4 +180,7 @@ func _handle_player_slide(player: Player) -> void:
 	player.set_input_enabled(true)
 	player.movement.play_directional_animation(&"idle")
 	player.movement.movement_finished.emit()
+
+	# Small cooldown to prevent double trigger
+	await get_tree().create_timer(0.1).timeout
 	_is_sliding_player = false

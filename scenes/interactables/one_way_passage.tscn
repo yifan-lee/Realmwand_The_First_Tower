@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b1g7uvapdrh56" path="res://scripts/interactables/one_way_passage.gd" id="1_k2itc"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
+size = Vector2(20, 20)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2itc"]
 size = Vector2(30, 2)
 
@@ -23,6 +26,10 @@ script = ExtResource("1_k2itc")
 
 [node name="TriggerArea" type="Area2D" parent="." unique_id=1851164614]
 collision_layer = 4
+collision_mask = 1
+
+[node name="TriggerShape" type="CollisionShape2D" parent="TriggerArea" unique_id=9948214]
+shape = SubResource("RectangleShape2D_trigger")
 
 [node name="BarrierTop" type="CollisionShape2D" parent="." unique_id=359001009]
 position = Vector2(0, -15)
