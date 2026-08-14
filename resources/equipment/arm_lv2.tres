@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://co51pqwbm7jmx"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_acm03"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_korto"]
+[ext_resource type="Texture2D" uid="uid://djtj0b85jvwsu" path="res://assets/items/equipment/wearable/arms_fp_tier_2.png" id="3_acm03"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="4_78lgu"]
+
+[resource]
+script = ExtResource("4_78lgu")
+slot_type = 7
+atk_bonus = 10.0
+def_bonus = 10.0
+id = &"arm_lv2"
+display_name = "2级护臂"
+item_type = 1
+icon = ExtResource("3_acm03")
+world_texture = ExtResource("3_acm03")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

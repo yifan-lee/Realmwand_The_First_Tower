@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://b1eg32eb6b6hq"]
+
+[ext_resource type="Script" uid="uid://b1g7uvapdrh56" path="res://scripts/interactables/one_way_passage.gd" id="1_k2itc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k2itc"]
+size = Vector2(30, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3p76w"]
+size = Vector2(30, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1y75d"]
+size = Vector2(2, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdd1a"]
+size = Vector2(2, 30)
+
+[node name="OneWayPassage" type="StaticBody2D" unique_id=2028843527]
+texture_filter = 3
+collision_layer = 2
+script = ExtResource("1_k2itc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=206981873]
+
+[node name="TriggerArea" type="Area2D" parent="." unique_id=1851164614]
+collision_layer = 4
+
+[node name="BarrierTop" type="CollisionShape2D" parent="." unique_id=359001009]
+position = Vector2(0, -15)
+shape = SubResource("RectangleShape2D_k2itc")
+
+[node name="BarrierBottom" type="CollisionShape2D" parent="." unique_id=716919328]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_3p76w")
+
+[node name="BarrierLeft" type="CollisionShape2D" parent="." unique_id=1755358381]
+position = Vector2(-15, 0)
+shape = SubResource("RectangleShape2D_1y75d")
+
+[node name="BarrierRight" type="CollisionShape2D" parent="." unique_id=1462377063]
+position = Vector2(15, 0)
+shape = SubResource("RectangleShape2D_jdd1a")

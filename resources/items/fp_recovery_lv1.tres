@@ -22,7 +22,6 @@ display_name = "1级专注回复数据"
 description = "回复些许专注"
 icon = ExtResource("3_1o77e")
 world_texture = ExtResource("3_1o77e")
-usable_from_inventory = true
 usable_in_battle = true
 consumed_on_use = true
 effects = Array[ExtResource("1_ia3im")]([SubResource("Resource_ktu67"), SubResource("Resource_ia3im")])

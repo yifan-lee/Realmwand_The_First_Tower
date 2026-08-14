@@ -17,9 +17,3 @@ script = ExtResource("1_qq3h0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=735584536]
 shape = SubResource("RectangleShape2D_fnoyy")
-
-[node name="InteractionArea" type="Area2D" parent="." unique_id=177895071]
-collision_layer = 4
-
-[node name="InteractionShape" type="CollisionShape2D" parent="." unique_id=750552337]
-shape = SubResource("RectangleShape2D_qq3h0")

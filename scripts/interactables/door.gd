@@ -48,7 +48,6 @@ const COL_OPEN: int = 1
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var interaction_area: Area2D = $InteractionArea
 var _atlas_texture: AtlasTexture
 
 
