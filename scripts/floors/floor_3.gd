@@ -191,16 +191,19 @@ func _on_floor_switch_state_changed(
 ) -> void:
 	match switch_id:
 		&"switch1":
-			_update_wall_passage_first()
+			_update_wall_passage_first(true)
 
-func _update_wall_passage_first() -> void:
+func _update_wall_passage_first(notify: bool = true) -> void:
 	set_tile_cells_removed(
 		wall_layer,
 		switch1_snapshots,
 		switch1.is_active
 	)
-	EventBus.system_message_requested.emit("某处的墙壁降下了，露出了捷径。")
-
+	if notify:
+		if switch1.is_active:
+			EventBus.system_message_requested.emit("某处的墙壁降下了，露出了捷径。")
+		else:
+			EventBus.system_message_requested.emit("捷径已关闭。")
 
 func _cache_switch_terrain() -> void:
 	switch1_snapshots = capture_tile_cells(

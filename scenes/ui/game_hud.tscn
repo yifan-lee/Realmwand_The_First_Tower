@@ -97,16 +97,3 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Content" type="VBoxContainer" parent="HudRoot/EnvironmentInfoArea/FloorInfoHUD" unique_id=1103382564]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="TitleLabel" type="Label" parent="HudRoot/EnvironmentInfoArea/FloorInfoHUD/Content" unique_id=615966641]
-layout_mode = 2
-theme_type_variation = &"HeaderLarge"
-
-[node name="DescLabel" type="Label" parent="HudRoot/EnvironmentInfoArea/FloorInfoHUD/Content" unique_id=662490160]
-custom_minimum_size = Vector2(340, 0)
-layout_mode = 2
-autowrap_mode = 3

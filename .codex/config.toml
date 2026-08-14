@@ -184,3 +184,6 @@ approval_mode = "approve"
 
 [mcp_servers.godot-mcp-pro.tools.edit_script]
 approval_mode = "approve"
+
+[mcp_servers.godot-mcp-pro.tools.simulate_sequence]
+approval_mode = "approve"

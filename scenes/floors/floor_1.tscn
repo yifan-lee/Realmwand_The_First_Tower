@@ -14,7 +14,7 @@
 [ext_resource type="Resource" uid="uid://bfhk2tg6kleul" path="res://resources/equipment/chest_lv1.tres" id="12_rj6dl"]
 [ext_resource type="Resource" uid="uid://dcite8gsbiu17" path="res://resources/equipment/feet_lv1.tres" id="13_r7vlu"]
 
-[node name="Floor2" unique_id=1021498195 instance=ExtResource("1_m1m67")]
+[node name="Floor1" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
 floor_id = &"floor_1"
 display_name = "一层"
@@ -98,12 +98,12 @@ enemy_data = ExtResource("9_4igxy")
 position = Vector2(192, -224)
 enemy_data = ExtResource("6_fv4kh")
 
-[node name="EnemyBalLv111" parent="Enemies/EnemyBalLv111" index="2" unique_id=796734484 instance=ExtResource("7_n2pbf")]
-position = Vector2(459, 280)
-enemy_data = ExtResource("6_fv4kh")
-
 [node name="EnemyBalLv112" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="11" unique_id=1407671429 instance=ExtResource("7_n2pbf")]
 position = Vector2(224, -256)
+enemy_data = ExtResource("6_fv4kh")
+
+[node name="EnemyBalLv113" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="12" unique_id=796734484 instance=ExtResource("7_n2pbf")]
+position = Vector2(651, 56)
 enemy_data = ExtResource("6_fv4kh")
 
 [node name="HandsLv1" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("5_wl6yc")]
@@ -121,8 +121,7 @@ position = Vector2(192, -256)
 pickup_id = &"feet_lv1"
 item_data = ExtResource("13_r7vlu")
 
-[node name="FeetLv1" parent="Pickups/FeetLv1" index="2" unique_id=322391170 instance=ExtResource("5_wl6yc")]
-position = Vector2(468, 233)
-pickup_id = &"feet_lv1"
+[node name="FeetLv2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=322391170 instance=ExtResource("5_wl6yc")]
+position = Vector2(660, -23)
 item_data = ExtResource("13_r7vlu")
 metadata/_edit_group_ = true

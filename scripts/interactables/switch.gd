@@ -69,9 +69,6 @@ func set_active(active: bool) -> void:
 		return
 
 	is_active = active
-	_update_visual()
-	if not Engine.is_editor_hint():
-		state_changed.emit(switch_id, is_active)
 
 
 func _init_texture() -> void:

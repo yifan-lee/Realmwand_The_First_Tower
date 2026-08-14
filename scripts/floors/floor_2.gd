@@ -27,7 +27,7 @@ func _cache_switch_terrain() -> void:
 
 
 func _apply_initial_switch_states() -> void:
-	_update_stairs()
+	_update_stairs(false)
 
 
 func _on_floor_switch_state_changed(
@@ -36,10 +36,10 @@ func _on_floor_switch_state_changed(
 ) -> void:
 	match switch_id:
 		&"switch_first":
-			_update_stairs()
+			_update_stairs(true)
 
 
-func _update_stairs() -> void:
+func _update_stairs(notify: bool = true) -> void:
 	set_tile_cells_removed(
 		wall_layer,
 		switch_first_snapshots,
@@ -48,4 +48,8 @@ func _update_stairs() -> void:
 	up_stair.visible = switch_first.is_active
 	up_stair.monitoring = switch_first.is_active
 	up_stair.monitorable = switch_first.is_active
-	EventBus.system_message_requested.emit("某处的墙壁消失了，显露出了楼梯。")
+	if notify:
+		if switch_first.is_active:
+			EventBus.system_message_requested.emit("某处的墙壁消失了，显露出了楼梯。")
+		else:
+			EventBus.system_message_requested.emit("楼梯被隐藏了。")

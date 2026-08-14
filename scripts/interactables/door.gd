@@ -74,10 +74,6 @@ func set_open(open: bool) -> void:
 		return
 
 	is_open = open
-	_update_visual()
-	_update_collision()
-	if not Engine.is_editor_hint():
-		state_changed.emit(door_id, is_open)
 
 
 func open() -> void:
