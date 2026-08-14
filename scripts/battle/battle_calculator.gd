@@ -82,8 +82,8 @@ static func evaluate_skill_effects(
 					var caster_atk = battle_manager.get_actor_stat(caster, ActionEffectData.EffectType.ATK)
 					var target_def = battle_manager.get_actor_stat(target, ActionEffectData.EffectType.DEF)
 					var skill_power = FORMULAS.calculate_skill_power_modifier(
-						effect.value, 
-						battle_manager.get_actor_effects(caster), 
+						effect.value,
+						battle_manager.get_actor_effects(caster),
 						skill.skill_type
 					)
 					var damage := FORMULAS.calculate_skill_damage(caster_atk, skill_power, target_def)
@@ -100,15 +100,13 @@ static func evaluate_skill_effects(
 
 	if total_applied_damage > 0.0:
 		preview.add_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, total_applied_damage])
-		
-	return preview
 
 
 static func evaluate_item(
 	item: ItemData,
 	caster: Node,
 	targets: Array[Node],
-	battle_manager: BattleManager
+	_battle_manager: BattleManager
 ) -> BattleActionPreview:
 	var preview := BattleActionPreview.new()
 	if item == null or caster == null:

@@ -60,7 +60,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 	transition_requested = true
 
-	if player.is_moving:
+	if player.movement.is_moving:
 		await player.movement_finished
 
 	if not is_instance_valid(player):

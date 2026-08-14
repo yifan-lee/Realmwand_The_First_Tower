@@ -12,10 +12,12 @@ var is_rule_active: bool = true
 var _last_facing: Vector2 = Vector2.UP
 var _player: Player = null
 var _pending_teleport: bool = false
+var _fail_count: int = 0
 var switch1_snapshots: Array[Floor.TileCellSnapshot] = []
 
 
 func _ready() -> void:
+	_cache_switch_terrain()
 	stair_up.body_entered.connect(
 		_on_stair_up_body_entered
 	)
@@ -56,6 +58,7 @@ func _setup_player_listener() -> void:
 func capture_runtime_state() -> Dictionary:
 	var state := super()
 	state["is_rule_active"] = is_rule_active
+	state["fail_count"] = _fail_count
 	return state
 
 
@@ -64,6 +67,7 @@ func apply_runtime_state(state: Dictionary) -> void:
 	is_rule_active = bool(
 		state.get("is_rule_active", is_rule_active)
 	)
+	_fail_count = int(state.get("fail_count", _fail_count))
 
 
 func _on_stair_up_body_entered(body: Node2D) -> void:
@@ -166,8 +170,9 @@ func _fail_and_teleport_to_start() -> void:
 	_player.movement.facing_direction = Vector2.UP
 	_last_facing = Vector2.UP
 	
-	# 可选：如果在战斗管理器或 UI 中有消息提示面板，可以提示玩家
-	# print("违反迷宫规则，被传送回起点！")
+	_fail_count += 1
+	if _fail_count >= 3:
+		EventBus.system_message_requested.emit("这层角色只能前进和左拐。")
 
 
 ## 当触发了解密机关/StairUp 时的回调
@@ -177,7 +182,7 @@ func unlock_rule() -> void:
 
 	is_rule_active = false
 	_pending_teleport = false
-	print("Floor 3 迷宫规则已解除！")
+	EventBus.system_message_requested.emit("Floor 3 迷宫规则已解除！")
 
 
 func _on_floor_switch_state_changed(
