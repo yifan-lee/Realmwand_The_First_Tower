@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://b1eg32eb6b6hq"]
 
 [ext_resource type="Script" uid="uid://b1g7uvapdrh56" path="res://scripts/interactables/one_way_passage.gd" id="1_k2itc"]
+[ext_resource type="Texture2D" uid="uid://ds8ityntebi6o" path="res://assets/tileset/one_way_channels_7x4.png" id="2_3p76w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1y75d"]
+atlas = ExtResource("2_3p76w")
+region = Rect2(406, 1218, 203, 203)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
-size = Vector2(20, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2itc"]
 size = Vector2(30, 2)
@@ -23,10 +27,11 @@ collision_layer = 2
 script = ExtResource("1_k2itc")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=206981873]
+scale = Vector2(0.15763547, 0.15763547)
+texture = SubResource("AtlasTexture_1y75d")
 
 [node name="TriggerArea" type="Area2D" parent="." unique_id=1851164614]
 collision_layer = 4
-collision_mask = 1
 
 [node name="TriggerShape" type="CollisionShape2D" parent="TriggerArea" unique_id=9948214]
 shape = SubResource("RectangleShape2D_trigger")
@@ -46,3 +51,4 @@ shape = SubResource("RectangleShape2D_1y75d")
 [node name="BarrierRight" type="CollisionShape2D" parent="." unique_id=1462377063]
 position = Vector2(15, 0)
 shape = SubResource("RectangleShape2D_jdd1a")
+disabled = true

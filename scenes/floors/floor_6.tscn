@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://4wc1v8w4vm5l"]
+
+[ext_resource type="PackedScene" uid="uid://dmpsab2hobft3" path="res://scenes/floors/floor.tscn" id="1_mxbsc"]
+
+[node name="Floor" unique_id=1021498195 instance=ExtResource("1_mxbsc")]
+
+[node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=540661241]

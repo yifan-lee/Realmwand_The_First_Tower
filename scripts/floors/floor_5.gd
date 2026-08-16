@@ -1,5 +1,7 @@
 extends Floor
 
+@onready var wall_layer: TileMapLayer = %WallLayer
+
 @onready var switch_atk_1: FloorSwitch = $Interactables/SwitchAtk1
 @onready var door_atk_1: FloorDoor = $Interactables/DoorAtk1
 @onready var switch_atk_2: FloorSwitch = $Interactables/SwitchAtk2
@@ -15,6 +17,13 @@ extends Floor
 @onready var one_way_spd_3: OneWayPassage = $Interactables/OneWaySpd3
 @onready var one_way_spd_4: OneWayPassage = $Interactables/OneWaySpd4
 @onready var one_way_spd_5: OneWayPassage = $Interactables/OneWaySpd5
+@onready var switch_neu_1: FloorSwitch = $Interactables/SwitchNeu1
+@onready var switch_neu_2: FloorSwitch = $Interactables/SwitchNeu2
+@onready var switch_neu_3: FloorSwitch = $Interactables/SwitchNeu3
+
+var switch_final_snapshots: Array[Floor.TileCellSnapshot] = []
+var switch_atk_2_snapshots: Array[Floor.TileCellSnapshot] = []
+var switch_spd_1_snapshots: Array[Floor.TileCellSnapshot] = []
 
 
 func _ready() -> void:
@@ -25,9 +34,31 @@ func _ready() -> void:
 	switch_def_1.state_changed.connect(_on_floor_switch_state_changed)
 	switch_spd_2.state_changed.connect(_on_floor_switch_state_changed)
 	switch_spd_3.state_changed.connect(_on_floor_switch_state_changed)
+	switch_neu_1.state_changed.connect(_on_floor_switch_state_changed)
+	switch_neu_2.state_changed.connect(_on_floor_switch_state_changed)
+	switch_neu_3.state_changed.connect(_on_floor_switch_state_changed)
+	
+	_cache_switch_terrain()
 	
 	# 2. 初始静默同步状态（不发送系统消息）
 	_apply_initial_switch_states()
+
+
+func _cache_switch_terrain() -> void:
+	switch_final_snapshots = capture_dynamic_wall(
+		wall_layer,
+		&"WallFinal"
+	)
+
+	switch_atk_2_snapshots = capture_dynamic_wall(
+		wall_layer,
+		&"WallAtk2"
+	)
+
+	switch_spd_1_snapshots = capture_dynamic_wall(
+		wall_layer,
+		&"WallSpd1"
+	)
 
 
 ## 初始/读档状态同步（notify = false 保证不误报提示）
@@ -38,6 +69,7 @@ func _apply_initial_switch_states() -> void:
 	_update_door_def_1(false)
 	_update_one_way_spd_2(false)
 	_update_one_way_spd_3(false)
+	_update_final_door(false)
 
 
 ## 玩家真实交互时触发
@@ -58,7 +90,28 @@ func _on_floor_switch_state_changed(
 			_update_one_way_spd_2(true)
 		&"switch_spd_3":
 			_update_one_way_spd_3(true)
+		&"switch_neu_1", &"switch_neu_2", &"switch_neu_3":
+			_update_final_door(true)
 
+
+func _update_final_door(notify: bool = true) -> void:
+	var all_active := (
+		switch_neu_1.is_active
+		and switch_neu_2.is_active
+		and switch_neu_3.is_active
+	)
+	set_tile_cells_removed(
+		wall_layer,
+		switch_final_snapshots,
+		all_active
+	)
+	if notify:
+		if all_active:
+			EventBus.system_message_requested.emit("三座机关都被打开了，通道被打开了！")
+		elif switch_neu_1.is_active or switch_neu_2.is_active or switch_neu_3.is_active:
+			EventBus.system_message_requested.emit("机关被激活了，但好像还需要启动其他机关...")
+		else:
+			EventBus.system_message_requested.emit("通道已关闭。")
 
 ## 单向通道联动逻辑
 func _update_one_way_spd_2(notify: bool = true) -> void:
@@ -99,12 +152,17 @@ func _update_door_atk_1(notify: bool = true) -> void:
 
 
 func _update_door_atk_2(notify: bool = true) -> void:
+	set_tile_cells_removed(
+		wall_layer,
+		switch_atk_2_snapshots,
+		switch_atk_2.is_active
+	)
 	door_atk_2.set_open(switch_atk_2.is_active)
 	if notify:
 		if switch_atk_2.is_active:
-			EventBus.system_message_requested.emit("某处的攻击之门打开了。")
+			EventBus.system_message_requested.emit("某处的攻击之门打开了。\n出现了通向它的捷径。")
 		else:
-			EventBus.system_message_requested.emit("某处的攻击之门关闭了。")
+			EventBus.system_message_requested.emit("某处的攻击之门关闭了。\n捷径关闭了。")
 
 
 func _update_door_def_1(notify: bool = true) -> void:
@@ -117,9 +175,14 @@ func _update_door_def_1(notify: bool = true) -> void:
 
 
 func _update_door_spd_1(notify: bool = true) -> void:
+	set_tile_cells_removed(
+		wall_layer,
+		switch_spd_1_snapshots,
+		switch_spd_1.is_active
+	)
 	door_spd_1.set_open(switch_spd_1.is_active)
 	if notify:
 		if switch_spd_1.is_active:
-			EventBus.system_message_requested.emit("某处的速度之门打开了。")
+			EventBus.system_message_requested.emit("某处的速度之门打开了。\n出现了通向它的捷径。")
 		else:
 			EventBus.system_message_requested.emit("某处的速度之门关闭了。")

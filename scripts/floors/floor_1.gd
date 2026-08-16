@@ -24,25 +24,17 @@ func _ready() -> void:
 
 
 func _cache_switch_terrain() -> void:
-	switch_first_snapshots = capture_tile_cells(
+	switch_first_snapshots = capture_dynamic_wall(
 		wall_layer,
-		[
-			Vector2i(0, -5),
-			Vector2i(0, -6),
-		]
+		&"WallFirst"
 	)
-	switch_red_blue_snapshots = capture_tile_cells(
+	switch_red_blue_snapshots = capture_dynamic_wall(
 		wall_layer,
-		[
-			Vector2i(0, -12),
-			Vector2i(0, -13),
-		]
+		&"WallRedBlue"
 	)
-	switch_yellow_snapshots = capture_tile_cells(
+	switch_yellow_snapshots = capture_dynamic_wall(
 		wall_layer,
-		[
-			Vector2i(0, -9),
-		]
+		&"WallStairs"
 	)
 
 

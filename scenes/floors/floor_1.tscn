@@ -125,3 +125,26 @@ item_data = ExtResource("13_r7vlu")
 position = Vector2(660, -23)
 item_data = ExtResource("13_r7vlu")
 metadata/_edit_group_ = true
+
+[node name="DynamicTiles" parent="." index="6"]
+
+[node name="WallFirst" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="0" unique_id=1498172901]
+
+[node name="Marker1" type="Marker2D" parent="DynamicTiles/WallFirst" index="0" unique_id=1498172902]
+position = Vector2(0, -128)
+
+[node name="Marker2" type="Marker2D" parent="DynamicTiles/WallFirst" index="1" unique_id=1498172903]
+position = Vector2(0, -160)
+
+[node name="WallRedBlue" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="1" unique_id=1498172904]
+
+[node name="Marker1" type="Marker2D" parent="DynamicTiles/WallRedBlue" index="0" unique_id=1498172905]
+position = Vector2(0, -352)
+
+[node name="Marker2" type="Marker2D" parent="DynamicTiles/WallRedBlue" index="1" unique_id=1498172906]
+position = Vector2(0, -384)
+
+[node name="WallStairs" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="2" unique_id=1498172907]
+
+[node name="Marker1" type="Marker2D" parent="DynamicTiles/WallStairs" index="0" unique_id=1498172908]
+position = Vector2(0, -256)

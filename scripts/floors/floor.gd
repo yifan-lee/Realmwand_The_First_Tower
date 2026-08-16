@@ -33,6 +33,7 @@ class TileCellSnapshot:
 @onready var interactables: Node2D = %Interactables
 @onready var enemies: Node2D = %Enemies
 @onready var pickups: Node2D = %Pickups
+@onready var dynamic_tiles: Node2D = %DynamicTiles
 
 
 func get_spawn_point(spawn_id: StringName) -> Marker2D:
@@ -106,6 +107,27 @@ func capture_tile_cells_from_markers(
 			cells.append(cell_coord)
 
 	return capture_tile_cells(layer, cells)
+
+
+## 通过 DynamicTiles 下的分组节点名字直接捕获瓦片快照
+func capture_dynamic_wall(
+	layer: TileMapLayer,
+	group_name: StringName
+) -> Array[TileCellSnapshot]:
+	var container: Node2D = dynamic_tiles
+	if not is_instance_valid(container):
+		container = get_node_or_null("%DynamicTiles") as Node2D
+	if container == null:
+		push_error("Floor '%s' has no DynamicTiles container." % floor_id)
+		return []
+	var group_node := container.get_node_or_null(NodePath(String(group_name)))
+	if group_node == null:
+		push_error(
+			"Floor '%s' has no dynamic tile group '%s' under DynamicTiles."
+			% [floor_id, group_name]
+		)
+		return []
+	return capture_tile_cells_from_markers(layer, group_node)
 
 
 func set_tile_cells_removed(
