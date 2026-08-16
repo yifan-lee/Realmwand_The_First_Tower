@@ -116,6 +116,24 @@ func change_floor(
 	EventBus.screen_fade_out_started.emit()
 	await EventBus.screen_fade_out_finished
 
+	# 同层传送分支：target_floor_id 为空 或 与当前楼层相同
+	if target_floor_id.is_empty() or (is_instance_valid(current_floor) and target_floor_id == current_floor.floor_id):
+		if is_instance_valid(current_floor):
+			var spawn_point := current_floor.get_spawn_point(target_spawn_id)
+			if spawn_point != null:
+				player.global_position = spawn_point.global_position
+			else:
+				push_error(
+					"Spawn point '%s' not found on current floor '%s'."
+					% [target_spawn_id, current_floor.floor_id]
+				)
+		EventBus.screen_fade_in_with_info_started.emit("", "")
+		await EventBus.screen_fade_in_finished
+		player.set_input_enabled(true)
+		_is_changing_floor = false
+		return
+
+	# 跨层传送分支
 	var new_floor := _instantiate_floor(target_floor_id)
 	if new_floor == null:
 		EventBus.screen_fade_in_with_info_started.emit("", "")

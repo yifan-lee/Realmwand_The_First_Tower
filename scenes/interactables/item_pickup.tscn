@@ -11,7 +11,7 @@ script = ExtResource("1_s6oxg")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=519226099]
 texture_filter = 1
-scale = Vector2(0.158, 0.158)
+scale = Vector2(0.15763547, 0.15763547)
 
 [node name="TriggerShape" type="CollisionShape2D" parent="." unique_id=408728916]
 shape = SubResource("RectangleShape2D_p32wu")

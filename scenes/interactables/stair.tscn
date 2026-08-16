@@ -40,7 +40,7 @@ script = ExtResource("1_pwt04")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1933247738]
 texture_filter = 2
-scale = Vector2(0.158, 0.158)
+scale = Vector2(0.15763547, 0.15763547)
 sprite_frames = SubResource("SpriteFrames_yxmmu")
 animation = &"down"
 

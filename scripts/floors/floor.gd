@@ -82,6 +82,32 @@ func capture_tile_cells(
 	return snapshots
 
 
+## 通过一组 Marker2D 节点自动计算其对应的瓦片格坐标并捕获快照
+func capture_tile_cells_from_markers(
+	layer: TileMapLayer,
+	markers_parent_or_array: Variant
+) -> Array[TileCellSnapshot]:
+	var cells: Array[Vector2i] = []
+	var marker_nodes: Array[Node2D] = []
+
+	if markers_parent_or_array is Node:
+		for child in markers_parent_or_array.get_children():
+			if child is Node2D:
+				marker_nodes.append(child)
+	elif markers_parent_or_array is Array:
+		for item in markers_parent_or_array:
+			if item is Node2D:
+				marker_nodes.append(item)
+
+	for marker in marker_nodes:
+		var local_pos = layer.to_local(marker.global_position)
+		var cell_coord = layer.local_to_map(local_pos)
+		if not cells.has(cell_coord):
+			cells.append(cell_coord)
+
+	return capture_tile_cells(layer, cells)
+
+
 func set_tile_cells_removed(
 	layer: TileMapLayer,
 	snapshots: Array[TileCellSnapshot],

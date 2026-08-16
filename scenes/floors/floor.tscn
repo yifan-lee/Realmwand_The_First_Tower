@@ -11,21 +11,21 @@ unique_name_in_owner = true
 z_index = -10
 texture_filter = 2
 position = Vector2(-16, 16)
-scale = Vector2(0.158, 0.158)
+scale = Vector2(0.15763547, 0.15763547)
 tile_set = ExtResource("2_861f6")
 
 [node name="WallLayer" type="TileMapLayer" parent="." unique_id=917837273]
 unique_name_in_owner = true
 texture_filter = 2
 position = Vector2(-16, 16)
-scale = Vector2(0.158, 0.158)
+scale = Vector2(0.15763547, 0.15763547)
 tile_set = ExtResource("2_861f6")
 
 [node name="FeatureLayer" type="TileMapLayer" parent="." unique_id=1361208269]
 unique_name_in_owner = true
 texture_filter = 2
 position = Vector2(-16, 16)
-scale = Vector2(0.158, 0.158)
+scale = Vector2(0.15763547, 0.15763547)
 tile_set = ExtResource("2_861f6")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=759900]
@@ -41,4 +41,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Npcs" type="Node2D" parent="." unique_id=1261277173]
+unique_name_in_owner = true
+
+[node name="DynamicTiles" type="Node2D" parent="." unique_id=1459102837]
 unique_name_in_owner = true
