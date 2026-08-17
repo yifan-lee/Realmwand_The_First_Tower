@@ -3,6 +3,7 @@ extends RefCounted
 
 class ActorDelta extends RefCounted:
 	var hp_delta: float = 0.0
+	var shield_delta: float = 0.0
 	var mp_delta: float = 0.0
 	var fp_delta: float = 0.0
 	

@@ -9,6 +9,7 @@ var experience: int = 0
 var experience_to_next_level: int = 0
 
 var current_hp: float = 0.0
+var current_shield: float = 0.0
 var max_hp: float = 0.0
 var current_mp: float = 0.0
 var max_mp: float = 0.0
@@ -21,6 +22,7 @@ var current_atb: float = 0.0
 var max_atb: float = 100.0
 
 var current_hp_delta: float = 0.0
+var current_shield_delta: float = 0.0
 var current_mp_delta: float = 0.0
 var current_fp_delta: float = 0.0
 var current_atb_delta: float = 0.0
@@ -49,6 +51,7 @@ static func from_player(player: Player) -> ActorStatsViewData:
 	view.experience = player.experience
 	view.experience_to_next_level = player.get_experience_for_next_level()
 	view.current_hp = player.current_hp
+	view.current_shield = player.current_shield
 	view.max_hp = player.get_max_hp()
 	view.current_mp = player.current_mp
 	view.max_mp = player.get_max_mp()
@@ -70,6 +73,10 @@ func has_hp_change() -> bool:
 	return not is_zero_approx(current_hp_delta)
 
 
+func has_shield_change() -> bool:
+	return not is_zero_approx(current_shield_delta)
+
+
 func has_mp_change() -> bool:
 	return not is_zero_approx(current_mp_delta)
 
@@ -85,6 +92,7 @@ func has_atb_change() -> bool:
 func has_any_preview() -> bool:
 	return (
 		has_hp_change()
+		or has_shield_change()
 		or has_mp_change()
 		or has_fp_change()
 		or has_atb_change()
@@ -171,6 +179,7 @@ func preview_damage(damage: float) -> void:
 
 func clear_preview() -> void:
 	current_hp_delta = 0.0
+	current_shield_delta = 0.0
 	current_mp_delta = 0.0
 	current_fp_delta = 0.0
 	current_atb_delta = 0.0

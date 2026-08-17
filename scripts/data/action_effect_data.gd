@@ -14,6 +14,8 @@ enum EffectType {
 	REDUCE_FP,
 	SKILL_POWER,
 	INTERRUPT,
+	SHIELD,
+	THORNS_REFLECT,
 }
 
 enum TargetType {
@@ -55,6 +57,14 @@ func get_description() -> String:
 			return "扣除 %.0f 点魔力" % value
 		EffectType.REDUCE_FP:
 			return "扣除 %.0f 点专注" % value
+		EffectType.SHIELD:
+			if operation_type == OperationType.MULTIPLY:
+				return "获得最大生命值 %.0f%% 的护盾" % (value * 100.0)
+			else:
+				return "获得 %.0f 点护盾" % value
+		EffectType.THORNS_REFLECT:
+			var type_str = "物理" if restrict_skill_type and target_skill_type == SkillData.SkillType.PHYSICAL else ""
+			return "护盾存在时，受%s攻击反弹自身防御力 %.0f%% 的伤害" % [type_str, value * 100.0]
 		EffectType.ATK:
 			return _get_stat_desc("攻击力")
 		EffectType.DEF:

@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_cost_data.gd" id="1_cost"]
+[ext_resource type="Script" path="res://scripts/data/action_effect_data.gd" id="2_effect"]
+[ext_resource type="Script" path="res://scripts/data/skill_data.gd" id="3_skill"]
+[ext_resource type="Texture2D" uid="uid://05c953dcbf550553bbaf03f47ecd070f" path="res://assets/skills/support/buff_def_tier_2.png" id="4_icon"]
+
+[sub_resource type="Resource" id="Resource_cost_fp"]
+script = ExtResource("1_cost")
+cost_type = 2
+value = 20.0
+
+[sub_resource type="Resource" id="Resource_effect_shield"]
+script = ExtResource("2_effect")
+effect_type = 12
+target_type = 0
+operation_type = 1
+value = 0.2
+duration_count = 0
+restrict_skill_type = false
+target_skill_type = 0
+
+[sub_resource type="Resource" id="Resource_effect_thorns"]
+script = ExtResource("2_effect")
+effect_type = 13
+target_type = 0
+operation_type = 0
+value = 0.2
+duration_count = 0
+restrict_skill_type = true
+target_skill_type = 0
+
+[resource]
+script = ExtResource("3_skill")
+id = &"overload_def"
+display_name = "过载防御"
+description = "展开能量护盾并强化反击力场"
+icon = ExtResource("4_icon")
+unlock_level = 1
+skill_type = 2
+target_type = 1
+costs = Array[ExtResource("1_cost")]([SubResource("Resource_cost_fp")])
+effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield"), SubResource("Resource_effect_thorns")])
+cooldown = 1

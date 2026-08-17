@@ -51,6 +51,9 @@ var current_fp: float:
 	get(): return stats.current_fp if stats else 0.0
 	set(v): if stats: stats.set_current_fp(v)
 
+var current_shield: float:
+	get(): return stats.current_shield if stats else 0.0
+
 
 func _ready() -> void:
 	_refresh_visual()
@@ -142,6 +145,8 @@ func get_collision_tile_size() -> Vector2:
 # Proxy methods
 func take_damage(amount: float) -> float: return stats.take_damage(amount)
 func change_hp(amount: float) -> void: stats.change_hp(amount)
+func add_shield(amount: float) -> void: stats.add_shield(amount)
+func clear_shield() -> void: stats.clear_shield()
 func set_current_hp(value: float) -> void: stats.set_current_hp(value)
 func change_mp(amount: float) -> void: stats.change_mp(amount)
 func set_current_mp(value: float) -> void: stats.set_current_mp(value)

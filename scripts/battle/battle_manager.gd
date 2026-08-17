@@ -36,6 +36,7 @@ var _player_effects: Array[Dictionary] = []
 var _enemy_effects: Array[Dictionary] = []
 var _enemy_queued_skill: SkillData
 var _is_paused: bool = false
+var _player_skill_cast_count: int = 0
 
 
 func setup(player: Player, battle_ui: BattleUI) -> void:
@@ -53,6 +54,10 @@ func is_active() -> bool:
 
 func is_waiting_for_player() -> bool:
 	return _state == BattleState.WAITING_FOR_PLAYER
+
+
+func get_player_skill_cast_count() -> int:
+	return _player_skill_cast_count
 
 
 func _process(delta: float) -> void:
@@ -99,6 +104,7 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_enemy = enemy
 	_player = player
 	
+	_player_skill_cast_count = 0
 	_pre_battle_hp = _player.current_hp
 	_pre_battle_mp = _player.current_mp
 	_pre_battle_fp = _player.current_fp
@@ -120,10 +126,36 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_player_effects.clear()
 	_enemy_effects.clear()
 	_player.set_input_enabled(false)
+	_refresh_passive_effects()
 	_battle_ui.open(_player, _enemy, self)
 	_queue_enemy_next_skill()
 	_battle_ui.show_message("遭遇 %s，战斗开始。" % _enemy.enemy_data.display_name)
 	battle_started.emit(_enemy)
+
+
+func _refresh_passive_effects() -> void:
+	if _player == null:
+		return
+	if _player.has_method(&"has_skill") and _player.has_skill(&"overload_spd"):
+		var rem: int = 4 - (_player_skill_cast_count % 4)
+		var text := ""
+		if rem == 1:
+			text = "【过载极速】准备就绪！下次技能伤害 +50%"
+		else:
+			text = "【过载极速】充能中（还需施法 %d 次）" % rem
+			
+		var found := false
+		for entry in _player_effects:
+			if entry.get(&"id") == &"overload_spd_buff":
+				entry[&"text"] = text
+				found = true
+				break
+		if not found:
+			_player_effects.append({
+				&"id": &"overload_spd_buff",
+				&"text": text,
+				&"is_passive": true,
+			})
 
 
 func _on_battle_requested(enemy: Enemy, player: Player) -> void:
@@ -269,6 +301,12 @@ func _release_player_skill(skill: SkillData = null) -> void:
 		message += "\n" + extra
 	_battle_ui.show_message(message)
 	
+	if resolved_skill.skill_type == SkillData.SkillType.PHYSICAL:
+		_trigger_thorns_reflection(_player, _enemy, true)
+	
+	_player_skill_cast_count += 1
+	_refresh_passive_effects()
+	
 	var player_delta = preview.actor_deltas.get(_player, null)
 	var is_free_action = false
 	if player_delta != null and player_delta.is_free_action:
@@ -293,6 +331,7 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	BattleCalculator.evaluate_skill_effects(skill, _enemy, [_player], self, preview)
 	_consume_action_charges(true)
 	
+	var is_physical := (skill == null) or (skill.skill_type == SkillData.SkillType.PHYSICAL)
 	if skill == null:
 		# Fallback to basic attack if no skill
 		var damage: float = FORMULAS.calculate_skill_damage(
@@ -308,6 +347,9 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 		for extra in preview.extra_messages:
 			message += "\n" + extra
 		_battle_ui.show_message(message)
+	
+	if is_physical:
+		_trigger_thorns_reflection(_enemy, _player, true)
 	
 	var enemy_delta = preview.actor_deltas.get(_enemy, null)
 	var is_free_action = false
@@ -326,9 +368,31 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 		_finish_battle(false)
 
 
+func _trigger_thorns_reflection(attacker: Node, defender: Node, is_physical: bool) -> void:
+	if not is_physical:
+		return
+	if defender == null or attacker == null:
+		return
+	if not defender.has_method(&"get_def") or defender.get("current_shield") == null or defender.current_shield <= 0.0:
+		return
+
+	var defender_effects := get_actor_effects(defender)
+	for effect_entry in defender_effects:
+		var effect: ActionEffectData = effect_entry.get(&"effect")
+		if effect != null and effect.effect_type == ActionEffectData.EffectType.THORNS_REFLECT:
+			if effect.restrict_skill_type and effect.target_skill_type != SkillData.SkillType.PHYSICAL:
+				continue
+			var reflect_damage: float = maxf(1.0, defender.get_def() * effect.value)
+			attacker.change_hp(-reflect_damage)
+			_battle_ui.show_message("【护盾反伤】反弹了 %.0f 点物理伤害！" % reflect_damage)
+			break
+
+
 func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[ActionEffectData] = [], caster_is_enemy: bool = false) -> void:
 	for actor in preview.actor_deltas.keys():
 		var delta = preview.actor_deltas[actor]
+		if delta.shield_delta > 0.0 and actor.has_method(&"add_shield"):
+			actor.add_shield(delta.shield_delta)
 		actor.change_hp(delta.hp_delta)
 		actor.change_mp(delta.mp_delta)
 		actor.change_fp(delta.fp_delta)
@@ -337,21 +401,15 @@ func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[Action
 			
 	# Apply buff/debuff effect data
 	for effect: ActionEffectData in effects_to_apply:
-		if effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_MP and effect.effect_type != ActionEffectData.EffectType.RESTORE_FP and effect.effect_type != ActionEffectData.EffectType.REDUCE_MP and effect.effect_type != ActionEffectData.EffectType.REDUCE_FP and effect.effect_type != ActionEffectData.EffectType.INTERRUPT:
-			if effect.duration_count > 0:
-				var targets_self := effect.target_type == ActionEffectData.TargetType.SELF
-				var target_actor = _enemy if caster_is_enemy else _player
-				if not targets_self:
-					target_actor = _player if caster_is_enemy else _enemy
-					
-				var target_array: Array[Dictionary] = _player_effects
-				if target_actor == _enemy:
-					target_array = _enemy_effects
-					
-				target_array.append({
-					&"effect": effect,
-					&"remaining_count": effect.duration_count,
-				})
+		if effect.effect_type != ActionEffectData.EffectType.FREE_ACTION and effect.effect_type != ActionEffectData.EffectType.REDUCE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_HP and effect.effect_type != ActionEffectData.EffectType.RESTORE_MP and effect.effect_type != ActionEffectData.EffectType.RESTORE_FP and effect.effect_type != ActionEffectData.EffectType.REDUCE_MP and effect.effect_type != ActionEffectData.EffectType.REDUCE_FP and effect.effect_type != ActionEffectData.EffectType.INTERRUPT and effect.effect_type != ActionEffectData.EffectType.SHIELD:
+			var targets_self := effect.target_type == ActionEffectData.TargetType.SELF
+			var target_is_enemy: bool = caster_is_enemy if targets_self else not caster_is_enemy
+			var target_array: Array[Dictionary] = _enemy_effects if target_is_enemy else _player_effects
+				
+			target_array.append({
+				&"effect": effect,
+				&"remaining_count": effect.duration_count,
+			})
 
 
 func _complete_player_action(is_free_action: bool = false) -> void:
@@ -372,6 +430,10 @@ func _finish_battle(victory: bool) -> void:
 	_state = BattleState.INACTIVE
 	_battle_ui.close()
 	_player.set_input_enabled(true)
+	if _player != null and _player.has_method(&"clear_shield"):
+		_player.clear_shield()
+	if _enemy != null and _enemy.has_method(&"clear_shield"):
+		_enemy.clear_shield()
 	if victory:
 		var reward := _get_experience_reward()
 		_player.gold += _enemy.enemy_data.gold_reward
@@ -416,6 +478,8 @@ func _consume_action_charges(is_enemy: bool) -> void:
 	var cds = _enemy_cooldowns if is_enemy else _cooldowns
 	
 	for index: int in range(effects.size() - 1, -1, -1):
+		if effects[index].get(&"is_passive", false):
+			continue
 		var remaining = int(effects[index].get(&"remaining_count", 0)) - 1
 		if remaining <= 0:
 			effects.remove_at(index)

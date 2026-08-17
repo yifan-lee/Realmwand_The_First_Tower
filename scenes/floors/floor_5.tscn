@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://co51pqwbm7jmx" path="res://resources/equipment/arm_lv2.tres" id="13_v2shg"]
 [ext_resource type="Resource" uid="uid://0dvg81bt3wru" path="res://resources/items/mp_recovery_lv1.tres" id="15_5xuqc"]
 [ext_resource type="Resource" uid="uid://dix8w26nav0uq" path="res://resources/equipment/feet_lv2.tres" id="17_fmrn4"]
+[ext_resource type="PackedScene" path="res://scenes/actors/npcs/skill_tutor.tscn" id="19_4erq6"]
 
 [node name="Floor" unique_id=141402115 instance=ExtResource("1_base_floor")]
 script = ExtResource("1_bu62v")
@@ -34,6 +35,7 @@ tile_map_data = PackedByteArray("AADw/yIAAAAAAAEAAAAmABYAAAAAAAEAAAD8/xoAAAAAAAE
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=1927]
 
 [node name="FromAboveStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="1" unique_id=12658361]
+visible = false
 position = Vector2(-224, 0)
 
 [node name="StairBelow" parent="Interactables" parent_id_path=PackedInt32Array(191277635) index="0" unique_id=841985626 instance=ExtResource("3_bq4r8")]
@@ -1084,6 +1086,9 @@ item_data = ExtResource("15_5xuqc")
 [node name="MPLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="70" unique_id=830332608 instance=ExtResource("9_wjhij")]
 position = Vector2(928, 1568)
 item_data = ExtResource("15_5xuqc")
+
+[node name="SkillTutor" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="0" unique_id=1258533527 instance=ExtResource("19_4erq6")]
+position = Vector2(0, -128)
 
 [node name="WallFinal" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="0" unique_id=886384889]
 

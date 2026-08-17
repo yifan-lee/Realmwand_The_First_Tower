@@ -87,6 +87,11 @@ static func evaluate_skill_effects(
 						skill.skill_type
 					)
 					var damage := FORMULAS.calculate_skill_damage(caster_atk, skill_power, target_def)
+					if caster.has_method(&"has_skill") and caster.has_skill(&"overload_spd") and battle_manager != null and battle_manager.has_method(&"get_player_skill_cast_count"):
+						var next_cast: int = battle_manager.get_player_skill_cast_count() + 1
+						if next_cast % 4 == 0:
+							damage = roundf(damage * 1.5)
+							preview.add_message("（触发【过载极速】伤害提升 50%！）")
 					target_delta.hp_delta -= damage
 					total_applied_damage += damage
 				ActionEffectData.EffectType.ATK:
@@ -95,6 +100,13 @@ static func evaluate_skill_effects(
 					target_delta.def_delta += FORMULAS.skill_effect_delta(battle_manager.get_actor_stat(target, ActionEffectData.EffectType.DEF), effect)
 				ActionEffectData.EffectType.SPD:
 					target_delta.spd_delta += FORMULAS.skill_effect_delta(battle_manager.get_actor_stat(target, ActionEffectData.EffectType.SPD), effect)
+				ActionEffectData.EffectType.SHIELD:
+					var shield_amount := effect.value
+					if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
+						var max_hp = target.get_max_hp() if target.has_method(&"get_max_hp") else 100.0
+						shield_amount = max_hp * effect.value
+					target_delta.shield_delta += shield_amount
+					preview.add_message("获得了 %.0f 点护盾。" % shield_amount)
 				ActionEffectData.EffectType.FREE_ACTION:
 					target_delta.is_free_action = true
 

@@ -10,6 +10,7 @@ enum SkillType {
 	PHYSICAL,
 	MAGICAL,
 	TRANSFORM,
+	PASSIVE,
 }
 
 @export_group("Identity")
@@ -37,6 +38,8 @@ func get_type_name() -> String:
 			return "魔法"
 		SkillType.TRANSFORM:
 			return "变化"
+		SkillType.PASSIVE:
+			return "被动"
 		_:
 			return "物理"
 

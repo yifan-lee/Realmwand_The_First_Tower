@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/skill_data.gd" id="1_skill"]
+[ext_resource type="Texture2D" uid="uid://adf8b063848a656b9496e8a0e49533de" path="res://assets/skills/support/buff_spd_tier_2.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"overload_spd"
+display_name = "过载极速"
+description = "被动：战斗中每第4次施放技能，造成的伤害提升50%"
+icon = ExtResource("2_icon")
+unlock_level = 1
+skill_type = 3
+target_type = 1
+costs = []
+effects = []
+cooldown = 0

@@ -121,7 +121,11 @@ func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) ->
 	_player = player
 	_enemy = enemy
 	_battle_manager = battle_manager
-	skill_panel.display_skills(player.learned_skills)
+	var active_skills: Array[SkillData] = []
+	for skill: SkillData in player.learned_skills:
+		if skill != null and skill.skill_type != SkillData.SkillType.PASSIVE:
+			active_skills.append(skill)
+	skill_panel.display_skills(active_skills)
 	inventory_panel.bind_inventory(player.inventory)
 	inventory_panel.set_battle_only(true)
 	battle_root.visible = true
@@ -279,6 +283,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 		var player_delta = preview.actor_deltas.get(_player, null)
 		if player_delta != null:
 			player_view.current_hp_delta = player_delta.hp_delta
+			player_view.current_shield_delta = player_delta.shield_delta
 			player_view.current_mp_delta = player_delta.mp_delta
 			player_view.current_fp_delta = player_delta.fp_delta
 			player_view.atk_delta = player_delta.atk_delta
@@ -290,6 +295,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 		var enemy_delta = preview.actor_deltas.get(_enemy, null)
 		if enemy_delta != null:
 			enemy_view.current_hp_delta = enemy_delta.hp_delta
+			enemy_view.current_shield_delta = enemy_delta.shield_delta
 			enemy_view.current_mp_delta = enemy_delta.mp_delta
 			enemy_view.current_fp_delta = enemy_delta.fp_delta
 			enemy_view.atk_delta = enemy_delta.atk_delta
@@ -380,6 +386,7 @@ func _build_enemy_view() -> ActorStatsViewData:
 	view.portrait = _get_marker_texture(_enemy, _enemy.enemy_data.portrait)
 	view.description = _enemy.enemy_data.description
 	view.current_hp = _enemy.current_hp
+	view.current_shield = _enemy.current_shield
 	view.max_hp = _enemy.get_max_hp()
 	view.current_mp = _enemy.current_mp
 	view.max_mp = _enemy.get_max_mp()

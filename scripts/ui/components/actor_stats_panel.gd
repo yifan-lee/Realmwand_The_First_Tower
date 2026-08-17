@@ -10,6 +10,8 @@ enum FpDisplayMode {
 
 const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
+const PREVIEW_SHIELD_COLOR := Color("#00E5FFFF")
+const SHIELD_VALUE_COLOR := Color("#50C8FFFF")
 const VALUE_COLOR := Color("#D9E5E8FF")
 const BUFF_LABEL_SCENE := preload("res://scenes/ui/components/buff_label.tscn")
 const FEATURE_IDS: Array[StringName] = [
@@ -93,7 +95,14 @@ func display_stats(
 		experience_value.text = "%d/%d" % [view_data.experience, view_data.experience_to_next_level]
 
 	_update_resource_bars()
-	hp_value.text = _format_resource(view_data.current_hp, view_data.max_hp, view_data.current_hp_delta, view_data.max_hp_delta)
+	hp_value.text = _format_hp_resource(
+		view_data.current_hp,
+		view_data.current_shield,
+		view_data.max_hp,
+		view_data.current_hp_delta,
+		view_data.current_shield_delta,
+		view_data.max_hp_delta
+	)
 	mp_value.text = _format_resource(view_data.current_mp, view_data.max_mp, view_data.current_mp_delta, view_data.max_mp_delta)
 	
 	if fp_display_mode == FpDisplayMode.RECOVERY_SPEED:
@@ -162,7 +171,14 @@ func refresh_runtime_resources(
 	_view_data.current_mp = current_mp
 	_view_data.current_fp = current_fp
 	_update_resource_bars()
-	hp_value.text = _format_resource(current_hp, _view_data.max_hp, _view_data.current_hp_delta, _view_data.max_hp_delta)
+	hp_value.text = _format_hp_resource(
+		current_hp,
+		_view_data.current_shield,
+		_view_data.max_hp,
+		_view_data.current_hp_delta,
+		_view_data.current_shield_delta,
+		_view_data.max_hp_delta
+	)
 	mp_value.text = _format_resource(current_mp, _view_data.max_mp, _view_data.current_mp_delta, _view_data.max_mp_delta)
 	
 	if fp_display_mode == FpDisplayMode.RECOVERY_SPEED:
@@ -176,7 +192,12 @@ func refresh_runtime_resources(
 func _update_resource_bars() -> void:
 	hp_bar.max_value = _view_data.get_preview_max_hp()
 	mp_bar.max_value = _view_data.get_preview_max_mp()
-	_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
+	
+	if _view_data.has_shield_change() and _view_data.current_shield_delta > 0.0:
+		_update_shield_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_shield_delta)
+	else:
+		_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
+
 	_update_preview_segment(mp_preview_segment, mp_bar, _view_data.current_mp, _view_data.current_mp_delta)
 
 	if fp_display_mode == FpDisplayMode.PROGRESS_BAR:
@@ -184,6 +205,29 @@ func _update_resource_bars() -> void:
 		_update_preview_segment(fp_preview_segment, fp_bar, _view_data.current_fp, _view_data.current_fp_delta)
 	else:
 		fp_preview_segment.visible = false
+
+
+func _update_shield_preview_segment(
+	segment: ColorRect,
+	bar: ProgressBar,
+	current_value: float,
+	shield_delta: float
+) -> void:
+	var maximum := maxf(bar.max_value, 1.0)
+	bar.value = current_value
+	if bar.size.x <= 0.0:
+		segment.visible = false
+		return
+	var segment_start := current_value
+	var preview_value := minf(current_value + shield_delta, maximum)
+	var segment_width := maxf(preview_value - current_value, 2.0)
+	segment.position = Vector2(bar.size.x * segment_start / maximum, 2.0)
+	segment.size = Vector2(maxf(2.0, bar.size.x * segment_width / maximum), maxf(0.0, bar.size.y - 4.0))
+	segment.color = PREVIEW_SHIELD_COLOR
+	var flash_tint := Color("#FFFFFFFF")
+	flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
+	segment.self_modulate = flash_tint
+	segment.visible = true
 
 
 func _update_preview_segment(
@@ -207,6 +251,7 @@ func _update_preview_segment(
 	var segment_width := absf(preview_value - current_value)
 	segment.position = Vector2(bar.size.x * segment_start / maximum, 2.0)
 	segment.size = Vector2(maxf(2.0, bar.size.x * segment_width / maximum), maxf(0.0, bar.size.y - 4.0))
+	segment.color = PREVIEW_GAIN_COLOR if delta > 0.0 else PREVIEW_LOSS_COLOR
 	var flash_tint := Color("#FFFFFFFF")
 	flash_tint.a = lerpf(0.15, 1.0, _view_data.get_flash_pulse())
 	segment.self_modulate = flash_tint
@@ -217,6 +262,26 @@ func _hide_preview_segments() -> void:
 	hp_preview_segment.visible = false
 	mp_preview_segment.visible = false
 	fp_preview_segment.visible = false
+
+
+func _format_hp_resource(
+	value: float,
+	shield: float,
+	maximum: float,
+	delta: float,
+	shield_delta: float,
+	maximum_delta: float = 0.0
+) -> String:
+	var hp_str := _format_stat(value, delta)
+	if not is_zero_approx(shield_delta):
+		hp_str += " [color=#%s](+%.0f 护盾)[/color]" % [PREVIEW_SHIELD_COLOR.to_html(false), shield_delta]
+	elif shield > 0.0:
+		hp_str += " [color=#%s](+%.0f 盾)[/color]" % [SHIELD_VALUE_COLOR.to_html(false), shield]
+		
+	return "[right]%s / %s[/right]" % [
+		hp_str,
+		_format_stat(maximum, maximum_delta),
+	]
 
 
 func _format_resource(value: float, maximum: float, delta: float, maximum_delta: float = 0.0) -> String:
@@ -273,13 +338,23 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 		
 	buffs_container.visible = true
 	for active: Dictionary in effects:
+		var custom_text: String = String(active.get(&"text", ""))
+		if not custom_text.is_empty():
+			var label := BUFF_LABEL_SCENE.instantiate() as Label
+			label.text = "• " + custom_text
+			buffs_container.add_child(label)
+			continue
+
 		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
 		if effect == null: continue
 		var desc := effect.get_description()
 		if desc.is_empty(): continue
 		var remaining: int = active.get(&"remaining_count", 0)
 		var label := BUFF_LABEL_SCENE.instantiate() as Label
-		label.text = "• %s (剩余 %d 次)" % [desc, remaining]
+		if remaining > 0:
+			label.text = "• %s (剩余 %d 次)" % [desc, remaining]
+		else:
+			label.text = "• %s" % desc
 		buffs_container.add_child(label)
 
 
