@@ -8,7 +8,7 @@
 [resource]
 script = ExtResource("1_jkdic")
 world_texture = ExtResource("4_au5ky")
-id = &"enemy_balance_lv2"
+id = &"enemy_bal_lv2"
 display_name = "2级平衡怪"
 atk = 1000.0
 def = 1000.0

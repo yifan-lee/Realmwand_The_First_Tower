@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("1_705wo")
 world_texture = ExtResource("1_glimv")
+id = &"enemy_atk_lv2"
 display_name = "2级攻击怪"
 atk = 80.0
 def = 30.0

@@ -109,8 +109,33 @@ func set_context(context: ActorStatsContext) -> void:
 	refresh()
 
 
-func set_preview(preview: ActorStatsPreviewData) -> void:
-	_preview = preview
+func set_preview(preview: Variant = null, extra_param: Variant = null) -> void:
+	if preview == null:
+		_preview = null
+		refresh()
+		return
+
+	if preview is ActorStatsPreviewData:
+		var p_data := preview as ActorStatsPreviewData
+		_preview = p_data if p_data.has_any_preview() else null
+		refresh()
+		return
+
+	if _bound_actor != null:
+		var created := ActorStatsFactory.create_preview_from_entry(_bound_actor, preview, extra_param)
+		_preview = created if created != null and created.has_any_preview() else null
+	else:
+		_preview = null
+
+	refresh()
+
+
+func preview_permanent_increase(stat_id: StringName, amount: float) -> void:
+	if _bound_actor is Player and not stat_id.is_empty() and not is_zero_approx(amount):
+		var created := ActorStatsFactory.create_preview_from_permanent_increase(_bound_actor as Player, stat_id, amount)
+		_preview = created if created != null and created.has_any_preview() else null
+	else:
+		_preview = null
 	refresh()
 
 

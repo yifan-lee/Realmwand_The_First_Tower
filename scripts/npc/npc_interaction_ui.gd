@@ -109,17 +109,7 @@ func show_player_stat_preview(player: Player, stat_id: StringName = &"", amount:
 		stats_panel.unbind_actor()
 		return
 	stats_panel.bind_actor(player, ActorStatsDisplayProfile.menu())
-	var preview_dict := player.get_permanent_stat_increase_preview(stat_id, amount)
-	var preview_data := ActorStatsPreviewData.new()
-	preview_data.current_hp_delta = preview_dict.get(&"current_hp", player.current_hp) - player.current_hp
-	preview_data.max_hp_delta = preview_dict.get(&"max_hp", player.get_max_hp()) - player.get_max_hp()
-	preview_data.current_mp_delta = preview_dict.get(&"current_mp", player.current_mp) - player.current_mp
-	preview_data.max_mp_delta = preview_dict.get(&"max_mp", player.get_max_mp()) - player.get_max_mp()
-	preview_data.atk_delta = preview_dict.get(&"atk", player.get_atk()) - player.get_atk()
-	preview_data.def_delta = preview_dict.get(&"def", player.get_def()) - player.get_def()
-	preview_data.spd_delta = preview_dict.get(&"spd", player.get_spd()) - player.get_spd()
-	preview_data.fp_recovery_spd_delta = preview_dict.get(&"fp_recovery", player.get_fp_recovery_spd()) - player.get_fp_recovery_spd()
-	stats_panel.set_preview(preview_data)
+	stats_panel.preview_permanent_increase(stat_id, amount)
 
 
 func show_transaction_result(success: bool, message: String) -> void:
@@ -128,16 +118,17 @@ func show_transaction_result(success: bool, message: String) -> void:
 
 
 func show_entry_detail(entry: Variant) -> void:
-	if selection_detail_panel == null:
-		return
-	if entry is SkillData:
-		selection_detail_panel.display_skill(entry as SkillData)
-	elif entry is ItemData:
-		selection_detail_panel.display_item(entry as ItemData)
-	elif entry is EntryInfoViewData:
-		selection_detail_panel.display_info(entry as EntryInfoViewData)
-	else:
-		selection_detail_panel.clear_info()
+	if selection_detail_panel != null:
+		if entry is SkillData:
+			selection_detail_panel.display_skill(entry as SkillData)
+		elif entry is ItemData:
+			selection_detail_panel.display_item(entry as ItemData)
+		elif entry is EntryInfoViewData:
+			selection_detail_panel.display_info(entry as EntryInfoViewData)
+		else:
+			selection_detail_panel.clear_info()
+
+	stats_panel.set_preview(entry)
 
 
 func close() -> void:

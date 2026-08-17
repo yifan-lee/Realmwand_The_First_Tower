@@ -350,30 +350,19 @@ func _should_preserve_text_input(event: InputEvent) -> bool:
 
 func _on_item_focused(item: ItemData) -> void:
 	equipment_panel.clear_preview()
-	var preview := ActorStatsPreviewData.new()
+	_preview_target_slot = -1
+
 	if item is EquipmentData:
 		var equipment := item as EquipmentData
 		_preview_target_slot = _choose_equipment_target(equipment)
 		if _preview_target_slot >= 0:
-			_preview_equipment(equipment, _preview_target_slot, preview)
+			_preview_equipment(equipment, _preview_target_slot)
+		else:
+			actor_stats_panel.set_preview(null)
 	else:
-		var hp_rec := 0.0
-		var mp_rec := 0.0
-		var fp_rec := 0.0
-		for effect: ActionEffectData in item.effects:
-			if effect.resource_type == ActionEffectData.ResourceType.HP and effect.value > 0:
-				hp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_hp() * effect.value if _player != null else 0.0)
-			elif effect.resource_type == ActionEffectData.ResourceType.MP and effect.value > 0:
-				mp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_mp() * effect.value if _player != null else 0.0)
-			elif effect.resource_type == ActionEffectData.ResourceType.FP and effect.value > 0:
-				fp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_fp() * effect.value if _player != null else 0.0)
-		if _player != null:
-			preview.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
-			preview.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
-			preview.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
+		actor_stats_panel.set_preview(item)
 
 	entry_info_panel.display_item(item)
-	actor_stats_panel.set_preview(preview)
 
 
 func _on_item_selected(item: ItemData) -> void:
@@ -413,19 +402,7 @@ func _on_item_selected(item: ItemData) -> void:
 
 
 func _on_skill_focused(skill: SkillData) -> void:
-	var preview := ActorStatsPreviewData.new()
-	if _player != null:
-		for effect: ActionEffectData in skill.effects:
-			if effect.status_to_apply != null:
-				var status := effect.status_to_apply
-				match status.affected_stat:
-					StatusEffectData.StatType.ATK:
-						preview.atk_delta += FORMULAS.status_effect_delta(_player.get_atk(), status)
-					StatusEffectData.StatType.DEF:
-						preview.def_delta += FORMULAS.status_effect_delta(_player.get_def(), status)
-					StatusEffectData.StatType.SPD:
-						preview.spd_delta += FORMULAS.status_effect_delta(_player.get_spd(), status)
-	actor_stats_panel.set_preview(preview)
+	actor_stats_panel.set_preview(skill)
 	entry_info_panel.display_skill(skill)
 
 
@@ -466,14 +443,15 @@ func _on_equip_slot_previewed(slot: int) -> void:
 	actor_stats_panel.set_preview(preview)
 
 
-func _preview_equipment(equipment: EquipmentData, target_slot: int, preview: ActorStatsPreviewData) -> void:
+func _preview_equipment(equipment: EquipmentData, target_slot: int, preview: ActorStatsPreviewData = null) -> void:
 	var displaced: Array[EquipmentData] = _player.equipment.get_displaced_items(equipment, target_slot)
 	var delta: Dictionary[StringName, float] = FORMULAS.equipment_delta(equipment, displaced)
-	preview.max_hp_delta = delta[&"max_hp"]
-	preview.max_mp_delta = delta[&"max_mp"]
-	preview.atk_delta = delta[&"atk"]
-	preview.def_delta = delta[&"def"]
-	preview.spd_delta = delta[&"spd"]
+	var preview_data := preview if preview != null else ActorStatsPreviewData.new()
+	preview_data.max_hp_delta = delta[&"max_hp"]
+	preview_data.max_mp_delta = delta[&"max_mp"]
+	preview_data.atk_delta = delta[&"atk"]
+	preview_data.def_delta = delta[&"def"]
+	preview_data.spd_delta = delta[&"spd"]
 	
 	var affected: Array[int] = _player.equipment.get_affected_slots(equipment, target_slot)
 	for displaced_item: EquipmentData in displaced:
@@ -481,7 +459,7 @@ func _preview_equipment(equipment: EquipmentData, target_slot: int, preview: Act
 			if not affected.has(s):
 				affected.append(s)
 	equipment_panel.preview_slots(affected)
-	actor_stats_panel.set_preview(preview)
+	actor_stats_panel.set_preview(preview_data)
 
 
 func _on_equip_popup_hide() -> void:

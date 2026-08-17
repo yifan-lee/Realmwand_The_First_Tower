@@ -8,7 +8,7 @@
 [resource]
 script = ExtResource("1_nbwpc")
 visual_scale_multiplier = 1.2000000000000002
-id = &"enemy_def_lv1"
+id = &"enemy_spd_lv1"
 display_name = "一级速度怪"
 description = "速度很快的生物。非常恼人。提高速度之后也许可以抢先出手。"
 atk = 50.0
