@@ -34,10 +34,13 @@ var cp: float = 0.0
 
 var max_hp_delta: float = 0.0
 var max_mp_delta: float = 0.0
+var max_fp_delta: float = 0.0
+var start_fp_delta: float = 0.0
 var atk_delta: float = 0.0
 var def_delta: float = 0.0
 var spd_delta: float = 0.0
 var fp_recovery_spd_delta: float = 0.0
+var cp_delta: float = 0.0
 
 var active_effects: Array[Dictionary] = []
 
@@ -47,7 +50,7 @@ func has_progression() -> bool:
 
 
 func has_hp_change() -> bool:
-	return not is_zero_approx(current_hp_delta)
+	return not is_zero_approx(current_hp_delta) or not is_zero_approx(max_hp_delta)
 
 
 func has_shield_change() -> bool:
@@ -55,15 +58,24 @@ func has_shield_change() -> bool:
 
 
 func has_mp_change() -> bool:
-	return not is_zero_approx(current_mp_delta)
+	return not is_zero_approx(current_mp_delta) or not is_zero_approx(max_mp_delta)
 
 
 func has_fp_change() -> bool:
-	return not is_zero_approx(current_fp_delta)
+	return (
+		not is_zero_approx(current_fp_delta)
+		or not is_zero_approx(max_fp_delta)
+		or not is_zero_approx(start_fp_delta)
+		or not is_zero_approx(fp_recovery_spd_delta)
+	)
 
 
 func has_atb_change() -> bool:
 	return not is_zero_approx(current_atb_delta)
+
+
+func has_combat_stat_change() -> bool:
+	return not is_zero_approx(atk_delta) or not is_zero_approx(def_delta) or not is_zero_approx(spd_delta)
 
 
 func has_any_preview() -> bool:
@@ -73,21 +85,23 @@ func has_any_preview() -> bool:
 		or has_mp_change()
 		or has_fp_change()
 		or has_atb_change()
-		or not is_zero_approx(max_hp_delta)
-		or not is_zero_approx(max_mp_delta)
-		or not is_zero_approx(atk_delta)
-		or not is_zero_approx(def_delta)
-		or not is_zero_approx(spd_delta)
-		or not is_zero_approx(fp_recovery_spd_delta)
+		or has_combat_stat_change()
+		or not is_zero_approx(cp_delta)
 	)
 
 
 func get_preview_hp() -> float:
-	return clampf(current_hp + current_hp_delta, 0.0, maxf(max_hp, 1.0))
+	return clampf(current_hp + current_hp_delta, 0.0, get_effective_hp_max())
 
 
 func get_preview_max_hp() -> float:
 	return maxf(1.0, max_hp + max_hp_delta)
+
+
+func get_effective_hp_max() -> float:
+	var base_max := get_preview_max_hp()
+	var projected_hp_and_shield := current_hp + current_shield + maxf(0.0, current_shield_delta)
+	return maxf(base_max, projected_hp_and_shield)
 
 
 func get_preview_mp() -> float:
@@ -100,6 +114,10 @@ func get_preview_max_mp() -> float:
 
 func get_preview_fp() -> float:
 	return clampf(current_fp + current_fp_delta, 0.0, maxf(max_fp, 1.0))
+
+
+func get_preview_max_fp() -> float:
+	return maxf(0.0, max_fp + max_fp_delta)
 
 
 func get_preview_atb() -> float:
@@ -167,7 +185,10 @@ func clear_preview() -> void:
 	current_atb_delta = 0.0
 	max_hp_delta = 0.0
 	max_mp_delta = 0.0
+	max_fp_delta = 0.0
+	start_fp_delta = 0.0
 	atk_delta = 0.0
 	def_delta = 0.0
 	spd_delta = 0.0
 	fp_recovery_spd_delta = 0.0
+	cp_delta = 0.0

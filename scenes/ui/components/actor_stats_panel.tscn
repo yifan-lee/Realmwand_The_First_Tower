@@ -120,6 +120,18 @@ theme_type_variation = &"HpProgressBar"
 value = 100.0
 show_percentage = false
 
+[node name="HpTicks" parent="MarginContainer/Content/Resources/HpRow/HpBar" unique_id=939573977 instance=ExtResource("3_xgs0e")]
+layout_mode = 1
+
+[node name="HpShieldSegment" type="ColorRect" parent="MarginContainer/Content/Resources/HpRow/HpBar" unique_id=105770670]
+visible = false
+layout_mode = 0
+anchor_bottom = 1.0
+offset_top = 2.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.27, 0.67, 0.95, 1)
+
 [node name="HpPreviewSegment" type="ColorRect" parent="MarginContainer/Content/Resources/HpRow/HpBar" unique_id=1409841475]
 visible = false
 layout_mode = 0
@@ -128,9 +140,6 @@ offset_top = 2.0
 offset_bottom = -2.0
 mouse_filter = 2
 color = Color(0.196078, 1, 0.490196, 1)
-
-[node name="HpTicks" parent="MarginContainer/Content/Resources/HpRow/HpBar" unique_id=939573977 instance=ExtResource("3_xgs0e")]
-layout_mode = 1
 
 [node name="HpValue" type="RichTextLabel" parent="MarginContainer/Content/Resources/HpRow" unique_id=1183193934]
 custom_minimum_size = Vector2(140, 28)

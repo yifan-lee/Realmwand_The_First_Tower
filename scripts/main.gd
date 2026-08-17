@@ -23,7 +23,7 @@ extends Node2D
 @onready var bgm_player: AudioStreamPlayer = $BgmPlayer
 
 const BGM_INTRO = preload("res://assets/audios/intro.ogg")
-const BGM_BATTLE = preload("res://assets/audios/battle.ogg")
+const BGM_BATTLE = preload("res://assets/audios/Leading-to-victory.ogg")
 const BGM_GENERAL = preload("res://assets/audios/general.ogg")
 
 func play_bgm(stream: AudioStream) -> void:
@@ -84,7 +84,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_battle_finished(victory: bool) -> void:
-	play_bgm(BGM_GENERAL)
+	if victory:
+		play_bgm(BGM_GENERAL)
+	else:
+		play_bgm(BGM_GENERAL)
 
 
 func _on_intro_finished() -> void:

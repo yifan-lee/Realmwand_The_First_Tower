@@ -36,7 +36,7 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 			var start: int = maxi(0, lines.size() - max_lines)
 			for i in range(start, lines.size()):
 				var line: String = lines[i]
-				if line.contains("ERROR") or line.contains("SCRIPT ERROR") or line.contains("Parse Error") or line.contains("WARNING"):
+				if line.contains("ERROR") or line.contains("SCRIPT ERROR") or line.contains("Parse Error"):
 					errors.append(line.strip_edges())
 
 	# 2. Check the script editor for compile errors (red background lines)
@@ -50,7 +50,7 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 			var script_path: String = current_script.resource_path
 			for i in range(ce.get_line_count()):
 				var bg: Color = ce.get_line_background_color(i)
-				if bg.r > 0.8 and bg.a > 0:  # Red-ish background = error
+				if bg.r > 0.8 and bg.a > 0: # Red-ish background = error
 					var line_text: String = ce.get_line(i).strip_edges()
 					script_errors.append("COMPILE ERROR: %s:%d - %s" % [script_path, i + 1, line_text])
 
@@ -74,18 +74,6 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 			if vsplit == null:
 				continue
 			var children: Array = vsplit.get_children()
-			# child[1] = warnings panel (RichTextLabel)
-			if children.size() > 1 and children[1] is RichTextLabel:
-				var text: String = (children[1] as RichTextLabel).get_parsed_text().strip_edges()
-				if not text.is_empty():
-					for line in text.split("\n"):
-						var stripped: String = line.strip_edges()
-						if stripped.is_empty() or stripped == "[Ignore]":
-							continue
-						# Remove leading "[Ignore]" prefix from warning lines
-						stripped = stripped.trim_prefix("[Ignore]")
-						var prefix: String = "WARNING: %s:" % script_path if not script_path.is_empty() else "WARNING: "
-						analyzer_errors.append(prefix + stripped)
 			# child[2] = errors panel (RichTextLabel)
 			if children.size() > 2 and children[2] is RichTextLabel:
 				var text: String = (children[2] as RichTextLabel).get_parsed_text().strip_edges()
@@ -140,9 +128,9 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 														debugger_errors.append("DEBUGGER:   " + sub_msg)
 													sub = sub.get_next()
 												item = item.get_next()
-								break  # Found Errors tab, stop searching tabs
-						break  # Found TabContainer, stop searching debugger children
-				break  # Found ScriptEditorDebugger, stop BFS
+								break # Found Errors tab, stop searching tabs
+						break # Found TabContainer, stop searching debugger children
+				break # Found ScriptEditorDebugger, stop BFS
 			for child in node.get_children():
 				queue.append(child)
 

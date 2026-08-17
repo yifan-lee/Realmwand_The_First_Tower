@@ -4,6 +4,7 @@ extends PanelContainer
 const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
 const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
 const PREVIEW_SHIELD_COLOR := Color("#00E5FFFF")
+const SHIELD_BAR_COLOR := Color("#45AAF2FF")
 const SHIELD_VALUE_COLOR := Color("#50C8FFFF")
 const VALUE_COLOR := Color("#D9E5E8FF")
 const BUFF_LABEL_SCENE := preload("res://scenes/ui/components/buff_label.tscn")
@@ -29,6 +30,7 @@ const FEATURE_IDS: Array[StringName] = [
 
 @onready var hp_row: Control = $MarginContainer/Content/Resources/HpRow
 @onready var hp_bar: ProgressBar = $MarginContainer/Content/Resources/HpRow/HpBar
+@onready var hp_shield_segment: ColorRect = $MarginContainer/Content/Resources/HpRow/HpBar/HpShieldSegment
 @onready var hp_preview_segment: ColorRect = $MarginContainer/Content/Resources/HpRow/HpBar/HpPreviewSegment
 @onready var hp_value: RichTextLabel = $MarginContainer/Content/Resources/HpRow/HpValue
 
@@ -113,20 +115,8 @@ func set_preview(preview: ActorStatsPreviewData) -> void:
 
 
 func clear_preview() -> void:
-	if _preview == null:
-		return
 	_preview = null
 	refresh()
-
-
-func refresh() -> void:
-	if _bound_actor == null:
-		if _view_data != null:
-			_render_view_data(_view_data)
-		return
-
-	_view_data = ActorStatsFactory.create_view_data(_bound_actor, _profile, _context, _preview)
-	_render_view_data(_view_data)
 
 
 func unbind_actor() -> void:
@@ -148,34 +138,53 @@ func _on_actor_stats_changed() -> void:
 	refresh()
 
 
-func display_stats(view_data: ActorStatsViewData) -> void:
-	if view_data == null:
+func refresh() -> void:
+	if _bound_actor == null:
 		clear_stats()
 		return
+
+	var profile := _profile if _profile != null else ActorStatsDisplayProfile.menu()
+	_view_data = ActorStatsFactory.create_view_data(
+		_bound_actor,
+		profile,
+		_context,
+		_preview
+	)
+	_render_view_data(_view_data)
+
+
+func display_stats(view_data: ActorStatsViewData) -> void:
 	_view_data = view_data
-	_render_view_data(view_data)
+	_render_view_data(_view_data)
 
 
 func _render_view_data(view_data: ActorStatsViewData) -> void:
+	if view_data == null:
+		clear_stats()
+		return
+
 	var profile: ActorStatsDisplayProfile = _profile if _profile != null else ActorStatsDisplayProfile.menu()
+	var obey_unlocks := profile.obey_feature_unlocks
 
 	# Portrait
-	portrait.texture = view_data.portrait
-	portrait.visible = profile.show_portrait and view_data.portrait != null
+	if view_data.portrait != null:
+		portrait.texture = view_data.portrait
+		portrait.visible = true
+	else:
+		portrait.texture = null
+		portrait.visible = false
 
 	# Name & Description
 	name_label.text = view_data.display_name
-	name_label.visible = profile.show_name and not view_data.display_name.is_empty()
+	name_label.visible = not view_data.display_name.is_empty()
 	description_label.text = view_data.description
-	description_label.visible = profile.show_description and not view_data.description.is_empty()
+	description_label.visible = not view_data.description.is_empty()
+	header_details.visible = name_label.visible or description_label.visible
 
 	# Progression & CP
-	var show_progression: bool = profile.show_progression and view_data.has_progression()
-	var obey_unlocks: bool = profile.obey_feature_unlocks
-
-	level_label.visible = show_progression and _is_stat_unlocked(&"level", obey_unlocks)
+	var show_progression := profile.show_progression and view_data.has_progression() and _is_stat_unlocked(&"level", obey_unlocks)
+	level_label.visible = show_progression
 	experience_row.visible = show_progression and _is_stat_unlocked(&"exp", obey_unlocks)
-
 	if show_progression:
 		level_label.text = "等级 %d" % view_data.level
 		experience_value.text = "%d/%d" % [view_data.experience, view_data.experience_to_next_level]
@@ -212,7 +221,12 @@ func _render_view_data(view_data: ActorStatsViewData) -> void:
 		fp_value.text = "[right]%s /s[/right]" % _format_float_stat(view_data.fp_recovery_spd, view_data.fp_recovery_spd_delta)
 	else:
 		fp_bar.visible = true
-		fp_value.text = _format_resource(view_data.current_fp, view_data.max_fp, view_data.current_fp_delta)
+		fp_value.text = _format_resource(
+			view_data.current_fp,
+			view_data.max_fp,
+			view_data.current_fp_delta,
+			view_data.max_fp_delta
+		)
 
 	if atb_row.visible:
 		atb_value.text = _format_resource(view_data.current_atb, view_data.max_atb, view_data.current_atb_delta)
@@ -276,51 +290,72 @@ func _update_resource_bars() -> void:
 	if _view_data == null:
 		return
 
-	hp_bar.max_value = _view_data.get_preview_max_hp()
-	mp_bar.max_value = _view_data.get_preview_max_mp()
+	var effective_hp_max := _view_data.get_effective_hp_max()
+	hp_bar.max_value = effective_hp_max
+	mp_bar.max_value = maxf(_view_data.get_preview_max_mp(), 1.0)
 
-	if _view_data.has_shield_change() and _view_data.current_shield_delta > 0.0:
-		_update_shield_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_shield_delta)
+	# Base HP Bar & Preview
+	var preview_hp := _view_data.get_preview_hp()
+	hp_bar.value = minf(_view_data.current_hp, preview_hp)
+
+	# Steady State Shield Layer
+	if _view_data.current_shield > 0.0 and hp_bar.size.x > 0.0:
+		var shield_start := minf(_view_data.current_hp, preview_hp)
+		var shield_width := _view_data.current_shield
+		hp_shield_segment.position = Vector2(hp_bar.size.x * shield_start / effective_hp_max, 2.0)
+		hp_shield_segment.size = Vector2(maxf(2.0, hp_bar.size.x * shield_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
+		hp_shield_segment.color = SHIELD_BAR_COLOR
+		hp_shield_segment.self_modulate = Color.WHITE
+		hp_shield_segment.visible = true
 	else:
-		_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
+		hp_shield_segment.visible = false
 
+	# HP / Shield Preview Flashing
+	if _view_data.has_shield_change():
+		if _view_data.current_shield_delta > 0.0:
+			# Shield gain preview: flashes immediately after (current_hp + current_shield)
+			var preview_start := _view_data.current_hp + _view_data.current_shield
+			var preview_width := _view_data.current_shield_delta
+			hp_preview_segment.position = Vector2(hp_bar.size.x * preview_start / effective_hp_max, 2.0)
+			hp_preview_segment.size = Vector2(maxf(2.0, hp_bar.size.x * preview_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
+			hp_preview_segment.color = PREVIEW_SHIELD_COLOR
+			var flash_tint := Color.WHITE
+			flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
+			hp_preview_segment.self_modulate = flash_tint
+			hp_preview_segment.visible = true
+		else:
+			# Shield loss preview: flashes on the reduced portion of shield
+			var preview_start := _view_data.current_hp + maxf(0.0, _view_data.current_shield + _view_data.current_shield_delta)
+			var preview_width := absf(_view_data.current_shield_delta)
+			hp_preview_segment.position = Vector2(hp_bar.size.x * preview_start / effective_hp_max, 2.0)
+			hp_preview_segment.size = Vector2(maxf(2.0, hp_bar.size.x * preview_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
+			hp_preview_segment.color = PREVIEW_LOSS_COLOR
+			var flash_tint := Color.WHITE
+			flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
+			hp_preview_segment.self_modulate = flash_tint
+			hp_preview_segment.visible = true
+	elif _view_data.has_hp_change():
+		_update_preview_segment(hp_preview_segment, hp_bar, _view_data.current_hp, _view_data.current_hp_delta)
+	else:
+		hp_preview_segment.visible = false
+
+	# MP Preview
 	_update_preview_segment(mp_preview_segment, mp_bar, _view_data.current_mp, _view_data.current_mp_delta)
 
+	# FP Preview
 	var profile: ActorStatsDisplayProfile = _profile if _profile != null else ActorStatsDisplayProfile.menu()
 	if profile.fp_display_mode == ActorStatsDisplayProfile.FpDisplayMode.PROGRESS_BAR:
-		fp_bar.max_value = maxf(_view_data.max_fp, 1.0)
+		fp_bar.max_value = maxf(_view_data.get_preview_max_fp(), 1.0)
 		_update_preview_segment(fp_preview_segment, fp_bar, _view_data.current_fp, _view_data.current_fp_delta)
 	else:
 		fp_preview_segment.visible = false
 
+	# ATB Preview
 	if profile.atb_display_mode == ActorStatsDisplayProfile.AtbDisplayMode.BAR:
 		atb_bar.max_value = maxf(_view_data.max_atb, 1.0)
 		_update_preview_segment(atb_preview_segment, atb_bar, _view_data.current_atb, _view_data.current_atb_delta)
 	else:
 		atb_preview_segment.visible = false
-
-
-func _update_shield_preview_segment(
-	segment: ColorRect,
-	bar: ProgressBar,
-	current_value: float,
-	shield_delta: float
-) -> void:
-	var maximum := maxf(bar.max_value, 1.0)
-	bar.value = current_value
-	if bar.size.x <= 0.0:
-		segment.visible = false
-		return
-	var segment_start := current_value
-	var preview_value := minf(current_value + shield_delta, maximum)
-	var segment_width := maxf(preview_value - current_value, 2.0)
-	segment.position = Vector2(bar.size.x * segment_start / maximum, 2.0)
-	segment.size = Vector2(maxf(2.0, bar.size.x * segment_width / maximum), maxf(0.0, bar.size.y - 4.0))
-	segment.color = PREVIEW_SHIELD_COLOR
-	var flash_tint := Color("#FFFFFFFF")
-	flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
-	segment.self_modulate = flash_tint
-	segment.visible = true
 
 
 func _update_preview_segment(
@@ -352,6 +387,7 @@ func _update_preview_segment(
 
 
 func _hide_preview_segments() -> void:
+	hp_shield_segment.visible = false
 	hp_preview_segment.visible = false
 	mp_preview_segment.visible = false
 	fp_preview_segment.visible = false
@@ -368,7 +404,19 @@ func _format_hp_resource(
 ) -> String:
 	var hp_str := _format_stat(value, delta)
 	if not is_zero_approx(shield_delta):
-		hp_str += " [color=#%s](+%.0f 护盾)[/color]" % [PREVIEW_SHIELD_COLOR.to_html(false), shield_delta]
+		if shield > 0.0:
+			var sign_str := "+" if shield_delta > 0 else ""
+			var delta_color: Color = PREVIEW_GAIN_COLOR if shield_delta > 0 else PREVIEW_LOSS_COLOR
+			hp_str += " [color=#%s](+%.0f [/color][color=#%s](%s%.0f)[/color][color=#%s] 护盾)[/color]" % [
+				SHIELD_VALUE_COLOR.to_html(false),
+				shield,
+				delta_color.to_html(false),
+				sign_str,
+				shield_delta,
+				SHIELD_VALUE_COLOR.to_html(false)
+			]
+		else:
+			hp_str += " [color=#%s](+%.0f 护盾)[/color]" % [PREVIEW_SHIELD_COLOR.to_html(false), shield_delta]
 	elif shield > 0.0:
 		hp_str += " [color=#%s](+%.0f 盾)[/color]" % [SHIELD_VALUE_COLOR.to_html(false), shield]
 

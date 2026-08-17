@@ -87,9 +87,12 @@ static func create_view_data(
 		view.current_atb_delta = preview.current_atb_delta
 		view.max_hp_delta = preview.max_hp_delta
 		view.max_mp_delta = preview.max_mp_delta
+		view.max_fp_delta = preview.max_fp_delta
+		view.start_fp_delta = preview.start_fp_delta
 		view.atk_delta = preview.atk_delta
 		view.def_delta = preview.def_delta
 		view.spd_delta = preview.spd_delta
 		view.fp_recovery_spd_delta = preview.fp_recovery_spd_delta
+		view.cp_delta = preview.cp_delta
 
 	return view
