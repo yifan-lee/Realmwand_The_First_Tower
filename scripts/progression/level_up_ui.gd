@@ -78,22 +78,20 @@ func open(player: Player) -> void:
 	_allocation = {&"atk": 0, &"def": 0, &"spd": 0}
 	_selected_index = 0
 	level_root.visible = true
+	if _player != null:
+		stats_panel.bind_actor(_player, ActorStatsDisplayProfile.progression())
 	_refresh_preview()
 	_sync_focus()
 
 
 func close() -> void:
 	level_root.visible = false
+	stats_panel.unbind_actor()
 	_player = null
 
 
 func _move_selection(direction: int) -> void:
-	if _selected_index == STAT_IDS.size():
-		_selected_index = STAT_IDS.size() - 1
-	elif direction > 0 and _selected_index == STAT_IDS.size() - 1 and _get_remaining_points() == 0:
-		_selected_index = STAT_IDS.size()
-	else:
-		_selected_index = posmod(_selected_index + direction, STAT_IDS.size())
+	_selected_index = posmod(_selected_index + direction, STAT_IDS.size() + 1)
 	_sync_focus()
 
 
@@ -102,16 +100,16 @@ func _select_row(index: int) -> void:
 	_sync_focus()
 
 
-func _change_allocation(index: int, direction: int) -> void:
+func _change_allocation(index: int, delta: int) -> void:
 	if _player == null:
 		return
 	var stat_id := STAT_IDS[index]
-	var next_value := _allocation[stat_id] + direction
-	if next_value < 0:
+	var current := _allocation[stat_id]
+	var remaining := _get_remaining_points()
+	var new_value := clampi(current + delta, 0, current + remaining)
+	if new_value == current:
 		return
-	if direction > 0 and _get_remaining_points() <= 0:
-		return
-	_allocation[stat_id] = next_value
+	_allocation[stat_id] = new_value
 	_refresh_preview()
 	_sync_focus()
 
@@ -132,7 +130,18 @@ func _refresh_preview() -> void:
 	var preview := _player.get_stat_allocation_preview(_allocation)
 	points_label.text = "剩余点数：%d" % _get_remaining_points()
 	confirm_button.disabled = _get_remaining_points() > 0
-	stats_panel.display_stats(_build_stats_view(preview))
+	
+	var preview_data := ActorStatsPreviewData.new()
+	preview_data.current_hp_delta = preview.get(&"current_hp", _player.current_hp) - _player.current_hp
+	preview_data.max_hp_delta = preview.get(&"max_hp", _player.get_max_hp()) - _player.get_max_hp()
+	preview_data.current_mp_delta = preview.get(&"current_mp", _player.current_mp) - _player.current_mp
+	preview_data.max_mp_delta = preview.get(&"max_mp", _player.get_max_mp()) - _player.get_max_mp()
+	preview_data.atk_delta = preview.get(&"atk", _player.get_atk()) - _player.get_atk()
+	preview_data.def_delta = preview.get(&"def", _player.get_def()) - _player.get_def()
+	preview_data.spd_delta = preview.get(&"spd", _player.get_spd()) - _player.get_spd()
+	preview_data.fp_recovery_spd_delta = preview.get(&"fp_recovery", _player.get_fp_recovery_spd()) - _player.get_fp_recovery_spd()
+	stats_panel.set_preview(preview_data)
+
 	for index: int in STAT_IDS.size():
 		var stat_id := STAT_IDS[index]
 		var current_value := _get_current_stat(stat_id)
@@ -145,34 +154,6 @@ func _refresh_preview() -> void:
 		]
 		allocation_grids[index].text = _format_allocation_grid(stat_id)
 	hint_label.text = "点数已分配完，可选择完成。" if _get_remaining_points() == 0 else "↑↓ 选择属性   ←→ 分配点数"
-
-
-func _build_stats_view(preview: Dictionary[StringName, float]) -> ActorStatsViewData:
-	var view := ActorStatsViewData.new()
-	view.display_name = _player.player_data.display_name
-	view.portrait = _player.get_ui_portrait()
-	view.level = _player.level
-	view.experience = _player.experience
-	view.experience_to_next_level = _player.get_experience_for_next_level()
-	view.current_hp = _player.current_hp
-	view.max_hp = _player.get_max_hp()
-	view.current_mp = _player.current_mp
-	view.max_mp = _player.get_max_mp()
-	view.current_fp = _player.current_fp
-	view.max_fp = _player.get_max_fp()
-	view.fp_recovery_spd = _player.get_fp_recovery_spd()
-	view.atk = _player.get_atk()
-	view.def = _player.get_def()
-	view.spd = _player.get_spd()
-	view.current_hp_delta = preview[&"current_hp"] - view.current_hp
-	view.max_hp_delta = preview[&"max_hp"] - view.max_hp
-	view.current_mp_delta = preview[&"current_mp"] - view.current_mp
-	view.max_mp_delta = preview[&"max_mp"] - view.max_mp
-	view.atk_delta = preview[&"atk"] - view.atk
-	view.def_delta = preview[&"def"] - view.def
-	view.spd_delta = preview[&"spd"] - view.spd
-	view.fp_recovery_spd_delta = preview.get(&"fp_recovery", view.fp_recovery_spd) - view.fp_recovery_spd
-	return view
 
 
 func _get_current_stat(stat_id: StringName) -> float:

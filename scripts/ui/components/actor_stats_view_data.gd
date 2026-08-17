@@ -30,6 +30,7 @@ var current_atb_delta: float = 0.0
 var atk: float = 0.0
 var def: float = 0.0
 var spd: float = 0.0
+var cp: float = 0.0
 
 var max_hp_delta: float = 0.0
 var max_mp_delta: float = 0.0
@@ -39,30 +40,6 @@ var spd_delta: float = 0.0
 var fp_recovery_spd_delta: float = 0.0
 
 var active_effects: Array[Dictionary] = []
-
-
-static func from_player(player: Player) -> ActorStatsViewData:
-	if player == null or player.player_data == null:
-		return null
-	var view := ActorStatsViewData.new()
-	view.display_name = player.player_data.display_name
-	view.portrait = player.get_ui_portrait()
-	view.level = player.level
-	view.experience = player.experience
-	view.experience_to_next_level = player.get_experience_for_next_level()
-	view.current_hp = player.current_hp
-	view.current_shield = player.current_shield
-	view.max_hp = player.get_max_hp()
-	view.current_mp = player.current_mp
-	view.max_mp = player.get_max_mp()
-	view.current_fp = player.current_fp
-	view.max_fp = player.get_max_fp()
-	view.start_fp = player.get_start_fp()
-	view.fp_recovery_spd = player.get_fp_recovery_spd()
-	view.atk = player.get_atk()
-	view.def = player.get_def()
-	view.spd = player.get_spd()
-	return view
 
 
 func has_progression() -> bool:
@@ -98,6 +75,9 @@ func has_any_preview() -> bool:
 		or has_atb_change()
 		or not is_zero_approx(max_hp_delta)
 		or not is_zero_approx(max_mp_delta)
+		or not is_zero_approx(atk_delta)
+		or not is_zero_approx(def_delta)
+		or not is_zero_approx(spd_delta)
 		or not is_zero_approx(fp_recovery_spd_delta)
 	)
 
@@ -152,7 +132,9 @@ func get_fp_bar_value(time_sec: float = -1.0) -> float:
 
 
 func get_atb_bar_value(time_sec: float = -1.0) -> float:
-	return current_atb
+	if not has_atb_change():
+		return current_atb
+	return lerpf(current_atb, get_preview_atb(), get_flash_pulse(time_sec))
 
 
 func preview_skill_cost(costs: Array[ActionCostData]) -> void:
@@ -188,3 +170,4 @@ func clear_preview() -> void:
 	atk_delta = 0.0
 	def_delta = 0.0
 	spd_delta = 0.0
+	fp_recovery_spd_delta = 0.0

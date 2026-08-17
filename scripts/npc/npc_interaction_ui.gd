@@ -102,14 +102,28 @@ func update_choices(labels: Array[String], disabled_flags: Array[bool] = []) -> 
 
 func show_player_stats(player: Player) -> void:
 	if player == null:
+		stats_panel.unbind_actor()
 		return
-	stats_panel.display_stats(_build_stats_view(player, {}))
+	stats_panel.bind_actor(player, ActorStatsDisplayProfile.menu())
+	stats_panel.clear_preview()
 
 
 func show_player_stat_preview(player: Player, stat_id: StringName = &"", amount: float = 0.0) -> void:
 	if player == null:
+		stats_panel.unbind_actor()
 		return
-	stats_panel.display_stats(_build_stats_view(player, player.get_permanent_stat_increase_preview(stat_id, amount)))
+	stats_panel.bind_actor(player, ActorStatsDisplayProfile.menu())
+	var preview_dict := player.get_permanent_stat_increase_preview(stat_id, amount)
+	var preview_data := ActorStatsPreviewData.new()
+	preview_data.current_hp_delta = preview_dict.get(&"current_hp", player.current_hp) - player.current_hp
+	preview_data.max_hp_delta = preview_dict.get(&"max_hp", player.get_max_hp()) - player.get_max_hp()
+	preview_data.current_mp_delta = preview_dict.get(&"current_mp", player.current_mp) - player.current_mp
+	preview_data.max_mp_delta = preview_dict.get(&"max_mp", player.get_max_mp()) - player.get_max_mp()
+	preview_data.atk_delta = preview_dict.get(&"atk", player.get_atk()) - player.get_atk()
+	preview_data.def_delta = preview_dict.get(&"def", player.get_def()) - player.get_def()
+	preview_data.spd_delta = preview_dict.get(&"spd", player.get_spd()) - player.get_spd()
+	preview_data.fp_recovery_spd_delta = preview_dict.get(&"fp_recovery", player.get_fp_recovery_spd()) - player.get_fp_recovery_spd()
+	stats_panel.set_preview(preview_data)
 
 
 func show_transaction_result(success: bool, message: String) -> void:
@@ -120,7 +134,7 @@ func show_transaction_result(success: bool, message: String) -> void:
 func close() -> void:
 	interaction_root.visible = false
 	_clear_rows()
-	stats_panel.clear_stats()
+	stats_panel.unbind_actor()
 	closed.emit()
 
 
@@ -193,31 +207,3 @@ func _sync_focus() -> void:
 		cancel_button.grab_focus()
 	elif _selected_index >= 0 and _selected_index < _rows.size():
 		_rows[_selected_index].grab_focus()
-
-
-func _build_stats_view(player: Player, preview: Dictionary[StringName, float] = {}) -> ActorStatsViewData:
-	var view := ActorStatsViewData.new()
-	view.display_name = player.player_data.display_name
-	view.portrait = player.get_ui_portrait()
-	view.level = player.level
-	view.experience = player.experience
-	view.experience_to_next_level = player.get_experience_for_next_level()
-	view.current_hp = player.current_hp
-	view.max_hp = player.get_max_hp()
-	view.current_mp = player.current_mp
-	view.max_mp = player.get_max_mp()
-	view.current_fp = player.current_fp
-	view.max_fp = player.get_max_fp()
-	view.fp_recovery_spd = player.get_fp_recovery_spd()
-	view.atk = player.get_atk()
-	view.def = player.get_def()
-	view.spd = player.get_spd()
-	view.current_hp_delta = preview.get(&"current_hp", view.current_hp) - view.current_hp
-	view.max_hp_delta = preview.get(&"max_hp", view.max_hp) - view.max_hp
-	view.current_mp_delta = preview.get(&"current_mp", view.current_mp) - view.current_mp
-	view.max_mp_delta = preview.get(&"max_mp", view.max_mp) - view.max_mp
-	view.atk_delta = preview.get(&"atk", view.atk) - view.atk
-	view.def_delta = preview.get(&"def", view.def) - view.def
-	view.spd_delta = preview.get(&"spd", view.spd) - view.spd
-	view.fp_recovery_spd_delta = preview.get(&"fp_recovery", view.fp_recovery_spd) - view.fp_recovery_spd
-	return view

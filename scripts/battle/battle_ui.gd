@@ -86,18 +86,7 @@ func _process(_delta: float) -> void:
 			enemy_atb_marker.modulate = Color("#FFFFFFFF")
 
 	if _player != null:
-		player_stats.refresh_runtime_resources(
-			_player.current_hp,
-			_player.current_mp,
-			_player.current_fp
-		)
 		skill_panel.update_availability(_can_cast_skill, _get_skill_cd)
-	if _enemy != null:
-		enemy_stats.refresh_runtime_resources(
-			_enemy.current_hp,
-			_enemy.current_mp,
-			_enemy.current_fp
-		)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -137,6 +126,8 @@ func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) ->
 	enemy_atb_marker.visible = enemy_atb_marker.texture != null
 	_show_action_page(ActionPage.SKILLS, false)
 	set_action_available(false)
+	player_stats.bind_actor(_player, ActorStatsDisplayProfile.battle_player(), _create_actor_context(_player, _player_atb_value))
+	enemy_stats.bind_actor(_enemy, ActorStatsDisplayProfile.battle_enemy(), _create_actor_context(_enemy, _enemy_atb_value))
 	refresh_stats()
 
 
@@ -145,6 +136,8 @@ func close() -> void:
 	inventory_panel.bind_inventory(null)
 	entry_info_panel.clear_info()
 	clear_message()
+	player_stats.unbind_actor()
+	enemy_stats.unbind_actor()
 	_player = null
 	_enemy = null
 	_battle_manager = null
@@ -179,10 +172,26 @@ func clear_message() -> void:
 
 
 func refresh_stats() -> void:
-	player_stats.display_stats(_build_player_view())
-	enemy_stats.display_stats(_build_enemy_view())
+	if _player != null:
+		player_stats.clear_preview()
+		player_stats.set_context(_create_actor_context(_player, _player_atb_value))
+	if _enemy != null:
+		enemy_stats.clear_preview()
+		enemy_stats.set_context(_create_actor_context(_enemy, _enemy_atb_value))
 	_update_atb_markers(_player_atb_value, _enemy_atb_value)
 	skill_panel.update_availability(_can_cast_skill, _get_skill_cd)
+
+
+func _create_actor_context(actor: Node, atb_val: float) -> ActorStatsContext:
+	var ctx := ActorStatsContext.new()
+	ctx.current_atb = atb_val
+	ctx.max_atb = FORMULAS.ATB_MAX
+	if _battle_manager != null and actor != null:
+		ctx.active_effects = _battle_manager.get_actor_effects(actor)
+		ctx.effective_atk = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.ATK)
+		ctx.effective_def = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.DEF)
+		ctx.effective_spd = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.SPD)
+	return ctx
 
 
 func set_enemy_forecast(skill: SkillData) -> void:
@@ -274,42 +283,53 @@ func _on_escape_tab_pressed() -> void:
 
 
 func _on_skill_focused(skill: SkillData) -> void:
-	var player_view := _build_player_view()
-	var enemy_view := _build_enemy_view()
+	var player_preview := ActorStatsPreviewData.new()
+	var enemy_preview := ActorStatsPreviewData.new()
 	
 	if _battle_manager != null:
 		var preview = BattleCalculator.evaluate_skill(skill, _player, [_enemy], _battle_manager)
 		
 		var player_delta = preview.actor_deltas.get(_player, null)
 		if player_delta != null:
-			player_view.current_hp_delta = player_delta.hp_delta
-			player_view.current_shield_delta = player_delta.shield_delta
-			player_view.current_mp_delta = player_delta.mp_delta
-			player_view.current_fp_delta = player_delta.fp_delta
-			player_view.atk_delta = player_delta.atk_delta
-			player_view.def_delta = player_delta.def_delta
-			player_view.spd_delta = player_delta.spd_delta
+			player_preview.current_hp_delta = player_delta.hp_delta
+			player_preview.current_shield_delta = player_delta.shield_delta
+			player_preview.current_mp_delta = player_delta.mp_delta
+			player_preview.current_fp_delta = player_delta.fp_delta
+			player_preview.atk_delta = player_delta.atk_delta
+			player_preview.def_delta = player_delta.def_delta
+			player_preview.spd_delta = player_delta.spd_delta
 			if player_delta.atb_delta < 0.0:
-				player_view.current_atb_delta = player_delta.atb_delta
+				player_preview.current_atb_delta = player_delta.atb_delta
 				
 		var enemy_delta = preview.actor_deltas.get(_enemy, null)
 		if enemy_delta != null:
-			enemy_view.current_hp_delta = enemy_delta.hp_delta
-			enemy_view.current_shield_delta = enemy_delta.shield_delta
-			enemy_view.current_mp_delta = enemy_delta.mp_delta
-			enemy_view.current_fp_delta = enemy_delta.fp_delta
-			enemy_view.atk_delta = enemy_delta.atk_delta
-			enemy_view.def_delta = enemy_delta.def_delta
-			enemy_view.spd_delta = enemy_delta.spd_delta
+			enemy_preview.current_hp_delta = enemy_delta.hp_delta
+			enemy_preview.current_shield_delta = enemy_delta.shield_delta
+			enemy_preview.current_mp_delta = enemy_delta.mp_delta
+			enemy_preview.current_fp_delta = enemy_delta.fp_delta
+			enemy_preview.atk_delta = enemy_delta.atk_delta
+			enemy_preview.def_delta = enemy_delta.def_delta
+			enemy_preview.spd_delta = enemy_delta.spd_delta
 	else:
-		player_view.preview_skill_cost(skill.costs)
+		if _player != null:
+			for cost: ActionCostData in skill.costs:
+				match cost.cost_type:
+					ActionCostData.CostType.HP:
+						player_preview.current_hp_delta -= cost.value
+					ActionCostData.CostType.MP:
+						player_preview.current_mp_delta -= cost.value
+					ActionCostData.CostType.FP:
+						player_preview.current_fp_delta -= cost.value
+					ActionCostData.CostType.CAST_TIME:
+						if cost.value > 0.0:
+							player_preview.current_atb_delta -= FORMULAS.ATB_MAX * cost.value
 
-	player_stats.display_stats(player_view)
-	enemy_stats.display_stats(enemy_view)
+	player_stats.set_preview(player_preview)
+	enemy_stats.set_preview(enemy_preview)
 	_update_atb_markers(
-		player_view.get_atb_bar_value(),
-		enemy_view.get_atb_bar_value(),
-		player_view.get_preview_atb() if player_view.has_atb_change() else -1.0
+		_player_atb_value,
+		_enemy_atb_value,
+		_player_atb_value + player_preview.current_atb_delta if player_preview.has_atb_change() else -1.0
 	)
 	var info := EntryInfoViewData.new()
 	info.title = skill.display_name
@@ -320,8 +340,8 @@ func _on_skill_focused(skill: SkillData) -> void:
 
 
 func _on_item_focused(item: ItemData) -> void:
-	var player_view := _build_player_view()
-	var enemy_view := _build_enemy_view()
+	var player_preview := ActorStatsPreviewData.new()
+	var enemy_preview := ActorStatsPreviewData.new()
 	var details: Array[String] = []
 	
 	for effect: ActionEffectData in item.effects:
@@ -333,28 +353,28 @@ func _on_item_focused(item: ItemData) -> void:
 		var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], _battle_manager)
 		var player_delta = preview.actor_deltas.get(_player, null)
 		if player_delta != null:
-			player_view.current_hp_delta = player_delta.hp_delta
-			player_view.current_mp_delta = player_delta.mp_delta
-			player_view.current_fp_delta = player_delta.fp_delta
-			player_view.atk_delta = player_delta.atk_delta
-			player_view.def_delta = player_delta.def_delta
-			player_view.spd_delta = player_delta.spd_delta
+			player_preview.current_hp_delta = player_delta.hp_delta
+			player_preview.current_mp_delta = player_delta.mp_delta
+			player_preview.current_fp_delta = player_delta.fp_delta
+			player_preview.atk_delta = player_delta.atk_delta
+			player_preview.def_delta = player_delta.def_delta
+			player_preview.spd_delta = player_delta.spd_delta
 
 		var enemy_delta = preview.actor_deltas.get(_enemy, null)
 		if enemy_delta != null:
-			enemy_view.current_hp_delta = enemy_delta.hp_delta
-			enemy_view.current_mp_delta = enemy_delta.mp_delta
-			enemy_view.current_fp_delta = enemy_delta.fp_delta
-			enemy_view.atk_delta = enemy_delta.atk_delta
-			enemy_view.def_delta = enemy_delta.def_delta
-			enemy_view.spd_delta = enemy_delta.spd_delta
+			enemy_preview.current_hp_delta = enemy_delta.hp_delta
+			enemy_preview.current_mp_delta = enemy_delta.mp_delta
+			enemy_preview.current_fp_delta = enemy_delta.fp_delta
+			enemy_preview.atk_delta = enemy_delta.atk_delta
+			enemy_preview.def_delta = enemy_delta.def_delta
+			enemy_preview.spd_delta = enemy_delta.spd_delta
 			
-	player_stats.display_stats(player_view)
-	enemy_stats.display_stats(enemy_view)
+	player_stats.set_preview(player_preview)
+	enemy_stats.set_preview(enemy_preview)
 	_update_atb_markers(
-		player_view.get_atb_bar_value(),
-		enemy_view.get_atb_bar_value(),
-		player_view.get_preview_atb() if player_view.has_atb_change() else -1.0
+		_player_atb_value,
+		_enemy_atb_value,
+		-1.0
 	)
 	var info := EntryInfoViewData.new()
 	info.title = item.display_name
@@ -362,50 +382,6 @@ func _on_item_focused(item: ItemData) -> void:
 	info.description = item.description
 	info.detail_lines = details
 	entry_info_panel.display_info(info)
-
-
-func _build_player_view() -> ActorStatsViewData:
-	var view := ActorStatsViewData.from_player(_player)
-	if view == null:
-		return null
-	view.current_atb = _player_atb_value
-	view.max_atb = FORMULAS.ATB_MAX
-	if _battle_manager != null:
-		view.active_effects = _battle_manager.get_actor_effects(_player)
-		view.atk = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.ATK)
-		view.def = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.DEF)
-		view.spd = _battle_manager.get_actor_stat(_player, ActionEffectData.EffectType.SPD)
-	return view
-
-
-func _build_enemy_view() -> ActorStatsViewData:
-	if _enemy == null or _enemy.enemy_data == null:
-		return null
-	var view := ActorStatsViewData.new()
-	view.display_name = _enemy.enemy_data.display_name
-	view.portrait = _get_marker_texture(_enemy, _enemy.enemy_data.portrait)
-	view.description = _enemy.enemy_data.description
-	view.current_hp = _enemy.current_hp
-	view.current_shield = _enemy.current_shield
-	view.max_hp = _enemy.get_max_hp()
-	view.current_mp = _enemy.current_mp
-	view.max_mp = _enemy.get_max_mp()
-	view.current_fp = _enemy.current_fp
-	view.max_fp = _enemy.get_max_fp()
-	view.start_fp = _enemy.enemy_data.start_fp
-	view.fp_recovery_spd = _enemy.get_fp_recovery_spd()
-	view.current_atb = _enemy_atb_value
-	view.max_atb = FORMULAS.ATB_MAX
-	if _battle_manager != null:
-		view.active_effects = _battle_manager.get_actor_effects(_enemy)
-		view.atk = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.ATK)
-		view.def = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.DEF)
-		view.spd = _battle_manager.get_actor_stat(_enemy, ActionEffectData.EffectType.SPD)
-	else:
-		view.atk = _enemy.enemy_data.atk
-		view.def = _enemy.enemy_data.def
-		view.spd = _enemy.enemy_data.spd
-	return view
 
 
 func _update_atb_markers(

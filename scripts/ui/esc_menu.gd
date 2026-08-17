@@ -95,6 +95,10 @@ func _input(event: InputEvent) -> void:
 
 func bind_player(player: Player) -> void:
 	_player = player
+	if _player != null:
+		actor_stats_panel.bind_actor(_player, ActorStatsDisplayProfile.menu())
+	else:
+		actor_stats_panel.unbind_actor()
 	refresh_content()
 
 
@@ -107,13 +111,14 @@ func refresh_content() -> void:
 		inventory_panel.bind_inventory(null)
 		skill_panel.clear_skills()
 		equipment_panel.bind_loadout(null)
-		actor_stats_panel.clear_stats()
+		actor_stats_panel.unbind_actor()
 		return
 	inventory_panel.set_battle_only(false)
 	inventory_panel.bind_inventory(_player.inventory)
 	skill_panel.display_skills(_player.learned_skills)
 	equipment_panel.bind_loadout(_player.equipment)
-	refresh_player_stats()
+	actor_stats_panel.clear_preview()
+	actor_stats_panel.refresh()
 
 
 func open() -> void:
@@ -134,6 +139,7 @@ func close() -> void:
 		return
 	menu_root.visible = false
 	equipment_panel.clear_preview()
+	actor_stats_panel.clear_preview()
 	entry_info_panel.clear_info()
 	if _player != null:
 		_player.set_input_enabled(true)
@@ -151,11 +157,12 @@ func is_open() -> bool:
 	return menu_root.visible
 
 
-func refresh_player_stats(view: ActorStatsViewData = null) -> void:
+func refresh_player_stats() -> void:
 	if _player == null:
-		actor_stats_panel.clear_stats()
+		actor_stats_panel.unbind_actor()
 		return
-	actor_stats_panel.display_stats(view if view != null else _build_player_view())
+	actor_stats_panel.clear_preview()
+	actor_stats_panel.refresh()
 
 
 func _show_main_page(page: MainPage, focus_content: bool) -> void:
@@ -343,13 +350,12 @@ func _should_preserve_text_input(event: InputEvent) -> bool:
 
 func _on_item_focused(item: ItemData) -> void:
 	equipment_panel.clear_preview()
-	var view := _build_player_view()
-	var action_hint := ""
+	var preview := ActorStatsPreviewData.new()
 	if item is EquipmentData:
 		var equipment := item as EquipmentData
 		_preview_target_slot = _choose_equipment_target(equipment)
 		if _preview_target_slot >= 0:
-			_preview_equipment(equipment, _preview_target_slot, view)
+			_preview_equipment(equipment, _preview_target_slot, preview)
 	else:
 		var hp_rec := 0.0
 		var mp_rec := 0.0
@@ -361,12 +367,13 @@ func _on_item_focused(item: ItemData) -> void:
 				mp_rec += effect.value
 			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
 				fp_rec += effect.value
-		view.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
-		view.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
-		view.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
-	
+		if _player != null:
+			preview.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
+			preview.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
+			preview.current_fp_delta = FORMULAS.calculate_recovery_delta(_player.current_fp, _player.get_max_fp(), fp_rec)
+
 	entry_info_panel.display_item(item)
-	refresh_player_stats(view)
+	actor_stats_panel.set_preview(preview)
 
 
 func _on_item_selected(item: ItemData) -> void:
@@ -401,18 +408,19 @@ func _on_item_selected(item: ItemData) -> void:
 
 
 func _on_skill_focused(skill: SkillData) -> void:
-	var view := _build_player_view()
-	for effect: ActionEffectData in skill.effects:
-		if effect.target_type != ActionEffectData.TargetType.SELF:
-			continue
-		match effect.effect_type:
-			ActionEffectData.EffectType.ATK:
-				view.atk_delta += FORMULAS.skill_effect_delta(view.atk, effect)
-			ActionEffectData.EffectType.DEF:
-				view.def_delta += FORMULAS.skill_effect_delta(view.def, effect)
-			ActionEffectData.EffectType.SPD:
-				view.spd_delta += FORMULAS.skill_effect_delta(view.spd, effect)
-	refresh_player_stats(view)
+	var preview := ActorStatsPreviewData.new()
+	if _player != null:
+		for effect: ActionEffectData in skill.effects:
+			if effect.target_type != ActionEffectData.TargetType.SELF:
+				continue
+			match effect.effect_type:
+				ActionEffectData.EffectType.ATK:
+					preview.atk_delta += FORMULAS.skill_effect_delta(_player.get_atk(), effect)
+				ActionEffectData.EffectType.DEF:
+					preview.def_delta += FORMULAS.skill_effect_delta(_player.get_def(), effect)
+				ActionEffectData.EffectType.SPD:
+					preview.spd_delta += FORMULAS.skill_effect_delta(_player.get_spd(), effect)
+	actor_stats_panel.set_preview(preview)
 	_display_entry_info(skill.display_name, skill.icon, skill.description, skill.get_details())
 
 
@@ -421,20 +429,20 @@ func _on_equipment_slot_focused(slot: int) -> void:
 	_preview_target_slot = -1
 	var slots: Array[int] = [slot]
 	equipment_panel.preview_slots(slots)
-	refresh_player_stats()
+	actor_stats_panel.clear_preview()
 
-	var item := _player.equipment.get_equipped(slot)
+	var item := _player.equipment.get_equipped(slot) if _player != null else null
 	entry_info_panel.display_item(item)
 
 
 func _on_equipment_slot_selected(slot: int) -> void:
-	if _player.unequip_item(slot):
+	if _player != null and _player.unequip_item(slot):
 		refresh_content()
 		equipment_panel.focus_first_slot()
 
 
 func _on_equip_slot_chosen(slot: int) -> void:
-	if _pending_equip_item != null and _player.equipment.can_equip(_pending_equip_item, slot):
+	if _pending_equip_item != null and _player != null and _player.equipment.can_equip(_pending_equip_item, slot):
 		_player.equip_item(_pending_equip_item.id, slot)
 	_pending_equip_item = null
 	_preview_target_slot = -1
@@ -443,22 +451,24 @@ func _on_equip_slot_chosen(slot: int) -> void:
 		if is_open() and _current_page == MainPage.INVENTORY:
 			category_buttons[_current_category].grab_focus()
 
+
 func _on_equip_slot_previewed(slot: int) -> void:
 	if _pending_equip_item == null or _player == null:
 		return
 	_preview_target_slot = slot
-	var view := _build_player_view()
-	_preview_equipment(_pending_equip_item, slot, view)
-	refresh_player_stats(view)
+	var preview := ActorStatsPreviewData.new()
+	_preview_equipment(_pending_equip_item, slot, preview)
+	actor_stats_panel.set_preview(preview)
 
-func _preview_equipment(equipment: EquipmentData, target_slot: int, view: ActorStatsViewData) -> void:
+
+func _preview_equipment(equipment: EquipmentData, target_slot: int, preview: ActorStatsPreviewData) -> void:
 	var displaced: Array[EquipmentData] = _player.equipment.get_displaced_items(equipment, target_slot)
 	var delta: Dictionary[StringName, float] = FORMULAS.equipment_delta(equipment, displaced)
-	view.max_hp_delta = delta[&"max_hp"]
-	view.max_mp_delta = delta[&"max_mp"]
-	view.atk_delta = delta[&"atk"]
-	view.def_delta = delta[&"def"]
-	view.spd_delta = delta[&"spd"]
+	preview.max_hp_delta = delta[&"max_hp"]
+	preview.max_mp_delta = delta[&"max_mp"]
+	preview.atk_delta = delta[&"atk"]
+	preview.def_delta = delta[&"def"]
+	preview.spd_delta = delta[&"spd"]
 	
 	var affected: Array[int] = _player.equipment.get_affected_slots(equipment, target_slot)
 	for displaced_item: EquipmentData in displaced:
@@ -466,11 +476,12 @@ func _preview_equipment(equipment: EquipmentData, target_slot: int, view: ActorS
 			if not affected.has(s):
 				affected.append(s)
 	equipment_panel.preview_slots(affected)
-	refresh_player_stats(view)
+	actor_stats_panel.set_preview(preview)
 
 
 func _on_equip_popup_hide() -> void:
 	call_deferred("_handle_popup_hide")
+
 
 func _handle_popup_hide() -> void:
 	if _pending_equip_item != null:
@@ -478,19 +489,17 @@ func _handle_popup_hide() -> void:
 		_preview_target_slot = -1
 		if is_open() and _current_page == MainPage.INVENTORY:
 			inventory_panel.item_rows.focus_first_row()
-			refresh_player_stats()
+			actor_stats_panel.clear_preview()
 
 
 func _choose_equipment_target(item: EquipmentData) -> int:
+	if _player == null:
+		return -1
 	var slots: Array[int] = _player.equipment.get_compatible_slots(item)
 	for slot: int in slots:
 		if _player.equipment.get_equipped(slot) == null:
 			return slot
 	return -1 if slots.is_empty() else slots.front()
-
-
-func _build_player_view() -> ActorStatsViewData:
-	return ActorStatsViewData.from_player(_player)
 
 
 func _display_entry_info(
