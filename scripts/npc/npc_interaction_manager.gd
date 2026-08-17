@@ -14,6 +14,7 @@ func setup(player: Player, ui: NpcInteractionUI) -> void:
 	_ui.option_focused.connect(_on_option_focused)
 	_ui.advance_requested.connect(_on_advance_requested)
 	_ui.close_requested.connect(_close_interaction)
+	_ui.closed.connect(_on_ui_closed)
 
 
 func is_active() -> bool:
@@ -58,5 +59,11 @@ func _close_interaction() -> void:
 	if not is_active():
 		return
 	_ui.close()
-	_player.set_input_enabled(true)
+	_on_ui_closed()
+
+
+func _on_ui_closed() -> void:
+	if _player != null:
+		_player.set_input_enabled(true)
 	_active_npc = null
+

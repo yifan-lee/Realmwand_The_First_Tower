@@ -93,10 +93,12 @@ func begin_interaction(ui: NpcInteractionUI, player: Player) -> void:
 	if player.has_skill(target_skill.id):
 		_current_step = Step.ALREADY_LEARNED
 		ui.open_dialogue(npc_name, already_learned_prompt)
+		ui.show_player_stats(player)
 		return
 
 	_current_step = Step.INTRO
 	ui.open_dialogue(npc_name, normal_prompt)
+	ui.show_player_stats(player)
 
 
 # 玩家按下确认键推进对话
@@ -131,12 +133,6 @@ func _show_choices_step(ui: NpcInteractionUI, player: Player) -> void:
 			tooltips.append(_format_skill_detailed(conflict))
 			disabled.append(true) # 灰色按键，不能按下
 
-	# 取消选项
-	entries.append(null)
-	labels.append("取消")
-	tooltips.append("")
-	disabled.append(false)
-
 	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
 	ui.show_player_stats(player)
 	ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
@@ -152,10 +148,10 @@ func _show_confirm_step(ui: NpcInteractionUI, player: Player) -> void:
 		var conflict_str := "、".join(conflict_names)
 		prompt_text = "%s\n（注意：学习将永久遗忘冲突技能 %s）" % [confirm_prompt, conflict_str]
 
-	var entries: Array[Resource] = [target_skill, null]
-	var labels: Array[String] = ["确认", "取消"]
-	var tooltips: Array[String] = [_format_skill_detailed(target_skill), ""]
-	var disabled: Array[bool] = [false, false]
+	var entries: Array[Resource] = [target_skill]
+	var labels: Array[String] = ["确认"]
+	var tooltips: Array[String] = [_format_skill_detailed(target_skill)]
+	var disabled: Array[bool] = [false]
 
 	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
 	ui.show_player_stats(player)

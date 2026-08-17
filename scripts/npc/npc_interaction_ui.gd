@@ -5,6 +5,7 @@ signal option_selected(option_index: int)
 signal option_focused(option_index: int)
 signal advance_requested
 signal close_requested
+signal closed
 
 enum Mode { CHOICES, DIALOGUE }
 
@@ -84,10 +85,10 @@ func open_dialogue(npc_name: String, dialogue: String) -> void:
 	title_label.text = npc_name
 	prompt_label.text = dialogue
 	feedback_label.text = ""
-	stats_panel.visible = false
+	stats_panel.visible = true
 	options_scroll.visible = false
 	cancel_button.visible = false
-	hint_label.text = "按任意键继续"
+	hint_label.text = "按确认键继续   菜单键取消"
 	_clear_rows()
 	interaction_root.visible = true
 
@@ -120,6 +121,7 @@ func close() -> void:
 	interaction_root.visible = false
 	_clear_rows()
 	stats_panel.clear_stats()
+	closed.emit()
 
 
 func is_open() -> bool:
