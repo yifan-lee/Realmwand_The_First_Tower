@@ -26,3 +26,10 @@ func set_info(title: String, desc: String) -> void:
 		title_label.text = title
 	if desc_label:
 		desc_label.text = desc
+	
+	call_deferred("_update_resting_position")
+
+
+func _update_resting_position() -> void:
+	if is_inside_tree() and scale == Vector2.ONE and get_parent() is EnvironmentInfoArea:
+		position = Vector2(0.0, -size.y)

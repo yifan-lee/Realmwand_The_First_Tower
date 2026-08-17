@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://djgmxkplhaese"]
 
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_3ceu8"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_3ceu8"]
 [ext_resource type="Texture2D" uid="uid://cir64cr74pffh" path="res://assets/items/token/hp_tier_2.png" id="3_3ceu8"]
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="3_fqtwc"]
@@ -7,7 +8,6 @@
 [sub_resource type="Resource" id="Resource_7bi3t"]
 script = ExtResource("2_3ceu8")
 target = 0
-resource_type = 1
 calc_method = 0
 value = 50.0
 

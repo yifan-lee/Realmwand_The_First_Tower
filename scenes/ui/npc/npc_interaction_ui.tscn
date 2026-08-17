@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://d0j66d8tiecc6" path="res://scenes/ui/components/selectable_list_row.tscn" id="2_ri78b"]
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_eu08y"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="4_o4vg4"]
+[ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_mromn"]
+[ext_resource type="Script" uid="uid://bip0oodwwfc5o" path="res://scripts/ui/components/entry_info_panel.gd" id="6_ri78b"]
 
 [node name="NpcInteractionUI" type="CanvasLayer" unique_id=1522184711]
 layer = 5
@@ -59,7 +61,6 @@ horizontal_alignment = 1
 
 [node name="ActorStatsPanel" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=799998403 instance=ExtResource("3_eu08y")]
 layout_mode = 2
-fp_display_mode = 1
 
 [node name="DialoguePanel" type="PanelContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content" unique_id=1413644256]
 custom_minimum_size = Vector2(0, 390)
@@ -89,21 +90,15 @@ autowrap_mode = 3
 [node name="OptionsScroll" type="ScrollContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=995617441]
 custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
-follow_focus = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
+follow_focus = true
 
 [node name="OptionRows" type="VBoxContainer" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/OptionsScroll" unique_id=1462300709]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
-
-[node name="CancelButton" type="Button" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=606034708]
-custom_minimum_size = Vector2(0, 54)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "取消"
 
 [node name="FeedbackLabel" type="Label" parent="InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent" unique_id=179518342]
 unique_name_in_owner = true
@@ -119,3 +114,19 @@ layout_mode = 2
 theme_type_variation = &"MutedLabel"
 text = "↑↓ 选择   确认键兑换   菜单键取消"
 horizontal_alignment = 1
+
+[node name="SelectionDetailPanel" type="PanelContainer" parent="InteractionRoot" unique_id=446886182 instance=ExtResource("5_mromn")]
+visible = false
+custom_minimum_size = Vector2(452, 492)
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -540.0
+offset_right = -48.0
+offset_bottom = -48.0
+theme = ExtResource("4_o4vg4")
+theme_type_variation = &"TerminalPanel"
+script = ExtResource("6_ri78b")

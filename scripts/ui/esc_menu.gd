@@ -426,7 +426,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 					StatusEffectData.StatType.SPD:
 						preview.spd_delta += FORMULAS.status_effect_delta(_player.get_spd(), status)
 	actor_stats_panel.set_preview(preview)
-	_display_entry_info(skill.display_name, skill.icon, skill.description, skill.get_details())
+	entry_info_panel.display_skill(skill)
 
 
 func _on_equipment_slot_focused(slot: int) -> void:

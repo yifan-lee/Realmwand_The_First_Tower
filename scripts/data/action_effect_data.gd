@@ -33,41 +33,54 @@ enum CalcMethod {
 @export var status_to_apply: StatusEffectData = null
 
 
+func get_target_prefix() -> String:
+	match target:
+		TargetType.SELF:
+			return "对自身"
+		TargetType.ALL:
+			return "对全体"
+		TargetType.OPPONENT:
+			return "对敌方"
+	return ""
+
+
 func get_description() -> String:
 	var desc_parts: Array[String] = []
+	var target_prefix := get_target_prefix()
 
 	if is_interrupt:
-		desc_parts.append("打断目标吟唱")
+		desc_parts.append("%s打断吟唱" % target_prefix)
 
 	if resource_type != ResourceType.NONE and not is_zero_approx(value):
 		var res_name := _get_resource_name()
 		match calc_method:
 			CalcMethod.SKILL_POWER:
 				if value > 0:
-					desc_parts.append("造成 %.0f 点技能威力伤害" % value)
+					desc_parts.append("%s造成 %.0f 点技能威力伤害" % [target_prefix, value])
 				else:
-					desc_parts.append("恢复 %.0f 点技能威力生命" % absf(value))
+					desc_parts.append("%s恢复 %.0f 点技能威力生命" % [target_prefix, absf(value)])
 			CalcMethod.FIXED_AMOUNT:
 				if value > 0:
 					if resource_type == ResourceType.SHIELD:
-						desc_parts.append("获得 %.0f 点护盾" % value)
+						desc_parts.append("%s获得 %.0f 点护盾" % [target_prefix, value])
 					else:
-						desc_parts.append("恢复 %.0f 点%s" % [value, res_name])
+						desc_parts.append("%s恢复 %.0f 点%s" % [target_prefix, value, res_name])
 				else:
-					desc_parts.append("扣除 %.0f 点%s" % [absf(value), res_name])
+					desc_parts.append("%s减少 %.0f 点%s" % [target_prefix, absf(value), res_name])
 			CalcMethod.MAX_RATIO:
 				if value > 0:
 					if resource_type == ResourceType.SHIELD:
-						desc_parts.append("获得最大生命值 %.0f%% 的护盾" % (value * 100.0))
+						desc_parts.append("%s获得最大生命值 %.0f%% 的护盾" % [target_prefix, value * 100.0])
 					else:
-						desc_parts.append("恢复最大%s %.0f%%" % [res_name, value * 100.0])
+						desc_parts.append("%s恢复最大%s %.0f%%" % [target_prefix, res_name, value * 100.0])
 				else:
-					desc_parts.append("扣除最大%s %.0f%%" % [res_name, absf(value) * 100.0])
+					desc_parts.append("%s减少最大%s %.0f%%" % [target_prefix, res_name, absf(value) * 100.0])
 
 	if status_to_apply != null:
 		var status_desc := status_to_apply.get_formatted_description()
+		var status_name := status_to_apply.display_name if not status_to_apply.display_name.is_empty() else status_to_apply.get_stat_name()
 		if not status_desc.is_empty():
-			desc_parts.append(status_desc)
+			desc_parts.append("%s施加【%s】：%s" % [target_prefix, status_name, status_desc])
 
 	return "；".join(desc_parts)
 

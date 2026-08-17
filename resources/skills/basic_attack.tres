@@ -7,9 +7,6 @@
 
 [sub_resource type="Resource" id="Resource_ktu67"]
 script = ExtResource("1_87of0")
-target = 1
-resource_type = 1
-calc_method = 1
 value = 40.0
 
 [resource]

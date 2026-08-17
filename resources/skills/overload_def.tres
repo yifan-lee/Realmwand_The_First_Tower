@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="SkillData" format=3]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bll8sqw230ypl"]
 
-[ext_resource type="Script" path="res://scripts/data/action_cost_data.gd" id="1_cost"]
-[ext_resource type="Script" path="res://scripts/data/action_effect_data.gd" id="2_effect"]
-[ext_resource type="Script" path="res://scripts/data/skill_data.gd" id="3_skill"]
-[ext_resource type="Texture2D" uid="uid://05c953dcbf550553bbaf03f47ecd070f" path="res://assets/skills/support/buff_def_tier_2.png" id="4_icon"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_cost"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_effect"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_skill"]
+[ext_resource type="Texture2D" uid="uid://5n6r4rf8yamp" path="res://assets/skills/support/buff_def_tier_2.png" id="4_icon"]
 
 [sub_resource type="Resource" id="Resource_cost_fp"]
 script = ExtResource("1_cost")
@@ -23,8 +23,7 @@ id = &"overload_def"
 display_name = "过载防御"
 description = "展开能量护盾"
 icon = ExtResource("4_icon")
-unlock_level = 1
 skill_type = 2
-target_type = 1
 costs = Array[ExtResource("1_cost")]([SubResource("Resource_cost_fp")])
+target_type = 1
 effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield")])

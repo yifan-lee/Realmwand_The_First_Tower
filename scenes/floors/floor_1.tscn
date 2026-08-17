@@ -126,8 +126,6 @@ position = Vector2(660, -23)
 item_data = ExtResource("13_r7vlu")
 metadata/_edit_group_ = true
 
-[node name="DynamicTiles" parent="." index="6"]
-
 [node name="WallFirst" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="0" unique_id=1498172901]
 
 [node name="Marker1" type="Marker2D" parent="DynamicTiles/WallFirst" index="0" unique_id=1498172902]

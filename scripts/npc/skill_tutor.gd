@@ -121,7 +121,7 @@ func advance_dialogue(ui: NpcInteractionUI, player: Player) -> void:
 func _show_choices_step(ui: NpcInteractionUI, player: Player) -> void:
 	var entries: Array[Resource] = [target_skill]
 	var labels: Array[String] = ["新技能：%s" % target_skill.display_name]
-	var tooltips: Array[String] = [_format_skill_detailed(target_skill)]
+	var tooltips: Array[String] = [""]
 	var disabled: Array[bool] = [false]
 	var prompt_text := normal_prompt
 
@@ -130,12 +130,15 @@ func _show_choices_step(ui: NpcInteractionUI, player: Player) -> void:
 		for conflict: SkillData in _active_conflicts:
 			entries.append(conflict)
 			labels.append("冲突技能：%s" % conflict.display_name)
-			tooltips.append(_format_skill_detailed(conflict))
+			tooltips.append("")
 			disabled.append(true) # 灰色按键，不能按下
 
 	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
 	ui.show_player_stats(player)
-	ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
+	if not _active_conflicts.is_empty():
+		ui.show_transaction_result(false, "存在冲突技能，领悟新技能将遗忘冲突技能")
+	else:
+		ui.show_transaction_result(true, "")
 
 
 # 3. 第三阶段：展示确认
@@ -149,32 +152,26 @@ func _show_confirm_step(ui: NpcInteractionUI, player: Player) -> void:
 		prompt_text = "%s\n（注意：学习将永久遗忘冲突技能 %s）" % [confirm_prompt, conflict_str]
 
 	var entries: Array[Resource] = [target_skill]
-	var labels: Array[String] = ["确认"]
-	var tooltips: Array[String] = [_format_skill_detailed(target_skill)]
+	var labels: Array[String] = ["确认领悟"]
+	var tooltips: Array[String] = [""]
 	var disabled: Array[bool] = [false]
 
 	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
 	ui.show_player_stats(player)
-	ui.show_transaction_result(true, _format_skill_summary(target_skill, "【将要习得】"))
+	ui.show_transaction_result(true, "")
 
 
 # 移动光标预览技能
 func handle_dialogue_option_focused(index: int, ui: NpcInteractionUI, _player: Player) -> void:
 	match _current_step:
 		Step.CHOICES:
-			if index == 0:
-				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
-			elif not _active_conflicts.is_empty() and index >= 1 and index <= _active_conflicts.size():
-				var conflict_skill: SkillData = _active_conflicts[index - 1]
-				ui.show_transaction_result(false, _format_skill_summary(conflict_skill, "【冲突技能效果（不可选，将遗忘）】"))
+			if not _active_conflicts.is_empty() and index >= 1 and index <= _active_conflicts.size():
+				ui.show_transaction_result(false, "冲突技能：学习新技能后将遗忘此技能")
 			else:
 				ui.show_transaction_result(true, "")
 
 		Step.CONFIRM:
-			if index == 0:
-				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
-			else:
-				ui.show_transaction_result(true, "")
+			ui.show_transaction_result(true, "")
 
 
 # 选项点击处理
@@ -209,62 +206,3 @@ func handle_dialogue_option(index: int, ui: NpcInteractionUI, player: Player) ->
 			else:
 				# 取消
 				ui.close()
-
-
-func _format_skill_summary(skill: SkillData, prefix: String = "") -> String:
-	if skill == null:
-		return ""
-	var parts: Array[String] = []
-	if not prefix.is_empty():
-		parts.append("%s 【%s】（%s）" % [prefix, skill.display_name, skill.get_type_name()])
-	else:
-		parts.append("【%s】（%s）" % [skill.display_name, skill.get_type_name()])
-
-	if not skill.description.is_empty():
-		parts.append("说明：%s" % skill.description)
-
-	var cost_strs: Array[String] = []
-	for cost: ActionCostData in skill.costs:
-		var d := cost.get_description()
-		if not d.is_empty():
-			cost_strs.append(d)
-	if not cost_strs.is_empty():
-		parts.append("消耗：%s" % "，".join(cost_strs))
-
-	var effect_strs: Array[String] = []
-	for eff: ActionEffectData in skill.effects:
-		var d := eff.get_description()
-		if not d.is_empty():
-			effect_strs.append(d)
-	if not effect_strs.is_empty():
-		parts.append("效果：%s" % "；".join(effect_strs))
-
-	return " | ".join(parts)
-
-
-func _format_skill_detailed(skill: SkillData) -> String:
-	if skill == null:
-		return ""
-	var lines: Array[String] = []
-	lines.append("【%s】（%s技能）" % [skill.display_name, skill.get_type_name()])
-	if not skill.description.is_empty():
-		lines.append("【描述】%s" % skill.description)
-
-	var cost_strs: Array[String] = []
-	for cost: ActionCostData in skill.costs:
-		var d := cost.get_description()
-		if not d.is_empty():
-			cost_strs.append(d)
-	if not cost_strs.is_empty():
-		lines.append("【消耗】%s" % "，".join(cost_strs))
-
-	var effect_strs: Array[String] = []
-	for eff: ActionEffectData in skill.effects:
-		var d := eff.get_description()
-		if not d.is_empty():
-			effect_strs.append(d)
-	if not effect_strs.is_empty():
-		lines.append("【效果】%s" % "；".join(effect_strs))
-
-	return "\n".join(lines)
-

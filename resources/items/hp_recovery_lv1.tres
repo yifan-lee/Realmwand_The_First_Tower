@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="1_bllr4"]
 [ext_resource type="Texture2D" uid="uid://cj8tj1soogg8e" path="res://assets/items/token/hp_tier_1.png" id="1_d1yla"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_n1f62"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_u0ib2"]
 
 [sub_resource type="Resource" id="Resource_ia3im"]
 script = ExtResource("1_n1f62")
 target = 0
-resource_type = 1
 calc_method = 0
 value = 20.0
 

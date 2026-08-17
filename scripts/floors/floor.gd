@@ -46,10 +46,21 @@ func get_spawn_point(spawn_id: StringName) -> Marker2D:
 		NodePath(String(resolved_id))
 	) as Marker2D
 
+	if marker == null and default_spawn_id != resolved_id and default_spawn_id != &"":
+		marker = spawn_points.get_node_or_null(
+			NodePath(String(default_spawn_id))
+		) as Marker2D
+
+	if marker == null and spawn_points.get_child_count() > 0:
+		for child: Node in spawn_points.get_children():
+			if child is Marker2D:
+				marker = child as Marker2D
+				break
+
 	if marker == null:
 		push_error(
-			"Floor '%s' has no spawn point '%s'."
-			% [floor_id, resolved_id]
+			"Floor '%s' has no valid spawn point for '%s'."
+			% [floor_id, spawn_id]
 		)
 
 	return marker

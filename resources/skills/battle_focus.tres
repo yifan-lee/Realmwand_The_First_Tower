@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_drfa4"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_r5wxd"]
-[ext_resource type="Script" path="res://scripts/data/status_effect_data.gd" id="2_status"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_0g62r"]
 [ext_resource type="Texture2D" uid="uid://draf8v3mwrxhg" path="res://assets/skills/support/buff_atk_tier_1.png" id="2_drfa4"]
+[ext_resource type="Script" uid="uid://cb8kh7hp8uvtq" path="res://scripts/data/status_effect_data.gd" id="2_status"]
 
 [sub_resource type="Resource" id="Resource_qrxtq"]
 script = ExtResource("1_drfa4")
@@ -14,13 +14,9 @@ value = 15.0
 script = ExtResource("2_status")
 id = &"battle_focus_buff"
 display_name = "战斗怒吼"
-polarity = 0
 affected_stat = 3
-operation = 1
 value = 1.5
 restrict_skill_type = true
-target_skill_type = 0
-end_condition = 1
 duration_count = 2
 
 [sub_resource type="Resource" id="Resource_drfa4"]

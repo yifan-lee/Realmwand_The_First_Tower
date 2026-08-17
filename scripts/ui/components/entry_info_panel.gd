@@ -19,13 +19,14 @@ func display_info(
 
 	title_label.text = view_data.title
 	description_label.text = view_data.description
+	description_label.visible = not view_data.description.is_empty()
 
 	icon_rect.texture = view_data.icon
 	icon_rect.visible = view_data.icon != null
 
 	var has_details := not view_data.detail_lines.is_empty()
 
-	details_separator.visible = has_details
+	details_separator.visible = has_details and description_label.visible
 	details_label.visible = has_details
 	details_label.text = "\n".join(view_data.detail_lines)
 
@@ -41,6 +42,18 @@ func clear_info() -> void:
 	details_label.text = ""
 	details_label.visible = false
 	details_separator.visible = false
+
+
+func display_skill(skill: SkillData) -> void:
+	if skill == null:
+		clear_info()
+		return
+	var view := EntryInfoViewData.new()
+	view.title = skill.display_name
+	view.icon = skill.icon
+	view.description = ""
+	view.detail_lines = skill.get_details()
+	display_info(view)
 
 
 func display_item(item: ItemData) -> void:

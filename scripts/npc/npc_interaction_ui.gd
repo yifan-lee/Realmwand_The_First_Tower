@@ -7,7 +7,7 @@ signal advance_requested
 signal close_requested
 signal closed
 
-enum Mode { CHOICES, DIALOGUE }
+enum Mode {CHOICES, DIALOGUE}
 
 const SUCCESS_COLOR := Color("#32FF7DFF")
 const ERROR_COLOR := Color("#FF4155FF")
@@ -20,18 +20,13 @@ const ERROR_COLOR := Color("#FF4155FF")
 @onready var prompt_label: Label = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/PromptLabel
 @onready var options_scroll: ScrollContainer = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/OptionsScroll
 @onready var option_rows: VBoxContainer = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/OptionsScroll/OptionRows
-@onready var cancel_button: Button = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/CancelButton
 @onready var feedback_label: Label = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/DialoguePanel/DialogueMargin/DialogueContent/FeedbackLabel
 @onready var hint_label: Label = $InteractionRoot/Backdrop/Center/Panel/Margin/Content/HintLabel
+@onready var selection_detail_panel: EntryInfoPanel = $InteractionRoot/SelectionDetailPanel
 
 var _mode: Mode = Mode.CHOICES
 var _rows: Array[SelectableListRow] = []
 var _selected_index: int = 0
-
-
-func _ready() -> void:
-	cancel_button.pressed.connect(close_requested.emit)
-	cancel_button.focus_entered.connect(_select_cancel)
 
 
 func _input(event: InputEvent) -> void:
@@ -69,7 +64,6 @@ func open_choices(
 	feedback_label.text = ""
 	stats_panel.visible = true
 	options_scroll.visible = true
-	cancel_button.visible = true
 	hint_label.text = "↑↓ 选择   确认键兑换   菜单键取消"
 	_rebuild_rows(entries, labels, tooltips, disabled_flags)
 	_selected_index = 0
@@ -87,14 +81,16 @@ func open_dialogue(npc_name: String, dialogue: String) -> void:
 	feedback_label.text = ""
 	stats_panel.visible = true
 	options_scroll.visible = false
-	cancel_button.visible = false
+	if selection_detail_panel != null:
+		selection_detail_panel.clear_info()
 	hint_label.text = "按确认键继续   菜单键取消"
 	_clear_rows()
 	interaction_root.visible = true
 
 
 func update_choices(labels: Array[String], disabled_flags: Array[bool] = []) -> void:
-	for index: int in mini(labels.size(), _rows.size()):
+	var entry_count := _rows.size() - 1
+	for index: int in mini(labels.size(), entry_count):
 		_rows[index].text = labels[index]
 		if index < disabled_flags.size():
 			_rows[index].disabled = disabled_flags[index]
@@ -131,10 +127,25 @@ func show_transaction_result(success: bool, message: String) -> void:
 	feedback_label.modulate = SUCCESS_COLOR if success else ERROR_COLOR
 
 
+func show_entry_detail(entry: Variant) -> void:
+	if selection_detail_panel == null:
+		return
+	if entry is SkillData:
+		selection_detail_panel.display_skill(entry as SkillData)
+	elif entry is ItemData:
+		selection_detail_panel.display_item(entry as ItemData)
+	elif entry is EntryInfoViewData:
+		selection_detail_panel.display_info(entry as EntryInfoViewData)
+	else:
+		selection_detail_panel.clear_info()
+
+
 func close() -> void:
 	interaction_root.visible = false
 	_clear_rows()
 	stats_panel.unbind_actor()
+	if selection_detail_panel != null:
+		selection_detail_panel.clear_info()
 	closed.emit()
 
 
@@ -161,6 +172,19 @@ func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Ar
 		row.entry_selected.connect(_on_row_selected.bind(index))
 		row.entry_focused.connect(_on_row_focused.bind(index))
 
+	# 取消选项作为同级别的最后一行选项
+	var cancel_row := option_row_scene.instantiate() as SelectableListRow
+	option_rows.add_child(cancel_row)
+	_rows.append(cancel_row)
+	var cancel_index := _rows.size() - 1
+	cancel_row.setup(null, "取消", null, "", false)
+	cancel_row.entry_selected.connect(func(_e): close_requested.emit())
+	cancel_row.entry_focused.connect(func(_e):
+		_selected_index = cancel_index
+		feedback_label.text = ""
+		show_entry_detail(null)
+	)
+
 
 func _clear_rows() -> void:
 	for child: Node in option_rows.get_children():
@@ -170,17 +194,19 @@ func _clear_rows() -> void:
 
 
 func _move_selection(direction: int) -> void:
-	_selected_index = posmod(_selected_index + direction, _rows.size() + 1)
+	if _rows.is_empty():
+		return
+	_selected_index = posmod(_selected_index + direction, _rows.size())
 	feedback_label.text = ""
 	_sync_focus()
-	if _selected_index < _rows.size():
+	if _selected_index < _rows.size() - 1:
 		option_focused.emit(_selected_index)
 
 
 func _activate_selection() -> void:
-	if _selected_index == _rows.size():
+	if _selected_index == _rows.size() - 1:
 		close_requested.emit()
-	elif _selected_index >= 0 and _selected_index < _rows.size():
+	elif _selected_index >= 0 and _selected_index < _rows.size() - 1:
 		if not _rows[_selected_index].disabled:
 			option_selected.emit(_selected_index)
 
@@ -188,22 +214,22 @@ func _activate_selection() -> void:
 func _on_row_selected(_entry: Resource, index: int) -> void:
 	if index >= 0 and index < _rows.size() and _rows[index].disabled:
 		return
+	if index == _rows.size() - 1:
+		close_requested.emit()
+		return
 	option_selected.emit(index)
 
 
-func _on_row_focused(_entry: Resource, index: int) -> void:
+func _on_row_focused(entry: Resource, index: int) -> void:
 	_selected_index = index
 	feedback_label.text = ""
-	option_focused.emit(index)
-
-
-func _select_cancel() -> void:
-	_selected_index = _rows.size()
-	feedback_label.text = ""
+	show_entry_detail(entry)
+	if index < _rows.size() - 1:
+		option_focused.emit(index)
 
 
 func _sync_focus() -> void:
-	if _selected_index == _rows.size():
-		cancel_button.grab_focus()
-	elif _selected_index >= 0 and _selected_index < _rows.size():
+	if _selected_index >= 0 and _selected_index < _rows.size():
 		_rows[_selected_index].grab_focus()
+		var entry: Resource = _rows[_selected_index].entry_data if _rows[_selected_index] != null else null
+		show_entry_detail(entry)

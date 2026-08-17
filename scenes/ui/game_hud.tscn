@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="3_x6mpk"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="4_ehshv"]
 [ext_resource type="PackedScene" uid="uid://bvg00qubiwf61" path="res://scenes/ui/components/floor_info_hud.tscn" id="5_floorinfo"]
-[ext_resource type="Script" path="res://scripts/ui/components/game_stats_column.gd" id="6_stats_col"]
-[ext_resource type="Script" path="res://scripts/ui/components/transition_overlay.gd" id="7_trans_overlay"]
-[ext_resource type="Script" path="res://scripts/ui/components/environment_info_area.gd" id="8_env_info"]
+[ext_resource type="Script" uid="uid://cqm5u8uxvb1tq" path="res://scripts/ui/components/game_stats_column.gd" id="6_stats_col"]
+[ext_resource type="Script" uid="uid://dpjmprmvivf7w" path="res://scripts/ui/components/transition_overlay.gd" id="7_trans_overlay"]
+[ext_resource type="Script" uid="uid://bgfxmr8fqnq5f" path="res://scripts/ui/components/environment_info_area.gd" id="8_env_info"]
 
 [node name="GameHUD" type="CanvasLayer" unique_id=129955379]
 script = ExtResource("1_8n052")
@@ -44,11 +44,11 @@ custom_minimum_size = Vector2(360, 0)
 layout_mode = 0
 offset_left = 24.0
 offset_top = 24.0
-script = ExtResource("6_stats_col")
 offset_right = 24.0
 offset_bottom = 24.0
 theme = ExtResource("4_ehshv")
 theme_type_variation = &"TerminalPanel"
+script = ExtResource("6_stats_col")
 
 [node name="Content" type="VBoxContainer" parent="HudRoot/StatsColumn" unique_id=1814305014]
 layout_mode = 2
@@ -57,7 +57,6 @@ theme_override_constants/separation = 4
 [node name="ActorStatsPanel" parent="HudRoot/StatsColumn/Content" unique_id=799998403 instance=ExtResource("3_x6mpk")]
 layout_mode = 2
 theme_type_variation = &"TransparentPanelContainer"
-fp_display_mode = 1
 
 [node name="TrackedInventoryHUD" parent="HudRoot/StatsColumn/Content" unique_id=794321377 instance=ExtResource("2_fnxle")]
 custom_minimum_size = Vector2(340, 0)
@@ -68,32 +67,34 @@ theme_type_variation = &"TransparentPanelContainer"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
-script = ExtResource("7_trans_overlay")
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+script = ExtResource("7_trans_overlay")
 
 [node name="EnvironmentInfoArea" type="Control" parent="HudRoot" unique_id=194048808]
 anchors_preset = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
-script = ExtResource("8_env_info")
 offset_left = 24.0
-offset_top = -112.0
+offset_top = -24.0
 offset_right = 392.0
 offset_bottom = -24.0
 grow_vertical = 0
 mouse_filter = 2
+script = ExtResource("8_env_info")
 
 [node name="FloorInfoHUD" parent="HudRoot/EnvironmentInfoArea" unique_id=1125122122 instance=ExtResource("5_floorinfo")]
 layout_mode = 0
+anchors_preset = 0
 anchor_top = 0.0
 anchor_right = 1.0
+anchor_bottom = 0.0
 offset_left = 0.0
+offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
-grow_vertical = 2

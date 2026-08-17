@@ -27,7 +27,6 @@ enum SkillType {
 @export var costs: Array[ActionCostData] = []
 @export var target_type: TargetType = TargetType.ENEMY
 
-
 @export_group("Effects")
 @export var effects: Array[ActionEffectData] = []
 
@@ -46,26 +45,35 @@ func get_type_name() -> String:
 
 func get_details() -> Array[String]:
 	var result: Array[String] = []
-	result.append("类型：%s" % get_type_name())
+	result.append("类别：%s" % get_type_name())
+	if not description.is_empty():
+		result.append("说明：%s" % description)
 	
 	var effect_lines: Array[String] = []
+	var eff_idx: int = 1
 	for effect: ActionEffectData in effects:
 		var desc := effect.get_description()
 		if not desc.is_empty():
-			effect_lines.append(desc)
+			effect_lines.append("%d. %s" % [eff_idx, desc])
+			eff_idx += 1
 			
 	if not effect_lines.is_empty():
-		result.append("\n[color=#A0A0A0]【效果】[/color]")
+		result.append("\n【效果】")
 		result.append_array(effect_lines)
 		
 	var cost_lines: Array[String] = []
+	var cost_idx: int = 1
 	for cost: ActionCostData in costs:
 		var desc := cost.get_description()
 		if not desc.is_empty():
-			cost_lines.append(desc)
+			cost_lines.append("%d. %s" % [cost_idx, desc])
+			cost_idx += 1
 			
 	if not cost_lines.is_empty():
-		result.append("\n[color=#A0A0A0]【消耗】[/color]")
+		result.append("\n【消耗】")
 		result.append_array(cost_lines)
+	elif skill_type != SkillType.PASSIVE:
+		result.append("\n【消耗】")
+		result.append("1. 无消耗")
 
 	return result

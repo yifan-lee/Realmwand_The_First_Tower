@@ -331,12 +331,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 		_enemy_atb_value,
 		_player_atb_value + player_preview.current_atb_delta if player_preview.has_atb_change() else -1.0
 	)
-	var info := EntryInfoViewData.new()
-	info.title = skill.display_name
-	info.icon = skill.icon
-	info.description = skill.description
-	info.detail_lines = skill.get_details()
-	entry_info_panel.display_info(info)
+	entry_info_panel.display_skill(skill)
 
 
 func _on_item_focused(item: ItemData) -> void:
