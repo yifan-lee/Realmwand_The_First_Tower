@@ -222,3 +222,42 @@ func get_stat_upgrade_preview(stat_id: StringName) -> Dictionary[StringName, flo
 		&"max_mp": FORMULAS.resolve_base_max_mp(_stats.base_max_mp, next_atk, next_spd) - _stats.get_max_mp(),
 		&"fp_recovery": FORMULAS.resolve_base_fp_recovery(_stats.base_fp_recovery_spd, next_atk, next_def) - _stats.get_fp_recovery_spd(),
 	}
+
+
+func has_skill(skill_id: StringName) -> bool:
+	for skill: SkillData in learned_skills:
+		if skill != null and skill.id == skill_id:
+			return true
+	return false
+
+
+func get_skill(skill_id: StringName) -> SkillData:
+	for skill: SkillData in learned_skills:
+		if skill != null and skill.id == skill_id:
+			return skill
+	return null
+
+
+func learn_skill(skill: SkillData) -> bool:
+	if skill == null:
+		return false
+	if not has_skill(skill.id):
+		learned_skills.append(skill)
+		pending_learned_skills.append(skill)
+		skill_learned.emit(skill)
+		return true
+	return false
+
+
+func forget_skill(skill_id: StringName) -> bool:
+	for i: int in range(learned_skills.size() - 1, -1, -1):
+		var skill := learned_skills[i]
+		if skill != null and skill.id == skill_id:
+			learned_skills.remove_at(i)
+			# 同时清理 pending
+			for j: int in range(pending_learned_skills.size() - 1, -1, -1):
+				if pending_learned_skills[j] != null and pending_learned_skills[j].id == skill_id:
+					pending_learned_skills.remove_at(j)
+			return true
+	return false
+

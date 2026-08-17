@@ -47,6 +47,22 @@ var learned_skills: Array[SkillData]:
 	get(): return progression.learned_skills if progression else []
 
 
+func has_skill(skill_id: StringName) -> bool:
+	return progression.has_skill(skill_id) if progression else false
+
+
+func get_skill(skill_id: StringName) -> SkillData:
+	return progression.get_skill(skill_id) if progression else null
+
+
+func learn_skill(skill: SkillData) -> bool:
+	return progression.learn_skill(skill) if progression else false
+
+
+func forget_skill(skill_id: StringName) -> bool:
+	return progression.forget_skill(skill_id) if progression else false
+
+
 func _ready() -> void:
 	if player_data == null:
 		push_error("Player requires a PlayerData resource.")
