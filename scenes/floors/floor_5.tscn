@@ -19,6 +19,13 @@
 [ext_resource type="Resource" uid="uid://0dvg81bt3wru" path="res://resources/items/mp_recovery_lv1.tres" id="15_5xuqc"]
 [ext_resource type="Resource" uid="uid://dix8w26nav0uq" path="res://resources/equipment/feet_lv2.tres" id="17_fmrn4"]
 [ext_resource type="PackedScene" path="res://scenes/actors/npcs/skill_tutor.tscn" id="19_4erq6"]
+[ext_resource type="Texture2D" uid="uid://bdo77ivm00hae" path="res://assets/interactables/npc_atk.png" id="20_kvxoc"]
+[ext_resource type="Resource" uid="uid://ntwb01jgccv4" path="res://resources/skills/overload_atk.tres" id="21_82yv0"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="22_j31jh"]
+[ext_resource type="Resource" path="res://resources/skills/overload_def.tres" id="23_44cnq"]
+[ext_resource type="Resource" path="res://resources/skills/overload_spd.tres" id="24_psuru"]
+[ext_resource type="Texture2D" uid="uid://d12nsak3odvgb" path="res://assets/interactables/npc_def.png" id="25_j31jh"]
+[ext_resource type="Texture2D" uid="uid://d0214rlpiyo3f" path="res://assets/interactables/npc_spd.png" id="26_44cnq"]
 
 [node name="Floor" unique_id=141402115 instance=ExtResource("1_base_floor")]
 script = ExtResource("1_bu62v")
@@ -336,7 +343,7 @@ attribute = 1
 direction = 3
 
 [node name="EnemyDefLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="0" unique_id=796734484 instance=ExtResource("6_yla54")]
-position = Vector2(32, 0)
+position = Vector2(-64, -224)
 enemy_data = ExtResource("7_iw1x7")
 
 [node name="EnemyDefLv133" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="1" unique_id=240984361 instance=ExtResource("6_yla54")]
@@ -452,7 +459,7 @@ position = Vector2(-96, 800)
 enemy_data = ExtResource("7_iw1x7")
 
 [node name="EnemyDefLv105" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="29" unique_id=361139462 instance=ExtResource("6_yla54")]
-position = Vector2(104, 48)
+position = Vector2(-104, -176)
 enemy_data = ExtResource("7_iw1x7")
 
 [node name="EnemyDefLv106" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="30" unique_id=1546077683 instance=ExtResource("6_yla54")]
@@ -468,7 +475,7 @@ position = Vector2(-80, -112)
 enemy_data = ExtResource("7_iw1x7")
 
 [node name="EnemyAtkLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="33" unique_id=1105885141 instance=ExtResource("6_yla54")]
-position = Vector2(0, -32)
+position = Vector2(-224, -64)
 enemy_data = ExtResource("8_iw1x7")
 
 [node name="EnemyAtkLv130" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="34" unique_id=34197019 instance=ExtResource("6_yla54")]
@@ -608,7 +615,7 @@ position = Vector2(96, 800)
 enemy_data = ExtResource("8_iw1x7")
 
 [node name="EnemySpdLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="68" unique_id=906522698 instance=ExtResource("6_yla54")]
-position = Vector2(32, -32)
+position = Vector2(-120, -224)
 enemy_data = ExtResource("9_2hsyx")
 
 [node name="EnemySpdLv131" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="69" unique_id=984013587 instance=ExtResource("6_yla54")]
@@ -804,7 +811,7 @@ position = Vector2(1248, 1280)
 enemy_data = ExtResource("7_iw1x7")
 
 [node name="HPLv201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("9_wjhij")]
-position = Vector2(32, 32)
+position = Vector2(-40, -168)
 item_data = ExtResource("10_6ppm1")
 
 [node name="HPLv212" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=1636969495 instance=ExtResource("9_wjhij")]
@@ -836,7 +843,7 @@ position = Vector2(2112, 416)
 item_data = ExtResource("10_6ppm1")
 
 [node name="HPLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="8" unique_id=5714791 instance=ExtResource("9_wjhij")]
-position = Vector2(-32, 32)
+position = Vector2(-208, -96)
 item_data = ExtResource("12_ap1j4")
 
 [node name="HPLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=275006133 instance=ExtResource("9_wjhij")]
@@ -896,7 +903,7 @@ position = Vector2(1248, 1248)
 item_data = ExtResource("12_ap1j4")
 
 [node name="MPLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="23" unique_id=1452411148 instance=ExtResource("9_wjhij")]
-position = Vector2(-32, 0)
+position = Vector2(-176, -32)
 item_data = ExtResource("15_5xuqc")
 
 [node name="HPLv208" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="24" unique_id=1881388378 instance=ExtResource("9_wjhij")]
@@ -996,7 +1003,7 @@ position = Vector2(224, 608)
 item_data = ExtResource("10_6ppm1")
 
 [node name="MPLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="48" unique_id=237022116 instance=ExtResource("9_wjhij")]
-position = Vector2(-32, 0)
+position = Vector2(-144, -64)
 item_data = ExtResource("15_5xuqc")
 
 [node name="MPLv124" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="49" unique_id=851458561 instance=ExtResource("9_wjhij")]
@@ -1087,8 +1094,32 @@ item_data = ExtResource("15_5xuqc")
 position = Vector2(928, 1568)
 item_data = ExtResource("15_5xuqc")
 
-[node name="SkillTutor" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="0" unique_id=1258533527 instance=ExtResource("19_4erq6")]
-position = Vector2(0, -128)
+[node name="SkillTutorAtk" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="0" unique_id=1258533527 instance=ExtResource("19_4erq6")]
+position = Vector2(0, -96)
+tutor_id = &"skill_tutor_atk"
+npc_name = "攻击武艺导师"
+texture = ExtResource("20_kvxoc")
+target_skill = ExtResource("21_82yv0")
+conflict_skills = Array[ExtResource("22_j31jh")]([ExtResource("23_44cnq"), ExtResource("24_psuru")])
+normal_prompt = "我可以传授你进攻型独门技能，只要你愿意潜心修习。"
+
+[node name="SkillTutorDef" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="1" unique_id=907689645 instance=ExtResource("19_4erq6")]
+position = Vector2(32, -96)
+tutor_id = &"skill_tutor_def"
+npc_name = "防御武艺导师"
+texture = ExtResource("25_j31jh")
+target_skill = ExtResource("23_44cnq")
+conflict_skills = Array[ExtResource("22_j31jh")]([ExtResource("21_82yv0"), ExtResource("24_psuru")])
+normal_prompt = "我可以传授你防御型独门技能，只要你愿意潜心修习。"
+
+[node name="SkillTutorSpd" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="2" unique_id=1778485059 instance=ExtResource("19_4erq6")]
+position = Vector2(64, -96)
+tutor_id = &"skill_tutor_spd"
+npc_name = "速度武艺导师"
+texture = ExtResource("26_44cnq")
+target_skill = ExtResource("24_psuru")
+conflict_skills = Array[ExtResource("22_j31jh")]([ExtResource("23_44cnq"), ExtResource("21_82yv0")])
+normal_prompt = "我可以传授你速度型独门技能，只要你愿意潜心修习。"
 
 [node name="WallFinal" type="Node2D" parent="DynamicTiles" parent_id_path=PackedInt32Array(1459102837) index="0" unique_id=886384889]
 

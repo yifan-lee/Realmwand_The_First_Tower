@@ -99,6 +99,12 @@ func update_choices(labels: Array[String], disabled_flags: Array[bool] = []) -> 
 			_rows[index].disabled = disabled_flags[index]
 
 
+func show_player_stats(player: Player) -> void:
+	if player == null:
+		return
+	stats_panel.display_stats(_build_stats_view(player, {}))
+
+
 func show_player_stat_preview(player: Player, stat_id: StringName = &"", amount: float = 0.0) -> void:
 	if player == null:
 		return
@@ -125,17 +131,16 @@ func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Ar
 	if option_row_scene == null:
 		push_error("NpcInteractionUI requires an option row scene.")
 		return
-	for index: int in entries.size():
-		var entry: Resource = entries[index]
-		if entry == null:
-			continue
+	var count: int = maxi(entries.size(), labels.size())
+	for index: int in count:
+		var entry: Resource = entries[index] if index < entries.size() else null
+		var label := labels[index] if index < labels.size() else ""
+		var tooltip := tooltips[index] if index < tooltips.size() else ""
+		var icon: Texture2D = entry.get("icon") as Texture2D if entry != null and "icon" in entry else null
+		var is_disabled = disabled_flags[index] if index < disabled_flags.size() else false
 		var row := option_row_scene.instantiate() as SelectableListRow
 		option_rows.add_child(row)
 		_rows.append(row)
-		var label := labels[index] if index < labels.size() else ""
-		var tooltip := tooltips[index] if index < tooltips.size() else ""
-		var icon: Texture2D = entry.get("icon") as Texture2D
-		var is_disabled = disabled_flags[index] if index < disabled_flags.size() else false
 		row.setup(entry, label, icon, tooltip, is_disabled)
 		row.entry_selected.connect(_on_row_selected.bind(index))
 		row.entry_focused.connect(_on_row_focused.bind(index))
@@ -149,12 +154,7 @@ func _clear_rows() -> void:
 
 
 func _move_selection(direction: int) -> void:
-	var start_index = _selected_index
 	_selected_index = posmod(_selected_index + direction, _rows.size() + 1)
-	var attempts = 0
-	while _selected_index < _rows.size() and _rows[_selected_index].disabled and attempts <= _rows.size():
-		_selected_index = posmod(_selected_index + direction, _rows.size() + 1)
-		attempts += 1
 	feedback_label.text = ""
 	_sync_focus()
 	if _selected_index < _rows.size():
@@ -170,6 +170,8 @@ func _activate_selection() -> void:
 
 
 func _on_row_selected(_entry: Resource, index: int) -> void:
+	if index >= 0 and index < _rows.size() and _rows[index].disabled:
+		return
 	option_selected.emit(index)
 
 
@@ -191,7 +193,7 @@ func _sync_focus() -> void:
 		_rows[_selected_index].grab_focus()
 
 
-func _build_stats_view(player: Player, preview: Dictionary[StringName, float]) -> ActorStatsViewData:
+func _build_stats_view(player: Player, preview: Dictionary[StringName, float] = {}) -> ActorStatsViewData:
 	var view := ActorStatsViewData.new()
 	view.display_name = player.player_data.display_name
 	view.portrait = player.get_ui_portrait()
@@ -208,12 +210,12 @@ func _build_stats_view(player: Player, preview: Dictionary[StringName, float]) -
 	view.atk = player.get_atk()
 	view.def = player.get_def()
 	view.spd = player.get_spd()
-	view.current_hp_delta = preview[&"current_hp"] - view.current_hp
-	view.max_hp_delta = preview[&"max_hp"] - view.max_hp
-	view.current_mp_delta = preview[&"current_mp"] - view.current_mp
-	view.max_mp_delta = preview[&"max_mp"] - view.max_mp
-	view.atk_delta = preview[&"atk"] - view.atk
-	view.def_delta = preview[&"def"] - view.def
-	view.spd_delta = preview[&"spd"] - view.spd
+	view.current_hp_delta = preview.get(&"current_hp", view.current_hp) - view.current_hp
+	view.max_hp_delta = preview.get(&"max_hp", view.max_hp) - view.max_hp
+	view.current_mp_delta = preview.get(&"current_mp", view.current_mp) - view.current_mp
+	view.max_mp_delta = preview.get(&"max_mp", view.max_mp) - view.max_mp
+	view.atk_delta = preview.get(&"atk", view.atk) - view.atk
+	view.def_delta = preview.get(&"def", view.def) - view.def
+	view.spd_delta = preview.get(&"spd", view.spd) - view.spd
 	view.fp_recovery_spd_delta = preview.get(&"fp_recovery", view.fp_recovery_spd) - view.fp_recovery_spd
 	return view

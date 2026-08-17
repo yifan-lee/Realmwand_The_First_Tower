@@ -21,25 +21,16 @@ func setup(
 	is_disabled: bool = false
 ) -> void:
 	entry_data = entry
-
-	if entry_data == null:
-		text = ""
-		icon = null
-		tooltip_text = ""
-		disabled = true
-		return
-
 	text = entry_text
-	icon = entry_icon
+	icon = entry_icon if entry_icon != null else (entry.get("icon") as Texture2D if entry != null else null)
 	tooltip_text = entry_tooltip
 	disabled = is_disabled
+	focus_mode = Control.FOCUS_ALL
 
 
 func _pressed() -> void:
-	if entry_data != null:
-		entry_selected.emit(entry_data)
+	entry_selected.emit(entry_data)
 
 
 func _emit_focused() -> void:
-	if entry_data != null:
-		entry_focused.emit(entry_data)
+	entry_focused.emit(entry_data)

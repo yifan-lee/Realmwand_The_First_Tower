@@ -2,15 +2,42 @@
 class_name SkillTutor
 extends StaticBody2D
 
-enum DialogueMode {
+enum Step {
+	INTRO,
+	CHOICES,
+	CONFIRM,
 	ALREADY_LEARNED,
-	NORMAL_LEARN,
-	FORGET_AND_LEARN,
 }
 
 @export_group("Identity")
 @export var tutor_id: StringName = &""
 @export var npc_name: String = "武艺导师"
+
+@export_group("Visuals")
+@export var texture: Texture2D = preload("res://assets/interactables/npc_universal.png"):
+	set(value):
+		texture = value
+		_update_visuals()
+@export var sprite_scale: Vector2 = Vector2(0.125, 0.125):
+	set(value):
+		sprite_scale = value
+		_update_visuals()
+@export var hframes: int = 1:
+	set(value):
+		hframes = maxi(1, value)
+		_update_visuals()
+@export var vframes: int = 1:
+	set(value):
+		vframes = maxi(1, value)
+		_update_visuals()
+@export var frame: int = 0:
+	set(value):
+		frame = maxi(0, value)
+		_update_visuals()
+@export var offset: Vector2 = Vector2.ZERO:
+	set(value):
+		offset = value
+		_update_visuals()
 
 @export_group("Skill Teaching")
 @export var target_skill: SkillData
@@ -20,9 +47,29 @@ enum DialogueMode {
 @export_multiline var normal_prompt: String = "我可以传授你独门技能，只要你愿意潜心修习。"
 @export_multiline var conflict_prompt: String = "你所掌握的技艺与这门技能冲突！若想习得新技能，必须先遗忘原有的招式，你可愿意？"
 @export_multiline var already_learned_prompt: String = "你已经掌握了这门技能的精髓，去实战中磨砺它吧。"
+@export_multiline var confirm_prompt: String = "你确定要领悟这门新技能吗？"
 
-var _current_mode: DialogueMode = DialogueMode.NORMAL_LEARN
+var _current_step: Step = Step.INTRO
 var _active_conflicts: Array[SkillData] = []
+
+
+func _ready() -> void:
+	_update_visuals()
+
+
+func _update_visuals() -> void:
+	if not is_inside_tree():
+		return
+	var sprite_node := get_node_or_null("Sprite2D") as Sprite2D
+	if sprite_node == null:
+		return
+	if texture != null:
+		sprite_node.texture = texture
+	sprite_node.scale = sprite_scale
+	sprite_node.hframes = hframes
+	sprite_node.vframes = vframes
+	sprite_node.frame = frame
+	sprite_node.offset = offset
 
 
 func get_persistent_id() -> String:
@@ -37,187 +84,135 @@ func interact(player: Player) -> void:
 	EventBus.npc_interaction_requested.emit(self, player)
 
 
+# 1. 开始对话
 func begin_interaction(ui: NpcInteractionUI, player: Player) -> void:
 	if target_skill == null:
 		ui.open_dialogue(npc_name, "（这位导师似乎还没有准备好要传授的技能...）")
 		return
 
-	# 1. 检查是否已经学会目标技能
 	if player.has_skill(target_skill.id):
-		_current_mode = DialogueMode.ALREADY_LEARNED
-		ui.open_choices(
-			npc_name,
-			already_learned_prompt,
-			[target_skill],
-			["📖 查看已掌握技能：【%s】（%s）" % [target_skill.display_name, target_skill.get_type_name()]],
-			[_format_skill_detailed(target_skill, "【已掌握】")],
-			[false]
-		)
-		ui.show_transaction_result(true, _format_skill_summary(target_skill, "【已掌握技能】"))
+		_current_step = Step.ALREADY_LEARNED
+		ui.open_dialogue(npc_name, already_learned_prompt)
 		return
 
-	# 2. 检查是否有冲突技能
-	_active_conflicts.clear()
-	for skill: SkillData in conflict_skills:
-		if skill != null and player.has_skill(skill.id):
-			_active_conflicts.append(skill)
+	_current_step = Step.INTRO
+	ui.open_dialogue(npc_name, normal_prompt)
+
+
+# 玩家按下确认键推进对话
+func advance_dialogue(ui: NpcInteractionUI, player: Player) -> void:
+	if _current_step == Step.ALREADY_LEARNED:
+		ui.close()
+		return
+
+	if _current_step == Step.INTRO:
+		_active_conflicts.clear()
+		for skill: SkillData in conflict_skills:
+			if skill != null and player.has_skill(skill.id):
+				_active_conflicts.append(skill)
+
+		_current_step = Step.CHOICES
+		_show_choices_step(ui, player)
+
+
+# 2. 第二阶段：展示选项
+func _show_choices_step(ui: NpcInteractionUI, player: Player) -> void:
+	var entries: Array[Resource] = [target_skill]
+	var labels: Array[String] = ["新技能：%s" % target_skill.display_name]
+	var tooltips: Array[String] = [_format_skill_detailed(target_skill)]
+	var disabled: Array[bool] = [false]
+	var prompt_text := normal_prompt
 
 	if not _active_conflicts.is_empty():
-		# 分支 C：存在冲突技能，明确列出冲突并提供预览
-		_current_mode = DialogueMode.FORGET_AND_LEARN
+		prompt_text = conflict_prompt
+		for conflict: SkillData in _active_conflicts:
+			entries.append(conflict)
+			labels.append("冲突技能：%s" % conflict.display_name)
+			tooltips.append(_format_skill_detailed(conflict))
+			disabled.append(true) # 灰色按键，不能按下
+
+	# 取消选项
+	entries.append(null)
+	labels.append("取消")
+	tooltips.append("")
+	disabled.append(false)
+
+	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
+	ui.show_player_stats(player)
+	ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
+
+
+# 3. 第三阶段：展示确认
+func _show_confirm_step(ui: NpcInteractionUI, player: Player) -> void:
+	var prompt_text := confirm_prompt
+	if not _active_conflicts.is_empty():
 		var conflict_names: Array[String] = []
-		for skill in _active_conflicts:
-			conflict_names.append("【%s】" % skill.display_name)
-		
+		for s: SkillData in _active_conflicts:
+			conflict_names.append("【%s】" % s.display_name)
 		var conflict_str := "、".join(conflict_names)
-		var prompt := "%s\n【冲突技能（将遗忘）】：%s\n【将要习得】：【%s】\n可在下方预览各项技能详情并选择：" % [
-			conflict_prompt,
-			conflict_str,
-			target_skill.display_name
-		]
-		
-		var entries: Array[Resource] = [target_skill, target_skill]
-		var labels: Array[String] = [
-			"⚡ 确认传授：遗忘 %s 并习得【%s】" % [conflict_str, target_skill.display_name],
-			"📖 预览新技能：【%s】（%s）" % [target_skill.display_name, target_skill.get_type_name()]
-		]
-		var tooltips: Array[String] = [
-			"遗忘 %s，领悟【%s】\n\n%s" % [conflict_str, target_skill.display_name, _format_skill_detailed(target_skill, "【新技能】")],
-			_format_skill_detailed(target_skill, "【将要习得】")
-		]
-		var disabled: Array[bool] = [false, false]
-		
-		for conflict_skill: SkillData in _active_conflicts:
-			entries.append(conflict_skill)
-			labels.append("❌ 预览冲突技能：【%s】（%s）" % [conflict_skill.display_name, conflict_skill.get_type_name()])
-			tooltips.append(_format_skill_detailed(conflict_skill, "【冲突将被遗忘】"))
-			disabled.append(false)
-		
-		ui.open_choices(
-			npc_name,
-			prompt,
-			entries,
-			labels,
-			tooltips,
-			disabled
-		)
-		ui.show_transaction_result(false, "注意：此传授将永久遗忘 %s，并习得【%s】！" % [conflict_str, target_skill.display_name])
-	else:
-		# 分支 B：无冲突技能，直接学习
-		_current_mode = DialogueMode.NORMAL_LEARN
-		var prompt := "%s\n【将要习得】：【%s】（%s）" % [
-			normal_prompt,
-			target_skill.display_name,
-			target_skill.get_type_name()
-		]
-		var entries: Array[Resource] = [target_skill, target_skill]
-		var labels: Array[String] = [
-			"⚡ 确认传授：习得【%s】" % target_skill.display_name,
-			"📖 预览技能详情：【%s】（%s）" % [target_skill.display_name, target_skill.get_type_name()]
-		]
-		var tooltips: Array[String] = [
-			_format_skill_detailed(target_skill, "【新技能】"),
-			_format_skill_detailed(target_skill, "【技能详情】")
-		]
-		var disabled: Array[bool] = [false, false]
-		
-		ui.open_choices(
-			npc_name,
-			prompt,
-			entries,
-			labels,
-			tooltips,
-			disabled
-		)
-		ui.show_transaction_result(true, _format_skill_summary(target_skill, "【可学技能】"))
+		prompt_text = "%s\n（注意：学习将永久遗忘冲突技能 %s）" % [confirm_prompt, conflict_str]
+
+	var entries: Array[Resource] = [target_skill, null]
+	var labels: Array[String] = ["确认", "取消"]
+	var tooltips: Array[String] = [_format_skill_detailed(target_skill), ""]
+	var disabled: Array[bool] = [false, false]
+
+	ui.open_choices(npc_name, prompt_text, entries, labels, tooltips, disabled)
+	ui.show_player_stats(player)
+	ui.show_transaction_result(true, _format_skill_summary(target_skill, "【将要习得】"))
 
 
+# 移动光标预览技能
+func handle_dialogue_option_focused(index: int, ui: NpcInteractionUI, _player: Player) -> void:
+	match _current_step:
+		Step.CHOICES:
+			if index == 0:
+				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
+			elif not _active_conflicts.is_empty() and index >= 1 and index <= _active_conflicts.size():
+				var conflict_skill: SkillData = _active_conflicts[index - 1]
+				ui.show_transaction_result(false, _format_skill_summary(conflict_skill, "【冲突技能效果（不可选，将遗忘）】"))
+			else:
+				ui.show_transaction_result(true, "")
+
+		Step.CONFIRM:
+			if index == 0:
+				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能效果】"))
+			else:
+				ui.show_transaction_result(true, "")
+
+
+# 选项点击处理
 func handle_dialogue_option(index: int, ui: NpcInteractionUI, player: Player) -> void:
-	match _current_mode:
-		DialogueMode.ALREADY_LEARNED:
-			if target_skill != null:
-				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【已掌握】"))
-
-		DialogueMode.NORMAL_LEARN:
+	match _current_step:
+		Step.CHOICES:
 			if index == 0:
-				if target_skill != null:
-					player.learn_skill(target_skill)
-					ui.show_transaction_result(true, "领悟了新技能：【%s】！" % target_skill.display_name)
-					_current_mode = DialogueMode.ALREADY_LEARNED
-					ui.open_choices(
-						npc_name,
-						already_learned_prompt,
-						[target_skill],
-						["📖 查看已掌握技能：【%s】（%s）" % [target_skill.display_name, target_skill.get_type_name()]],
-						[_format_skill_detailed(target_skill, "【已掌握】")],
-						[false]
-					)
-			elif index == 1:
-				if target_skill != null:
-					ui.show_transaction_result(true, _format_skill_summary(target_skill, "【新技能详情】"))
+				# 选择新技能，进入确认阶段
+				_current_step = Step.CONFIRM
+				_show_confirm_step(ui, player)
+			else:
+				# 选择取消
+				ui.close()
 
-		DialogueMode.FORGET_AND_LEARN:
+		Step.CONFIRM:
 			if index == 0:
+				# 确认学习
+				ui.close()
+
 				var forgotten_names: Array[String] = []
 				for skill: SkillData in _active_conflicts:
 					player.forget_skill(skill.id)
 					forgotten_names.append("【%s】" % skill.display_name)
 
-				if target_skill != null:
-					player.learn_skill(target_skill)
+				player.learn_skill(target_skill)
 
-				var forgotten_str := "、".join(forgotten_names)
-				var msg := "遗忘了 %s，成功习得了【%s】！" % [forgotten_str, target_skill.display_name]
-				ui.show_transaction_result(true, msg)
-				_current_mode = DialogueMode.ALREADY_LEARNED
-				ui.open_choices(
-					npc_name,
-					already_learned_prompt,
-					[target_skill],
-					["📖 查看已掌握技能：【%s】（%s）" % [target_skill.display_name, target_skill.get_type_name()]],
-					[_format_skill_detailed(target_skill, "【已掌握】")],
-					[false]
-				)
-			elif index == 1:
-				if target_skill != null:
-					ui.show_transaction_result(true, _format_skill_summary(target_skill, "【将要习得】"))
+				if forgotten_names.is_empty():
+					EventBus.system_message_requested.emit("成功领悟了新技能【%s】！" % target_skill.display_name)
+				else:
+					var forgotten_str := "、".join(forgotten_names)
+					EventBus.system_message_requested.emit("遗忘了 %s，成功领悟了新技能【%s】！" % [forgotten_str, target_skill.display_name])
 			else:
-				var conflict_idx := index - 2
-				if conflict_idx >= 0 and conflict_idx < _active_conflicts.size():
-					var conflict_skill := _active_conflicts[conflict_idx]
-					ui.show_transaction_result(false, _format_skill_summary(conflict_skill, "【将被遗忘】"))
-
-
-func handle_dialogue_option_focused(index: int, ui: NpcInteractionUI, _player: Player) -> void:
-	match _current_mode:
-		DialogueMode.ALREADY_LEARNED:
-			if target_skill != null:
-				ui.show_transaction_result(true, _format_skill_summary(target_skill, "【已掌握】"))
-
-		DialogueMode.NORMAL_LEARN:
-			if index == 0:
-				if target_skill != null:
-					ui.show_transaction_result(true, "准备传授：【%s】\n%s" % [target_skill.display_name, _format_skill_summary(target_skill)])
-			elif index == 1:
-				if target_skill != null:
-					ui.show_transaction_result(true, _format_skill_summary(target_skill, "【将要习得】"))
-
-		DialogueMode.FORGET_AND_LEARN:
-			var conflict_names: Array[String] = []
-			for skill in _active_conflicts:
-				conflict_names.append("【%s】" % skill.display_name)
-			var conflict_str := "、".join(conflict_names)
-
-			if index == 0:
-				ui.show_transaction_result(false, "注意：此操作将遗忘 %s，并习得【%s】！" % [conflict_str, target_skill.display_name])
-			elif index == 1:
-				if target_skill != null:
-					ui.show_transaction_result(true, _format_skill_summary(target_skill, "【将要习得】"))
-			else:
-				var conflict_idx := index - 2
-				if conflict_idx >= 0 and conflict_idx < _active_conflicts.size():
-					var conflict_skill := _active_conflicts[conflict_idx]
-					ui.show_transaction_result(false, _format_skill_summary(conflict_skill, "【将被遗忘】"))
+				# 取消
+				ui.close()
 
 
 func _format_skill_summary(skill: SkillData, prefix: String = "") -> String:
@@ -228,10 +223,10 @@ func _format_skill_summary(skill: SkillData, prefix: String = "") -> String:
 		parts.append("%s 【%s】（%s）" % [prefix, skill.display_name, skill.get_type_name()])
 	else:
 		parts.append("【%s】（%s）" % [skill.display_name, skill.get_type_name()])
-	
+
 	if not skill.description.is_empty():
 		parts.append("说明：%s" % skill.description)
-	
+
 	var cost_strs: Array[String] = []
 	for cost: ActionCostData in skill.costs:
 		var d := cost.get_description()
@@ -239,7 +234,7 @@ func _format_skill_summary(skill: SkillData, prefix: String = "") -> String:
 			cost_strs.append(d)
 	if not cost_strs.is_empty():
 		parts.append("消耗：%s" % "，".join(cost_strs))
-		
+
 	var effect_strs: Array[String] = []
 	for eff: ActionEffectData in skill.effects:
 		var d := eff.get_description()
@@ -247,22 +242,18 @@ func _format_skill_summary(skill: SkillData, prefix: String = "") -> String:
 			effect_strs.append(d)
 	if not effect_strs.is_empty():
 		parts.append("效果：%s" % "；".join(effect_strs))
-		
+
 	return " | ".join(parts)
 
 
-func _format_skill_detailed(skill: SkillData, title_prefix: String = "") -> String:
+func _format_skill_detailed(skill: SkillData) -> String:
 	if skill == null:
 		return ""
 	var lines: Array[String] = []
-	if not title_prefix.is_empty():
-		lines.append("%s 【%s】（%s技能）" % [title_prefix, skill.display_name, skill.get_type_name()])
-	else:
-		lines.append("【%s】（%s技能）" % [skill.display_name, skill.get_type_name()])
-		
+	lines.append("【%s】（%s技能）" % [skill.display_name, skill.get_type_name()])
 	if not skill.description.is_empty():
 		lines.append("【描述】%s" % skill.description)
-	
+
 	var cost_strs: Array[String] = []
 	for cost: ActionCostData in skill.costs:
 		var d := cost.get_description()
@@ -270,7 +261,7 @@ func _format_skill_detailed(skill: SkillData, title_prefix: String = "") -> Stri
 			cost_strs.append(d)
 	if not cost_strs.is_empty():
 		lines.append("【消耗】%s" % "，".join(cost_strs))
-		
+
 	var effect_strs: Array[String] = []
 	for eff: ActionEffectData in skill.effects:
 		var d := eff.get_description()
@@ -278,5 +269,6 @@ func _format_skill_detailed(skill: SkillData, title_prefix: String = "") -> Stri
 			effect_strs.append(d)
 	if not effect_strs.is_empty():
 		lines.append("【效果】%s" % "；".join(effect_strs))
-		
+
 	return "\n".join(lines)
+
