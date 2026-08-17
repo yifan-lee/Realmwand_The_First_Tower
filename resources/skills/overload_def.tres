@@ -12,33 +12,19 @@ value = 20.0
 
 [sub_resource type="Resource" id="Resource_effect_shield"]
 script = ExtResource("2_effect")
-effect_type = 12
-target_type = 0
-operation_type = 1
+target = 0
+resource_type = 4
+calc_method = 2
 value = 0.2
-duration_count = 0
-restrict_skill_type = false
-target_skill_type = 0
-
-[sub_resource type="Resource" id="Resource_effect_thorns"]
-script = ExtResource("2_effect")
-effect_type = 13
-target_type = 0
-operation_type = 0
-value = 0.2
-duration_count = 0
-restrict_skill_type = true
-target_skill_type = 0
 
 [resource]
 script = ExtResource("3_skill")
 id = &"overload_def"
 display_name = "过载防御"
-description = "展开能量护盾并强化反击力场"
+description = "展开能量护盾"
 icon = ExtResource("4_icon")
 unlock_level = 1
 skill_type = 2
 target_type = 1
 costs = Array[ExtResource("1_cost")]([SubResource("Resource_cost_fp")])
-effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield"), SubResource("Resource_effect_thorns")])
-cooldown = 1
+effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield")])

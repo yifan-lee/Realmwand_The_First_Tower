@@ -1,92 +1,81 @@
 class_name ActionEffectData
 extends Resource
 
-enum EffectType {
-	ATK,
-	DEF,
-	SPD,
-	RESTORE_HP,
-	RESTORE_MP,
-	RESTORE_FP,
-	FREE_ACTION,
-	REDUCE_HP,
-	REDUCE_MP,
-	REDUCE_FP,
-	SKILL_POWER,
-	INTERRUPT,
-	SHIELD,
-	THORNS_REFLECT,
-}
-
 enum TargetType {
 	SELF,
-	ENEMY,
+	OPPONENT,
+	ALL,
 }
 
-enum OperationType {
-	ADD,
-	MULTIPLY,
+enum ResourceType {
+	NONE,
+	HP,
+	MP,
+	FP,
+	SHIELD,
 }
 
-@export_group("Effect")
-@export var effect_type: EffectType = EffectType.ATK
-@export var target_type: TargetType = TargetType.SELF
-@export var operation_type: OperationType = OperationType.ADD
+enum CalcMethod {
+	FIXED_AMOUNT,
+	SKILL_POWER,
+	MAX_RATIO,
+}
 
-@export_group("Value")
-@export var value: float = 0.0
-@export_range(0, 100, 1) var duration_count: int = 1
+@export var target: TargetType = TargetType.OPPONENT
 
-@export_group("Skill Restriction")
-@export var restrict_skill_type: bool = false
-@export var target_skill_type: SkillData.SkillType = SkillData.SkillType.PHYSICAL
+@export_group("Instant Resource Change")
+@export var resource_type: ResourceType = ResourceType.HP
+@export var calc_method: CalcMethod = CalcMethod.SKILL_POWER
+@export var value: float = 1.0
+@export var is_interrupt: bool = false
+
+@export_group("Applied Status")
+@export var status_to_apply: StatusEffectData = null
+
 
 func get_description() -> String:
-	match effect_type:
-		EffectType.RESTORE_HP:
-			return "生命回复：%.0f" % value
-		EffectType.RESTORE_MP:
-			return "魔力回复：%.0f" % value
-		EffectType.RESTORE_FP:
-			return "专注回复：%.0f" % value
-		EffectType.FREE_ACTION:
-			return "特性：使用后可立刻再次行动"
-		EffectType.REDUCE_HP:
-			return "造成 %.0f 点技能威力伤害" % value
-		EffectType.REDUCE_MP:
-			return "扣除 %.0f 点魔力" % value
-		EffectType.REDUCE_FP:
-			return "扣除 %.0f 点专注" % value
-		EffectType.SHIELD:
-			if operation_type == OperationType.MULTIPLY:
-				return "获得最大生命值 %.0f%% 的护盾" % (value * 100.0)
-			else:
-				return "获得 %.0f 点护盾" % value
-		EffectType.THORNS_REFLECT:
-			var type_str = "物理" if restrict_skill_type and target_skill_type == SkillData.SkillType.PHYSICAL else ""
-			return "护盾存在时，受%s攻击反弹自身防御力 %.0f%% 的伤害" % [type_str, value * 100.0]
-		EffectType.ATK:
-			return _get_stat_desc("攻击力")
-		EffectType.DEF:
-			return _get_stat_desc("防御力")
-		EffectType.SPD:
-			return _get_stat_desc("速度")
-		EffectType.SKILL_POWER:
-			return _get_stat_desc("技能威力")
-	return ""
+	var desc_parts: Array[String] = []
 
-func _get_stat_desc(stat_name: String) -> String:
-	var prefix = "提升" if operation_type == OperationType.ADD and value > 0 else "降低"
-	var type_prefix = ""
-	if restrict_skill_type:
-		match target_skill_type:
-			SkillData.SkillType.PHYSICAL: type_prefix = "物理"
-			SkillData.SkillType.MAGICAL: type_prefix = "魔法"
-			SkillData.SkillType.TRANSFORM: type_prefix = "变化"
-			
-	if operation_type == OperationType.MULTIPLY:
-		prefix = "提升" if value > 1.0 else "降低"
-		var pct = absf(value - 1.0) * 100.0
-		return "%s %s%s %.0f%% (剩余 %d 次)" % [prefix, type_prefix, stat_name, pct, duration_count]
-	else:
-		return "%s %s%s %.0f (剩余 %d 次)" % [prefix, type_prefix, stat_name, absf(value), duration_count]
+	if is_interrupt:
+		desc_parts.append("打断目标吟唱")
+
+	if resource_type != ResourceType.NONE and not is_zero_approx(value):
+		var res_name := _get_resource_name()
+		match calc_method:
+			CalcMethod.SKILL_POWER:
+				if value > 0:
+					desc_parts.append("造成 %.0f 点技能威力伤害" % value)
+				else:
+					desc_parts.append("恢复 %.0f 点技能威力生命" % absf(value))
+			CalcMethod.FIXED_AMOUNT:
+				if value > 0:
+					if resource_type == ResourceType.SHIELD:
+						desc_parts.append("获得 %.0f 点护盾" % value)
+					else:
+						desc_parts.append("恢复 %.0f 点%s" % [value, res_name])
+				else:
+					desc_parts.append("扣除 %.0f 点%s" % [absf(value), res_name])
+			CalcMethod.MAX_RATIO:
+				if value > 0:
+					if resource_type == ResourceType.SHIELD:
+						desc_parts.append("获得最大生命值 %.0f%% 的护盾" % (value * 100.0))
+					else:
+						desc_parts.append("恢复最大%s %.0f%%" % [res_name, value * 100.0])
+				else:
+					desc_parts.append("扣除最大%s %.0f%%" % [res_name, absf(value) * 100.0])
+
+	if status_to_apply != null:
+		var status_desc := status_to_apply.get_formatted_description()
+		if not status_desc.is_empty():
+			desc_parts.append(status_desc)
+
+	return "；".join(desc_parts)
+
+
+func _get_resource_name() -> String:
+	match resource_type:
+		ResourceType.HP: return "生命"
+		ResourceType.MP: return "魔力"
+		ResourceType.FP: return "专注"
+		ResourceType.SHIELD: return "护盾"
+	return "资源"

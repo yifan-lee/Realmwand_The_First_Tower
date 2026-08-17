@@ -2,38 +2,46 @@
 
 [ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_j7wkf"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_kkxer"]
+[ext_resource type="Script" path="res://scripts/data/status_effect_data.gd" id="2_status"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_xohqs"]
 
 [sub_resource type="Resource" id="Resource_lv4pn"]
 script = ExtResource("1_j7wkf")
 value = 20.0
-metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
 [sub_resource type="Resource" id="Resource_5b5ri"]
 script = ExtResource("1_j7wkf")
 cost_type = 2
 value = 40.0
-metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
 [sub_resource type="Resource" id="Resource_4mscu"]
 script = ExtResource("1_j7wkf")
 cost_type = 3
 value = 8.0
-metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
+
+[sub_resource type="Resource" id="Resource_weak_status"]
+script = ExtResource("2_status")
+id = &"overload_atk_weak"
+display_name = "进攻虚弱"
+polarity = 1
+affected_stat = 0
+operation = 1
+value = 0.7
+end_condition = 1
+duration_count = 1
 
 [sub_resource type="Resource" id="Resource_c3esm"]
 script = ExtResource("2_kkxer")
-operation_type = 1
-value = 0.7
-metadata/_custom_type_script = "uid://b1wegwwmokann"
+target = 0
+resource_type = 0
+status_to_apply = SubResource("Resource_weak_status")
 
 [sub_resource type="Resource" id="Resource_yv5s2"]
 script = ExtResource("2_kkxer")
-effect_type = 7
-target_type = 1
-operation_type = 1
+target = 1
+resource_type = 1
+calc_method = 1
 value = 200.0
-metadata/_custom_type_script = "uid://b1wegwwmokann"
 
 [resource]
 script = ExtResource("3_xohqs")
@@ -42,4 +50,3 @@ display_name = "进攻过载"
 description = "强力的一击，但是使用过后会虚弱一段时间"
 costs = Array[ExtResource("1_j7wkf")]([SubResource("Resource_lv4pn"), SubResource("Resource_5b5ri"), SubResource("Resource_4mscu")])
 effects = Array[ExtResource("2_kkxer")]([SubResource("Resource_c3esm"), SubResource("Resource_yv5s2")])
-metadata/_custom_type_script = "uid://dg3w5qs5rpxbg"

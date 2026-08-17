@@ -12,10 +12,10 @@ value = 20.0
 
 [sub_resource type="Resource" id="Resource_eoj3j"]
 script = ExtResource("1_dn1r3")
-effect_type = 7
-target_type = 1
+target = 1
+resource_type = 1
+calc_method = 1
 value = 60.0
-metadata/_custom_type_script = "uid://b1wegwwmokann"
 
 [resource]
 script = ExtResource("2_dn1r3")

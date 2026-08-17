@@ -131,53 +131,52 @@ static func stat_point_increase(_stat_id: StringName) -> float:
 	return STAT_INCREASE_PER_ALLOCATED_POINT
 
 
-static func skill_effect_delta(
+static func status_effect_delta(
 	base_value: float,
-	effect: ActionEffectData
+	status: StatusEffectData
 ) -> float:
-	if effect == null:
+	if status == null:
 		return 0.0
-	if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
-		return base_value * (effect.value - 1.0)
-	return effect.value
+	if status.operation == StatusEffectData.OpType.MULTIPLY:
+		return base_value * (status.value - 1.0)
+	return status.value
 
 
 static func calculate_effective_stat(
 	base_value: float,
-	active_effects: Array[Dictionary],
-	effect_type: int
+	statuses: Array[ActiveStatus],
+	stat_type: StatusEffectData.StatType
 ) -> float:
 	var added_value := 0.0
 	var multiplier := 1.0
-	for active: Dictionary in active_effects:
-		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
-		if effect == null or effect.effect_type != effect_type:
+	for status: ActiveStatus in statuses:
+		if status.data == null or status.data.affected_stat != stat_type:
 			continue
-		if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
-			multiplier *= effect.value
+		var stacks := float(status.current_stacks)
+		if status.data.operation == StatusEffectData.OpType.MULTIPLY:
+			multiplier *= (1.0 + (status.data.value - 1.0) * stacks)
 		else:
-			added_value += effect.value
+			added_value += status.data.value * stacks
 	return maxf(0.0, (base_value + added_value) * multiplier)
 
 
 static func calculate_skill_power_modifier(
 	base_power: float,
-	active_effects: Array[Dictionary],
+	statuses: Array[ActiveStatus],
 	skill_type: int
 ) -> float:
 	var added_value := 0.0
 	var multiplier := 1.0
-	for active: Dictionary in active_effects:
-		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
-		if effect == null or effect.effect_type != ActionEffectData.EffectType.SKILL_POWER:
+	for status: ActiveStatus in statuses:
+		if status.data == null or status.data.affected_stat != StatusEffectData.StatType.SKILL_POWER:
 			continue
-		if effect.restrict_skill_type and effect.target_skill_type != skill_type:
+		if status.data.restrict_skill_type and status.data.target_skill_type != skill_type:
 			continue
-			
-		if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
-			multiplier *= effect.value
+		var stacks := float(status.current_stacks)
+		if status.data.operation == StatusEffectData.OpType.MULTIPLY:
+			multiplier *= (1.0 + (status.data.value - 1.0) * stacks)
 		else:
-			added_value += effect.value
+			added_value += status.data.value * stacks
 	return maxf(0.0, (base_power + added_value) * multiplier)
 
 

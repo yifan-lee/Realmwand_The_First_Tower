@@ -361,12 +361,12 @@ func _on_item_focused(item: ItemData) -> void:
 		var mp_rec := 0.0
 		var fp_rec := 0.0
 		for effect: ActionEffectData in item.effects:
-			if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
-				hp_rec += effect.value
-			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
-				mp_rec += effect.value
-			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
-				fp_rec += effect.value
+			if effect.resource_type == ActionEffectData.ResourceType.HP and effect.value > 0:
+				hp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_hp() * effect.value if _player != null else 0.0)
+			elif effect.resource_type == ActionEffectData.ResourceType.MP and effect.value > 0:
+				mp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_mp() * effect.value if _player != null else 0.0)
+			elif effect.resource_type == ActionEffectData.ResourceType.FP and effect.value > 0:
+				fp_rec += effect.value if effect.calc_method == ActionEffectData.CalcMethod.FIXED_AMOUNT else (_player.get_max_fp() * effect.value if _player != null else 0.0)
 		if _player != null:
 			preview.current_hp_delta = FORMULAS.calculate_recovery_delta(_player.current_hp, _player.get_max_hp(), hp_rec)
 			preview.current_mp_delta = FORMULAS.calculate_recovery_delta(_player.current_mp, _player.get_max_mp(), mp_rec)
@@ -393,12 +393,17 @@ func _on_item_selected(item: ItemData) -> void:
 		if not item.usable_from_inventory:
 			return
 		for effect: ActionEffectData in item.effects:
-			if effect.effect_type == ActionEffectData.EffectType.RESTORE_HP:
-				_player.change_hp(effect.value)
-			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_MP:
-				_player.change_mp(effect.value)
-			elif effect.effect_type == ActionEffectData.EffectType.RESTORE_FP:
-				_player.change_fp(effect.value)
+			var val := effect.value
+			if effect.calc_method == ActionEffectData.CalcMethod.MAX_RATIO:
+				if effect.resource_type == ActionEffectData.ResourceType.HP: val = _player.get_max_hp() * effect.value
+				elif effect.resource_type == ActionEffectData.ResourceType.MP: val = _player.get_max_mp() * effect.value
+				elif effect.resource_type == ActionEffectData.ResourceType.FP: val = _player.get_max_fp() * effect.value
+			if effect.resource_type == ActionEffectData.ResourceType.HP:
+				_player.change_hp(val)
+			elif effect.resource_type == ActionEffectData.ResourceType.MP:
+				_player.change_mp(val)
+			elif effect.resource_type == ActionEffectData.ResourceType.FP:
+				_player.change_fp(val)
 		if item.consumed_on_use:
 			_player.inventory.remove_item(item.id)
 	refresh_content()
@@ -411,15 +416,15 @@ func _on_skill_focused(skill: SkillData) -> void:
 	var preview := ActorStatsPreviewData.new()
 	if _player != null:
 		for effect: ActionEffectData in skill.effects:
-			if effect.target_type != ActionEffectData.TargetType.SELF:
-				continue
-			match effect.effect_type:
-				ActionEffectData.EffectType.ATK:
-					preview.atk_delta += FORMULAS.skill_effect_delta(_player.get_atk(), effect)
-				ActionEffectData.EffectType.DEF:
-					preview.def_delta += FORMULAS.skill_effect_delta(_player.get_def(), effect)
-				ActionEffectData.EffectType.SPD:
-					preview.spd_delta += FORMULAS.skill_effect_delta(_player.get_spd(), effect)
+			if effect.status_to_apply != null:
+				var status := effect.status_to_apply
+				match status.affected_stat:
+					StatusEffectData.StatType.ATK:
+						preview.atk_delta += FORMULAS.status_effect_delta(_player.get_atk(), status)
+					StatusEffectData.StatType.DEF:
+						preview.def_delta += FORMULAS.status_effect_delta(_player.get_def(), status)
+					StatusEffectData.StatType.SPD:
+						preview.spd_delta += FORMULAS.status_effect_delta(_player.get_spd(), status)
 	actor_stats_panel.set_preview(preview)
 	_display_entry_info(skill.display_name, skill.icon, skill.description, skill.get_details())
 

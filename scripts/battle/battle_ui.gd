@@ -188,9 +188,9 @@ func _create_actor_context(actor: Node, atb_val: float) -> ActorStatsContext:
 	ctx.max_atb = FORMULAS.ATB_MAX
 	if _battle_manager != null and actor != null:
 		ctx.active_effects = _battle_manager.get_actor_effects(actor)
-		ctx.effective_atk = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.ATK)
-		ctx.effective_def = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.DEF)
-		ctx.effective_spd = _battle_manager.get_actor_stat(actor, ActionEffectData.EffectType.SPD)
+		ctx.effective_atk = _battle_manager.get_actor_stat(actor, StatusEffectData.StatType.ATK)
+		ctx.effective_def = _battle_manager.get_actor_stat(actor, StatusEffectData.StatType.DEF)
+		ctx.effective_spd = _battle_manager.get_actor_stat(actor, StatusEffectData.StatType.SPD)
 	return ctx
 
 

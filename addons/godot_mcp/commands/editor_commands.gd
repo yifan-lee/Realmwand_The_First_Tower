@@ -27,7 +27,7 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 
 	# 1. Read from the editor's Output panel (EditorLog RichTextLabel)
 	#    This captures runtime errors, warnings, and print output
-	var editor_log: Node = base.find_child("Output", true, false)
+	var editor_log: Node = _find_editor_log(base)
 	if editor_log:
 		var rtl: RichTextLabel = _find_rtl(editor_log)
 		if rtl:
@@ -76,14 +76,16 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 			var children: Array = vsplit.get_children()
 			# child[2] = errors panel (RichTextLabel)
 			if children.size() > 2 and children[2] is RichTextLabel:
-				var text: String = (children[2] as RichTextLabel).get_parsed_text().strip_edges()
-				if not text.is_empty():
-					for line in text.split("\n"):
-						var stripped: String = line.strip_edges()
-						if stripped.is_empty():
-							continue
-						var prefix: String = "SCRIPT ERROR: %s:" % script_path if not script_path.is_empty() else "SCRIPT ERROR: "
-						analyzer_errors.append(prefix + stripped)
+				var rtl := children[2] as RichTextLabel
+				if rtl.visible and rtl.size.y > 0:
+					var text: String = rtl.get_parsed_text().strip_edges()
+					if not text.is_empty():
+						for line in text.split("\n"):
+							var stripped: String = line.strip_edges()
+							if stripped.is_empty():
+								continue
+							var prefix: String = "SCRIPT ERROR: %s:" % script_path if not script_path.is_empty() else "SCRIPT ERROR: "
+							analyzer_errors.append(prefix + stripped)
 
 	# 4. Read from the debugger Errors tab (runtime errors/warnings)
 	#    Path: ScriptEditorDebugger > TabContainer > "Errors" VBoxContainer > Tree
@@ -134,8 +136,8 @@ func _get_editor_errors(params: Dictionary) -> Dictionary:
 			for child in node.get_children():
 				queue.append(child)
 
-	# Fallback: read from log file if Output panel not accessible
-	if errors.size() == 0 and script_errors.size() == 0 and analyzer_errors.size() == 0 and debugger_errors.size() == 0:
+	# Fallback: read from log file only if Output panel not accessible
+	if editor_log == null:
 		var log_path := "user://logs/godot.log"
 		if FileAccess.file_exists(log_path):
 			var file := FileAccess.open(log_path, FileAccess.READ)
@@ -160,7 +162,7 @@ func _get_output_log(params: Dictionary) -> Dictionary:
 	var filter: String = optional_string(params, "filter", "")
 	var base: Control = get_editor().get_base_control()
 
-	var editor_log: Node = base.find_child("Output", true, false)
+	var editor_log: Node = _find_editor_log(base)
 	if editor_log == null:
 		# Fallback: read from log file
 		var log_path := "user://logs/godot.log"
@@ -205,6 +207,19 @@ func _find_code_edit(node: Node, depth: int = 0) -> CodeEdit:
 		var found: CodeEdit = _find_code_edit(child, depth + 1)
 		if found:
 			return found
+	return null
+
+
+func _find_editor_log(base: Control) -> Node:
+	if base == null:
+		return null
+	var queue: Array[Node] = [base]
+	while not queue.is_empty():
+		var node := queue.pop_front()
+		if node.get_class() == "EditorLog":
+			return node
+		for child in node.get_children():
+			queue.append(child)
 	return null
 
 
@@ -443,7 +458,30 @@ func _indent_code(code: String) -> String:
 
 
 func _clear_output(params: Dictionary) -> Dictionary:
-	print("\n".repeat(50))
+	var base: Control = get_editor().get_base_control()
+	var editor_log: Node = _find_editor_log(base)
+	if editor_log != null:
+		var rtl: RichTextLabel = _find_rtl(editor_log)
+		if rtl != null:
+			rtl.clear()
+	var queue: Array[Node] = [base]
+	while not queue.is_empty():
+		var node := queue.pop_front()
+		if node.get_class() == "ScriptEditorDebugger":
+			for child in node.get_children():
+				if child is TabContainer:
+					for tab_idx in range(child.get_tab_count()):
+						var tab_control: Control = child.get_tab_control(tab_idx)
+						if tab_control is VBoxContainer and tab_control.name.begins_with("Errors"):
+							for vchild in tab_control.get_children():
+								if vchild is Tree:
+									(vchild as Tree).clear()
+									break
+							break
+					break
+			break
+		for child in node.get_children():
+			queue.append(child)
 	return success({"cleared": true})
 
 

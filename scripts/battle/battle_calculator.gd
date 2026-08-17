@@ -55,60 +55,56 @@ static func evaluate_skill_effects(
 	
 	for effect: ActionEffectData in skill.effects:
 		var effect_targets: Array[Node] = targets
-		if effect.target_type == ActionEffectData.TargetType.SELF:
+		if effect.target == ActionEffectData.TargetType.SELF:
 			effect_targets = [caster]
+		elif effect.target == ActionEffectData.TargetType.ALL:
+			effect_targets = targets.duplicate()
+			if not effect_targets.has(caster):
+				effect_targets.append(caster)
 			
 		for target in effect_targets:
+			if target == null:
+				continue
 			var target_delta := preview.get_or_create_delta(target)
 			
-			match effect.effect_type:
-				ActionEffectData.EffectType.RESTORE_HP:
-					target_delta.hp_delta += effect.value
-				ActionEffectData.EffectType.RESTORE_MP:
-					target_delta.mp_delta += effect.value
-				ActionEffectData.EffectType.RESTORE_FP:
-					target_delta.fp_delta += effect.value
-				ActionEffectData.EffectType.REDUCE_MP:
-					target_delta.mp_delta -= effect.value
-				ActionEffectData.EffectType.REDUCE_FP:
-					target_delta.fp_delta -= effect.value
-				ActionEffectData.EffectType.INTERRUPT:
-					if battle_manager.is_actor_casting(target):
-						target_delta.is_interrupted = true
-						preview.add_message("打断了吟唱。")
-					else:
-						preview.add_message("目标没有正在吟唱的技能。")
-				ActionEffectData.EffectType.REDUCE_HP:
-					var caster_atk = battle_manager.get_actor_stat(caster, ActionEffectData.EffectType.ATK)
-					var target_def = battle_manager.get_actor_stat(target, ActionEffectData.EffectType.DEF)
-					var skill_power = FORMULAS.calculate_skill_power_modifier(
-						effect.value,
-						battle_manager.get_actor_effects(caster),
-						skill.skill_type
-					)
-					var damage := FORMULAS.calculate_skill_damage(caster_atk, skill_power, target_def)
-					if caster.has_method(&"has_skill") and caster.has_skill(&"overload_spd") and battle_manager != null and battle_manager.has_method(&"get_player_skill_cast_count"):
-						var next_cast: int = battle_manager.get_player_skill_cast_count() + 1
-						if next_cast % 4 == 0:
-							damage = roundf(damage * 1.5)
-							preview.add_message("（触发【过载极速】伤害提升 50%！）")
-					target_delta.hp_delta -= damage
-					total_applied_damage += damage
-				ActionEffectData.EffectType.ATK:
-					target_delta.atk_delta += FORMULAS.skill_effect_delta(battle_manager.get_actor_stat(target, ActionEffectData.EffectType.ATK), effect)
-				ActionEffectData.EffectType.DEF:
-					target_delta.def_delta += FORMULAS.skill_effect_delta(battle_manager.get_actor_stat(target, ActionEffectData.EffectType.DEF), effect)
-				ActionEffectData.EffectType.SPD:
-					target_delta.spd_delta += FORMULAS.skill_effect_delta(battle_manager.get_actor_stat(target, ActionEffectData.EffectType.SPD), effect)
-				ActionEffectData.EffectType.SHIELD:
-					var shield_amount := effect.value
-					if effect.operation_type == ActionEffectData.OperationType.MULTIPLY:
-						var max_hp = target.get_max_hp() if target.has_method(&"get_max_hp") else 100.0
-						shield_amount = max_hp * effect.value
-					target_delta.shield_delta += shield_amount
-					preview.add_message("获得了 %.0f 点护盾。" % shield_amount)
-				ActionEffectData.EffectType.FREE_ACTION:
-					target_delta.is_free_action = true
+			# 1. 打断处理
+			if effect.is_interrupt:
+				if battle_manager != null and battle_manager.is_actor_casting(target):
+					target_delta.is_interrupted = true
+					preview.add_message("打断了吟唱。")
+				else:
+					preview.add_message("目标没有正在吟唱的技能。")
+
+			# 2. 即时资源结算
+			if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
+				var amount := _calculate_resource_amount(effect, caster, target, skill, battle_manager)
+				match effect.resource_type:
+					ActionEffectData.ResourceType.HP:
+						target_delta.hp_delta += amount
+						if amount < 0.0:
+							total_applied_damage += absf(amount)
+					ActionEffectData.ResourceType.MP:
+						target_delta.mp_delta += amount
+					ActionEffectData.ResourceType.FP:
+						target_delta.fp_delta += amount
+					ActionEffectData.ResourceType.SHIELD:
+						target_delta.shield_delta += amount
+						if amount > 0.0:
+							preview.add_message("获得了 %.0f 点护盾。" % amount)
+
+			# 3. 施加状态预览
+			if effect.status_to_apply != null and battle_manager != null:
+				var status := effect.status_to_apply
+				match status.affected_stat:
+					StatusEffectData.StatType.ATK:
+						var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
+						target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
+					StatusEffectData.StatType.DEF:
+						var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
+						target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
+					StatusEffectData.StatType.SPD:
+						var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
+						target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
 
 	if total_applied_damage > 0.0:
 		preview.add_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, total_applied_damage])
@@ -118,7 +114,7 @@ static func evaluate_item(
 	item: ItemData,
 	caster: Node,
 	targets: Array[Node],
-	_battle_manager: BattleManager
+	battle_manager: BattleManager
 ) -> BattleActionPreview:
 	var preview := BattleActionPreview.new()
 	if item == null or caster == null:
@@ -126,18 +122,63 @@ static func evaluate_item(
 		
 	for effect: ActionEffectData in item.effects:
 		var effect_targets: Array[Node] = targets
-		if effect.target_type == ActionEffectData.TargetType.SELF:
+		if effect.target == ActionEffectData.TargetType.SELF:
 			effect_targets = [caster]
+		elif effect.target == ActionEffectData.TargetType.ALL:
+			effect_targets = targets.duplicate()
+			if not effect_targets.has(caster):
+				effect_targets.append(caster)
 			
 		for target in effect_targets:
+			if target == null:
+				continue
 			var target_delta := preview.get_or_create_delta(target)
-			match effect.effect_type:
-				ActionEffectData.EffectType.RESTORE_HP:
-					target_delta.hp_delta += effect.value
-				ActionEffectData.EffectType.RESTORE_MP:
-					target_delta.mp_delta += effect.value
-				ActionEffectData.EffectType.RESTORE_FP:
-					target_delta.fp_delta += effect.value
-				ActionEffectData.EffectType.FREE_ACTION:
-					target_delta.is_free_action = true
+			if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
+				var amount := _calculate_resource_amount(effect, caster, target, null, battle_manager)
+				match effect.resource_type:
+					ActionEffectData.ResourceType.HP:
+						target_delta.hp_delta += amount
+					ActionEffectData.ResourceType.MP:
+						target_delta.mp_delta += amount
+					ActionEffectData.ResourceType.FP:
+						target_delta.fp_delta += amount
+					ActionEffectData.ResourceType.SHIELD:
+						target_delta.shield_delta += amount
 	return preview
+
+
+static func _calculate_resource_amount(
+	effect: ActionEffectData,
+	caster: Node,
+	target: Node,
+	skill: SkillData,
+	battle_manager: BattleManager
+) -> float:
+	match effect.calc_method:
+		ActionEffectData.CalcMethod.FIXED_AMOUNT:
+			return effect.value
+		ActionEffectData.CalcMethod.MAX_RATIO:
+			var max_res := 100.0
+			match effect.resource_type:
+				ActionEffectData.ResourceType.HP, ActionEffectData.ResourceType.SHIELD:
+					max_res = target.get_max_hp() if target.has_method(&"get_max_hp") else 100.0
+				ActionEffectData.ResourceType.MP:
+					max_res = target.get_max_mp() if target.has_method(&"get_max_mp") else 100.0
+				ActionEffectData.ResourceType.FP:
+					max_res = target.get_max_fp() if target.has_method(&"get_max_fp") else 100.0
+			return max_res * effect.value
+		ActionEffectData.CalcMethod.SKILL_POWER:
+			if battle_manager == null:
+				return effect.value
+			var caster_atk: float = battle_manager.get_actor_stat(caster, StatusEffectData.StatType.ATK)
+			var target_def: float = battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
+			var skill_type_int: int = skill.skill_type if skill != null else int(SkillData.SkillType.PHYSICAL)
+			var skill_power_mod: float = battle_manager.get_skill_power_modifier(caster, skill_type_int)
+			var damage: float = FORMULAS.calculate_skill_damage(caster_atk, effect.value * skill_power_mod, target_def)
+			
+			if caster.has_method(&"has_skill") and caster.has_skill(&"overload_spd") and battle_manager.has_method(&"get_player_skill_cast_count"):
+				var next_cast: int = battle_manager.get_player_skill_cast_count() + 1
+				if next_cast % 4 == 0:
+					damage = roundf(damage * 1.5)
+			return -damage
+	return 0.0

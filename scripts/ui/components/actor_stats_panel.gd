@@ -470,6 +470,11 @@ func _format_float_stat(
 	]
 
 
+const BUFF_COLOR = Color("#55EFC4FF")
+const DEBUFF_COLOR = Color("#FF7675FF")
+const NEUTRAL_COLOR = Color("#DFE6E9FF")
+
+
 func _refresh_buffs(effects: Array[Dictionary]) -> void:
 	for child in buffs_container.get_children():
 		child.queue_free()
@@ -482,23 +487,20 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 	buffs_separator.visible = true
 	buffs_container.visible = true
 	for active: Dictionary in effects:
-		var custom_text: String = String(active.get(&"text", ""))
-		if not custom_text.is_empty():
-			var label := BUFF_LABEL_SCENE.instantiate() as Label
-			label.text = "• " + custom_text
-			buffs_container.add_child(label)
+		var text: String = String(active.get(&"text", ""))
+		if text.is_empty():
 			continue
 
-		var effect: ActionEffectData = active.get(&"effect") as ActionEffectData
-		if effect == null: continue
-		var desc := effect.get_description()
-		if desc.is_empty(): continue
-		var remaining: int = active.get(&"remaining_count", 0)
+		var polarity_val: int = int(active.get(&"polarity", StatusEffectData.Polarity.BUFF))
+		var color: Color = BUFF_COLOR
+		if polarity_val == StatusEffectData.Polarity.DEBUFF:
+			color = DEBUFF_COLOR
+		elif polarity_val == StatusEffectData.Polarity.NEUTRAL:
+			color = NEUTRAL_COLOR
+
 		var label := BUFF_LABEL_SCENE.instantiate() as Label
-		if remaining > 0:
-			label.text = "• %s (剩余 %d 次)" % [desc, remaining]
-		else:
-			label.text = "• %s" % desc
+		label.text = "• " + text
+		label.modulate = color
 		buffs_container.add_child(label)
 
 
