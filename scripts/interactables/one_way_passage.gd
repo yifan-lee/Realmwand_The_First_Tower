@@ -159,7 +159,7 @@ func _handle_player_slide(player: Player) -> void:
 		return
 
 	_is_sliding_player = true
-	player.set_input_enabled(false)
+	player.lock_movement(&"one_way_passage")
 
 	var push_dir := get_push_direction_vector()
 	var target_pos := global_position + push_dir * GRID_SIZE
@@ -177,7 +177,7 @@ func _handle_player_slide(player: Player) -> void:
 
 	player.global_position = target_pos
 	player.movement.is_moving = false
-	player.set_input_enabled(true)
+	player.unlock_movement(&"one_way_passage")
 	player.movement.play_directional_animation(&"idle")
 	player.movement.movement_finished.emit()
 

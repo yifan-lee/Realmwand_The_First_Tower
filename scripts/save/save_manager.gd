@@ -58,6 +58,7 @@ func load_save(slot_id: String) -> bool:
 		_tutorial_manager.restore_save_data(tutorial_data_value)
 	_player.restore_save_data(player_data_value)
 	_floor_manager.restore_save_data(world_data_value)
+	_player.clear_all_movement_locks()
 	return true
 
 

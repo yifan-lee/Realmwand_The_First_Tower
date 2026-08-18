@@ -185,6 +185,22 @@ func _apply_data_visuals() -> void:
 	movement.play_directional_animation(&"idle")
 
 
+func lock_movement(lock_id: StringName) -> void:
+	movement.lock_movement(lock_id)
+
+
+func unlock_movement(lock_id: StringName) -> void:
+	movement.unlock_movement(lock_id)
+
+
+func is_movement_locked() -> bool:
+	return movement.is_movement_locked()
+
+
+func clear_all_movement_locks() -> void:
+	movement.clear_all_movement_locks()
+
+
 func set_input_enabled(enabled: bool) -> void:
 	movement.set_input_enabled(enabled)
 

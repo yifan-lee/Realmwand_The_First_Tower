@@ -5,13 +5,14 @@ const ATB_MAX: float = 200.0
 const MIN_DAMAGE: float = 1.0
 const EXPERIENCE_PER_LEVEL: int = 10
 const BASE_EXPERIENCE: int = 50
-const DEF_CONSTANT: float = 0.0
-const SPD_CONSTANT: float = 50.0
+const ATK_CONSTANT: float = 20.0
+const DEF_CONSTANT: float = 20.0
+const SPD_CONSTANT: float = 40.0
 const AUTO_PRIMARY_STAT_INCREASE_PER_LEVEL: float = 2.0
 const FREE_STAT_POINTS_PER_LEVEL: int = 6
 const STAT_INCREASE_PER_ALLOCATED_POINT: float = 1.0
-const BASE_MAX_HP_COEFFICIENT: float = 4.0
-const BASE_MAX_MP_COEFFICIENT: float = 2.0
+const BASE_MAX_HP_COEFFICIENT: float = 5.0
+const BASE_MAX_MP_COEFFICIENT: float = 3.0
 const BASE_FP_RECOVERY_COEFFICIENT: float = 0.1
 const CP_DIVISOR: float = 10.0
 ## 为 true 时，因加点提升的最大生命/魔力会同步恢复等量当前值。
@@ -45,7 +46,7 @@ static func calculate_skill_damage(
 ) -> float:
 	return maxf(
 		MIN_DAMAGE,
-		attack * skill_power / (defense + DEF_CONSTANT)
+		(attack + ATK_CONSTANT) * skill_power / (defense + DEF_CONSTANT)
 	)
 
 

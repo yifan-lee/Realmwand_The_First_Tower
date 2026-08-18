@@ -14,8 +14,10 @@ enum ActionPage {
 }
 
 @onready var battle_root: Control = $BattleRoot
-@onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/PlayerStats
+@onready var player_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/LeftColumn/PlayerStats
+@onready var player_action_info: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/LeftColumn/PlayerActionInfo
 @onready var enemy_stats: ActorStatsPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyStats
+@onready var enemy_action_info: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyActionInfo
 @onready var shared_atb_track: ProgressBar = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track
 @onready var player_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker
 @onready var enemy_atb_marker: TextureRect = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker
@@ -26,7 +28,6 @@ enum ActionPage {
 @onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/SkillPanel
 @onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/InventoryPanel
 @onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/EscapePage
-@onready var entry_info_panel: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/EntryInfoPanel
 @onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/MessagePanel/Message
 
 var _player: Player
@@ -42,9 +43,9 @@ var _enemy_casting_label: Label
 
 
 func _ready() -> void:
-	skill_panel.skill_selected.connect(skill_selected.emit)
+	skill_panel.skill_selected.connect(_on_skill_selected)
 	skill_panel.skill_focused.connect(_on_skill_focused)
-	inventory_panel.item_selected.connect(item_selected.emit)
+	inventory_panel.item_selected.connect(_on_item_selected)
 	inventory_panel.item_focused.connect(_on_item_focused)
 	skills_tab.pressed.connect(_show_action_page.bind(ActionPage.SKILLS, true))
 	items_tab.pressed.connect(_show_action_page.bind(ActionPage.ITEMS, true))
@@ -72,7 +73,7 @@ func _process(_delta: float) -> void:
 		var p_casting = _battle_manager.is_player_casting()
 		_player_casting_label.visible = p_casting
 		if p_casting:
-			player_atb_marker.modulate = Color("#99CCFFFF")
+			player_atb_marker.modulate = Color("#80CCFFFF")
 			player_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
 		else:
 			player_atb_marker.modulate = Color("#FFFFFFFF")
@@ -90,7 +91,7 @@ func _process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not battle_root.visible or not _action_available:
+	if not battle_root.visible:
 		return
 	if event.is_action_pressed(&"ui_left"):
 		_cycle_action_page(-1)
@@ -118,26 +119,27 @@ func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) ->
 	inventory_panel.bind_inventory(player.inventory)
 	inventory_panel.set_battle_only(true)
 	battle_root.visible = true
+	player_stats.bind_actor(_player, ActorStatsDisplayProfile.battle_player(), _create_actor_context(_player, _player_atb_value))
+	enemy_stats.bind_actor(_enemy, ActorStatsDisplayProfile.battle_enemy(), _create_actor_context(_enemy, _enemy_atb_value))
 	clear_message()
-	entry_info_panel.clear_info()
+	player_action_info.clear_info()
+	# enemy_action_info.clear_info()
+	enemy_action_info.display_skill(null, true)
 	player_atb_marker.texture = _get_marker_texture(player, player.player_data.portrait)
 	enemy_atb_marker.texture = _get_marker_texture(enemy, enemy.enemy_data.portrait)
 	player_atb_marker.visible = player_atb_marker.texture != null
 	enemy_atb_marker.visible = enemy_atb_marker.texture != null
 	_show_action_page(ActionPage.SKILLS, false)
 	set_action_available(false)
-	player_stats.bind_actor(_player, ActorStatsDisplayProfile.battle_player(), _create_actor_context(_player, _player_atb_value))
-	enemy_stats.bind_actor(_enemy, ActorStatsDisplayProfile.battle_enemy(), _create_actor_context(_enemy, _enemy_atb_value))
 	refresh_stats()
+	call_deferred(&"_focus_current_page")
 
 
 func close() -> void:
 	battle_root.visible = false
 	inventory_panel.bind_inventory(null)
-	entry_info_panel.clear_info()
-	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel") as EnemyForecastPanel
-	if forecast_panel != null:
-		forecast_panel.clear_forecast()
+	player_action_info.clear_info()
+	enemy_action_info.clear_info()
 	clear_message()
 	player_stats.unbind_actor()
 	enemy_stats.unbind_actor()
@@ -149,14 +151,8 @@ func close() -> void:
 
 func set_action_available(available: bool) -> void:
 	_action_available = available
-	skills_tab.disabled = not available
-	items_tab.disabled = not available
-	escape_tab.disabled = not available
 	if available:
-		_show_action_page(ActionPage.SKILLS, false)
 		call_deferred(&"_focus_current_page")
-	else:
-		get_viewport().gui_release_focus()
 
 
 func set_atb(player_value: float, enemy_value: float) -> void:
@@ -203,9 +199,8 @@ func set_enemy_forecast(skill: SkillData) -> void:
 
 
 func _update_enemy_forecast() -> void:
-	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel") as EnemyForecastPanel
-	if forecast_panel != null and _enemy != null:
-		forecast_panel.display_forecast(_enemy_current_forecast_skill, _enemy.enemy_data.display_name)
+	if enemy_action_info != null and _enemy != null:
+		enemy_action_info.display_skill(_enemy_current_forecast_skill, true)
 
 
 func _get_skill_cd(skill: SkillData) -> int:
@@ -235,10 +230,55 @@ func _show_action_page(page: ActionPage, focus_page: bool) -> void:
 	skill_panel.visible = page == ActionPage.SKILLS
 	inventory_panel.visible = page == ActionPage.ITEMS
 	escape_page.visible = page == ActionPage.ESCAPE
-	entry_info_panel.clear_info()
+	_refresh_default_preview_for_current_page()
 	refresh_stats()
 	if focus_page:
 		_focus_current_page()
+
+
+func _refresh_default_preview_for_current_page() -> void:
+	match _current_page:
+		ActionPage.SKILLS:
+			var rows = skill_panel.skill_rows.get_rows()
+			if not rows.is_empty() and rows[0] is SelectableListRow:
+				var first_row = rows[0] as SelectableListRow
+				if first_row.entry is SkillData:
+					_on_skill_focused(first_row.entry as SkillData)
+					return
+			player_action_info.clear_info()
+		ActionPage.ITEMS:
+			var rows = inventory_panel.item_rows.get_rows()
+			if not rows.is_empty() and rows[0] is SelectableListRow:
+				var first_row = rows[0] as SelectableListRow
+				if first_row.entry is ItemData:
+					_on_item_focused(first_row.entry as ItemData)
+					return
+			var empty_info := EntryInfoViewData.new()
+			empty_info.title = "道具为空"
+			empty_info.description = "背包中没有可在战斗中使用的道具。"
+			player_action_info.display_info(empty_info)
+		ActionPage.ESCAPE:
+			var esc_info := EntryInfoViewData.new()
+			esc_info.title = "撤退"
+			esc_info.description = "尝试脱离当前的战斗。按确认键执行撤退。"
+			player_action_info.display_info(esc_info)
+
+
+func _on_skill_selected(skill: SkillData) -> void:
+	if not _action_available:
+		show_message("行动准备中，请等待行动槽就绪……")
+		return
+	if not _can_cast_skill(skill):
+		show_message("无法使用该技能：资源不足或正在冷却。")
+		return
+	skill_selected.emit(skill)
+
+
+func _on_item_selected(item: ItemData) -> void:
+	if not _action_available:
+		show_message("行动准备中，请等待行动槽就绪……")
+		return
+	item_selected.emit(item)
 
 
 func _cycle_action_page(direction: int) -> void:
@@ -286,6 +326,9 @@ func _is_tab_focused() -> bool:
 
 func _on_escape_tab_pressed() -> void:
 	if _current_page == ActionPage.ESCAPE:
+		if not _action_available:
+			show_message("行动准备中，请等待行动槽就绪……")
+			return
 		escape_requested.emit()
 		return
 	_show_action_page(ActionPage.ESCAPE, true)
@@ -340,7 +383,7 @@ func _on_skill_focused(skill: SkillData) -> void:
 		_enemy_atb_value,
 		_player_atb_value + player_preview.current_atb_delta if player_preview.has_atb_change() else -1.0
 	)
-	entry_info_panel.display_skill(skill)
+	player_action_info.display_skill(skill)
 
 
 func _on_item_focused(item: ItemData) -> void:
@@ -385,7 +428,7 @@ func _on_item_focused(item: ItemData) -> void:
 	info.icon = item.icon
 	info.description = item.description
 	info.detail_lines = details
-	entry_info_panel.display_info(info)
+	player_action_info.display_info(info)
 
 
 func _update_atb_markers(

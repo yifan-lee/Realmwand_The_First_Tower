@@ -50,4 +50,4 @@ func _finish_intro() -> void:
 	intro_finished.emit()
 
 func is_playing_intro() -> bool:
-	return intro_root.visible
+	return visible and intro_root != null and intro_root.visible

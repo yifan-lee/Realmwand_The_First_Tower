@@ -4,6 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="2_1lexf"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_mxbsc")]
+floor_id = "floor_6"
+display_name = "六层：通关"
+description = "恭喜你！成功登上了第一座高塔的顶层！"
+default_spawn_id = "FromBelowStair"
 
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=540661241]
 

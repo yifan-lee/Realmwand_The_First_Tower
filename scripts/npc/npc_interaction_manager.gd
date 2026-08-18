@@ -28,7 +28,7 @@ func _on_interaction_requested(npc: Node, player: Player) -> void:
 		push_warning("NPC does not implement begin_interaction().")
 		return
 	_active_npc = npc
-	_player.set_input_enabled(false)
+	_player.lock_movement(&"npc_interaction")
 	npc.call(&"begin_interaction", _ui, _player)
 
 
@@ -64,6 +64,6 @@ func _close_interaction() -> void:
 
 func _on_ui_closed() -> void:
 	if _player != null:
-		_player.set_input_enabled(true)
+		_player.unlock_movement(&"npc_interaction")
 	_active_npc = null
 

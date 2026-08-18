@@ -19,7 +19,7 @@ func is_active() -> bool:
 
 
 func _on_level_up_available() -> void:
-	_player.set_input_enabled(false)
+	_player.lock_movement(&"level_up")
 	_level_up_ui.open(_player)
 
 
@@ -27,7 +27,7 @@ func _on_allocation_confirmed(allocation: Dictionary[StringName, int]) -> void:
 	if not _player.apply_stat_allocation(allocation):
 		return
 	_level_up_ui.close()
-	_player.set_input_enabled(true)
+	_player.unlock_movement(&"level_up")
 	
 	if not _player.progression.pending_learned_skills.is_empty():
 		var skill: SkillData = _player.progression.pending_learned_skills.pop_front()

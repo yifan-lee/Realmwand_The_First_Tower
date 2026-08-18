@@ -32,15 +32,12 @@ func initialize(
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _player == null or not _player.visible:
+	if _player == null or not _player.visible or is_movement_locked() or is_moving:
 		return
 		
 	var movement_direction := _get_movement_event_direction(event)
 	if movement_direction != Vector2.ZERO:
 		_handle_movement_input(event, movement_direction)
-		return
-
-	if not input_enabled or is_moving:
 		return
 
 	if event.is_action_pressed(&"interact"):
@@ -174,9 +171,31 @@ func _try_interact() -> void:
 		target.call(&"interact", _player)
 
 
+var _movement_locks: Dictionary[StringName, bool] = {}
+
+
+func lock_movement(lock_id: StringName) -> void:
+	_movement_locks[lock_id] = true
+	_held_directions.clear()
+	if not is_moving:
+		play_directional_animation(&"idle")
+
+
+func unlock_movement(lock_id: StringName) -> void:
+	_movement_locks.erase(lock_id)
+
+
+func is_movement_locked() -> bool:
+	return not _movement_locks.is_empty() or not input_enabled
+
+
+func clear_all_movement_locks() -> void:
+	_movement_locks.clear()
+	_held_directions.clear()
+
+
 func set_input_enabled(enabled: bool) -> void:
 	input_enabled = enabled
-
 	if not input_enabled:
 		_held_directions.clear()
 		if not is_moving:

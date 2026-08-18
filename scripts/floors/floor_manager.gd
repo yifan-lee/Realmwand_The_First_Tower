@@ -111,7 +111,7 @@ func change_floor(
 		return
 	_is_changing_floor = true
 	
-	player.set_input_enabled(false)
+	player.lock_movement(&"floor_transition")
 	
 	EventBus.screen_fade_out_started.emit()
 	await EventBus.screen_fade_out_finished
@@ -129,7 +129,7 @@ func change_floor(
 				)
 		EventBus.screen_fade_in_with_info_started.emit("", "")
 		await EventBus.screen_fade_in_finished
-		player.set_input_enabled(true)
+		player.unlock_movement(&"floor_transition")
 		_is_changing_floor = false
 		return
 
@@ -138,7 +138,7 @@ func change_floor(
 	if new_floor == null:
 		EventBus.screen_fade_in_with_info_started.emit("", "")
 		await EventBus.screen_fade_in_finished
-		player.set_input_enabled(true)
+		player.unlock_movement(&"floor_transition")
 		_is_changing_floor = false
 		return
 
@@ -154,7 +154,7 @@ func change_floor(
 		new_floor.queue_free()
 		EventBus.screen_fade_in_with_info_started.emit("", "")
 		await EventBus.screen_fade_in_finished
-		player.set_input_enabled(true)
+		player.unlock_movement(&"floor_transition")
 		_is_changing_floor = false
 		return
 
@@ -168,7 +168,7 @@ func change_floor(
 	EventBus.screen_fade_in_with_info_started.emit(f_name, f_desc)
 	await EventBus.screen_fade_in_finished
 
-	player.set_input_enabled(true)
+	player.unlock_movement(&"floor_transition")
 	_is_changing_floor = false
 
 
@@ -232,7 +232,7 @@ func restore_save_data(data: Dictionary) -> bool:
 	if new_floor == null:
 		return false
 
-	player.set_input_enabled(false)
+	player.lock_movement(&"floor_transition")
 	
 	# Clear out current floor before applying state
 	if is_instance_valid(current_floor):
@@ -250,7 +250,7 @@ func restore_save_data(data: Dictionary) -> bool:
 		var local_position := Vector2(float(position_value[0]), float(position_value[1]))
 		player.global_position = current_floor.to_global(local_position)
 	
-	player.set_input_enabled(true)
+	player.unlock_movement(&"floor_transition")
 	return true
 
 

@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://eco3lvxg3lut"]
 
-[ext_resource type="Script" path="res://scripts/npc/skill_tutor.gd" id="1_tutor"]
+[ext_resource type="Script" uid="uid://dn43tw2ihdsh0" path="res://scripts/npc/skill_tutor.gd" id="1_tutor"]
 [ext_resource type="Texture2D" uid="uid://dnxqwfgjujhhh" path="res://assets/interactables/npc_universal.png" id="2_jej0v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u8vam"]

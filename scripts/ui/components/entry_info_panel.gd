@@ -44,9 +44,20 @@ func clear_info() -> void:
 	details_separator.visible = false
 
 
-func display_skill(skill: SkillData) -> void:
+func display_skill(skill: SkillData, fallback_to_basic_attack: bool = false) -> void:
 	if skill == null:
-		clear_info()
+		if fallback_to_basic_attack:
+			var default_view := EntryInfoViewData.new()
+			default_view.title = "普通攻击"
+			default_view.description = "对目标造成基础物理伤害。"
+			default_view.detail_lines = [
+				"类别：物理",
+				"\n【效果】",
+				"1. 对目标造成基础物理伤害"
+			]
+			display_info(default_view)
+		else:
+			clear_info()
 		return
 	var view := EntryInfoViewData.new()
 	view.title = skill.display_name

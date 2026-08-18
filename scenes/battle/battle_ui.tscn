@@ -4,9 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://c01uv3eb5dpcj" path="res://scenes/ui/components/actor_stats_panel.tscn" id="2_elpkr"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_keo60"]
 [ext_resource type="PackedScene" uid="uid://ctp1h6g1ket5y" path="res://scenes/ui/components/skill_panel.tscn" id="3_bgiko"]
+[ext_resource type="Script" uid="uid://b5lltfg5dekj0" path="res://scripts/ui/components/actor_stats_panel.gd" id="4_0qfdl"]
 [ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="4_keo60"]
 [ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_bgiko"]
-[ext_resource type="PackedScene" uid="uid://l4sdg3sblxqh" path="res://scenes/ui/components/enemy_forecast_panel.tscn" id="7_xm0oj"]
+[ext_resource type="Script" uid="uid://bip0oodwwfc5o" path="res://scripts/ui/components/entry_info_panel.gd" id="6_yyma0"]
 
 [node name="BattleUI" type="CanvasLayer" unique_id=609410111]
 script = ExtResource("1_d43ay")
@@ -59,8 +60,24 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="PlayerStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=799998403 instance=ExtResource("2_elpkr")]
+[node name="LeftColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=1904080597]
 layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlayerStats" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/LeftColumn" unique_id=799998403 instance=ExtResource("2_elpkr")]
+custom_minimum_size = Vector2(510, 0)
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2_keo60")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("4_0qfdl")
+
+[node name="PlayerActionInfo" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/LeftColumn" unique_id=446886182 instance=ExtResource("5_bgiko")]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+theme = ExtResource("2_keo60")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("6_yyma0")
 
 [node name="CenterColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=786186562]
 custom_minimum_size = Vector2(850, 0)
@@ -190,7 +207,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 16
 
 [node name="ListColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=574439855]
-custom_minimum_size = Vector2(345, 300)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -217,19 +234,24 @@ text = "按确认键撤退"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EntryInfoPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody" unique_id=446886182 instance=ExtResource("5_bgiko")]
-custom_minimum_size = Vector2(345, 300)
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="RightColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=2108736980]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="EnemyStats" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=37358213 instance=ExtResource("2_elpkr")]
+[node name="EnemyStats" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1015850872 instance=ExtResource("2_elpkr")]
+custom_minimum_size = Vector2(510, 0)
 layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2_keo60")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("4_0qfdl")
 
-[node name="EnemyForecastPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1900324266 instance=ExtResource("7_xm0oj")]
+[node name="EnemyActionInfo" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1675114004 instance=ExtResource("5_bgiko")]
+custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
+theme = ExtResource("2_keo60")
+theme_type_variation = &"TerminalInsetPanel"
+script = ExtResource("6_yyma0")
 
 [node name="MessagePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=566612400]
 custom_minimum_size = Vector2(0, 52)

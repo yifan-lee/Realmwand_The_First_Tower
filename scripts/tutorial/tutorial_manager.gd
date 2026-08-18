@@ -83,7 +83,7 @@ func _on_game_event(event_name: StringName, event_data: Variant) -> void:
 		if tut.should_trigger(event_name, event_data):
 			active_tutorial = tut
 			if _player != null:
-				_player.set_input_enabled(false)
+				_player.lock_movement(&"tutorial")
 			active_tutorial.start()
 			break
 
@@ -93,7 +93,7 @@ func _on_tutorial_completed(tutorial_id: StringName) -> void:
 		completed_tutorials.append(tutorial_id)
 	active_tutorial = null
 	if _player != null:
-		_player.set_input_enabled(true)
+		_player.unlock_movement(&"tutorial")
 
 
 func capture_save_data() -> Dictionary:

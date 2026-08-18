@@ -127,7 +127,7 @@ func open() -> void:
 	refresh_content()
 	menu_root.visible = true
 	if _player != null:
-		_player.set_input_enabled(false)
+		_player.lock_movement(&"esc_menu")
 	_show_main_page(MainPage.INVENTORY, false)
 	_show_category(0, false)
 	call_deferred(&"_focus_main_tab")
@@ -142,7 +142,7 @@ func close() -> void:
 	actor_stats_panel.clear_preview()
 	entry_info_panel.clear_info()
 	if _player != null:
-		_player.set_input_enabled(true)
+		_player.unlock_movement(&"esc_menu")
 	closed.emit()
 
 

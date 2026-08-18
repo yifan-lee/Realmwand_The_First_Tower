@@ -36,7 +36,7 @@ func play_bgm(stream: AudioStream) -> void:
 
 
 func _ready() -> void:
-	player.set_input_enabled(false)
+	player.lock_movement(&"intro_video")
 
 	intro_video.intro_finished.connect(
 		_on_intro_finished
@@ -91,7 +91,7 @@ func _on_battle_finished(victory: bool) -> void:
 
 
 func _on_intro_finished() -> void:
-	player.set_input_enabled(true)
+	player.unlock_movement(&"intro_video")
 	play_bgm(BGM_GENERAL)
 
 

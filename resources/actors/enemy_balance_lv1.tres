@@ -12,6 +12,7 @@ visual_scale_multiplier = 1.2000000000000002
 id = &"enemy_bal_lv1"
 display_name = "1级平衡怪"
 description = "各项属性都比较平衡的生物。"
+max_hp = 170.0
 atk = 20.0
 def = 28.0
 spd = 22.0

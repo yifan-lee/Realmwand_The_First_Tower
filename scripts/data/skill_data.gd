@@ -101,8 +101,5 @@ func get_details() -> Array[String]:
 	if not cost_lines.is_empty():
 		result.append("\n【消耗】")
 		result.append_array(cost_lines)
-	elif skill_type != SkillType.PASSIVE:
-		result.append("\n【消耗】")
-		result.append("1. 无消耗")
 
 	return result

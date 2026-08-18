@@ -99,13 +99,13 @@ func _on_body_entered(body: Node2D) -> void:
 		EventBus.floor_change_requested.emit(target_floor_id, target_spawn_id)
 	# 2. 备选直接世界坐标同层传送
 	elif target_position != Vector2.ZERO:
-		player.set_input_enabled(false)
+		player.lock_movement(&"portal")
 		EventBus.screen_fade_out_started.emit()
 		await EventBus.screen_fade_out_finished
 		player.global_position = target_position
 		EventBus.screen_fade_in_with_info_started.emit("", "")
 		await EventBus.screen_fade_in_finished
-		player.set_input_enabled(true)
+		player.unlock_movement(&"portal")
 	else:
 		push_error("Portal '%s' has no target_spawn_id or target_position configured." % get_persistent_id())
 

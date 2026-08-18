@@ -72,7 +72,9 @@ func update_availability(usability_check: Callable, cd_check: Callable = Callabl
 	for i in range(_skills.size()):
 		if i < rows.size():
 			var skill: SkillData = _skills[i]
-			rows[i].disabled = not usability_check.call(skill)
+			var is_usable: bool = usability_check.call(skill)
+			rows[i].disabled = false
+			rows[i].modulate = Color(1.0, 1.0, 1.0, 1.0) if is_usable else Color(1.0, 1.0, 1.0, 0.5)
 			var text = _build_row_text(skill)
 			if not cd_check.is_null():
 				var cd: int = cd_check.call(skill)

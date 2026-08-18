@@ -118,7 +118,7 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_player_casting_skill = null
 	_enemy_casting_skill = null
 	status_controller.clear_all()
-	_player.set_input_enabled(false)
+	_player.lock_movement(&"battle")
 	
 	_load_passive_statuses()
 	_battle_ui.open(_player, _enemy, self)
@@ -452,7 +452,7 @@ func _finish_battle(victory: bool) -> void:
 		return
 	_state = BattleState.INACTIVE
 	_battle_ui.close()
-	_player.set_input_enabled(true)
+	_player.unlock_movement(&"battle")
 	if _player != null and _player.has_method(&"clear_shield"):
 		_player.clear_shield()
 	if _enemy != null and _enemy.has_method(&"clear_shield"):
