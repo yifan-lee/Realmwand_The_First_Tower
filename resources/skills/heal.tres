@@ -26,7 +26,6 @@ value = 5.0
 [sub_resource type="Resource" id="Resource_g6y56"]
 script = ExtResource("2_ept0b")
 target = 0
-resource_type = 1
 calc_method = 0
 value = 500.0
 
@@ -35,6 +34,7 @@ script = ExtResource("3_ekc00")
 id = &"heal"
 display_name = "治疗术"
 skill_type = 1
-costs = Array[ExtResource("1_f26ep")]([SubResource("Resource_7fuss"), SubResource("Resource_rhvf2"), SubResource("Resource_288bf"), SubResource("Resource_61s12")])
+cooldown = 5
+costs = Array[ExtResource("1_f26ep")]([SubResource("Resource_7fuss"), SubResource("Resource_rhvf2"), SubResource("Resource_288bf")])
 target_type = 1
 effects = Array[ExtResource("2_ept0b")]([SubResource("Resource_g6y56")])

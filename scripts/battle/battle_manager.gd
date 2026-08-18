@@ -28,13 +28,12 @@ var _pre_battle_inventory: Array[Dictionary] = []
 var _pre_battle_enemy_hp: float = 0.0
 var _pre_battle_enemy_mp: float = 0.0
 var _pre_battle_enemy_fp: float = 0.0
-var _cooldowns: Dictionary[StringName, float] = {}
-var _enemy_cooldowns: Dictionary[StringName, float] = {}
+var _cooldowns: Dictionary[StringName, int] = {}
+var _enemy_cooldowns: Dictionary[StringName, int] = {}
 var _player_casting_skill: SkillData
 var _enemy_casting_skill: SkillData
 var _enemy_queued_skill: SkillData
 var _is_paused: bool = false
-var _player_skill_cast_count: int = 0
 
 var status_controller: BattleStatusController = BattleStatusController.new()
 
@@ -54,10 +53,6 @@ func is_active() -> bool:
 
 func is_waiting_for_player() -> bool:
 	return _state == BattleState.WAITING_FOR_PLAYER
-
-
-func get_player_skill_cast_count() -> int:
-	return _player_skill_cast_count
 
 
 func _process(delta: float) -> void:
@@ -104,7 +99,6 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_enemy = enemy
 	_player = player
 	
-	_player_skill_cast_count = 0
 	_pre_battle_hp = _player.current_hp
 	_pre_battle_mp = _player.current_mp
 	_pre_battle_fp = _player.current_fp
@@ -134,30 +128,26 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 
 
 func _load_passive_statuses() -> void:
-	if _player == null:
+	_load_actor_passives(_player)
+	_load_actor_passives(_enemy)
+
+
+func _load_actor_passives(actor: Node) -> void:
+	if actor == null:
 		return
-	if _player.has_method(&"has_skill") and _player.has_skill(&"overload_spd"):
-		_update_overload_spd_status()
+	var skills: Array[SkillData] = []
+	if actor.has_method(&"get_skills"):
+		skills = actor.get_skills()
+	elif actor is Enemy and (actor as Enemy).enemy_data != null:
+		skills = (actor as Enemy).enemy_data.skills
+	elif actor is Player:
+		skills = (actor as Player).learned_skills
 
-
-func _update_overload_spd_status() -> void:
-	if _player == null or not _player.has_method(&"has_skill") or not _player.has_skill(&"overload_spd"):
-		return
-	var rem: int = 4 - (_player_skill_cast_count % 4)
-	var text := ""
-	if rem == 1:
-		text = "【过载极速】准备就绪！下次技能伤害 +50%"
-	else:
-		text = "【过载极速】充能中（还需施法 %d 次）" % rem
-
-	# 移除旧的同类状态并注入更新
-	var status_data := StatusEffectData.new()
-	status_data.id = &"overload_spd_buff"
-	status_data.display_name = "过载极速"
-	status_data.display_template = text
-	status_data.end_condition = StatusEffectData.EndCondition.PERMANENT
-	status_data.polarity = StatusEffectData.Polarity.BUFF
-	status_controller.apply_status(_player, status_data)
+	for skill: SkillData in skills:
+		if skill != null and skill.skill_type == SkillData.SkillType.PASSIVE:
+			for effect: ActionEffectData in skill.effects:
+				if effect.status_to_apply != null:
+					status_controller.apply_status(actor, effect.status_to_apply)
 
 
 func _on_battle_requested(enemy: Enemy, player: Player) -> void:
@@ -175,24 +165,18 @@ func _get_skill_cost(skill: SkillData, type: ActionCostData.CostType) -> float:
 func _on_skill_selected(skill: SkillData) -> void:
 	if _state != BattleState.WAITING_FOR_PLAYER or skill == null:
 		return
-	if get_skill_cooldown(skill.id, false) > 0.0:
+	if get_skill_cooldown(skill.id, false) > 0:
 		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
 		return
 		
 	var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
 	var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
 	var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
-	var cd := _get_skill_cost(skill, ActionCostData.CostType.COOLDOWN)
+	var cd: int = skill.get_cooldown()
 	var cast_time := _get_skill_cost(skill, ActionCostData.CostType.CAST_TIME)
 
-	if _player.current_hp <= hp_cost:
-		_battle_ui.show_message("生命不足。")
-		return
-	if _player.current_mp < mp_cost:
-		_battle_ui.show_message("魔力不足。")
-		return
-	if _player.current_fp < fp_cost:
-		_battle_ui.show_message("专注值不足。")
+	if _player.current_hp <= hp_cost or _player.current_mp < mp_cost or _player.current_fp < fp_cost:
+		_battle_ui.show_message("资源不足，无法施放 %s。" % skill.display_name)
 		return
 
 	if hp_cost > 0: _player.change_hp(-hp_cost)
@@ -226,7 +210,7 @@ func _on_item_selected(item: ItemData) -> void:
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
 	
 	var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], self)
-	_apply_preview(preview, item.effects, false)
+	_apply_preview(preview, item.effects, false, false)
 	
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
@@ -258,7 +242,7 @@ func _begin_enemy_turn() -> void:
 	var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
 	var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
 	var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
-	var cd := _get_skill_cost(skill, ActionCostData.CostType.COOLDOWN)
+	var cd: int = skill.get_cooldown()
 	var cast_time := _get_skill_cost(skill, ActionCostData.CostType.CAST_TIME)
 
 	if hp_cost > 0: _enemy.change_hp(-hp_cost)
@@ -304,23 +288,23 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	elif resolved_skill.skill_type == SkillData.SkillType.MAGICAL:
 		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_MAGICAL_ATTACK)
 
-	_apply_preview(preview, resolved_skill.effects, false)
+	var is_physical := (resolved_skill.skill_type == SkillData.SkillType.PHYSICAL)
+	_apply_preview(preview, resolved_skill.effects, false, is_physical)
 	
 	var message = "使用了 %s。" % resolved_skill.display_name
 	for extra in preview.extra_messages:
 		message += "\n" + extra
 	_battle_ui.show_message(message)
 	
-	_player_skill_cast_count += 1
-	_update_overload_spd_status()
-	
 	var player_delta = preview.actor_deltas.get(_player, null)
 	var is_free_action = false
 	if player_delta != null and player_delta.is_free_action:
 		is_free_action = true
 	_complete_player_action(is_free_action)
-	if _enemy.is_defeated:
+	if _enemy.is_defeated or _enemy.current_hp <= 0.0:
 		_finish_battle(true)
+	elif _player.current_hp <= 0.0:
+		_finish_battle(false)
 
 
 func _release_enemy_skill() -> void:
@@ -354,9 +338,19 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 			get_actor_stat(_player, StatusEffectData.StatType.DEF)
 		)
 		_player.change_hp(-damage)
-		_battle_ui.show_message("%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage])
+		var counter_messages: Array[String] = []
+		var counter_events = status_controller.on_damage_taken(_player, _enemy, damage, true)
+		for event in counter_events:
+			var dmg: float = event.damage
+			_enemy.change_hp(-dmg)
+			var source_name: String = event.status_name if not event.status_name.is_empty() else "反伤"
+			counter_messages.append("【%s】对 %s 反弹了 %.0f 点伤害！" % [source_name, _enemy.enemy_data.display_name, dmg])
+		var msg_text := "%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage]
+		for extra in counter_messages:
+			msg_text += "\n" + extra
+		_battle_ui.show_message(msg_text)
 	else:
-		_apply_preview(preview, skill.effects, true)
+		_apply_preview(preview, skill.effects, true, is_physical)
 		var message = "%s 使用了 %s。" % [_enemy.enemy_data.display_name, skill_name]
 		for extra in preview.extra_messages:
 			message += "\n" + extra
@@ -377,9 +371,14 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	
 	if _player.current_hp <= 0.0:
 		_finish_battle(false)
+	elif _enemy.current_hp <= 0.0:
+		_finish_battle(true)
 
 
-func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[ActionEffectData] = [], caster_is_enemy: bool = false) -> void:
+func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[ActionEffectData] = [], caster_is_enemy: bool = false, is_physical: bool = true) -> void:
+	var caster: Node = _enemy if caster_is_enemy else _player
+	var counter_messages: Array[String] = []
+
 	for actor in preview.actor_deltas.keys():
 		var delta = preview.actor_deltas[actor]
 		var prev_shield: float = actor.current_shield if (actor != null and actor.get("current_shield") != null) else 0.0
@@ -394,7 +393,18 @@ func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[Action
 		var cur_shield: float = actor.current_shield if (actor != null and actor.get("current_shield") != null) else 0.0
 		if prev_shield > 0.0 and cur_shield <= 0.0:
 			status_controller.on_shield_depleted(actor)
-			
+
+		# 受击反伤结算
+		if delta.hp_delta < 0.0 and actor != caster and caster != null:
+			var actual_dmg: float = absf(delta.hp_delta)
+			var counter_events = status_controller.on_damage_taken(actor, caster, actual_dmg, is_physical)
+			for event in counter_events:
+				var dmg: float = event.damage
+				caster.change_hp(-dmg)
+				var source_name: String = event.status_name if not event.status_name.is_empty() else "反伤"
+				var caster_name: String = "玩家" if caster == _player else (_enemy.enemy_data.display_name if _enemy.enemy_data else "敌人")
+				counter_messages.append("【%s】对 %s 反弹了 %.0f 点伤害！" % [source_name, caster_name, dmg])
+
 	# Apply buff/debuff status data
 	for effect: ActionEffectData in effects_to_apply:
 		if effect.status_to_apply != null:
@@ -408,6 +418,9 @@ func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[Action
 			for tgt in targets:
 				if tgt != null:
 					status_controller.apply_status(tgt, effect.status_to_apply)
+
+	for msg in counter_messages:
+		preview.extra_messages.append(msg)
 
 
 func _complete_player_action(is_free_action: bool = false) -> void:
@@ -468,10 +481,9 @@ func get_actor_effects(actor: Node) -> Array[Dictionary]:
 
 
 func _decrement_cooldowns(is_enemy: bool) -> void:
-	var cds = _enemy_cooldowns if is_enemy else _cooldowns
-	var cd_keys = cds.keys()
-	for skill_id in cd_keys:
-		var remaining = int(cds[skill_id]) - 1
+	var cds: Dictionary[StringName, int] = _enemy_cooldowns if is_enemy else _cooldowns
+	for skill_id: StringName in cds.keys():
+		var remaining: int = cds[skill_id] - 1
 		if remaining <= 0:
 			cds.erase(skill_id)
 		else:
@@ -519,15 +531,16 @@ func get_actor_stat(actor: Node, stat_type: StatusEffectData.StatType) -> float:
 	elif actor == _enemy:
 		match stat_type:
 			StatusEffectData.StatType.ATK:
-				base_value = _enemy.enemy_data.atk
+				base_value = _enemy.get_atk()
 			StatusEffectData.StatType.DEF:
-				base_value = _enemy.enemy_data.def
+				base_value = _enemy.get_def()
 			StatusEffectData.StatType.SPD:
-				base_value = _enemy.enemy_data.spd
+				base_value = _enemy.get_spd()
 			StatusEffectData.StatType.MAX_HP:
-				base_value = _enemy.enemy_data.max_hp
+				base_value = _enemy.get_max_hp()
 			StatusEffectData.StatType.MAX_MP:
-				base_value = _enemy.enemy_data.max_mp
+				base_value = _enemy.get_max_mp()
+
 	return status_controller.get_effective_stat(base_value, actor, stat_type)
 
 
@@ -535,33 +548,17 @@ func get_skill_power_modifier(actor: Node, skill_type: int) -> float:
 	return status_controller.get_skill_power_modifier(actor, skill_type)
 
 
-func _interrupt_actor(target_actor: Node) -> bool:
-	if target_actor == _player:
-		if _player_casting_skill == null:
-			return false
-
-		_player_casting_skill = null
-		_player_atb = 0.0
-		return true
-
-	if target_actor == _enemy:
-		if _enemy_casting_skill == null:
-			return false
-
-		_enemy_casting_skill = null
-		_enemy_atb = 0.0
-		_queue_enemy_next_skill()
-		return true
-
-	return false
+func get_skill_cooldown(skill_id: StringName, is_enemy: bool = false) -> int:
+	var cds: Dictionary[StringName, int] = _enemy_cooldowns if is_enemy else _cooldowns
+	return cds.get(skill_id, 0)
 
 
-func is_actor_casting(actor: Node) -> bool:
-	if actor == _player:
-		return _player_casting_skill != null
-	elif actor == _enemy:
-		return _enemy_casting_skill != null
-	return false
+func pause_battle() -> void:
+	_is_paused = true
+
+
+func resume_battle() -> void:
+	_is_paused = false
 
 
 func is_player_casting() -> bool:
@@ -572,19 +569,33 @@ func is_enemy_casting() -> bool:
 	return _enemy_casting_skill != null
 
 
-func get_skill_cooldown(skill_id: StringName, is_enemy: bool = false) -> int:
-	if is_enemy:
-		return int(_enemy_cooldowns.get(skill_id, 0.0))
-	return int(_cooldowns.get(skill_id, 0.0))
+func is_actor_casting(actor: Node) -> bool:
+	if actor == _player:
+		return is_player_casting()
+	elif actor == _enemy:
+		return is_enemy_casting()
+	return false
 
 
-func pause_battle() -> void:
-	_is_paused = true
-	if _battle_ui != null:
-		_battle_ui.set_action_available(false)
+func is_actor_interrupted(actor: Node) -> bool:
+	if actor == _player:
+		return _player_casting_skill != null and _player_atb < 0.0
+	elif actor == _enemy:
+		return _enemy_casting_skill != null and _enemy_atb < 0.0
+	return false
 
 
-func resume_battle() -> void:
-	_is_paused = false
-	if _state == BattleState.WAITING_FOR_PLAYER and _battle_ui != null:
-		_battle_ui.set_action_available(true)
+func _interrupt_actor(actor: Node) -> void:
+	if actor == _player:
+		if _player_casting_skill != null:
+			_battle_ui.show_message("%s 的吟唱被打断！" % _player.player_data.display_name)
+			_player_casting_skill = null
+			_player_atb = 0.0
+			_battle_ui.set_atb(_player_atb, _enemy_atb)
+	elif actor == _enemy:
+		if _enemy_casting_skill != null:
+			_battle_ui.show_message("%s 的吟唱被打断！" % _enemy.enemy_data.display_name)
+			_enemy_casting_skill = null
+			_enemy_atb = 0.0
+			_battle_ui.set_atb(_player_atb, _enemy_atb)
+			_queue_enemy_next_skill()

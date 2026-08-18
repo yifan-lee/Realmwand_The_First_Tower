@@ -55,6 +55,19 @@ var current_shield: float:
 	get(): return stats.current_shield if stats else 0.0
 
 
+func get_skills() -> Array[SkillData]:
+	return enemy_data.skills if enemy_data != null else []
+
+
+func has_skill(skill_id: StringName) -> bool:
+	if enemy_data == null:
+		return false
+	for s: SkillData in enemy_data.skills:
+		if s != null and s.id == skill_id:
+			return true
+	return false
+
+
 func _ready() -> void:
 	_refresh_visual()
 	_update_size()

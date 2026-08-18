@@ -56,7 +56,6 @@ func _ready() -> void:
 	_enemy_casting_label = enemy_atb_marker.get_node("EnemyCastingLabel")
 
 
-
 func _process(_delta: float) -> void:
 	if not battle_root.visible:
 		return
@@ -198,6 +197,7 @@ func set_enemy_forecast(skill: SkillData) -> void:
 	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel")
 	if forecast_panel != null and _enemy != null:
 		forecast_panel.display_forecast(skill, _enemy.enemy_data.display_name)
+
 
 func _get_skill_cd(skill: SkillData) -> int:
 	if _battle_manager != null:

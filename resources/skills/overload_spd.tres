@@ -1,17 +1,34 @@
-[gd_resource type="Resource" script_class="SkillData" format=3]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://clfwoago8src0"]
 
-[ext_resource type="Script" path="res://scripts/data/skill_data.gd" id="1_skill"]
-[ext_resource type="Texture2D" uid="uid://adf8b063848a656b9496e8a0e49533de" path="res://assets/skills/support/buff_spd_tier_2.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_u43nn"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_skill"]
+[ext_resource type="Texture2D" uid="uid://lksci5iov3us" path="res://assets/skills/support/buff_spd_tier_2.png" id="3_icon"]
+[ext_resource type="Script" uid="uid://cb8kh7hp8uvtq" path="res://scripts/data/status_effect_data.gd" id="4_status"]
+
+[sub_resource type="Resource" id="Resource_overload_spd_status"]
+script = ExtResource("4_status")
+id = &"overload_spd_buff"
+display_name = "速度过载"
+affected_stat = 3
+value = 1.5
+end_condition = 0
+duration_count = 0
+trigger_interval = 4
+
+[sub_resource type="Resource" id="Resource_overload_spd_effect"]
+script = ExtResource("1_effect")
+target = 0
+resource_type = 0
+value = 0.0
+status_to_apply = SubResource("Resource_overload_spd_status")
 
 [resource]
-script = ExtResource("1_skill")
+script = ExtResource("2_skill")
 id = &"overload_spd"
-display_name = "过载极速"
+display_name = "速度过载"
 description = "被动：战斗中每第4次施放技能，造成的伤害提升50%"
-icon = ExtResource("2_icon")
-unlock_level = 1
+icon = ExtResource("3_icon")
 skill_type = 3
 target_type = 1
-costs = []
-effects = []
-cooldown = 0
+effects = Array[ExtResource("1_effect")]([SubResource("Resource_overload_spd_effect")])

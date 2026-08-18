@@ -1,7 +1,7 @@
 class_name BattleStatusController
 extends RefCounted
 
-## 战斗状态单一真值源管理器：负责所有 ActiveStatus 的增删改查、生命周期流转与属性加成计算。
+## 战斗状态单一真值源管理器：负责所有 ActiveStatus 的增删改查、生命周期流转、受击反伤与属性加成计算。
 
 var _statuses: Dictionary = {}  # Dictionary[Node, Array[ActiveStatus]]
 
@@ -80,6 +80,42 @@ func on_trigger_event(actor: Node, trigger_type: StatusEffectData.TriggerType) -
 				list.remove_at(i)
 
 
+func on_damage_taken(victim: Node, attacker: Node, damage: float, is_physical: bool) -> Array[Dictionary]:
+	var counter_events: Array[Dictionary] = []
+	if victim == null or attacker == null or not _statuses.has(victim):
+		return counter_events
+
+	var list: Array[ActiveStatus] = _statuses[victim]
+	var expected_type := StatusEffectData.TriggerType.ON_TAKE_PHYSICAL_DAMAGE if is_physical else StatusEffectData.TriggerType.ON_TAKE_MAGICAL_DAMAGE
+
+	for i in range(list.size() - 1, -1, -1):
+		var status := list[i]
+		if status.data == null:
+			continue
+		if status.data.trigger_type != StatusEffectData.TriggerType.ON_ANY_ACTION and status.data.trigger_type != expected_type:
+			continue
+
+		var fixed_dmg: float = status.data.counter_damage_fixed
+		var ratio_dmg: float = damage * status.data.counter_damage_ratio
+		var total_counter: float = fixed_dmg + ratio_dmg
+
+		status.on_trigger_event(expected_type)
+
+		if total_counter > 0.0:
+			counter_events.append({
+				&"source_status": status,
+				&"status_name": status.data.display_name,
+				&"damage": maxf(1.0, roundf(total_counter)),
+				&"victim": victim,
+				&"attacker": attacker,
+			})
+
+		if status.is_expired():
+			list.remove_at(i)
+
+	return counter_events
+
+
 func on_shield_depleted(actor: Node) -> void:
 	if actor == null or not _statuses.has(actor):
 		return
@@ -99,6 +135,8 @@ func get_effective_stat(base_value: float, actor: Node, stat_type: StatusEffectD
 	var list: Array[ActiveStatus] = _statuses[actor]
 	for status: ActiveStatus in list:
 		if status.data == null or status.data.affected_stat != stat_type:
+			continue
+		if not status.is_interval_active():
 			continue
 		var stacks := float(status.current_stacks)
 		if status.data.operation == StatusEffectData.OpType.MULTIPLY:
@@ -121,6 +159,8 @@ func get_skill_power_modifier(actor: Node, skill_type: int) -> float:
 			continue
 		if status.data.restrict_skill_type and status.data.target_skill_type != skill_type:
 			continue
+		if not status.is_interval_active():
+			continue
 		var stacks := float(status.current_stacks)
 		if status.data.operation == StatusEffectData.OpType.MULTIPLY:
 			multiplier *= (1.0 + (status.data.value - 1.0) * stacks)
@@ -137,7 +177,7 @@ func get_active_effects_for_ui(actor: Node) -> Array[Dictionary]:
 
 	var list: Array[ActiveStatus] = _statuses[actor]
 	for status: ActiveStatus in list:
-		if status.data == null:
+		if status.data == null or not status.data.show_in_buff_bar:
 			continue
 		result.append({
 			&"id": status.data.id,

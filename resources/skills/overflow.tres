@@ -29,5 +29,6 @@ id = &"overflow"
 display_name = "湮灭"
 description = "伤害极高的技能，请及时打断"
 skill_type = 1
-costs = Array[ExtResource("1_7llpx")]([SubResource("Resource_v7wxn"), SubResource("Resource_g6mqr"), SubResource("Resource_0xcip")])
+cooldown = 1
+costs = Array[ExtResource("1_7llpx")]([SubResource("Resource_v7wxn"), SubResource("Resource_g6mqr")])
 effects = Array[ExtResource("2_rfug7")]([SubResource("Resource_7llpx")])

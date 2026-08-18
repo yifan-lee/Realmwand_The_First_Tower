@@ -29,5 +29,6 @@ script = ExtResource("3_vn8x5")
 id = &"kick_off"
 display_name = "打断"
 icon = ExtResource("3_3c7a8")
-costs = Array[ExtResource("1_ibhqy")]([SubResource("Resource_k11ut"), SubResource("Resource_vn8x5")])
+cooldown = 4
+costs = Array[ExtResource("1_ibhqy")]([SubResource("Resource_k11ut")])
 effects = Array[ExtResource("2_3c7a8")]([SubResource("Resource_3c7a8"), SubResource("Resource_137w6")])

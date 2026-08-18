@@ -47,6 +47,10 @@ var learned_skills: Array[SkillData]:
 	get(): return progression.learned_skills if progression else []
 
 
+func get_skills() -> Array[SkillData]:
+	return progression.learned_skills if progression else []
+
+
 func has_skill(skill_id: StringName) -> bool:
 	return progression.has_skill(skill_id) if progression else false
 

@@ -13,6 +13,12 @@ enum CostType {
 @export var value: float = 0.0
 
 
+func get_cooldown() -> int:
+	if cost_type == CostType.COOLDOWN:
+		return int(value)
+	return 0
+
+
 func get_description() -> String:
 	match cost_type:
 		CostType.HP:
@@ -22,7 +28,7 @@ func get_description() -> String:
 		CostType.FP:
 			return "消耗专注：%.0f" % value
 		CostType.COOLDOWN:
-			return "冷却：%.0f 次行动" % value
+			return "冷却：%d 次行动" % get_cooldown()
 		CostType.CAST_TIME:
 			return "吟唱：行动条倒退 %.0f%%" % (value * 100.0)
 	return ""

@@ -75,7 +75,7 @@ func update_availability(usability_check: Callable, cd_check: Callable = Callabl
 			rows[i].disabled = not usability_check.call(skill)
 			var text = _build_row_text(skill)
 			if not cd_check.is_null():
-				var cd = cd_check.call(skill)
+				var cd: int = cd_check.call(skill)
 				if cd > 0:
 					text += " (CD: %d)" % cd
 			rows[i].text = text

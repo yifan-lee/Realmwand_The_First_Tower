@@ -10,6 +10,8 @@ static func choose_skill(
 		return null
 		
 	for skill: SkillData in enemy.enemy_data.skills:
+		if skill == null or skill.skill_type == SkillData.SkillType.PASSIVE:
+			continue
 		if battle_manager.get_skill_cooldown(skill.id, true) > 0:
 			continue
 			

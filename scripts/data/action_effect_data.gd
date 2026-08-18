@@ -80,7 +80,10 @@ func get_description() -> String:
 		var status_desc := status_to_apply.get_formatted_description()
 		var status_name := status_to_apply.display_name if not status_to_apply.display_name.is_empty() else status_to_apply.get_stat_name()
 		if not status_desc.is_empty():
-			desc_parts.append("%s施加【%s】：%s" % [target_prefix, status_name, status_desc])
+			if status_desc.begins_with("【"):
+				desc_parts.append(status_desc)
+			else:
+				desc_parts.append("%s施加【%s】：%s" % [target_prefix, status_name, status_desc])
 
 	return "；".join(desc_parts)
 

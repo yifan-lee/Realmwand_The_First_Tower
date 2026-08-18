@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://dw0u3nu1pt1wm"]
+
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_pe3tn"]
+[ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_skill"]
+[ext_resource type="Texture2D" uid="uid://bsw32x0cfp6mh" path="res://assets/skills/support/buff_def_tier_1.png" id="3_icon"]
+[ext_resource type="Script" uid="uid://cb8kh7hp8uvtq" path="res://scripts/data/status_effect_data.gd" id="4_status"]
+
+[sub_resource type="Resource" id="Resource_thorns_status"]
+script = ExtResource("4_status")
+id = &"thorns_status"
+display_name = "刺甲"
+affected_stat = 1
+operation = 0
+value = 0.0
+counter_damage_fixed = 10.0
+end_condition = 0
+duration_count = 0
+trigger_type = 3
+
+[sub_resource type="Resource" id="Resource_thorns_effect"]
+script = ExtResource("1_effect")
+target = 0
+resource_type = 0
+value = 0.0
+status_to_apply = SubResource("Resource_thorns_status")
+
+[resource]
+script = ExtResource("2_skill")
+id = &"thorns"
+display_name = "刺甲"
+description = "受到物理攻击时对攻击者反弹伤害"
+icon = ExtResource("3_icon")
+skill_type = 3
+target_type = 1
+effects = Array[ExtResource("1_effect")]([SubResource("Resource_thorns_effect")])

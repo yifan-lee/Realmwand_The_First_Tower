@@ -6,6 +6,7 @@ var owner_actor: Node
 var remaining_actions: int = 0
 var remaining_triggers: int = 0
 var current_stacks: int = 1
+var current_trigger_count: int = 0
 
 
 func _init(p_data: StatusEffectData, p_owner: Node) -> void:
@@ -14,6 +15,7 @@ func _init(p_data: StatusEffectData, p_owner: Node) -> void:
 	remaining_actions = data.duration_count
 	remaining_triggers = data.duration_count
 	current_stacks = 1
+	current_trigger_count = 0
 
 
 func is_permanent() -> bool:
@@ -35,6 +37,19 @@ func is_expired() -> bool:
 	return false
 
 
+func is_interval_active() -> bool:
+	if data == null or data.trigger_interval <= 1:
+		return true
+	return ((current_trigger_count + 1) % data.trigger_interval) == 0
+
+
+func get_remaining_to_interval() -> int:
+	if data == null or data.trigger_interval <= 1:
+		return 0
+	var rem: int = data.trigger_interval - (current_trigger_count % data.trigger_interval)
+	return rem
+
+
 func on_owner_action_completed() -> void:
 	if is_permanent():
 		return
@@ -43,13 +58,20 @@ func on_owner_action_completed() -> void:
 
 
 func on_trigger_event(trigger_type: StatusEffectData.TriggerType) -> bool:
+	if data == null:
+		return false
+	if data.trigger_type != trigger_type:
+		return false
+
+	current_trigger_count += 1
+
 	if is_permanent():
-		return false
-	if data.end_condition != StatusEffectData.EndCondition.TRIGGER_COUNT:
-		return false
-	if data.trigger_type == StatusEffectData.TriggerType.ON_ANY_ACTION or data.trigger_type == trigger_type:
+		return true
+
+	if data.end_condition == StatusEffectData.EndCondition.TRIGGER_COUNT:
 		remaining_triggers = maxi(0, remaining_triggers - 1)
 		return true
+
 	return false
 
 
@@ -77,4 +99,5 @@ func get_formatted_text() -> String:
 			remaining = remaining_actions
 		elif data.end_condition == StatusEffectData.EndCondition.TRIGGER_COUNT:
 			remaining = remaining_triggers
-	return data.get_formatted_description(remaining, current_stacks)
+	var rem_interval: int = get_remaining_to_interval()
+	return data.get_formatted_description(remaining, current_stacks, rem_interval)

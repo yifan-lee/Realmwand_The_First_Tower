@@ -175,10 +175,5 @@ static func _calculate_resource_amount(
 			var skill_type_int: int = skill.skill_type if skill != null else int(SkillData.SkillType.PHYSICAL)
 			var skill_power_mod: float = battle_manager.get_skill_power_modifier(caster, skill_type_int)
 			var damage: float = FORMULAS.calculate_skill_damage(caster_atk, effect.value * skill_power_mod, target_def)
-			
-			if caster.has_method(&"has_skill") and caster.has_skill(&"overload_spd") and battle_manager.has_method(&"get_player_skill_cast_count"):
-				var next_cast: int = battle_manager.get_player_skill_cast_count() + 1
-				if next_cast % 4 == 0:
-					damage = roundf(damage * 1.5)
 			return -damage
 	return 0.0
