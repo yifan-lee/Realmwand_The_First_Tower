@@ -120,7 +120,6 @@ static func run_playthrough(tree: SceneTree, build_type: String) -> Dictionary:
 	
 	player.progression.level = 1
 	player.progression.experience = 0
-	player.progression.gold = 0
 	player.progression.unspent_stat_points = 0
 	player.progression.learned_skills.clear()
 	var basic_attack = load("res://resources/skills/basic_attack.tres")

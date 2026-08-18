@@ -25,9 +25,14 @@ func is_empty() -> bool:
 
 
 func focus_first_row(fallback_button_index: int = 0) -> bool:
+	return focus_row_at(0, fallback_button_index)
+
+
+func focus_row_at(index: int, fallback_button_index: int = 0) -> bool:
 	if _rows.is_empty():
 		return false
-	_focus_row(_rows.front(), fallback_button_index)
+	var target_index := clampi(index, 0, _rows.size() - 1)
+	_focus_row(_rows[target_index], fallback_button_index)
 	return true
 
 

@@ -107,6 +107,12 @@ func capture_save_data() -> Array[Dictionary]:
 	return result
 
 
+func clear() -> void:
+	_items.clear()
+	_quantities.clear()
+	inventory_changed.emit()
+
+
 func restore_save_data(entries_value: Variant) -> void:
 	_items.clear()
 	_quantities.clear()
@@ -119,3 +125,4 @@ func restore_save_data(entries_value: Variant) -> void:
 			if item != null:
 				add_item(item, int(entry_value.get("quantity", 1)))
 	inventory_changed.emit()
+

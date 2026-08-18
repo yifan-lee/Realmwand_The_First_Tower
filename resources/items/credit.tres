@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b6tk7io3qys6i"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_cbxfg"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_uoqxw"]
+[ext_resource type="Texture2D" uid="uid://dufjnfdbdm8r8" path="res://assets/items/token/universal_token_tier_1.png" id="3_3xncv"]
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="4_7845p"]
+
+[resource]
+script = ExtResource("4_7845p")
+id = &"credit"
+display_name = "信用点"
+description = "高塔通用的数字算力与能源点数，可用于交易、设备激活与系统交换。"
+item_type = 3
+icon = ExtResource("3_3xncv")
+world_texture = ExtResource("3_3xncv")
+max_stack = 999999

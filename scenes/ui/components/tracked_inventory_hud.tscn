@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bbkyugu0r0boc" path="res://scenes/ui/components/tracked_item_row.tscn" id="3_b3ihe"]
 [ext_resource type="Resource" uid="uid://b4l6caihdn1ku" path="res://resources/items/fragment_red_lv1.tres" id="4_cdld0"]
 [ext_resource type="Script" uid="uid://bdr618i520nn4" path="res://scripts/ui/components/tracked_item_row.gd" id="5_vfqbt"]
+[ext_resource type="Resource" uid="uid://b6tk7io3qys6i" path="res://resources/items/credit.tres" id="5_vjsmp"]
 [ext_resource type="Resource" uid="uid://c3wjh3yedu4qu" path="res://resources/items/fragment_blue_lv1.tres" id="6_vjsmp"]
 [ext_resource type="Resource" uid="uid://2a8073kqq366" path="res://resources/items/fragment_yellow_lv1.tres" id="7_p316j"]
 
@@ -28,14 +29,34 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="FragmentRed" parent="Content/ItemRows" unique_id=638465790 instance=ExtResource("3_b3ihe")]
+[node name="Credit" type="HBoxContainer" parent="Content/ItemRows" unique_id=638465790 instance=ExtResource("3_b3ihe")]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("1_us412")
+script = ExtResource("5_vfqbt")
+item = ExtResource("5_vjsmp")
+
+[node name="FragmentRed" type="HBoxContainer" parent="Content/ItemRows" unique_id=1993279801 instance=ExtResource("3_b3ihe")]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("1_us412")
+script = ExtResource("5_vfqbt")
 item = ExtResource("4_cdld0")
 
-[node name="FragmentBlue" parent="Content/ItemRows" unique_id=1148602989 instance=ExtResource("3_b3ihe")]
+[node name="FragmentBlue" type="HBoxContainer" parent="Content/ItemRows" unique_id=1148602989 instance=ExtResource("3_b3ihe")]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("1_us412")
+script = ExtResource("5_vfqbt")
 item = ExtResource("6_vjsmp")
 
-[node name="FragmentYellow" parent="Content/ItemRows" unique_id=1069943216 instance=ExtResource("3_b3ihe")]
+[node name="FragmentYellow" type="HBoxContainer" parent="Content/ItemRows" unique_id=1069943216 instance=ExtResource("3_b3ihe")]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("1_us412")
+script = ExtResource("5_vfqbt")
 item = ExtResource("7_p316j")

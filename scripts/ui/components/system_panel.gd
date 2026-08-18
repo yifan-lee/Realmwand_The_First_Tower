@@ -29,6 +29,13 @@ func bind_save_manager(save_manager: SaveManager) -> void:
 
 
 func refresh_saves() -> void:
+	var focus_owner: Control = get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	var had_panel_focus: bool = has_control_focus(focus_owner) if focus_owner != null else false
+	var focused_row_index: int = save_rows.get_focused_row_index(focus_owner) if focus_owner != null else -1
+	var focused_button_index: int = save_rows.get_focused_button_index(focus_owner) if focus_owner != null else 0
+	if focused_button_index < 0:
+		focused_button_index = 0
+
 	save_rows.clear_rows()
 	var saves: Array[Dictionary] = []
 	if _save_manager != null:
@@ -41,6 +48,14 @@ func refresh_saves() -> void:
 		row.overwrite_requested.connect(_on_overwrite_requested)
 		row.delete_requested.connect(_on_delete_requested)
 	empty_label.visible = save_rows.is_empty()
+
+	if had_panel_focus:
+		if focused_row_index >= 0:
+			if not save_rows.is_empty():
+				var target_index := clampi(focused_row_index, 0, save_rows.get_rows().size() - 1)
+				save_rows.focus_row_at(target_index, focused_button_index)
+			else:
+				create_button.grab_focus()
 
 
 func focus_first_control() -> void:

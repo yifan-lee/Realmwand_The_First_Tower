@@ -7,7 +7,7 @@ extends ActorData
 @export_group("Starting Progression")
 @export_range(1, 99, 1) var starting_level: int = 1
 @export_range(0, 999, 1) var starting_experience: int = 0
-@export_range(0, 9999, 1) var starting_gold: int = 0
+@export_range(0, 9999, 1) var starting_credits: int = 0
 
 @export_group("Starting Content")
 @export var starting_items: Array[ItemData] = []

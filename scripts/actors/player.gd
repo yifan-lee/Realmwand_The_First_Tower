@@ -38,9 +38,8 @@ var level: int:
 	get(): return progression.level if progression else 1
 var experience: int:
 	get(): return progression.experience if progression else 0
-var gold: int:
-	get(): return progression.gold if progression else 0
-	set(v): if progression: progression.gold = v
+var credits: int:
+	get(): return inventory.get_quantity(&"credit") if inventory else 0
 var unspent_stat_points: int:
 	get(): return progression.unspent_stat_points if progression else 0
 var learned_skills: Array[SkillData]:
@@ -81,6 +80,11 @@ func _ready() -> void:
 	progression.initialize(player_data, stats)
 	movement.initialize(self, animated_sprite, interaction_ray, grid_size, move_duration)
 	
+	if player_data.starting_credits > 0 and inventory.get_quantity(&"credit") == 0:
+		var credit_res: ItemData = load("res://resources/items/credit.tres")
+		if credit_res != null:
+			inventory.add_item(credit_res, player_data.starting_credits)
+	
 	# Connect component signals to forward them
 	stats.stats_changed.connect(func(): stats_changed.emit())
 	progression.level_up_available.connect(func(): level_up_available.emit())
@@ -110,7 +114,7 @@ func capture_save_data() -> Dictionary:
 	return {
 		"level": progression.level,
 		"experience": progression.experience,
-		"gold": progression.gold,
+		"credits": credits,
 		"unspent_stat_points": progression.unspent_stat_points,
 		"base_max_hp": stats.base_max_hp,
 		"base_max_mp": stats.base_max_mp,
@@ -133,7 +137,6 @@ func capture_save_data() -> Dictionary:
 func restore_save_data(data: Dictionary) -> void:
 	progression.level = maxi(1, int(data.get("level", progression.level)))
 	progression.experience = maxi(0, int(data.get("experience", progression.experience)))
-	progression.gold = maxi(0, int(data.get("gold", progression.gold)))
 	progression.unspent_stat_points = maxi(0, int(data.get("unspent_stat_points", progression.unspent_stat_points)))
 	
 	stats.base_max_hp = float(data.get("base_max_hp", stats.base_max_hp))
@@ -147,6 +150,12 @@ func restore_save_data(data: Dictionary) -> void:
 	
 	inventory.restore_save_data(data.get("inventory", []))
 	equipment.restore_save_data(data.get("equipment", []))
+	
+	var legacy_credits := int(data.get("credits", data.get("gold", 0)))
+	if legacy_credits > 0 and inventory.get_quantity(&"credit") == 0:
+		var credit_res: ItemData = load("res://resources/items/credit.tres")
+		if credit_res != null:
+			inventory.add_item(credit_res, legacy_credits)
 	
 	progression.learned_skills.clear()
 	var skills_value: Variant = data.get("learned_skills", [])

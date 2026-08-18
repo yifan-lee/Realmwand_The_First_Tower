@@ -16,10 +16,10 @@ var _held_directions: Array[Vector2] = []
 
 
 func initialize(
-	player: Player, 
-	sprite: AnimatedSprite2D, 
-	ray: RayCast2D, 
-	grid_size: float, 
+	player: Player,
+	sprite: AnimatedSprite2D,
+	ray: RayCast2D,
+	grid_size: float,
 	move_duration: float
 ) -> void:
 	_player = player
@@ -32,7 +32,8 @@ func initialize(
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _player == null or not _player.visible or is_movement_locked() or is_moving:
+	if _player == null or not _player.visible or is_movement_locked():
+		_held_directions.clear()
 		return
 		
 	var movement_direction := _get_movement_event_direction(event)
@@ -41,7 +42,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed(&"interact"):
-		_try_interact()
+		if not is_moving:
+			_try_interact()
 		get_viewport().set_input_as_handled()
 
 
@@ -57,7 +59,7 @@ func _handle_movement_input(event: InputEvent, direction: Vector2) -> void:
 	if event.is_pressed():
 		if event is InputEventKey and (event as InputEventKey).echo:
 			return
-		if not input_enabled:
+		if not input_enabled or is_movement_locked():
 			return
 			
 		_remember_held_direction(direction)
@@ -82,10 +84,29 @@ func _forget_held_direction(direction: Vector2) -> void:
 	_held_directions.erase(direction)
 
 
-func _get_latest_held_direction() -> Vector2:
-	if _held_directions.is_empty():
-		return Vector2.ZERO
-	return _held_directions.back()
+func _is_direction_action_pressed(dir: Vector2) -> bool:
+	if dir == Vector2.UP and Input.is_action_pressed(&"move_up"): return true
+	if dir == Vector2.DOWN and Input.is_action_pressed(&"move_down"): return true
+	if dir == Vector2.LEFT and Input.is_action_pressed(&"move_left"): return true
+	if dir == Vector2.RIGHT and Input.is_action_pressed(&"move_right"): return true
+	return false
+
+
+func _get_active_held_direction() -> Vector2:
+	var valid_dirs: Array[Vector2] = []
+	for dir in _held_directions:
+		if _is_direction_action_pressed(dir):
+			valid_dirs.append(dir)
+	_held_directions = valid_dirs
+	
+	if not _held_directions.is_empty():
+		return _held_directions.back()
+		
+	if Input.is_action_pressed(&"move_up"): return Vector2.UP
+	if Input.is_action_pressed(&"move_down"): return Vector2.DOWN
+	if Input.is_action_pressed(&"move_left"): return Vector2.LEFT
+	if Input.is_action_pressed(&"move_right"): return Vector2.RIGHT
+	return Vector2.ZERO
 
 
 func _set_facing_direction(direction: Vector2) -> void:
@@ -132,12 +153,14 @@ func _move_one_tile(direction: Vector2) -> void:
 	is_moving = false
 	movement_finished.emit()
 
-	var next_direction := _get_latest_held_direction()
-	if input_enabled and next_direction != Vector2.ZERO:
-		_set_facing_direction(next_direction)
-		_move_one_tile(next_direction)
-	else:
-		play_directional_animation(&"idle")
+	if not is_movement_locked() and input_enabled:
+		var next_direction := _get_active_held_direction()
+		if next_direction != Vector2.ZERO:
+			_set_facing_direction(next_direction)
+			_move_one_tile(next_direction)
+			return
+
+	play_directional_animation(&"idle")
 
 
 func play_directional_animation(action: StringName) -> void:

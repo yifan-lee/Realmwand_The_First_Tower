@@ -2,6 +2,7 @@
 class_name EnemyData
 extends ActorData
 
+const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 const BASIC_ATTACK: SkillData = preload("res://resources/skills/basic_attack.tres")
 
 @export_group("Battle")
@@ -9,7 +10,13 @@ const BASIC_ATTACK: SkillData = preload("res://resources/skills/basic_attack.tre
 
 @export_group("Rewards")
 @export var experience_reward_override: int = -1
-@export_range(0, 999999, 1) var gold_reward: int = 0
+@export var credit_reward_override: int = -1
+
+
+func get_credit_reward() -> int:
+	if credit_reward_override >= 0:
+		return credit_reward_override
+	return maxi(1, roundi(FORMULAS.calculate_cp(atk, def, spd)))
 
 
 @export_group("World Presentation")

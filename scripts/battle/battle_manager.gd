@@ -459,9 +459,17 @@ func _finish_battle(victory: bool) -> void:
 		_enemy.clear_shield()
 	status_controller.clear_all()
 	if victory:
-		var reward := _get_experience_reward()
-		_player.gold += _enemy.enemy_data.gold_reward
-		_player.add_experience(reward)
+		var exp_reward := _get_experience_reward()
+		var credit_reward := _get_credit_reward()
+		_player.add_experience(exp_reward)
+		var credit_item: ItemData = preload("res://resources/items/credit.tres")
+		if credit_item != null and _player != null and _player.inventory != null:
+			_player.inventory.add_item(credit_item, credit_reward)
+		battle_finished.emit(victory)
+		_enemy = null
+		EventBus.system_message_requested.emit(
+			"战斗胜利！获得了 %d 点经验值、%d 点信用点。" % [exp_reward, credit_reward]
+		)
 	else:
 		_player.set_current_hp(_pre_battle_hp)
 		_player.set_current_mp(_pre_battle_mp)
@@ -471,14 +479,14 @@ func _finish_battle(victory: bool) -> void:
 		_enemy.set_current_hp(_pre_battle_enemy_hp)
 		_enemy.set_current_mp(_pre_battle_enemy_mp)
 		_enemy.set_current_fp(_pre_battle_enemy_fp)
-	battle_finished.emit(victory)
-	_enemy = null
-	EventBus.system_message_requested.emit(
-		"战斗胜利。" if victory else "战斗结束。"
-	)
+		battle_finished.emit(victory)
+		_enemy = null
+		EventBus.system_message_requested.emit("战斗结束。")
 
 
 func _get_experience_reward() -> int:
+	if _enemy == null or _enemy.enemy_data == null:
+		return 0
 	if _enemy.enemy_data.experience_reward_override >= 0:
 		return _enemy.enemy_data.experience_reward_override
 	return FORMULAS.default_enemy_experience(
@@ -486,6 +494,20 @@ func _get_experience_reward() -> int:
 		_enemy.enemy_data.def,
 		_enemy.enemy_data.spd
 	)
+
+
+func _get_credit_reward() -> int:
+	if _enemy == null or _enemy.enemy_data == null:
+		return 0
+	if _enemy.enemy_data.has_method(&"get_credit_reward"):
+		return _enemy.enemy_data.get_credit_reward()
+	if _enemy.enemy_data.credit_reward_override >= 0:
+		return _enemy.enemy_data.credit_reward_override
+	return maxi(1, roundi(FORMULAS.calculate_cp(
+		_enemy.enemy_data.atk,
+		_enemy.enemy_data.def,
+		_enemy.enemy_data.spd
+	)))
 
 
 func get_actor_effects(actor: Node) -> Array[Dictionary]:

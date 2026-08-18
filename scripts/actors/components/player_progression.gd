@@ -8,7 +8,6 @@ signal skill_learned(skill: SkillData)
 
 var level: int = 1
 var experience: int = 0
-var gold: int = 0
 var unspent_stat_points: int = 0
 
 var learned_skills: Array[SkillData] = []
@@ -24,7 +23,6 @@ func initialize(data: PlayerData, stats: PlayerStats) -> void:
 	
 	level = _player_data.starting_level
 	experience = _player_data.starting_experience
-	gold = _player_data.starting_gold
 	learned_skills = _player_data.starting_skills.duplicate()
 
 
