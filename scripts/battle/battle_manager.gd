@@ -499,15 +499,13 @@ func _get_experience_reward() -> int:
 func _get_credit_reward() -> int:
 	if _enemy == null or _enemy.enemy_data == null:
 		return 0
-	if _enemy.enemy_data.has_method(&"get_credit_reward"):
-		return _enemy.enemy_data.get_credit_reward()
 	if _enemy.enemy_data.credit_reward_override >= 0:
 		return _enemy.enemy_data.credit_reward_override
-	return maxi(1, roundi(FORMULAS.calculate_cp(
+	return FORMULAS.default_enemy_credit(
 		_enemy.enemy_data.atk,
 		_enemy.enemy_data.def,
 		_enemy.enemy_data.spd
-	)))
+	)
 
 
 func get_actor_effects(actor: Node) -> Array[Dictionary]:

@@ -15,6 +15,8 @@ const BASE_MAX_HP_COEFFICIENT: float = 5.0
 const BASE_MAX_MP_COEFFICIENT: float = 3.0
 const BASE_FP_RECOVERY_COEFFICIENT: float = 0.1
 const CP_DIVISOR: float = 10.0
+const CP_TO_EXPERIENCE_MULTIPLIER: float = 1.0
+const CP_TO_CREDIT_MULTIPLIER: float = 1.0
 ## 为 true 时，因加点提升的最大生命/魔力会同步恢复等量当前值。
 const RESTORE_CURRENT_ON_MAX_RESOURCE_INCREASE: bool = true
 
@@ -126,7 +128,15 @@ static func default_enemy_experience(
 	defense: float,
 	speed: float
 ) -> int:
-	return maxi(1, roundi(calculate_cp(attack, defense, speed)))
+	return maxi(1, roundi(calculate_cp(attack, defense, speed) * CP_TO_EXPERIENCE_MULTIPLIER))
+
+
+static func default_enemy_credit(
+	attack: float,
+	defense: float,
+	speed: float
+) -> int:
+	return maxi(1, roundi(calculate_cp(attack, defense, speed) * CP_TO_CREDIT_MULTIPLIER))
 
 
 static func stat_point_increase(_stat_id: StringName) -> float:

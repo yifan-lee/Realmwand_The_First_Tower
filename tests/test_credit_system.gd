@@ -17,9 +17,9 @@ func _init() -> void:
 	var enemy_def := ResourceLoader.load("res://resources/actors/enemy_def_lv1.tres", "", ResourceLoader.CACHE_MODE_IGNORE) as EnemyData
 	var boss_atk := ResourceLoader.load("res://resources/actors/boss_atk.tres", "", ResourceLoader.CACHE_MODE_IGNORE) as EnemyData
 	
-	var atk_cr: int = enemy_atk.get_credit_reward()
-	var def_cr: int = enemy_def.get_credit_reward()
-	var boss_cr: int = boss_atk.get_credit_reward()
+	var atk_cr: int = GameFormulas.default_enemy_credit(enemy_atk.atk, enemy_atk.def, enemy_atk.spd)
+	var def_cr: int = GameFormulas.default_enemy_credit(enemy_def.atk, enemy_def.def, enemy_def.spd)
+	var boss_cr: int = GameFormulas.default_enemy_credit(boss_atk.atk, boss_atk.def, boss_atk.spd)
 	
 	print("enemy_atk (50/40/30) 掉落 Credit: %d (预期 12)" % atk_cr)
 	print("enemy_def (60/100/40) 掉落 Credit: %d (预期 20)" % def_cr)
