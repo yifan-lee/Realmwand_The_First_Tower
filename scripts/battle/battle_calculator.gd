@@ -54,13 +54,20 @@ static func evaluate_skill_effects(
 	var total_applied_damage := 0.0
 	
 	for effect: ActionEffectData in skill.effects:
-		var effect_targets: Array[Node] = targets
+		var effect_targets: Array[Node] = []
 		if effect.target == ActionEffectData.TargetType.SELF:
-			effect_targets = [caster]
-		elif effect.target == ActionEffectData.TargetType.ALL:
-			effect_targets = targets.duplicate()
-			if not effect_targets.has(caster):
+			if caster != null:
 				effect_targets.append(caster)
+		elif effect.target == ActionEffectData.TargetType.ALL:
+			for t in targets:
+				if t != null:
+					effect_targets.append(t)
+			if caster != null and not effect_targets.has(caster):
+				effect_targets.append(caster)
+		else:
+			for t in targets:
+				if t != null:
+					effect_targets.append(t)
 			
 		for target in effect_targets:
 			if target == null:
@@ -121,13 +128,20 @@ static func evaluate_item(
 		return preview
 		
 	for effect: ActionEffectData in item.effects:
-		var effect_targets: Array[Node] = targets
+		var effect_targets: Array[Node] = []
 		if effect.target == ActionEffectData.TargetType.SELF:
-			effect_targets = [caster]
-		elif effect.target == ActionEffectData.TargetType.ALL:
-			effect_targets = targets.duplicate()
-			if not effect_targets.has(caster):
+			if caster != null:
 				effect_targets.append(caster)
+		elif effect.target == ActionEffectData.TargetType.ALL:
+			for t in targets:
+				if t != null:
+					effect_targets.append(t)
+			if caster != null and not effect_targets.has(caster):
+				effect_targets.append(caster)
+		else:
+			for t in targets:
+				if t != null:
+					effect_targets.append(t)
 			
 		for target in effect_targets:
 			if target == null:

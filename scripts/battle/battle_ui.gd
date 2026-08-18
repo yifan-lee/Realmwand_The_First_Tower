@@ -166,7 +166,7 @@ func set_atb(player_value: float, enemy_value: float) -> void:
 
 
 func show_message(message: String) -> void:
-	message_label.text = message
+	message_label.text = message.replace("\n", " ； ")
 
 
 func clear_message() -> void:
@@ -205,10 +205,7 @@ func set_enemy_forecast(skill: SkillData) -> void:
 func _update_enemy_forecast() -> void:
 	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel") as EnemyForecastPanel
 	if forecast_panel != null and _enemy != null:
-		var effects: Array[Dictionary] = []
-		if _battle_manager != null:
-			effects = _battle_manager.get_actor_effects(_enemy)
-		forecast_panel.display_forecast(_enemy_current_forecast_skill, _enemy.enemy_data.display_name, effects)
+		forecast_panel.display_forecast(_enemy_current_forecast_skill, _enemy.enemy_data.display_name)
 
 
 func _get_skill_cd(skill: SkillData) -> int:

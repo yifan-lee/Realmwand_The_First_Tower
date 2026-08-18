@@ -293,7 +293,7 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	
 	var message = "使用了 %s。" % resolved_skill.display_name
 	for extra in preview.extra_messages:
-		message += "\n" + extra
+		message += " ； " + extra
 	_battle_ui.show_message(message)
 	
 	var player_delta = preview.actor_deltas.get(_player, null)
@@ -347,13 +347,13 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 			counter_messages.append("【%s】对 %s 反弹了 %.0f 点伤害！" % [source_name, _enemy.enemy_data.display_name, dmg])
 		var msg_text := "%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage]
 		for extra in counter_messages:
-			msg_text += "\n" + extra
+			msg_text += " ； " + extra
 		_battle_ui.show_message(msg_text)
 	else:
 		_apply_preview(preview, skill.effects, true, is_physical)
 		var message = "%s 使用了 %s。" % [_enemy.enemy_data.display_name, skill_name]
 		for extra in preview.extra_messages:
-			message += "\n" + extra
+			message += " ； " + extra
 		_battle_ui.show_message(message)
 	
 	var enemy_delta = preview.actor_deltas.get(_enemy, null)
@@ -376,7 +376,9 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 
 
 func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[ActionEffectData] = [], caster_is_enemy: bool = false, is_physical: bool = true) -> void:
-	var caster: Node = _enemy if caster_is_enemy else _player
+	var caster: Node = _player
+	if caster_is_enemy:
+		caster = _enemy
 	var counter_messages: Array[String] = []
 
 	for actor in preview.actor_deltas.keys():
@@ -410,11 +412,21 @@ func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[Action
 		if effect.status_to_apply != null:
 			var targets: Array[Node] = []
 			if effect.target == ActionEffectData.TargetType.SELF:
-				targets = [_enemy] if caster_is_enemy else [_player]
+				if caster != null:
+					targets.append(caster)
 			elif effect.target == ActionEffectData.TargetType.OPPONENT:
-				targets = [_player] if caster_is_enemy else [_enemy]
+				var opp: Node = null
+				if caster_is_enemy:
+					opp = _player
+				else:
+					opp = _enemy
+				if opp != null:
+					targets.append(opp)
 			elif effect.target == ActionEffectData.TargetType.ALL:
-				targets = [_player, _enemy]
+				if _player != null:
+					targets.append(_player)
+				if _enemy != null:
+					targets.append(_enemy)
 			for tgt in targets:
 				if tgt != null:
 					status_controller.apply_status(tgt, effect.status_to_apply)

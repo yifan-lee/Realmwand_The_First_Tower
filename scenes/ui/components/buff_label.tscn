@@ -1,7 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cygpwaw3vudhf"]
 
-[node name="BuffLabel" type="Label"]
-theme_override_colors/font_color = Color(0.627451, 0.847059, 0.937255, 1)
-theme_override_font_sizes/font_size = 14
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_x1cy4"]
+
+[node name="BuffLabel" type="Label" unique_id=716388364]
+theme = ExtResource("1_x1cy4")
+theme_type_variation = &"BuffLabel"
 text = "• 增益 (剩余 1 次)"
-autowrap_mode = 2
+autowrap_mode = 3

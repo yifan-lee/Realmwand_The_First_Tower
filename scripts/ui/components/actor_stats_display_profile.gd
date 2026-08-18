@@ -62,7 +62,7 @@ static func battle_enemy() -> ActorStatsDisplayProfile:
 	profile.fp_display_mode = FpDisplayMode.PROGRESS_BAR
 	profile.atb_display_mode = AtbDisplayMode.EXTERNAL
 	profile.show_progression = false
-	profile.show_buffs = false
+	profile.show_buffs = true
 	profile.show_cp = true
 	profile.obey_feature_unlocks = true
 	return profile

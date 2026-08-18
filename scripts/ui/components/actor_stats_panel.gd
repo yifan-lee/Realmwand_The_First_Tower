@@ -511,6 +511,7 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 
 	buffs_separator.visible = true
 	buffs_container.visible = true
+	var buff_idx: int = 1
 	for active: Dictionary in effects:
 		var text: String = String(active.get(&"text", ""))
 		if text.is_empty():
@@ -524,9 +525,10 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 			color = NEUTRAL_COLOR
 
 		var label := BUFF_LABEL_SCENE.instantiate() as Label
-		label.text = "• " + text
+		label.text = "%d. %s" % [buff_idx, text]
 		label.modulate = color
 		buffs_container.add_child(label)
+		buff_idx += 1
 
 
 func _is_stat_unlocked(feature_id: StringName, obey_unlocks: bool) -> bool:
