@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://gci0suvrdb5i"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_4n454"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_p1t34"]
+[ext_resource type="Texture2D" uid="uid://bvkxr5p3rqop5" path="res://assets/items/equipment/wearable/chest_def_tier_2.png" id="3_8el26"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="4_mqqrc"]
+
+[resource]
+script = ExtResource("4_mqqrc")
+slot_type = 1
+atk_bonus = -5.0
+def_bonus = 30.0
+spd_bonus = -5.0
+id = &"chest_lv2"
+display_name = "2级胸甲（改）"
+description = "极致的防御"
+item_type = 1
+icon = ExtResource("3_8el26")
+world_texture = ExtResource("3_8el26")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://c51pgdlirpmuh"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_y2xiw"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_b8q7p"]
+[ext_resource type="Texture2D" uid="uid://g60acw0ai04i" path="res://assets/items/equipment/wearable/feet_spd_tier_2.png" id="3_ihn1r"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="4_h1amw"]
+
+[resource]
+script = ExtResource("4_h1amw")
+slot_type = 4
+atk_bonus = -5.0
+def_bonus = -5.0
+spd_bonus = 30.0
+id = &"feet_lv2"
+display_name = "2级鞋子（改）"
+description = "极致的速度"
+item_type = 1
+icon = ExtResource("3_ihn1r")
+world_texture = ExtResource("3_ihn1r")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"

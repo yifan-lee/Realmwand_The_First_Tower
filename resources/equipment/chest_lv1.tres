@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://bfhk2tg6kleul"]
 
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_0f0dp"]
 [ext_resource type="Texture2D" uid="uid://bolmj3poov4nx" path="res://assets/items/equipment/wearable/chest_def_tier_1.png" id="1_2rsqd"]
 [ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="1_wsyjq"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_1wh5m"]
 
 [resource]
 script = ExtResource("1_wsyjq")

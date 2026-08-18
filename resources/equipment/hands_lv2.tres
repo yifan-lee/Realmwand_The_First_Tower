@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3 uid="uid://bsb58yi2ovqkd"]
+
+[ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_ni440"]
+[ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_rqmcp"]
+[ext_resource type="Texture2D" uid="uid://dtnsewwggk3lw" path="res://assets/items/equipment/wearable/hands_atk_tier_2.png" id="3_xrao6"]
+[ext_resource type="Script" uid="uid://bbv1l13viq4m2" path="res://scripts/data/equipment_data.gd" id="4_k6ljq"]
+
+[resource]
+script = ExtResource("4_k6ljq")
+slot_type = 2
+atk_bonus = 20.0
+id = &"hands_lv2"
+display_name = "2级护手"
+item_type = 1
+icon = ExtResource("3_xrao6")
+world_texture = ExtResource("3_xrao6")
+usable_from_inventory = true
+metadata/_custom_type_script = "uid://bbv1l13viq4m2"
