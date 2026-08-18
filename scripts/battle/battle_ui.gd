@@ -27,10 +27,11 @@ enum ActionPage {
 @onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/InventoryPanel
 @onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/EscapePage
 @onready var entry_info_panel: EntryInfoPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/EntryInfoPanel
-@onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/Message
+@onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/MessagePanel/Message
 
 var _player: Player
 var _enemy: Enemy
+var _enemy_current_forecast_skill: SkillData = null
 var _action_available := false
 var _current_page: ActionPage = ActionPage.SKILLS
 var _player_atb_value := 0.0
@@ -134,9 +135,13 @@ func close() -> void:
 	battle_root.visible = false
 	inventory_panel.bind_inventory(null)
 	entry_info_panel.clear_info()
+	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel") as EnemyForecastPanel
+	if forecast_panel != null:
+		forecast_panel.clear_forecast()
 	clear_message()
 	player_stats.unbind_actor()
 	enemy_stats.unbind_actor()
+	_enemy_current_forecast_skill = null
 	_player = null
 	_enemy = null
 	_battle_manager = null
@@ -162,12 +167,10 @@ func set_atb(player_value: float, enemy_value: float) -> void:
 
 func show_message(message: String) -> void:
 	message_label.text = message
-	message_label.visible = not message.is_empty()
 
 
 func clear_message() -> void:
 	message_label.text = ""
-	message_label.visible = false
 
 
 func refresh_stats() -> void:
@@ -179,6 +182,7 @@ func refresh_stats() -> void:
 		enemy_stats.set_context(_create_actor_context(_enemy, _enemy_atb_value))
 	_update_atb_markers(_player_atb_value, _enemy_atb_value)
 	skill_panel.update_availability(_can_cast_skill, _get_skill_cd)
+	_update_enemy_forecast()
 
 
 func _create_actor_context(actor: Node, atb_val: float) -> ActorStatsContext:
@@ -194,9 +198,17 @@ func _create_actor_context(actor: Node, atb_val: float) -> ActorStatsContext:
 
 
 func set_enemy_forecast(skill: SkillData) -> void:
-	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel")
+	_enemy_current_forecast_skill = skill
+	_update_enemy_forecast()
+
+
+func _update_enemy_forecast() -> void:
+	var forecast_panel = get_node_or_null("BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn/EnemyForecastPanel") as EnemyForecastPanel
 	if forecast_panel != null and _enemy != null:
-		forecast_panel.display_forecast(skill, _enemy.enemy_data.display_name)
+		var effects: Array[Dictionary] = []
+		if _battle_manager != null:
+			effects = _battle_manager.get_actor_effects(_enemy)
+		forecast_panel.display_forecast(_enemy_current_forecast_skill, _enemy.enemy_data.display_name, effects)
 
 
 func _get_skill_cd(skill: SkillData) -> int:

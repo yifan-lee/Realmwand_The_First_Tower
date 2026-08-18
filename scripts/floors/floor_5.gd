@@ -20,6 +20,7 @@ extends Floor
 @onready var switch_neu_1: FloorSwitch = $Interactables/SwitchNeu1
 @onready var switch_neu_2: FloorSwitch = $Interactables/SwitchNeu2
 @onready var switch_neu_3: FloorSwitch = $Interactables/SwitchNeu3
+@onready var up_stair: Area2D = $Interactables/StairAbove
 
 var switch_final_snapshots: Array[Floor.TileCellSnapshot] = []
 var switch_atk_2_snapshots: Array[Floor.TileCellSnapshot] = []
@@ -105,6 +106,9 @@ func _update_final_door(notify: bool = true) -> void:
 		switch_final_snapshots,
 		all_active
 	)
+	up_stair.visible = all_active
+	up_stair.monitoring = all_active
+	up_stair.monitorable = all_active
 	if notify:
 		if all_active:
 			EventBus.system_message_requested.emit("三座机关都被打开了，通道被打开了！")

@@ -969,226 +969,234 @@ position = Vector2(32, -192)
 item_data = ExtResource("10_6ppm1")
 
 [node name="HPLv220" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="39" unique_id=1205446711 instance=ExtResource("9_wjhij")]
+position = Vector2(288, 608)
+item_data = ExtResource("10_6ppm1")
+
+[node name="HPLv222" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="40" unique_id=2122526344 instance=ExtResource("9_wjhij")]
+position = Vector2(288, -80)
+item_data = ExtResource("10_6ppm1")
+
+[node name="HPLv223" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="41" unique_id=1906664322 instance=ExtResource("9_wjhij")]
 position = Vector2(0, -96)
 item_data = ExtResource("10_6ppm1")
 
-[node name="HPLv221" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="40" unique_id=439200275 instance=ExtResource("9_wjhij")]
+[node name="HPLv221" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="42" unique_id=439200275 instance=ExtResource("9_wjhij")]
 position = Vector2(0, -1408)
 item_data = ExtResource("10_6ppm1")
 
-[node name="HPLv203" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="41" unique_id=1105157654 instance=ExtResource("9_wjhij")]
+[node name="HPLv203" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="43" unique_id=1105157654 instance=ExtResource("9_wjhij")]
 position = Vector2(0, 192)
 item_data = ExtResource("10_6ppm1")
 
-[node name="HPLv204" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="42" unique_id=2021642720 instance=ExtResource("9_wjhij")]
+[node name="HPLv204" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="44" unique_id=2021642720 instance=ExtResource("9_wjhij")]
 position = Vector2(0, 160)
 item_data = ExtResource("10_6ppm1")
 
-[node name="FragmentRedLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="43" unique_id=522213033 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="45" unique_id=522213033 instance=ExtResource("9_wjhij")]
 position = Vector2(32, 544)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="44" unique_id=1558162832 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="46" unique_id=1558162832 instance=ExtResource("9_wjhij")]
 position = Vector2(-32, 576)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="45" unique_id=1255012829 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="47" unique_id=1255012829 instance=ExtResource("9_wjhij")]
 position = Vector2(-32, 544)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="46" unique_id=209640059 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="48" unique_id=209640059 instance=ExtResource("9_wjhij")]
 position = Vector2(264, -304)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="47" unique_id=681022100 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="49" unique_id=681022100 instance=ExtResource("9_wjhij")]
 position = Vector2(256, 1472)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv107" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="48" unique_id=1584666835 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv107" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="50" unique_id=1584666835 instance=ExtResource("9_wjhij")]
 position = Vector2(192, 1472)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv108" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="49" unique_id=1357030902 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv108" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="51" unique_id=1357030902 instance=ExtResource("9_wjhij")]
 position = Vector2(-224, 1440)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv109" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="50" unique_id=871049465 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv109" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="52" unique_id=871049465 instance=ExtResource("9_wjhij")]
 position = Vector2(-224, 1376)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="51" unique_id=963720583 instance=ExtResource("9_wjhij")]
+[node name="FragmentRedLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="53" unique_id=963720583 instance=ExtResource("9_wjhij")]
 position = Vector2(32, 576)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentRedLv110" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="52" unique_id=708927321 instance=ExtResource("9_wjhij")]
-position = Vector2(288, 608)
+[node name="FragmentRedLv110" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="54" unique_id=708927321 instance=ExtResource("9_wjhij")]
+position = Vector2(160, 608)
 item_data = ExtResource("11_6ppm1")
 
-[node name="FragmentBlueLv111" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="53" unique_id=1015179417 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv111" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="55" unique_id=1015179417 instance=ExtResource("9_wjhij")]
 position = Vector2(288, -368)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv112" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="54" unique_id=1651132555 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv112" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="56" unique_id=1651132555 instance=ExtResource("9_wjhij")]
 position = Vector2(208, -344)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv113" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="55" unique_id=1170567739 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv113" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="57" unique_id=1170567739 instance=ExtResource("9_wjhij")]
 position = Vector2(336, -296)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentYellowLv114" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="56" unique_id=975827957 instance=ExtResource("9_wjhij")]
+[node name="FragmentYellowLv114" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="58" unique_id=975827957 instance=ExtResource("9_wjhij")]
 position = Vector2(448, -360)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentYellowLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="57" unique_id=1063781410 instance=ExtResource("9_wjhij")]
+[node name="FragmentYellowLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="59" unique_id=1063781410 instance=ExtResource("9_wjhij")]
 position = Vector2(2464, 448)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentYellowLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="58" unique_id=216373570 instance=ExtResource("9_wjhij")]
+[node name="FragmentYellowLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="60" unique_id=216373570 instance=ExtResource("9_wjhij")]
 position = Vector2(2336, 576)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentYellowLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="59" unique_id=338610076 instance=ExtResource("9_wjhij")]
+[node name="FragmentYellowLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="61" unique_id=338610076 instance=ExtResource("9_wjhij")]
 position = Vector2(2080, 832)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentYellowLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="60" unique_id=157174977 instance=ExtResource("9_wjhij")]
+[node name="FragmentYellowLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="62" unique_id=157174977 instance=ExtResource("9_wjhij")]
 position = Vector2(1952, 960)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="61" unique_id=2082532591 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="63" unique_id=2082532591 instance=ExtResource("9_wjhij")]
 position = Vector2(928, 1312)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="62" unique_id=1859552701 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="64" unique_id=1859552701 instance=ExtResource("9_wjhij")]
 position = Vector2(928, 1248)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="63" unique_id=1021474866 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="65" unique_id=1021474866 instance=ExtResource("9_wjhij")]
 position = Vector2(1216, 1600)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="64" unique_id=527295067 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="66" unique_id=527295067 instance=ExtResource("9_wjhij")]
 position = Vector2(1248, 1600)
 item_data = ExtResource("17_v7l5s")
 
-[node name="FragmentBlueLv119" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="65" unique_id=1158482242 instance=ExtResource("9_wjhij")]
+[node name="FragmentBlueLv119" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="67" unique_id=1158482242 instance=ExtResource("9_wjhij")]
 position = Vector2(1280, 1600)
 item_data = ExtResource("17_v7l5s")
 
-[node name="ArmLv2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="66" unique_id=971758744 instance=ExtResource("9_wjhij")]
+[node name="ArmLv2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="68" unique_id=971758744 instance=ExtResource("9_wjhij")]
 position = Vector2(-32, 928)
 item_data = ExtResource("13_v2shg")
 
-[node name="MPLv208" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="67" unique_id=895592736 instance=ExtResource("9_wjhij")]
+[node name="MPLv208" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="69" unique_id=895592736 instance=ExtResource("9_wjhij")]
 position = Vector2(-224, 704)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv209" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="68" unique_id=1421681847 instance=ExtResource("9_wjhij")]
+[node name="MPLv209" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="70" unique_id=1421681847 instance=ExtResource("9_wjhij")]
 position = Vector2(-224, 768)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="69" unique_id=1091316009 instance=ExtResource("9_wjhij")]
+[node name="MPLv201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="71" unique_id=1091316009 instance=ExtResource("9_wjhij")]
 position = Vector2(-224, 832)
 item_data = ExtResource("15_5xuqc")
 
-[node name="FeetLv2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="70" unique_id=673760192 instance=ExtResource("9_wjhij")]
+[node name="FeetLv2" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="72" unique_id=673760192 instance=ExtResource("9_wjhij")]
 position = Vector2(2208, 704)
 item_data = ExtResource("17_fmrn4")
 
-[node name="HPLv206" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="71" unique_id=1044062381 instance=ExtResource("9_wjhij")]
+[node name="HPLv206" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="73" unique_id=1044062381 instance=ExtResource("9_wjhij")]
 position = Vector2(224, 608)
 item_data = ExtResource("10_6ppm1")
 
-[node name="MPLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="72" unique_id=237022116 instance=ExtResource("9_wjhij")]
+[node name="MPLv102" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="74" unique_id=237022116 instance=ExtResource("9_wjhij")]
 position = Vector2(32, -160)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv124" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="73" unique_id=851458561 instance=ExtResource("9_wjhij")]
+[node name="MPLv124" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="75" unique_id=851458561 instance=ExtResource("9_wjhij")]
 position = Vector2(848, -304)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="74" unique_id=927880955 instance=ExtResource("9_wjhij")]
+[node name="MPLv118" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="76" unique_id=927880955 instance=ExtResource("9_wjhij")]
 position = Vector2(2496, 672)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv119" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="75" unique_id=622826518 instance=ExtResource("9_wjhij")]
+[node name="MPLv119" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="77" unique_id=622826518 instance=ExtResource("9_wjhij")]
 position = Vector2(2496, 416)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv120" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="76" unique_id=1396672557 instance=ExtResource("9_wjhij")]
+[node name="MPLv120" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="78" unique_id=1396672557 instance=ExtResource("9_wjhij")]
 position = Vector2(32, -224)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv121" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="77" unique_id=422922118 instance=ExtResource("9_wjhij")]
+[node name="MPLv121" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="79" unique_id=422922118 instance=ExtResource("9_wjhij")]
 position = Vector2(-32, -224)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv122" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="78" unique_id=1930816214 instance=ExtResource("9_wjhij")]
+[node name="MPLv122" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="80" unique_id=1930816214 instance=ExtResource("9_wjhij")]
 position = Vector2(0, -160)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv123" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="79" unique_id=727103512 instance=ExtResource("9_wjhij")]
+[node name="MPLv123" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="81" unique_id=727103512 instance=ExtResource("9_wjhij")]
 position = Vector2(368, -144)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="80" unique_id=1666259973 instance=ExtResource("9_wjhij")]
+[node name="MPLv103" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="82" unique_id=1666259973 instance=ExtResource("9_wjhij")]
 position = Vector2(2112, 800)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="81" unique_id=1024526736 instance=ExtResource("9_wjhij")]
+[node name="MPLv104" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="83" unique_id=1024526736 instance=ExtResource("9_wjhij")]
 position = Vector2(2240, 928)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="82" unique_id=1177301123 instance=ExtResource("9_wjhij")]
+[node name="MPLv105" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="84" unique_id=1177301123 instance=ExtResource("9_wjhij")]
 position = Vector2(2368, 800)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="83" unique_id=1541806172 instance=ExtResource("9_wjhij")]
+[node name="MPLv106" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="85" unique_id=1541806172 instance=ExtResource("9_wjhij")]
 position = Vector2(2240, 672)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv107" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="84" unique_id=432910867 instance=ExtResource("9_wjhij")]
+[node name="MPLv107" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="86" unique_id=432910867 instance=ExtResource("9_wjhij")]
 position = Vector2(2112, 544)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv108" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="85" unique_id=109278522 instance=ExtResource("9_wjhij")]
+[node name="MPLv108" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="87" unique_id=109278522 instance=ExtResource("9_wjhij")]
 position = Vector2(2496, 928)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv109" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="86" unique_id=496240923 instance=ExtResource("9_wjhij")]
+[node name="MPLv109" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="88" unique_id=496240923 instance=ExtResource("9_wjhij")]
 position = Vector2(2368, 544)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv110" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="87" unique_id=774316785 instance=ExtResource("9_wjhij")]
+[node name="MPLv110" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="89" unique_id=774316785 instance=ExtResource("9_wjhij")]
 position = Vector2(2240, 416)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv111" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="88" unique_id=928802023 instance=ExtResource("9_wjhij")]
+[node name="MPLv111" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="90" unique_id=928802023 instance=ExtResource("9_wjhij")]
 position = Vector2(1984, 928)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv112" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="89" unique_id=1730563752 instance=ExtResource("9_wjhij")]
+[node name="MPLv112" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="91" unique_id=1730563752 instance=ExtResource("9_wjhij")]
 position = Vector2(1984, 416)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv113" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="90" unique_id=1803795157 instance=ExtResource("9_wjhij")]
+[node name="MPLv113" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="92" unique_id=1803795157 instance=ExtResource("9_wjhij")]
 position = Vector2(1984, 672)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv114" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="91" unique_id=810103270 instance=ExtResource("9_wjhij")]
+[node name="MPLv114" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="93" unique_id=810103270 instance=ExtResource("9_wjhij")]
 position = Vector2(928, 1632)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="92" unique_id=1480212331 instance=ExtResource("9_wjhij")]
+[node name="MPLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="94" unique_id=1480212331 instance=ExtResource("9_wjhij")]
 position = Vector2(896, 1600)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="93" unique_id=1875378531 instance=ExtResource("9_wjhij")]
+[node name="MPLv116" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="95" unique_id=1875378531 instance=ExtResource("9_wjhij")]
 position = Vector2(960, 1600)
 item_data = ExtResource("15_5xuqc")
 
-[node name="MPLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="94" unique_id=830332608 instance=ExtResource("9_wjhij")]
+[node name="MPLv117" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="96" unique_id=830332608 instance=ExtResource("9_wjhij")]
 position = Vector2(928, 1568)
 item_data = ExtResource("15_5xuqc")
 

@@ -99,7 +99,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker"]
+[node name="PlayerCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/PlayerMarker" unique_id=277636659]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -130,7 +130,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnemyCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker"]
+[node name="EnemyCastingLabel" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/SharedAtb/Track/EnemyMarker" unique_id=1395915189]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -231,8 +231,12 @@ layout_mode = 2
 [node name="EnemyForecastPanel" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1900324266 instance=ExtResource("7_xm0oj")]
 layout_mode = 2
 
-[node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=1942472126]
-visible = false
-custom_minimum_size = Vector2(0, 48)
+[node name="MessagePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=566612400]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-autowrap_mode = 2
+theme_type_variation = &"TerminalInsetPanel"
+
+[node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/MessagePanel" unique_id=1509085731]
+layout_mode = 2
+vertical_alignment = 1
+text_overrun_behavior = 3
