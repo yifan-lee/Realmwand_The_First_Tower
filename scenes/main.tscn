@@ -16,6 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://85suawpth3l7" path="res://scenes/ui/tutorial_ui.tscn" id="14_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://bfa8faveibvt2" path="res://scenes/tutorial/intro_video.tscn" id="16_jbj1t"]
 [ext_resource type="Script" uid="uid://ckgv8u3ut5g48" path="res://scripts/actors/components/player_stats.gd" id="16_muem4"]
+[ext_resource type="PackedScene" uid="uid://br2mgvx1ych6i" path="res://scenes/ui/game_clear_ui.tscn" id="17_0ld40"]
+[ext_resource type="Script" uid="uid://btfyb3d46qoce" path="res://scripts/ui/game_clear_ui.gd" id="18_gqmmt"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="19_yc10j"]
 
 [node name="Main" type="Node2D" unique_id=1313419244]
 script = ExtResource("1_o5qli")
@@ -75,3 +78,111 @@ layer = 5
 
 [node name="PlayerStats" type="Node" parent="." unique_id=301887441]
 script = ExtResource("16_muem4")
+
+[node name="GameClearUI" type="CanvasLayer" parent="." unique_id=724430151 instance=ExtResource("17_0ld40")]
+script = ExtResource("18_gqmmt")
+
+[node name="ClearRoot" type="Control" parent="GameClearUI" unique_id=966493623]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("19_yc10j")
+
+[node name="Backdrop" type="ColorRect" parent="GameClearUI/ClearRoot" unique_id=379362635]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.8)
+
+[node name="Center" type="CenterContainer" parent="GameClearUI/ClearRoot" unique_id=2141508651]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="GameClearUI/ClearRoot/Center" unique_id=1986366514]
+custom_minimum_size = Vector2(1080, 720)
+layout_mode = 2
+theme_type_variation = &"TerminalPanel"
+
+[node name="Margin" type="MarginContainer" parent="GameClearUI/ClearRoot/Center/Panel" unique_id=1900364884]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="GameClearUI/ClearRoot/Center/Panel/Margin" unique_id=1090737309]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=1266478034]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "★ 第一座高塔 · DEMO 通关达成 ★"
+horizontal_alignment = 1
+
+[node name="SubTitleLabel" type="Label" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=1496180916]
+layout_mode = 2
+text = "恭喜你！成功登顶了试玩版第一座高塔！以下是你的最终通关档案："
+horizontal_alignment = 1
+
+[node name="@HSeparator@20753" type="HSeparator" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=1466953180]
+layout_mode = 2
+
+[node name="SummaryTextEdit" type="TextEdit" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=1239869666]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="StatusLabel" type="Label" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=2039313616]
+unique_name_in_owner = true
+layout_mode = 2
+text = "点击下方按钮可一键上传战报或复制到剪贴板"
+horizontal_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content" unique_id=1658683433]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UploadButton" type="Button" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=229448832]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "🚀 一键上传战报 (Google Forms)"
+
+[node name="CopySummaryButton" type="Button" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=456687560]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "📋 复制战报文字"
+
+[node name="CopyJsonButton" type="Button" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=873618966]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "💾 复制存档代码(JSON)"
+
+[node name="CloseButton" type="Button" parent="GameClearUI/ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=297741784]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "✕ 关闭 / 返回游戏"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="GameClearUI" unique_id=1797383043]
+unique_name_in_owner = true
+
+[node name="@Timer@21364" type="Timer" parent="GameClearUI/HTTPRequest" unique_id=1033233029]
+one_shot = true
+ignore_time_scale = true

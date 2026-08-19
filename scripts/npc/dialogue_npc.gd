@@ -24,6 +24,7 @@ var _sprite_scale: Vector2 = Vector2(0.125, 0.125)
 @export var npc_name: String = "旅人"
 
 @export_group("Dialogue")
+@export var triggers_game_clear: bool = false
 @export_multiline var dialogue_lines: Array[String] = [
 	"你好，年轻的冒险者。",
 	"这座高塔隐藏着许多古老的秘密……",
@@ -89,6 +90,8 @@ func advance_dialogue(ui: NpcInteractionUI, player: Player) -> void:
 		# 对话结束
 		_has_completed_first_time = true
 		ui.close()
+		if triggers_game_clear:
+			EventBus.game_clear_triggered.emit()
 
 
 func _get_active_lines() -> Array[String]:

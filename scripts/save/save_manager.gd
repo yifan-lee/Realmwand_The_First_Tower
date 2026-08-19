@@ -41,25 +41,107 @@ func overwrite_save(slot_id: String) -> bool:
 
 
 func load_save(slot_id: String) -> bool:
-	if _player == null or _floor_manager == null:
-		return false
 	var data := _read_save(slot_id)
 	if data.is_empty():
+		return false
+	return restore_save_data_dict(data)
+
+
+func restore_save_data_dict(data: Dictionary) -> bool:
+	if _player == null or _floor_manager == null:
 		return false
 	var player_data_value: Variant = data.get("player", {})
 	var world_data_value: Variant = data.get("world", {})
 	var tutorial_data_value: Variant = data.get("tutorial", {})
-	if not (player_data_value is Dictionary) or not (world_data_value is Dictionary):
+	if not (player_data_value is Dictionary):
 		return false
-	if not _floor_manager.can_restore_save_data(world_data_value):
-		return false
-		
-	if _tutorial_manager != null:
+	if world_data_value is Dictionary and not world_data_value.is_empty():
+		if not _floor_manager.can_restore_save_data(world_data_value):
+			return false
+		_floor_manager.restore_save_data(world_data_value)
+	
+	if _tutorial_manager != null and tutorial_data_value is Dictionary:
 		_tutorial_manager.restore_save_data(tutorial_data_value)
 	_player.restore_save_data(player_data_value)
-	_floor_manager.restore_save_data(world_data_value)
 	_player.clear_all_movement_locks()
 	return true
+
+
+func capture_current_save_dict(display_name: String = "通关战报存档") -> Dictionary:
+	if _player == null or _floor_manager == null:
+		return {}
+	_floor_manager.store_current_floor_state()
+	var now_unix := int(Time.get_unix_time_from_system())
+	return {
+		"version": SAVE_VERSION,
+		"slot_id": "clear_%d" % now_unix,
+		"display_name": display_name,
+		"saved_at": Time.get_datetime_string_from_system(false, true),
+		"saved_at_unix": now_unix,
+		"floor_id": String(_floor_manager.current_floor_id),
+		"player": _player.capture_save_data(),
+		"world": _floor_manager.capture_save_data(),
+		"tutorial": (
+			_tutorial_manager.capture_save_data()
+			if _tutorial_manager != null
+			else {}
+		),
+	}
+
+
+func export_save_json_string(display_name: String = "通关战报存档") -> String:
+	var data := capture_current_save_dict(display_name)
+	return JSON.stringify(data)
+
+
+func import_save_from_json_string(json_string: String) -> bool:
+	var cleaned := json_string.strip_edges()
+	if cleaned.is_empty():
+		return false
+	var parsed: Variant = JSON.parse_string(cleaned)
+	if not (parsed is Dictionary):
+		return false
+	var save_dict: Dictionary = parsed as Dictionary
+	var success := restore_save_data_dict(save_dict)
+	if success:
+		saves_changed.emit()
+	return success
+
+
+func generate_clear_summary_text() -> String:
+	if _player == null:
+		return "无玩家数据"
+	
+	var lines: Array[String] = []
+	var p_name: String = _player.player_data.display_name if _player.player_data else "玩家"
+	lines.append("【通关角色】%s | 等级: Lv.%d (经验: %d)" % [p_name, _player.level, _player.experience])
+	lines.append("【最终属性】ATK: %.0f | DEF: %.0f | SPD: %.0f" % [
+		_player.stats.get_atk(),
+		_player.stats.get_def(),
+		_player.stats.get_spd()
+	])
+	lines.append("【资源上限】MaxHP: %.0f | MaxMP: %.0f | FP回复: %.1f/s" % [
+		_player.stats.get_max_hp(),
+		_player.stats.get_max_mp(),
+		_player.stats.get_fp_recovery_spd()
+	])
+	lines.append("【持有信用】%d Credits" % _player.credits)
+	
+	var skill_names: Array[String] = []
+	for sk: SkillData in _player.get_skills():
+		if sk != null:
+			skill_names.append(sk.display_name)
+	lines.append("【掌握技能】%s" % (", ".join(skill_names) if not skill_names.is_empty() else "无"))
+	
+	var equip_names: Array[String] = []
+	if _player.equipment != null:
+		for item: EquipmentData in _player.equipment.get_all_equipped_items():
+			if item != null:
+				equip_names.append(item.display_name)
+	lines.append("【穿戴装备】%s" % (", ".join(equip_names) if not equip_names.is_empty() else "无"))
+	
+	return "\n".join(lines)
+
 
 
 func delete_save(slot_id: String) -> bool:

@@ -24,3 +24,6 @@ signal npc_interaction_requested(
 	npc: Node,
 	player: Player
 )
+
+signal game_clear_triggered
+

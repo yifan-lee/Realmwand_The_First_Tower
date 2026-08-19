@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://br2mgvx1ych6i"]
+
+[ext_resource type="Script" path="res://scripts/ui/game_clear_ui.gd" id="1_o5hm6"]
+[ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_iqrrp"]
+
+[node name="GameClearUI" type="CanvasLayer" unique_id=724430151]
+script = ExtResource("1_o5hm6")
+
+[node name="ClearRoot" type="Control" parent="." unique_id=966493623]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_iqrrp")
+
+[node name="Backdrop" type="ColorRect" parent="ClearRoot" unique_id=379362635]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.8)
+
+[node name="Center" type="CenterContainer" parent="ClearRoot" unique_id=2141508651]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="ClearRoot/Center" unique_id=1986366514]
+custom_minimum_size = Vector2(1080, 720)
+layout_mode = 2
+theme_type_variation = &"TerminalPanel"
+
+[node name="Margin" type="MarginContainer" parent="ClearRoot/Center/Panel" unique_id=1900364884]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="ClearRoot/Center/Panel/Margin" unique_id=1090737309]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=1266478034]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "★ 第一座高塔 · DEMO 通关达成 ★"
+horizontal_alignment = 1
+
+[node name="SubTitleLabel" type="Label" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=1496180916]
+layout_mode = 2
+text = "恭喜你！成功登顶了试玩版第一座高塔！以下是你的最终通关档案："
+horizontal_alignment = 1
+
+[node name="@HSeparator@20753" type="HSeparator" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=1466953180]
+layout_mode = 2
+
+[node name="SummaryTextEdit" type="TextEdit" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=1239869666]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="StatusLabel" type="Label" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=2039313616]
+unique_name_in_owner = true
+layout_mode = 2
+text = "点击下方按钮可一键上传战报或复制到剪贴板"
+horizontal_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="ClearRoot/Center/Panel/Margin/Content" unique_id=1658683433]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UploadButton" type="Button" parent="ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=229448832]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "🚀 一键上传战报 (Google Forms)"
+
+[node name="CopySummaryButton" type="Button" parent="ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=456687560]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "📋 复制战报文字"
+
+[node name="CopyJsonButton" type="Button" parent="ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=873618966]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "💾 复制存档代码(JSON)"
+
+[node name="CloseButton" type="Button" parent="ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=297741784]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TerminalTabButton"
+text = "✕ 关闭 / 返回游戏"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1797383043]
+unique_name_in_owner = true

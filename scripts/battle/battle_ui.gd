@@ -151,8 +151,6 @@ func close() -> void:
 
 func set_action_available(available: bool) -> void:
 	_action_available = available
-	if available:
-		call_deferred(&"_focus_current_page")
 
 
 func set_atb(player_value: float, enemy_value: float) -> void:

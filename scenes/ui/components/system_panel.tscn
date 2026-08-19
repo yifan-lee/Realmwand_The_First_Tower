@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="1_1xnwh"]
 [ext_resource type="Script" uid="uid://dvx5cqy2l2dj2" path="res://scripts/ui/components/system_panel.gd" id="2_ibdvy"]
-[ext_resource type="Script" path="res://scripts/ui/components/focusable_list.gd" id="FocusableList"]
+[ext_resource type="Script" uid="uid://3pmt03elylod" path="res://scripts/ui/components/focusable_list.gd" id="FocusableList"]
 
 [node name="SystemPanel" type="PanelContainer" unique_id=1878234096]
 custom_minimum_size = Vector2(500, 390)
@@ -46,6 +46,11 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "新建存档"
 
+[node name="ImportButton" type="Button" parent="MarginContainer/Content/InputRow" unique_id=1248387435]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "从剪贴板导入"
+
 [node name="Separator" type="HSeparator" parent="MarginContainer/Content" unique_id=1856932645]
 layout_mode = 2
 
@@ -57,14 +62,14 @@ text = "已有存档"
 [node name="SaveScroll" type="ScrollContainer" parent="MarginContainer/Content" unique_id=1274534234]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
-follow_focus = true
 size_flags_vertical = 3
+follow_focus = true
 
 [node name="SaveRows" type="VBoxContainer" parent="MarginContainer/Content/SaveScroll" unique_id=1734674401]
-script = ExtResource("FocusableList")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
+script = ExtResource("FocusableList")
 
 [node name="EmptyLabel" type="Label" parent="MarginContainer/Content" unique_id=1712276560]
 layout_mode = 2

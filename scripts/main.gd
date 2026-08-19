@@ -18,6 +18,7 @@ extends Node2D
 @onready var save_manager: SaveManager = $Systems/SaveManager
 @onready var tutorial_manager: TutorialManager = $Systems/TutorialManager
 @onready var tutorial_ui: TutorialUI = $OverlayRoot/TutorialUI
+@onready var game_clear_ui: GameClearUI = $GameClearUI
 @onready var intro_video: IntroVideo = $OverlayRoot/IntroVideo
 @onready var feature_unlock_state: FeatureUnlockState = get_node("/root/FeatureUnlocks")
 @onready var bgm_player: AudioStreamPlayer = $BgmPlayer
@@ -68,10 +69,17 @@ func _ready() -> void:
 	battle_manager.battle_finished.connect(
 		_on_battle_finished
 	)
+	EventBus.game_clear_triggered.connect(
+		_on_game_clear_triggered
+	)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if intro_video.is_playing_intro():
+		get_viewport().set_input_as_handled()
+		return
+		
+	if game_clear_ui != null and game_clear_ui.ui_root.visible:
 		get_viewport().set_input_as_handled()
 		return
 		
@@ -81,6 +89,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		esc_menu.toggle()
 		get_viewport().set_input_as_handled()
+
+
+func _on_game_clear_triggered() -> void:
+	if game_clear_ui != null:
+		game_clear_ui.open(player, save_manager)
 
 
 func _on_battle_finished(victory: bool) -> void:
@@ -97,3 +110,4 @@ func _on_intro_finished() -> void:
 
 func _on_battle_started(_enemy: Enemy) -> void:
 	play_bgm(BGM_BATTLE)
+

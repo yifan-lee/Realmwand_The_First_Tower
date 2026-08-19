@@ -2,6 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://dmpsab2hobft3" path="res://scenes/floors/floor.tscn" id="1_mxbsc"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="2_1lexf"]
+[ext_resource type="PackedScene" uid="uid://dp35njgrpgo2v" path="res://scenes/actors/npcs/dialogue_npc.tscn" id="3_r8tm3"]
+[ext_resource type="Script" uid="uid://nsu1mtiartca" path="res://scripts/npc/dialogue_npc.gd" id="4_s7xw2"]
+[ext_resource type="Texture2D" uid="uid://dnxqwfgjujhhh" path="res://assets/interactables/npc_universal.png" id="5_nwjoy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
+size = Vector2(24, 24)
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_mxbsc")]
 floor_id = "floor_6"
@@ -15,3 +21,22 @@ default_spawn_id = "FromBelowStair"
 direction = 1
 target_floor_id = &"floor_5"
 target_spawn_id = &"FromAboveStair"
+
+[node name="ClearTerminal" type="StaticBody2D" parent="." index="10" unique_id=1213669799 instance=ExtResource("3_r8tm3")]
+position = Vector2(0, -64)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("4_s7xw2")
+texture = ExtResource("5_nwjoy")
+sprite_scale = Vector2(0.125, 0.125)
+npc_name = "塔顶终端"
+triggers_game_clear = true
+
+[node name="Sprite2D" type="Sprite2D" parent="ClearTerminal" index="0" unique_id=1222618819]
+z_index = 1
+texture_filter = 1
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("5_nwjoy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClearTerminal" index="1" unique_id=2079457756]
+shape = SubResource("RectangleShape2D_k3a8i")
