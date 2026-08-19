@@ -27,10 +27,14 @@ const ERROR_COLOR := Color("#FF4155FF")
 var _mode: Mode = Mode.CHOICES
 var _rows: Array[SelectableListRow] = []
 var _selected_index: int = 0
+var _input_ready_time: int = 0
 
 
 func _input(event: InputEvent) -> void:
 	if not is_open():
+		return
+	if Time.get_ticks_msec() < _input_ready_time:
+		get_viewport().set_input_as_handled()
 		return
 	if _mode == Mode.DIALOGUE:
 		if event is InputEventKey and event.pressed and not event.echo:
@@ -58,6 +62,8 @@ func open_choices(
 	tooltips: Array[String],
 	disabled_flags: Array[bool] = []
 ) -> void:
+	Input.flush_buffered_events()
+	_input_ready_time = Time.get_ticks_msec() + 180
 	_mode = Mode.CHOICES
 	title_label.text = npc_name
 	prompt_label.text = prompt
@@ -75,6 +81,8 @@ func open_choices(
 
 
 func open_dialogue(npc_name: String, dialogue: String) -> void:
+	Input.flush_buffered_events()
+	_input_ready_time = Time.get_ticks_msec() + 180
 	_mode = Mode.DIALOGUE
 	title_label.text = npc_name
 	prompt_label.text = dialogue

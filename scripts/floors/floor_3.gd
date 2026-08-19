@@ -76,9 +76,9 @@ func _on_stair_up_body_entered(body: Node2D) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not is_rule_active or _player == null or not _player.movement.input_enabled:
+	if not is_rule_active or _player == null or _player.is_movement_locked() or not _player.movement.input_enabled:
 		return
-
+		
 	var direction := Vector2.ZERO
 	if event.is_action("move_up"): direction = Vector2.UP
 	elif event.is_action("move_down"): direction = Vector2.DOWN

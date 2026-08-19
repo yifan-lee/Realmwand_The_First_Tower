@@ -9,7 +9,7 @@
 script = ExtResource("2_3ceu8")
 target = 0
 calc_method = 0
-value = 50.0
+value = 100.0
 
 [resource]
 script = ExtResource("3_fqtwc")

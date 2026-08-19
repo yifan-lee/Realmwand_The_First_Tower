@@ -46,6 +46,7 @@ var _allocation: Dictionary[StringName, int] = {
 	&"spd": 0,
 }
 var _selected_index := 0
+var _input_ready_time: int = 0
 
 
 func _ready() -> void:
@@ -56,6 +57,9 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if not level_root.visible:
+		return
+	if Time.get_ticks_msec() < _input_ready_time:
+		get_viewport().set_input_as_handled()
 		return
 
 	if event.is_action_pressed(&"move_up"):
@@ -74,6 +78,8 @@ func _input(event: InputEvent) -> void:
 
 
 func open(player: Player) -> void:
+	Input.flush_buffered_events()
+	_input_ready_time = Time.get_ticks_msec() + 180
 	_player = player
 	_allocation = {&"atk": 0, &"def": 0, &"spd": 0}
 	_selected_index = 0

@@ -19,12 +19,15 @@ signal confirmed
 @export var target_vertical_gap: float = 16.0
 
 var _wait_for_confirmation: bool = false
+var _input_ready_time: int = 0
 
 
 func show_prompt(
 	message: String,
 	wait_for_confirmation: bool = false
 ) -> void:
+	Input.flush_buffered_events()
+	_input_ready_time = Time.get_ticks_msec() + 180
 	_restore_default_position()
 	message_label.text = message
 	_wait_for_confirmation = wait_for_confirmation
@@ -96,6 +99,10 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if not _wait_for_confirmation:
+		return
+
+	if Time.get_ticks_msec() < _input_ready_time:
+		get_viewport().set_input_as_handled()
 		return
 
 	if event.is_action_pressed(&"ui_accept"):

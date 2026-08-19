@@ -43,6 +43,7 @@ var _current_page: MainPage = MainPage.INVENTORY
 var _current_category := 0
 var _preview_target_slot := -1
 var _pending_equip_item: EquipmentData = null
+var _input_ready_time: int = 0
 
 
 func _ready() -> void:
@@ -75,6 +76,9 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if not menu_root.visible:
+		return
+	if Time.get_ticks_msec() < _input_ready_time:
+		get_viewport().set_input_as_handled()
 		return
 	if _should_preserve_text_input(event):
 		return
@@ -124,6 +128,8 @@ func refresh_content() -> void:
 func open() -> void:
 	if menu_root.visible:
 		return
+	Input.flush_buffered_events()
+	_input_ready_time = Time.get_ticks_msec() + 180
 	refresh_content()
 	menu_root.visible = true
 	if _player != null:
