@@ -7,7 +7,15 @@ signal feature_unlocked(
 )
 
 
-var _unlocked_features: Dictionary = {}
+var _unlocked_features: Dictionary = {
+	&"level": true,
+	&"exp": true,
+}
+
+
+func _init() -> void:
+	_unlocked_features[&"level"] = true
+	_unlocked_features[&"exp"] = true
 
 
 func is_unlocked(feature_id: StringName) -> bool:
@@ -37,6 +45,8 @@ func capture_save_data() -> Array[String]:
 
 func restore_save_data(data: Variant) -> void:
 	_unlocked_features.clear()
+	_unlocked_features[&"level"] = true
+	_unlocked_features[&"exp"] = true
 
 	if not data is Array:
 		return

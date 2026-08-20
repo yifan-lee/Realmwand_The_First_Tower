@@ -8,7 +8,7 @@ const BLUE_FRAGMENT: ItemData = preload("res://resources/items/fragment_blue_lv1
 const NPC_NAME := "碎片共鸣者"
 const PROMPT := "将碎片交给我，它们会化作你自身的力量。"
 const STAT_IDS: Array[StringName] = [&"atk", &"def", &"spd"]
-const STAT_NAMES: Array[String] = ["攻击力", "防御力", "速度"]
+const STAT_NAMES: Array[String] = ["攻击", "防御", "速度"]
 const STAT_AMOUNT := 1.0
 const COST_AMOUNT := 1
 
@@ -20,7 +20,7 @@ func interact(player: Player) -> void:
 
 
 func begin_interaction(ui: NpcInteractionUI, player: Player) -> void:
-	ui.open_choices(NPC_NAME, PROMPT, _get_fragments(), _build_labels(player), _build_tooltips(), _build_disabled_flags(player))
+	ui.open_choices(NPC_NAME, PROMPT, _get_fragments(), _build_labels(player), _build_tooltips(), _build_disabled_flags(player), _build_trailing_texts())
 	ui.show_player_stat_preview(player, STAT_IDS[0], STAT_AMOUNT)
 
 
@@ -36,7 +36,7 @@ func handle_dialogue_option(index: int, ui: NpcInteractionUI, player: Player) ->
 		ui.show_transaction_result(false, "交换失败，请重试。")
 		return
 	player.apply_permanent_stat_increase(STAT_IDS[index], STAT_AMOUNT)
-	ui.update_choices(_build_labels(player), _build_disabled_flags(player))
+	ui.update_choices(_build_labels(player), _build_disabled_flags(player), _build_trailing_texts())
 	ui.show_player_stat_preview(player, STAT_IDS[index], STAT_AMOUNT)
 	ui.show_transaction_result(true, "交换完成：%s +%d" % [STAT_NAMES[index], int(STAT_AMOUNT)])
 
@@ -55,15 +55,16 @@ func _build_labels(player: Player) -> Array[String]:
 	var fragments := _get_fragments()
 	for index: int in fragments.size():
 		var fragment := fragments[index] as ItemData
-		labels.append("%s：%s +%d    [%s %d/%d]" % [
-			fragment.display_name,
-			STAT_NAMES[index],
-			int(STAT_AMOUNT),
-			fragment.display_name,
-			player.inventory.get_quantity(fragment.id),
-			COST_AMOUNT,
-		])
+		var count: int = player.inventory.get_quantity(fragment.id) if player != null and player.inventory != null else 0
+		labels.append("%s [持有数: %d]" % [fragment.display_name, count])
 	return labels
+
+
+func _build_trailing_texts() -> Array[String]:
+	var trailings: Array[String] = []
+	for index: int in STAT_NAMES.size():
+		trailings.append("%s +%d" % [STAT_NAMES[index], int(STAT_AMOUNT)])
+	return trailings
 
 
 func _build_tooltips() -> Array[String]:

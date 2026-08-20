@@ -4,17 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://cx2dni2s7yq1c" path="res://assets/monsters/enemy/def_tier_1.png" id="1_502dx"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_502dx"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_vhc1m"]
+[ext_resource type="Resource" uid="uid://cfvsm3iqxdydg" path="res://resources/skills/heal.tres" id="4_qykte"]
 [ext_resource type="Resource" uid="uid://dw0u3nu1pt1wm" path="res://resources/skills/thorns.tres" id="4_thorns"]
 
 [resource]
 script = ExtResource("1_7rj2e")
-skills = Array[ExtResource("2_502dx")]([ExtResource("3_vhc1m"), ExtResource("4_thorns")])
+skills = Array[ExtResource("2_502dx")]([ExtResource("4_qykte"), ExtResource("3_vhc1m"), ExtResource("4_thorns")])
 visual_scale_multiplier = 1.2000000000000002
 id = &"enemy_def_lv1"
 display_name = "一级防御怪"
 description = "防御极高的生物，最好提升攻击力之后再来。"
 atk = 60.0
-def = 100.0
+def = 120.0
 spd = 40.0
 portrait = ExtResource("1_502dx")
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"

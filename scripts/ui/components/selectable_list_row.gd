@@ -12,6 +12,9 @@ var entry: Resource:
 		entry_data = value
 
 
+@onready var trailing_label: Label = get_node_or_null("%TrailingLabel")
+
+
 func _ready() -> void:
 	focus_mode = Control.FOCUS_ALL
 	focus_entered.connect(_emit_focused)
@@ -23,7 +26,8 @@ func setup(
 	entry_text: String,
 	entry_icon: Texture2D,
 	entry_tooltip: String,
-	is_disabled: bool = false
+	is_disabled: bool = false,
+	trailing_text: String = ""
 ) -> void:
 	entry_data = p_entry
 	text = entry_text
@@ -31,6 +35,11 @@ func setup(
 	tooltip_text = entry_tooltip
 	disabled = is_disabled
 	focus_mode = Control.FOCUS_ALL
+	if trailing_label == null:
+		trailing_label = get_node_or_null("%TrailingLabel")
+	if trailing_label != null:
+		trailing_label.text = trailing_text
+		trailing_label.visible = not trailing_text.is_empty()
 
 
 func _pressed() -> void:

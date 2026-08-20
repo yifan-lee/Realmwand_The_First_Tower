@@ -171,7 +171,7 @@ func _fail_and_teleport_to_start() -> void:
 	_last_facing = Vector2.UP
 	
 	_fail_count += 1
-	if _fail_count >= 3:
+	if _fail_count >= 6:
 		EventBus.system_message_requested.emit("这层角色只能前进和左拐。")
 
 

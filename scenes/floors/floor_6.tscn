@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://4wc1v8w4vm5l"]
+[gd_scene format=4 uid="uid://4wc1v8w4vm5l"]
 
 [ext_resource type="PackedScene" uid="uid://dmpsab2hobft3" path="res://scenes/floors/floor.tscn" id="1_mxbsc"]
 [ext_resource type="PackedScene" uid="uid://c0u1y4f7xh5lb" path="res://scenes/interactables/stair.tscn" id="2_1lexf"]
@@ -14,6 +14,12 @@ floor_id = "floor_6"
 display_name = "六层：通关"
 description = "恭喜你！成功登上了第一座高塔的顶层！"
 default_spawn_id = "FromBelowStair"
+
+[node name="GroundLayer" parent="." index="0" unique_id=370044564]
+tile_map_data = PackedByteArray("AAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAA=")
+
+[node name="WallLayer" parent="." index="1" unique_id=917837273]
+tile_map_data = PackedByteArray("AAD+/wAAAAAAAAEAAAD//wAAAAAAAAEAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAEAAAACAAAAAAAAAAEAAAACAPz/AAAAAAEAAAACAP3/AAAAAAEAAAACAP7/AAAAAAEAAAACAP//AAAAAAEAAAD///z/AAAAAAEAAAAAAPz/AAAAAAEAAAABAPz/AAAAAAEAAAD+//z/AAAAAAEAAAD+//3/AAAAAAEAAAD+//7/AAAAAAEAAAD+////AAAAAAEAAAA=")
 
 [node name="FromBelowStair" type="Marker2D" parent="SpawnPoints" parent_id_path=PackedInt32Array(759900) index="0" unique_id=540661241]
 

@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c6shopnpclv1"]
+
+[ext_resource type="Script" path="res://scripts/npc/shop_npc.gd" id="1_shop"]
+[ext_resource type="Texture2D" uid="uid://dnxqwfgjujhhh" path="res://assets/interactables/npc_universal.png" id="2_jej0v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shop"]
+size = Vector2(24, 28)
+
+[node name="ShopNpc" type="StaticBody2D" unique_id=1983748291]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_shop")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=417825242]
+z_index = 1
+texture_filter = 1
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_jej0v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1203449508]
+shape = SubResource("RectangleShape2D_shop")

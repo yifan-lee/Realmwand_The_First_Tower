@@ -41,7 +41,7 @@ var _battle_manager: BattleManager
 var _player_casting_label: Label
 var _enemy_casting_label: Label
 var _current_preview_entry: Resource = null
-var _input_ready_time: int = 0
+var _input_gate = preload("res://scripts/ui/components/ui_input_gate.gd").new()
 
 
 func _ready() -> void:
@@ -95,7 +95,7 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not battle_root.visible:
 		return
-	if Time.get_ticks_msec() < _input_ready_time:
+	if not _input_gate.filter_event(event):
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed(&"ui_left"):
@@ -113,8 +113,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) -> void:
-	Input.flush_buffered_events()
-	_input_ready_time = Time.get_ticks_msec() + 180
+	_input_gate.reset_gate()
 	_player = player
 	_enemy = enemy
 	_battle_manager = battle_manager

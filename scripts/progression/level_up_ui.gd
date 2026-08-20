@@ -46,7 +46,7 @@ var _allocation: Dictionary[StringName, int] = {
 	&"spd": 0,
 }
 var _selected_index := 0
-var _input_ready_time: int = 0
+var _input_gate = preload("res://scripts/ui/components/ui_input_gate.gd").new()
 
 
 func _ready() -> void:
@@ -58,7 +58,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if not level_root.visible:
 		return
-	if Time.get_ticks_msec() < _input_ready_time:
+	if not _input_gate.filter_event(event):
 		get_viewport().set_input_as_handled()
 		return
 
@@ -78,8 +78,7 @@ func _input(event: InputEvent) -> void:
 
 
 func open(player: Player) -> void:
-	Input.flush_buffered_events()
-	_input_ready_time = Time.get_ticks_msec() + 180
+	_input_gate.reset_gate()
 	_player = player
 	_allocation = {&"atk": 0, &"def": 0, &"spd": 0}
 	_selected_index = 0

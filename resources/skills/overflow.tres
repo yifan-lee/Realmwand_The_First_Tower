@@ -14,11 +14,6 @@ script = ExtResource("1_7llpx")
 cost_type = 4
 value = 1.0
 
-[sub_resource type="Resource" id="Resource_0xcip"]
-script = ExtResource("1_7llpx")
-cost_type = 3
-value = 1.0
-
 [sub_resource type="Resource" id="Resource_7llpx"]
 script = ExtResource("2_rfug7")
 value = 150.0

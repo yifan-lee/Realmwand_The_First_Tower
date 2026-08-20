@@ -80,6 +80,11 @@ func display_item(item: ItemData) -> void:
 		if equip.atk_bonus != 0: details.append("物理攻击: %+d" % int(equip.atk_bonus))
 		if equip.def_bonus != 0: details.append("物理防御: %+d" % int(equip.def_bonus))
 		if equip.spd_bonus != 0: details.append("速度: %+d" % int(equip.spd_bonus))
+	elif item != null and not item.effects.is_empty():
+		for effect in item.effects:
+			if effect != null:
+				var res_name = "生命" if effect.resource_type == ActionEffectData.ResourceType.HP else ("法力" if effect.resource_type == ActionEffectData.ResourceType.MP else "FP")
+				details.append("恢复%s: +%d" % [res_name, int(effect.value)])
 		
 	var view := EntryInfoViewData.new()
 	view.title = item.display_name

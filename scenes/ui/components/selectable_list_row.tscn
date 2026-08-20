@@ -13,3 +13,17 @@ theme_override_constants/icon_max_width = 36
 text = "列表内容"
 alignment = 0
 script = ExtResource("1_tle13")
+
+[node name="TrailingLabel" type="Label" parent="." unique_id=1849204128]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_right = -18.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_alignment = 2
+vertical_alignment = 1

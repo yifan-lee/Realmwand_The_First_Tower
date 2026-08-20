@@ -4,14 +4,18 @@
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="2_au5ky"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="3_rf42y"]
 [ext_resource type="Texture2D" uid="uid://bunf67smu628w" path="res://assets/monsters/enemy/balanced_tier_2.png" id="4_au5ky"]
+[ext_resource type="Resource" uid="uid://ntwb01jgccv4" path="res://resources/skills/overload_atk.tres" id="4_rf42y"]
+[ext_resource type="Resource" uid="uid://bll8sqw230ypl" path="res://resources/skills/overload_def.tres" id="6_0cpke"]
+[ext_resource type="Resource" uid="uid://clfwoago8src0" path="res://resources/skills/overload_spd.tres" id="7_a8xaf"]
 
 [resource]
 script = ExtResource("1_jkdic")
+skills = Array[ExtResource("2_au5ky")]([ExtResource("4_rf42y"), ExtResource("6_0cpke"), ExtResource("3_rf42y"), ExtResource("7_a8xaf")])
 world_texture = ExtResource("4_au5ky")
 id = &"enemy_bal_lv2"
 display_name = "2级平衡怪"
-atk = 100.0
+atk = 80.0
 def = 100.0
-spd = 50.0
+spd = 60.0
 portrait = ExtResource("4_au5ky")
 metadata/_custom_type_script = "uid://dt0hov06fbtv5"

@@ -27,13 +27,13 @@ const ERROR_COLOR := Color("#FF4155FF")
 var _mode: Mode = Mode.CHOICES
 var _rows: Array[SelectableListRow] = []
 var _selected_index: int = 0
-var _input_ready_time: int = 0
+var _input_gate = preload("res://scripts/ui/components/ui_input_gate.gd").new()
 
 
 func _input(event: InputEvent) -> void:
 	if not is_open():
 		return
-	if Time.get_ticks_msec() < _input_ready_time:
+	if not _input_gate.filter_event(event):
 		get_viewport().set_input_as_handled()
 		return
 	if _mode == Mode.DIALOGUE:
@@ -60,10 +60,10 @@ func open_choices(
 	entries: Array[Resource],
 	labels: Array[String],
 	tooltips: Array[String],
-	disabled_flags: Array[bool] = []
+	disabled_flags: Array[bool] = [],
+	trailing_texts: Array[String] = []
 ) -> void:
-	Input.flush_buffered_events()
-	_input_ready_time = Time.get_ticks_msec() + 180
+	_input_gate.reset_gate()
 	_mode = Mode.CHOICES
 	title_label.text = npc_name
 	prompt_label.text = prompt
@@ -71,7 +71,7 @@ func open_choices(
 	stats_panel.visible = true
 	options_scroll.visible = true
 	hint_label.text = "↑↓ 选择   确认键兑换   菜单键取消"
-	_rebuild_rows(entries, labels, tooltips, disabled_flags)
+	_rebuild_rows(entries, labels, tooltips, disabled_flags, trailing_texts)
 	_selected_index = 0
 	if _selected_index < _rows.size() and _rows[_selected_index].disabled:
 		_move_selection(1)
@@ -81,8 +81,7 @@ func open_choices(
 
 
 func open_dialogue(npc_name: String, dialogue: String) -> void:
-	Input.flush_buffered_events()
-	_input_ready_time = Time.get_ticks_msec() + 180
+	_input_gate.reset_gate()
 	_mode = Mode.DIALOGUE
 	title_label.text = npc_name
 	prompt_label.text = dialogue
@@ -96,12 +95,15 @@ func open_dialogue(npc_name: String, dialogue: String) -> void:
 	interaction_root.visible = true
 
 
-func update_choices(labels: Array[String], disabled_flags: Array[bool] = []) -> void:
+func update_choices(labels: Array[String], disabled_flags: Array[bool] = [], trailing_texts: Array[String] = []) -> void:
 	var entry_count := _rows.size() - 1
 	for index: int in mini(labels.size(), entry_count):
 		_rows[index].text = labels[index]
 		if index < disabled_flags.size():
 			_rows[index].disabled = disabled_flags[index]
+		if index < trailing_texts.size() and _rows[index].trailing_label != null:
+			_rows[index].trailing_label.text = trailing_texts[index]
+			_rows[index].trailing_label.visible = not trailing_texts[index].is_empty()
 
 
 func show_player_stats(player: Player) -> void:
@@ -152,7 +154,13 @@ func is_open() -> bool:
 	return interaction_root != null and interaction_root.visible
 
 
-func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Array[String], disabled_flags: Array[bool]) -> void:
+func _rebuild_rows(
+	entries: Array[Resource],
+	labels: Array[String],
+	tooltips: Array[String],
+	disabled_flags: Array[bool],
+	trailing_texts: Array[String] = []
+) -> void:
 	_clear_rows()
 	if option_row_scene == null:
 		push_error("NpcInteractionUI requires an option row scene.")
@@ -164,10 +172,11 @@ func _rebuild_rows(entries: Array[Resource], labels: Array[String], tooltips: Ar
 		var tooltip := tooltips[index] if index < tooltips.size() else ""
 		var icon: Texture2D = entry.get("icon") as Texture2D if entry != null and "icon" in entry else null
 		var is_disabled = disabled_flags[index] if index < disabled_flags.size() else false
+		var trailing := trailing_texts[index] if index < trailing_texts.size() else ""
 		var row := option_row_scene.instantiate() as SelectableListRow
 		option_rows.add_child(row)
 		_rows.append(row)
-		row.setup(entry, label, icon, tooltip, is_disabled)
+		row.setup(entry, label, icon, tooltip, is_disabled, trailing)
 		row.entry_selected.connect(_on_row_selected.bind(index))
 		row.entry_focused.connect(_on_row_focused.bind(index))
 
