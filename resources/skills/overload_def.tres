@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bvntyhvoo7xa5" path="res://scripts/data/action_cost_data.gd" id="1_cost"]
 [ext_resource type="Script" uid="uid://b1wegwwmokann" path="res://scripts/data/action_effect_data.gd" id="2_effect"]
 [ext_resource type="Script" uid="uid://dg3w5qs5rpxbg" path="res://scripts/data/skill_data.gd" id="3_skill"]
+[ext_resource type="Script" uid="uid://cb8kh7hp8uvtq" path="res://scripts/data/status_effect_data.gd" id="3_ynfgc"]
 [ext_resource type="Texture2D" uid="uid://5n6r4rf8yamp" path="res://assets/skills/support/buff_def_tier_2.png" id="4_icon"]
 
 [sub_resource type="Resource" id="Resource_cost_fp"]
@@ -27,7 +28,28 @@ script = ExtResource("2_effect")
 target = 0
 resource_type = 4
 calc_method = 2
-value = 0.2
+value = 0.4
+
+[sub_resource type="Resource" id="Resource_ur0qp"]
+script = ExtResource("3_ynfgc")
+id = &"overload_thorns"
+display_name = "过载刺甲"
+display_template = "在有护盾时反弹伤害"
+affected_stat = 1
+value = 1.0
+counter_damage_ratio = 0.5
+end_condition = 2
+duration_count = 0
+metadata/_custom_type_script = "uid://cb8kh7hp8uvtq"
+
+[sub_resource type="Resource" id="Resource_1o77e"]
+script = ExtResource("2_effect")
+target = 0
+resource_type = 0
+calc_method = 2
+value = 0.0
+status_to_apply = SubResource("Resource_ur0qp")
+metadata/_custom_type_script = "uid://b1wegwwmokann"
 
 [resource]
 script = ExtResource("3_skill")
@@ -38,4 +60,4 @@ icon = ExtResource("4_icon")
 skill_type = 2
 costs = Array[ExtResource("1_cost")]([SubResource("Resource_cost_fp"), SubResource("Resource_xeyyh"), SubResource("Resource_dja7u")])
 target_type = 1
-effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield")])
+effects = Array[ExtResource("2_effect")]([SubResource("Resource_effect_shield"), SubResource("Resource_1o77e")])
