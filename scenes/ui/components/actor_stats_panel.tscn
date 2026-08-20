@@ -113,7 +113,7 @@ text = "生命"
 vertical_alignment = 1
 
 [node name="HpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/HpRow" unique_id=770419014]
-custom_minimum_size = Vector2(250, 24)
+custom_minimum_size = Vector2(180, 24)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"HpProgressBar"
@@ -164,7 +164,7 @@ text = "魔力"
 vertical_alignment = 1
 
 [node name="MpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/MpRow" unique_id=38239767]
-custom_minimum_size = Vector2(250, 24)
+custom_minimum_size = Vector2(180, 24)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"MpProgressBar"
@@ -206,7 +206,7 @@ text = "专注"
 vertical_alignment = 1
 
 [node name="FpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/FpRow" unique_id=1077821796]
-custom_minimum_size = Vector2(250, 24)
+custom_minimum_size = Vector2(180, 24)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"FpProgressBar"
@@ -248,7 +248,7 @@ text = "行动"
 vertical_alignment = 1
 
 [node name="AtbBar" type="ProgressBar" parent="MarginContainer/Content/Resources/AtbRow" unique_id=1301685143]
-custom_minimum_size = Vector2(250, 24)
+custom_minimum_size = Vector2(180, 24)
 layout_mode = 2
 size_flags_vertical = 4
 show_percentage = false

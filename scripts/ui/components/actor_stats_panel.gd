@@ -432,7 +432,7 @@ func _format_hp_resource(
 		if shield > 0.0:
 			var sign_str := "+" if shield_delta > 0 else ""
 			var delta_color: Color = PREVIEW_GAIN_COLOR if shield_delta > 0 else PREVIEW_LOSS_COLOR
-			hp_str += " [color=#%s](+%.0f [/color][color=#%s](%s%.0f)[/color][color=#%s] 护盾)[/color]" % [
+			hp_str += " [color=#%s](%.0f [/color][color=#%s](%s%.0f)[/color][color=#%s])[/color]" % [
 				SHIELD_VALUE_COLOR.to_html(false),
 				shield,
 				delta_color.to_html(false),
@@ -441,9 +441,11 @@ func _format_hp_resource(
 				SHIELD_VALUE_COLOR.to_html(false)
 			]
 		else:
-			hp_str += " [color=#%s](+%.0f 护盾)[/color]" % [PREVIEW_SHIELD_COLOR.to_html(false), shield_delta]
+			var sign_str := "+" if shield_delta > 0 else ""
+			var delta_color: Color = PREVIEW_GAIN_COLOR if shield_delta > 0 else PREVIEW_LOSS_COLOR
+			hp_str += " [color=#%s](%s%.0f)[/color]" % [delta_color.to_html(false), sign_str, shield_delta]
 	elif shield > 0.0:
-		hp_str += " [color=#%s](+%.0f 盾)[/color]" % [SHIELD_VALUE_COLOR.to_html(false), shield]
+		hp_str += " [color=#%s](%.0f)[/color]" % [SHIELD_VALUE_COLOR.to_html(false), shield]
 
 	return "[right]%s / %s[/right]" % [
 		hp_str,
