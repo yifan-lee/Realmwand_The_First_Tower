@@ -205,21 +205,23 @@ func _on_item_selected(item: ItemData) -> void:
 		_battle_ui.show_message("这个物品不能在战斗中使用。")
 		return
 		
-	_decrement_cooldowns(false)
-	status_controller.on_action_finished(_player)
+	var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], self)
+	var player_delta = preview.actor_deltas.get(_player, null)
+	var is_free_action = false
+	if player_delta != null and player_delta.is_free_action:
+		is_free_action = true
+
+	if not is_free_action:
+		_decrement_cooldowns(false)
+		status_controller.on_action_finished(_player)
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
 	
-	var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], self)
 	_apply_preview(preview, item.effects, false, false)
 	
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
 	_battle_ui.show_message("使用了 %s。" % item.display_name)
 	
-	var player_delta = preview.actor_deltas.get(_player, null)
-	var is_free_action = false
-	if player_delta != null and player_delta.is_free_action:
-		is_free_action = true
 	_complete_player_action(is_free_action)
 
 
@@ -280,8 +282,15 @@ func _release_player_skill(skill: SkillData = null) -> void:
 
 	var preview := BattleActionPreview.new()
 	BattleCalculator.evaluate_skill_effects(resolved_skill, _player, [_enemy], self, preview)
-	_decrement_cooldowns(false)
-	status_controller.on_action_finished(_player)
+	
+	var player_delta = preview.actor_deltas.get(_player, null)
+	var is_free_action = false
+	if player_delta != null and player_delta.is_free_action:
+		is_free_action = true
+
+	if not is_free_action:
+		_decrement_cooldowns(false)
+		status_controller.on_action_finished(_player)
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
 	if resolved_skill.skill_type == SkillData.SkillType.PHYSICAL:
 		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_PHYSICAL_ATTACK)
@@ -296,10 +305,6 @@ func _release_player_skill(skill: SkillData = null) -> void:
 		message += " ； " + extra
 	_battle_ui.show_message(message)
 	
-	var player_delta = preview.actor_deltas.get(_player, null)
-	var is_free_action = false
-	if player_delta != null and player_delta.is_free_action:
-		is_free_action = true
 	_complete_player_action(is_free_action)
 	if _enemy.is_defeated or _enemy.current_hp <= 0.0:
 		_finish_battle(true)

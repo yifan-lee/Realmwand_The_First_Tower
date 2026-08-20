@@ -113,6 +113,11 @@ static func evaluate_skill_effects(
 						var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
 						target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
 
+		# 4. 自由动作处理
+		if effect.is_free_action and caster != null:
+			var caster_delta := preview.get_or_create_delta(caster)
+			caster_delta.is_free_action = true
+
 	if total_applied_damage > 0.0:
 		preview.add_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, total_applied_damage])
 
@@ -147,6 +152,16 @@ static func evaluate_item(
 			if target == null:
 				continue
 			var target_delta := preview.get_or_create_delta(target)
+
+			# 1. 打断处理
+			if effect.is_interrupt:
+				if battle_manager != null and battle_manager.is_actor_casting(target):
+					target_delta.is_interrupted = true
+					preview.add_message("打断了吟唱。")
+				else:
+					preview.add_message("目标没有正在吟唱的技能。")
+
+			# 2. 即时资源结算
 			if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
 				var amount := _calculate_resource_amount(effect, caster, target, null, battle_manager)
 				match effect.resource_type:
@@ -158,6 +173,28 @@ static func evaluate_item(
 						target_delta.fp_delta += amount
 					ActionEffectData.ResourceType.SHIELD:
 						target_delta.shield_delta += amount
+						if amount > 0.0:
+							preview.add_message("获得了 %.0f 点护盾。" % amount)
+
+			# 3. 施加状态预览
+			if effect.status_to_apply != null and battle_manager != null:
+				var status := effect.status_to_apply
+				match status.affected_stat:
+					StatusEffectData.StatType.ATK:
+						var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
+						target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
+					StatusEffectData.StatType.DEF:
+						var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
+						target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
+					StatusEffectData.StatType.SPD:
+						var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
+						target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
+
+		# 4. 自由动作处理
+		if effect.is_free_action and caster != null:
+			var caster_delta := preview.get_or_create_delta(caster)
+			caster_delta.is_free_action = true
+
 	return preview
 
 

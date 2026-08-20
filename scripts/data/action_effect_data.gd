@@ -28,6 +28,7 @@ enum CalcMethod {
 @export var calc_method: CalcMethod = CalcMethod.SKILL_POWER
 @export var value: float = 1.0
 @export var is_interrupt: bool = false
+@export var is_free_action: bool = false
 
 @export_group("Applied Status")
 @export var status_to_apply: StatusEffectData = null
@@ -50,6 +51,9 @@ func get_description() -> String:
 
 	if is_interrupt:
 		desc_parts.append("%s打断吟唱" % target_prefix)
+
+	if is_free_action:
+		desc_parts.append("自由动作（不消耗行动机会）")
 
 	if resource_type != ResourceType.NONE and not is_zero_approx(value):
 		var res_name := _get_resource_name()

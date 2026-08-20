@@ -11,6 +11,7 @@ target = 0
 resource_type = 3
 calc_method = 0
 value = 10.0
+is_free_action = true
 
 [resource]
 script = ExtResource("1_uphl2")
