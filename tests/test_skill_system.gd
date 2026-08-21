@@ -21,8 +21,8 @@ func run_test(main: Node) -> void:
 	
 	# 1. 验证数据互斥组
 	assert(ov_atk.exclusive_group == &"overload", "进攻过载互斥组应为 overload")
-	assert(ov_def.exclusive_group == &"overload", "过载防御互斥组应为 overload")
-	assert(ov_spd.exclusive_group == &"overload", "过载极速互斥组应为 overload")
+	assert(ov_def.exclusive_group == &"overload", "防御过载互斥组应为 overload")
+	assert(ov_spd.exclusive_group == &"overload", "速度过载互斥组应为 overload")
 	print("[PASS] 1. SkillData exclusive_group 数据驱动配置验证通过")
 	
 	# 2. 验证 Player 6 槽位逻辑与学习自动装备
