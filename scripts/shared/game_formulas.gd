@@ -175,14 +175,14 @@ static func calculate_effective_stat(
 static func calculate_skill_power_modifier(
 	base_power: float,
 	statuses: Array[ActiveStatus],
-	skill_type: int
+	skill_domain: int
 ) -> float:
 	var added_value := 0.0
 	var multiplier := 1.0
 	for status: ActiveStatus in statuses:
 		if status.data == null or status.data.affected_stat != StatusEffectData.StatType.SKILL_POWER:
 			continue
-		if status.data.restrict_skill_type and status.data.target_skill_type != skill_type:
+		if status.data.restrict_skill_type and int(status.data.target_skill_type) != skill_domain:
 			continue
 		var stacks := float(status.current_stacks)
 		if status.data.operation == StatusEffectData.OpType.MULTIPLY:

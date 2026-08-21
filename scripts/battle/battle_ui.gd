@@ -119,7 +119,7 @@ func open(player: Player, enemy: Enemy, battle_manager: BattleManager = null) ->
 	_battle_manager = battle_manager
 	var active_skills: Array[SkillData] = []
 	for skill: SkillData in player.get_skills():
-		if skill != null and skill.skill_type != SkillData.SkillType.PASSIVE:
+		if skill != null and not skill.is_passive():
 			active_skills.append(skill)
 	skill_panel.display_skills(active_skills)
 	inventory_panel.bind_inventory(player.inventory)

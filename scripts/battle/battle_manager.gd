@@ -147,7 +147,7 @@ func _load_actor_passives(actor: Node) -> void:
 		skills = (actor as Player).get_skills()
 
 	for skill: SkillData in skills:
-		if skill != null and skill.skill_type == SkillData.SkillType.PASSIVE:
+		if skill != null and skill.is_passive():
 			for effect: ActionEffectData in skill.effects:
 				if effect.status_to_apply != null:
 					status_controller.apply_status(actor, effect.status_to_apply)
@@ -158,7 +158,7 @@ func _has_usable_player_skills() -> bool:
 		return false
 	var skills: Array[SkillData] = _player.get_skills()
 	for skill: SkillData in skills:
-		if skill == null or skill.skill_type == SkillData.SkillType.PASSIVE:
+		if skill == null or skill.is_passive():
 			continue
 		if get_skill_cooldown(skill.id, false) > 0:
 			continue
@@ -321,12 +321,12 @@ func _release_player_skill(skill: SkillData = null) -> void:
 		_decrement_cooldowns(false)
 		status_controller.on_action_finished(_player)
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
-	if resolved_skill.skill_type == SkillData.SkillType.PHYSICAL:
+	if resolved_skill.domain == SkillData.SkillDomain.PHYSICAL:
 		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_PHYSICAL_ATTACK)
-	elif resolved_skill.skill_type == SkillData.SkillType.MIND:
+	elif resolved_skill.domain == SkillData.SkillDomain.MIND:
 		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_MIND_ATTACK)
 
-	var is_physical := (resolved_skill.skill_type == SkillData.SkillType.PHYSICAL)
+	var is_physical := (resolved_skill.domain == SkillData.SkillDomain.PHYSICAL)
 	_apply_preview(preview, resolved_skill.effects, false, is_physical)
 	
 	var message = "使用了 %s。" % resolved_skill.display_name
@@ -358,10 +358,10 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	status_controller.on_action_finished(_enemy)
 	status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_ANY_ACTION)
 	
-	var is_physical := (skill == null) or (skill.skill_type == SkillData.SkillType.PHYSICAL)
+	var is_physical := (skill == null) or (skill.domain == SkillData.SkillDomain.PHYSICAL)
 	if is_physical:
 		status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_PHYSICAL_ATTACK)
-	elif skill != null and skill.skill_type == SkillData.SkillType.MIND:
+	elif skill != null and skill.domain == SkillData.SkillDomain.MIND:
 		status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_MIND_ATTACK)
 
 	if skill == null:
@@ -610,8 +610,8 @@ func get_actor_stat(actor: Node, stat_type: StatusEffectData.StatType) -> float:
 	return status_controller.get_effective_stat(base_value, actor, stat_type)
 
 
-func get_skill_power_modifier(actor: Node, skill_type: int) -> float:
-	return status_controller.get_skill_power_modifier(actor, skill_type)
+func get_skill_power_modifier(actor: Node, skill_domain: int) -> float:
+	return status_controller.get_skill_power_modifier(actor, skill_domain)
 
 
 func get_skill_cooldown(skill_id: StringName, is_enemy: bool = false) -> int:

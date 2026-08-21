@@ -46,11 +46,10 @@ enum StackPolicy {
 	REPLACE,
 }
 
-enum SkillType {
-	PHYSICAL,
-	MIND,
-	TRANSFORM,
-	PASSIVE,
+enum SkillDomain {
+	PHYSICAL = 0,
+	MIND = 1,
+	TACTICAL = 2,
 }
 
 @export_group("Identity & UI")
@@ -67,7 +66,7 @@ enum SkillType {
 @export var operation: OpType = OpType.MULTIPLY
 @export var value: float = 1.2
 @export var restrict_skill_type: bool = false
-@export var target_skill_type: SkillType = SkillType.PHYSICAL
+@export var target_skill_type: SkillDomain = SkillDomain.PHYSICAL
 ## 反伤：受到伤害时对攻击者造成的固定伤害值
 @export var counter_damage_fixed: float = 0.0
 ## 反伤：受到伤害时对攻击者造成的百分比伤害（例如 0.1 代表 10%）
@@ -99,10 +98,9 @@ func get_skill_type_name() -> String:
 	if not restrict_skill_type:
 		return ""
 	match target_skill_type:
-		SkillType.PHYSICAL: return "物理"
-		SkillType.MIND: return "灵技"
-		SkillType.TRANSFORM: return "变化"
-		SkillType.PASSIVE: return "被动"
+		SkillDomain.PHYSICAL: return "物理"
+		SkillDomain.MIND: return "灵技"
+		SkillDomain.TACTICAL: return "变化"
 	return ""
 
 

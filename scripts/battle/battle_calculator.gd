@@ -223,8 +223,8 @@ static func _calculate_resource_amount(
 				return effect.value
 			var caster_atk: float = battle_manager.get_actor_stat(caster, StatusEffectData.StatType.ATK)
 			var target_def: float = battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
-			var skill_type_int: int = skill.skill_type if skill != null else int(SkillData.SkillType.PHYSICAL)
-			var skill_power_mod: float = battle_manager.get_skill_power_modifier(caster, skill_type_int)
+			var skill_domain_int: int = skill.domain if skill != null else int(SkillData.SkillDomain.PHYSICAL)
+			var skill_power_mod: float = battle_manager.get_skill_power_modifier(caster, skill_domain_int)
 			var damage: float = FORMULAS.calculate_skill_damage(caster_atk, effect.value * skill_power_mod, target_def)
 			return -damage
 	return 0.0

@@ -29,6 +29,6 @@ id = &"data_attack"
 display_name = "数据攻击"
 icon = ExtResource("3_4mr0n")
 unlock_level = 4
-skill_type = 1
+domain = 1
 costs = Array[ExtResource("1_u6vhg")]([SubResource("Resource_qj3mj"), SubResource("Resource_jtp2g"), SubResource("Resource_7xij5")])
 effects = Array[ExtResource("2_4mr0n")]([SubResource("Resource_umo0u")])

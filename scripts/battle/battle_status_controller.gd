@@ -147,7 +147,7 @@ func get_effective_stat(base_value: float, actor: Node, stat_type: StatusEffectD
 	return maxf(0.0, (base_value + added_value) * multiplier)
 
 
-func get_skill_power_modifier(actor: Node, skill_type: int) -> float:
+func get_skill_power_modifier(actor: Node, skill_domain: int) -> float:
 	if actor == null or not _statuses.has(actor):
 		return 1.0
 
@@ -157,7 +157,7 @@ func get_skill_power_modifier(actor: Node, skill_type: int) -> float:
 	for status: ActiveStatus in list:
 		if status.data == null or status.data.affected_stat != StatusEffectData.StatType.SKILL_POWER:
 			continue
-		if status.data.restrict_skill_type and status.data.target_skill_type != skill_type:
+		if status.data.restrict_skill_type and int(status.data.target_skill_type) != skill_domain:
 			continue
 		if not status.is_interval_active():
 			continue

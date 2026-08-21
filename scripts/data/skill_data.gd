@@ -6,11 +6,15 @@ enum TargetType {
 	SELF,
 }
 
-enum SkillType {
-	PHYSICAL,
-	MIND,
-	TRANSFORM,
-	PASSIVE,
+enum ActivationType {
+	ACTIVE = 0,   ## 主动
+	PASSIVE = 1,  ## 被动
+}
+
+enum SkillDomain {
+	PHYSICAL = 0, ## 物理
+	MIND = 1,     ## 灵技 / 灵能
+	TACTICAL = 2, ## 变化
 }
 
 @export_group("Identity")
@@ -24,7 +28,8 @@ enum SkillType {
 @export_range(1, 99, 1) var unlock_level: int = 1
 
 @export_group("Usage")
-@export var skill_type: SkillType = SkillType.PHYSICAL
+@export var activation_type: ActivationType = ActivationType.ACTIVE
+@export var domain: SkillDomain = SkillDomain.PHYSICAL
 @export_range(0, 99, 1) var cooldown: int = 0
 @export var costs: Array[ActionCostData] = []
 @export var target_type: TargetType = TargetType.ENEMY
@@ -33,16 +38,26 @@ enum SkillType {
 @export var effects: Array[ActionEffectData] = []
 
 
-func get_type_name() -> String:
-	match skill_type:
-		SkillType.MIND:
-			return "灵技"
-		SkillType.TRANSFORM:
+func is_passive() -> bool:
+	return activation_type == ActivationType.PASSIVE
+
+
+func get_activation_name() -> String:
+	return "主动" if activation_type == ActivationType.ACTIVE else "被动"
+
+
+func get_domain_name() -> String:
+	match domain:
+		SkillDomain.MIND:
+			return "灵技" if activation_type == ActivationType.ACTIVE else "灵能"
+		SkillDomain.TACTICAL:
 			return "变化"
-		SkillType.PASSIVE:
-			return "被动"
 		_:
 			return "物理"
+
+
+func get_type_name() -> String:
+	return "%s / %s" % [get_activation_name(), get_domain_name()]
 
 
 func get_cooldown() -> int:
