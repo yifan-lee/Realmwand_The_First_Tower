@@ -118,16 +118,11 @@ func change_floor(
 
 	# 同层传送分支：target_floor_id 为空 或 与当前楼层相同
 	if target_floor_id.is_empty() or (is_instance_valid(current_floor) and target_floor_id == current_floor.floor_id):
-		if is_instance_valid(current_floor):
-			var spawn_point := current_floor.get_spawn_point(target_spawn_id)
-			if spawn_point != null:
-				player.global_position = spawn_point.global_position
-			else:
-				push_error(
-					"Spawn point '%s' not found on current floor '%s'."
-					% [target_spawn_id, current_floor.floor_id]
-				)
-		EventBus.screen_fade_in_with_info_started.emit("", "")
+		var spawn_point := current_floor.get_spawn_point(target_spawn_id)
+		var f_name = current_floor.get("display_name")
+		var f_desc = current_floor.get("description")
+		player.global_position = spawn_point.global_position
+		EventBus.screen_fade_in_with_info_started.emit(f_name, f_desc)
 		await EventBus.screen_fade_in_finished
 		player.unlock_movement(&"floor_transition")
 		_is_changing_floor = false

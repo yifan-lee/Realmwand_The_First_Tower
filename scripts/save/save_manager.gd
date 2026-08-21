@@ -135,7 +135,7 @@ func generate_clear_summary_text() -> String:
 	
 	var equip_names: Array[String] = []
 	if _player.equipment != null:
-		for item: EquipmentData in _player.equipment.get_all_equipped_items():
+		for item: EquipmentData in _player.equipment.get_unique_equipped_items():
 			if item != null:
 				equip_names.append(item.display_name)
 	lines.append("【穿戴装备】%s" % (", ".join(equip_names) if not equip_names.is_empty() else "无"))

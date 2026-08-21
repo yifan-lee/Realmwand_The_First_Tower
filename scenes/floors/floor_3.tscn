@@ -23,7 +23,7 @@
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_base_floor")]
 script = ExtResource("1_kbxsx")
 floor_id = &"floor_3"
-display_name = "三层：规则"
+display_name = "3层：规则"
 description = "顾左不顾右，顾前不顾后
 Left is right"
 
@@ -113,11 +113,11 @@ position = Vector2(-478, -294)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="15" unique_id=355156168 instance=ExtResource("4_dgw2m")]
-position = Vector2(-232, -104)
+position = Vector2(-520, -72)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="16" unique_id=477430475 instance=ExtResource("4_dgw2m")]
-position = Vector2(-384, -400)
+position = Vector2(-576, -408)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="DefLv104" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="17" unique_id=1679076072 instance=ExtResource("4_dgw2m")]
@@ -125,11 +125,11 @@ position = Vector2(-480, -317)
 enemy_data = ExtResource("6_2hbpx")
 
 [node name="AtkLv101" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="18" unique_id=232817028 instance=ExtResource("4_dgw2m")]
-position = Vector2(-216, -176)
+position = Vector2(-504, -144)
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv116" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="19" unique_id=794842729 instance=ExtResource("4_dgw2m")]
-position = Vector2(-208, -424)
+position = Vector2(-496, -392)
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv115" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="20" unique_id=148182946 instance=ExtResource("4_dgw2m")]
@@ -137,7 +137,7 @@ position = Vector2(0, -256)
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv102" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="21" unique_id=1811105936 instance=ExtResource("4_dgw2m")]
-position = Vector2(-224, -312)
+position = Vector2(-512, -280)
 enemy_data = ExtResource("6_xlqth")
 
 [node name="AtkLv103" parent="Enemies" parent_id_path=PackedInt32Array(1020133424) index="22" unique_id=1252898236 instance=ExtResource("4_dgw2m")]
@@ -217,35 +217,35 @@ position = Vector2(64, -544)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="5" unique_id=1379067021 instance=ExtResource("5_wmq0r")]
-position = Vector2(-240, -64)
+position = Vector2(-528, -32)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv202" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="6" unique_id=459596612 instance=ExtResource("5_wmq0r")]
-position = Vector2(-224, -256)
+position = Vector2(-512, -224)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv208" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="7" unique_id=225042848 instance=ExtResource("5_wmq0r")]
-position = Vector2(-232, -136)
+position = Vector2(-520, -104)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv203" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="8" unique_id=1104256071 instance=ExtResource("5_wmq0r")]
-position = Vector2(-240, -8)
+position = Vector2(-528, 24)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv204" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="9" unique_id=1599757811 instance=ExtResource("5_wmq0r")]
-position = Vector2(208, 48)
+position = Vector2(-544, -496)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv205" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="10" unique_id=877984277 instance=ExtResource("5_wmq0r")]
-position = Vector2(256, 80)
+position = Vector2(-496, -464)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv206" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="11" unique_id=1828611389 instance=ExtResource("5_wmq0r")]
-position = Vector2(136, 56)
+position = Vector2(-616, -488)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv207" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="12" unique_id=1507960915 instance=ExtResource("5_wmq0r")]
-position = Vector2(256, 40)
+position = Vector2(-496, -504)
 item_data = ExtResource("7_a6ijt")
 
 [node name="HpRecoveryLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="13" unique_id=1835675025 instance=ExtResource("5_wmq0r")]
@@ -317,11 +317,11 @@ position = Vector2(-96, -192)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv123" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="30" unique_id=868795778 instance=ExtResource("5_wmq0r")]
-position = Vector2(88, 24)
+position = Vector2(-664, -520)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv128" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="31" unique_id=325641888 instance=ExtResource("5_wmq0r")]
-position = Vector2(128, 24)
+position = Vector2(-624, -520)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv124" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="32" unique_id=370128698 instance=ExtResource("5_wmq0r")]
@@ -341,15 +341,15 @@ position = Vector2(-32, -64)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv115" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="36" unique_id=747562838 instance=ExtResource("5_wmq0r")]
-position = Vector2(-392, -440)
+position = Vector2(-584, -448)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv114" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="37" unique_id=470844840 instance=ExtResource("5_wmq0r")]
-position = Vector2(-384, -488)
+position = Vector2(-576, -496)
 item_data = ExtResource("14_ta0wl")
 
 [node name="HpRecoveryLv113" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="38" unique_id=333399188 instance=ExtResource("5_wmq0r")]
-position = Vector2(-384, -544)
+position = Vector2(-576, -552)
 item_data = ExtResource("14_ta0wl")
 
 [node name="MpRecoveryLv101" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="39" unique_id=1167899819 instance=ExtResource("5_wmq0r")]

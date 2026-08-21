@@ -17,7 +17,7 @@
 [node name="Floor1" unique_id=1021498195 instance=ExtResource("1_m1m67")]
 script = ExtResource("2_hk6q0")
 floor_id = &"floor_1"
-display_name = "一层"
+display_name = "1层：基础"
 description = "攻击，防御，速度"
 
 [node name="GroundLayer" parent="." index="0" unique_id=370044564]

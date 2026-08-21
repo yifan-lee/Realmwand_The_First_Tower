@@ -10,6 +10,9 @@ extends Floor
 @onready var door_spd_1: FloorDoor = $Interactables/DoorSpd1
 @onready var switch_def_1: FloorSwitch = $Interactables/SwitchDef1
 @onready var door_def_1: FloorDoor = $Interactables/DoorDef1
+@onready var switch_bal_1: FloorSwitch = $Interactables/SwitchBal1
+@onready var portal_1: FloorPortal = $Interactables/Portal1
+@onready var portal_2: FloorPortal = $Interactables/Portal2
 @onready var switch_spd_2: FloorSwitch = $Interactables/SwitchSpd2
 @onready var switch_spd_3: FloorSwitch = $Interactables/SwitchSpd3
 @onready var one_way_spd_1: OneWayPassage = $Interactables/OneWaySpd1
@@ -33,6 +36,7 @@ func _ready() -> void:
 	switch_atk_2.state_changed.connect(_on_floor_switch_state_changed)
 	switch_spd_1.state_changed.connect(_on_floor_switch_state_changed)
 	switch_def_1.state_changed.connect(_on_floor_switch_state_changed)
+	switch_bal_1.state_changed.connect(_on_floor_switch_state_changed)
 	switch_spd_2.state_changed.connect(_on_floor_switch_state_changed)
 	switch_spd_3.state_changed.connect(_on_floor_switch_state_changed)
 	switch_neu_1.state_changed.connect(_on_floor_switch_state_changed)
@@ -68,6 +72,7 @@ func _apply_initial_switch_states() -> void:
 	_update_door_atk_2(false)
 	_update_door_spd_1(false)
 	_update_door_def_1(false)
+	_update_portal_bal_1(false)
 	_update_one_way_spd_2(false)
 	_update_one_way_spd_3(false)
 	_update_final_door(false)
@@ -87,6 +92,8 @@ func _on_floor_switch_state_changed(
 			_update_door_spd_1(true)
 		&"switch_def_1":
 			_update_door_def_1(true)
+		&"switch_bal_1":
+			_update_portal_bal_1(true)
 		&"switch_spd_2":
 			_update_one_way_spd_2(true)
 		&"switch_spd_3":
@@ -190,3 +197,14 @@ func _update_door_spd_1(notify: bool = true) -> void:
 			EventBus.system_message_requested.emit("某处的速度之门打开了。\n出现了通向它的捷径。")
 		else:
 			EventBus.system_message_requested.emit("某处的速度之门关闭了。")
+
+
+## 传送门状态更新逻辑
+func _update_portal_bal_1(notify: bool = true) -> void:
+	portal_1.set_active(switch_bal_1.is_active)
+	portal_2.set_active(switch_bal_1.is_active)
+	if notify:
+		if switch_bal_1.is_active:
+			EventBus.system_message_requested.emit("某处的传送门被激活了。")
+		else:
+			EventBus.system_message_requested.emit("传送门已关闭。")

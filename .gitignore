@@ -8,6 +8,9 @@
 .mcp.json
 resources/godot-mcp-pro-server/
 
+# Local Discord webhook secret (keep the example file tracked)
+config/discord_webhook.cfg
+
 # Temporary validation artifacts
 /tmp/*
 !/tmp/.gitkeep

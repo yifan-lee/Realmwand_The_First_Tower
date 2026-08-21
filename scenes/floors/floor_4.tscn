@@ -8,10 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://c6shopnpclv1" path="res://scenes/actors/npcs/shop_npc.tscn" id="7_sd13j"]
 [ext_resource type="Resource" uid="uid://djgmxkplhaese" path="res://resources/items/hp_recovery_lv2.tres" id="7_wwa7h"]
 [ext_resource type="Texture2D" uid="uid://cdh3nnemr52bw" path="res://assets/interactables/terminal_universal.png" id="8_wwa7h"]
+[ext_resource type="Script" uid="uid://gqps43r1hjs1" path="res://scripts/data/item_data.gd" id="9_aoltt"]
+[ext_resource type="Resource" uid="uid://dp07qcx0dn7k" path="res://resources/items/hp_recovery_lv1.tres" id="10_glv83"]
+[ext_resource type="Resource" uid="uid://0dvg81bt3wru" path="res://resources/items/mp_recovery_lv1.tres" id="11_p24v6"]
+[ext_resource type="Resource" uid="uid://ctl3skm52eury" path="res://resources/items/fp_recovery_lv1.tres" id="12_dqeil"]
 
 [node name="Floor" unique_id=1021498195 instance=ExtResource("1_base_floor")]
 floor_id = &"floor_4"
-display_name = "四层：攻击之王"
+display_name = "4层：攻击之王"
 description = "打断。说你呢。打断啊！打断啊啊啊！"
 default_spawn_id = &"FromBelowStair"
 
@@ -41,38 +45,39 @@ position = Vector2(0, -608)
 enemy_data = ExtResource("5_pvo1t")
 
 [node name="HPRecoveryLv201" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="0" unique_id=1816246793 instance=ExtResource("6_sd13j")]
-position = Vector2(210, -78)
+position = Vector2(797, -31)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv202" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="1" unique_id=1464297194 instance=ExtResource("6_sd13j")]
-position = Vector2(216, -143)
+position = Vector2(803, -96)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv203" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="2" unique_id=382470154 instance=ExtResource("6_sd13j")]
-position = Vector2(197, -179)
+position = Vector2(784, -132)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv204" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="3" unique_id=844148010 instance=ExtResource("6_sd13j")]
-position = Vector2(293, -146)
+position = Vector2(880, -99)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv205" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="4" unique_id=2051863383 instance=ExtResource("6_sd13j")]
-position = Vector2(251, -206)
+position = Vector2(838, -159)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv206" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="5" unique_id=518816957 instance=ExtResource("6_sd13j")]
-position = Vector2(262, -266)
+position = Vector2(849, -219)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv207" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="6" unique_id=55053437 instance=ExtResource("6_sd13j")]
-position = Vector2(238, -303)
+position = Vector2(825, -256)
 item_data = ExtResource("7_wwa7h")
 
 [node name="HPRecoveryLv208" parent="Pickups" parent_id_path=PackedInt32Array(1104918386) index="7" unique_id=1811365605 instance=ExtResource("6_sd13j")]
-position = Vector2(278, -350)
+position = Vector2(824, -296)
 item_data = ExtResource("7_wwa7h")
 
 [node name="ShopNpc" parent="Npcs" parent_id_path=PackedInt32Array(1261277173) index="0" unique_id=1983748291 instance=ExtResource("7_sd13j")]
 position = Vector2(-64, -64)
 texture = ExtResource("8_wwa7h")
-item_prices = Array[int]([50, 50])
+shop_items = Array[ExtResource("9_aoltt")]([ExtResource("10_glv83"), ExtResource("11_p24v6"), ExtResource("12_dqeil")])
+item_prices = Array[int]([50, 50, 50])

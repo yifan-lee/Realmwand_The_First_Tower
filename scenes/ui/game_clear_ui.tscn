@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://br2mgvx1ych6i"]
 
-[ext_resource type="Script" path="res://scripts/ui/game_clear_ui.gd" id="1_o5hm6"]
+[ext_resource type="Script" uid="uid://btfyb3d46qoce" path="res://scripts/ui/game_clear_ui.gd" id="1_o5hm6"]
 [ext_resource type="Theme" uid="uid://b08pjyxkk3rbq" path="res://resources/themes/game_ui_theme.tres" id="2_iqrrp"]
 
 [node name="GameClearUI" type="CanvasLayer" unique_id=724430151]
@@ -11,6 +11,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("2_iqrrp")
 
@@ -79,7 +81,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"TerminalTabButton"
-text = "🚀 一键上传战报 (Google Forms)"
+text = "🚀 上传测试存档 (Discord)"
 
 [node name="CopySummaryButton" type="Button" parent="ClearRoot/Center/Panel/Margin/Content/ButtonRow" unique_id=456687560]
 unique_name_in_owner = true
