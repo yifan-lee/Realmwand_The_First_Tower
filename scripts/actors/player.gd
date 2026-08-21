@@ -44,10 +44,12 @@ var unspent_stat_points: int:
 	get(): return progression.unspent_stat_points if progression else 0
 var learned_skills: Array[SkillData]:
 	get(): return progression.learned_skills if progression else []
+var equipped_skills: Array[SkillData]:
+	get(): return progression.equipped_skills if progression else []
 
 
 func get_skills() -> Array[SkillData]:
-	return progression.learned_skills if progression else []
+	return progression.get_active_equipped_skills() if progression else []
 
 
 func has_skill(skill_id: StringName) -> bool:
@@ -64,6 +66,26 @@ func learn_skill(skill: SkillData) -> bool:
 
 func forget_skill(skill_id: StringName) -> bool:
 	return progression.forget_skill(skill_id) if progression else false
+
+
+func can_equip_skill(skill: SkillData, target_slot: int) -> Dictionary:
+	return progression.can_equip_skill(skill, target_slot) if progression else {"allowed": false, "reason": "No progression"}
+
+
+func equip_skill(skill: SkillData, target_slot: int) -> bool:
+	return progression.equip_skill(skill, target_slot) if progression else false
+
+
+func unequip_skill(target_slot: int) -> bool:
+	return progression.unequip_skill(target_slot) if progression else false
+
+
+func is_skill_equipped(skill_id: StringName) -> bool:
+	return progression.is_skill_equipped(skill_id) if progression else false
+
+
+func get_equipped_slot(skill_id: StringName) -> int:
+	return progression.get_equipped_slot(skill_id) if progression else -1
 
 
 func _ready() -> void:
@@ -108,8 +130,15 @@ func get_ui_portrait() -> Texture2D:
 func capture_save_data() -> Dictionary:
 	var skill_paths: Array[String] = []
 	for skill: SkillData in progression.learned_skills:
-		if not skill.resource_path.is_empty():
+		if skill != null and not skill.resource_path.is_empty():
 			skill_paths.append(skill.resource_path)
+			
+	var equipped_skill_paths: Array[String] = []
+	for skill: SkillData in progression.equipped_skills:
+		if skill != null and not skill.resource_path.is_empty():
+			equipped_skill_paths.append(skill.resource_path)
+		else:
+			equipped_skill_paths.append("")
 			
 	return {
 		"level": progression.level,
@@ -129,6 +158,7 @@ func capture_save_data() -> Dictionary:
 		"current_fp": stats.current_fp,
 		"facing_direction": [movement.facing_direction.x, movement.facing_direction.y],
 		"learned_skills": skill_paths,
+		"equipped_skills": equipped_skill_paths,
 		"inventory": inventory.capture_save_data(),
 		"equipment": equipment.capture_save_data(),
 	}
@@ -174,6 +204,22 @@ func restore_save_data(data: Dictionary) -> void:
 			var skill: SkillData = player_data.level_skills[i]
 			if skill != null and not progression.learned_skills.has(skill):
 				progression.learned_skills.append(skill)
+				
+	# Restore equipped skills
+	progression.equipped_skills = [null, null, null, null, null, null]
+	var equipped_value: Variant = data.get("equipped_skills", null)
+	if equipped_value is Array and not (equipped_value as Array).is_empty():
+		var eq_arr: Array = equipped_value as Array
+		for slot_idx: int in range(mini(eq_arr.size(), PlayerProgression.MAX_EQUIPPED_SKILLS)):
+			var path_str := String(eq_arr[slot_idx])
+			if not path_str.is_empty():
+				var skill := load(path_str) as SkillData
+				if skill != null and progression.has_skill(skill.id):
+					progression.equipped_skills[slot_idx] = skill
+	else:
+		# Fallback for old save files: auto equip from learned skills
+		for skill: SkillData in progression.learned_skills:
+			progression._try_auto_equip_skill(skill)
 				
 	stats.current_hp = clampf(float(data.get("current_hp", stats.current_hp)), 0.0, stats.get_max_hp())
 	stats.current_mp = clampf(float(data.get("current_mp", stats.current_mp)), 0.0, stats.get_max_mp())

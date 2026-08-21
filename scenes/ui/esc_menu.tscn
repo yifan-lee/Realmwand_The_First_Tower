@@ -156,9 +156,40 @@ size_flags_vertical = 3
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 8
 
-[node name="SkillPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage" unique_id=2087337204 instance=ExtResource("5_0us07")]
-custom_minimum_size = Vector2(0, 450)
+[node name="SkillPanelsContainer" type="HBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage" unique_id=1587391024]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="AllSkillsColumn" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer" unique_id=1734910231]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="AllSkillsHeader" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/AllSkillsColumn" unique_id=1284910382]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "已掌握技能"
+
+[node name="AllSkillPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/AllSkillsColumn" unique_id=2087337204 instance=ExtResource("5_0us07")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquippedSkillsColumn" type="VBoxContainer" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer" unique_id=1948271039]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="EquippedSkillsHeader" type="Label" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/EquippedSkillsColumn" unique_id=1958201948]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "当前携带技能"
+
+[node name="EquippedSkillPanel" parent="MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/EquippedSkillsColumn" unique_id=2198471029 instance=ExtResource("5_0us07")]
 layout_mode = 2
 size_flags_vertical = 3
 

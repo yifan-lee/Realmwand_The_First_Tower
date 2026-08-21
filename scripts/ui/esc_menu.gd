@@ -29,7 +29,9 @@ const CATEGORY_TYPES: Array[int] = [
 @onready var skill_page: Control = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage
 @onready var system_page: SystemPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SystemPage
 @onready var inventory_panel: InventoryPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/InventoryPanel
-@onready var skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanel
+@onready var all_skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/AllSkillsColumn/AllSkillPanel
+@onready var equipped_skill_panel: SkillPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/EquippedSkillsColumn/EquippedSkillPanel
+@onready var equipped_skills_header: Label = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/SkillPage/SkillPanelsContainer/EquippedSkillsColumn/EquippedSkillsHeader
 @onready var entry_info_panel: EntryInfoPanel = $MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/CharacterColumn/SelectionDetailPanel
 @onready var category_buttons: Array[Button] = [
 	$MenuRoot/Backdrop/MenuCenter/MenuPanel/MarginContainer/Content/Body/PageColumn/InventoryPage/CategoryTabs/EquipmentCategory,
@@ -43,6 +45,7 @@ var _current_page: MainPage = MainPage.INVENTORY
 var _current_category := 0
 var _preview_target_slot := -1
 var _pending_equip_item: EquipmentData = null
+var _pending_assign_skill: SkillData = null
 var _input_gate = preload("res://scripts/ui/components/ui_input_gate.gd").new()
 
 
@@ -65,7 +68,10 @@ func _ready() -> void:
 	equipment_panel.equip_slot_previewed.connect(_on_equip_slot_previewed)
 	if equipment_panel.equip_popup != null:
 		equipment_panel.equip_popup.popup_hide.connect(_on_equip_popup_hide)
-	skill_panel.skill_focused.connect(_on_skill_focused)
+	all_skill_panel.skill_focused.connect(_on_all_skill_focused)
+	all_skill_panel.skill_selected.connect(_on_all_skill_selected)
+	equipped_skill_panel.slot_focused.connect(_on_equipped_slot_focused)
+	equipped_skill_panel.slot_selected.connect(_on_equipped_slot_selected)
 	system_page.save_loaded.connect(close)
 
 
@@ -82,6 +88,14 @@ func _input(event: InputEvent) -> void:
 		return
 	if _should_preserve_text_input(event):
 		return
+
+	if event.is_action_pressed(&"ui_cancel"):
+		if _current_page == MainPage.SKILLS and _pending_assign_skill != null:
+			_pending_assign_skill = null
+			all_skill_panel.clear_highlight()
+			all_skill_panel.focus_first_row()
+			get_viewport().set_input_as_handled()
+			return
 
 	var direction := Vector2i.ZERO
 	if event.is_action_pressed(&"ui_left"):
@@ -113,13 +127,28 @@ func bind_save_manager(save_manager: SaveManager) -> void:
 func refresh_content() -> void:
 	if _player == null:
 		inventory_panel.bind_inventory(null)
-		skill_panel.clear_skills()
+		all_skill_panel.clear_skills()
+		equipped_skill_panel.clear_skills()
 		equipment_panel.bind_loadout(null)
 		actor_stats_panel.unbind_actor()
 		return
 	inventory_panel.set_battle_only(false)
 	inventory_panel.bind_inventory(_player.inventory)
-	skill_panel.display_skills(_player.learned_skills)
+	
+	var badges: Dictionary = {}
+	for skill: SkillData in _player.learned_skills:
+		if skill != null and _player.is_skill_equipped(skill.id):
+			badges[skill.id] = "已携带"
+	all_skill_panel.display_skills(_player.learned_skills, badges)
+	equipped_skill_panel.display_slots(_player.equipped_skills, PlayerProgression.MAX_EQUIPPED_SKILLS)
+	var active_count: int = _player.get_skills().size()
+	equipped_skills_header.text = "当前携带技能 (%d/%d)" % [active_count, PlayerProgression.MAX_EQUIPPED_SKILLS]
+	
+	if _pending_assign_skill != null:
+		all_skill_panel.set_highlighted_skill(_pending_assign_skill.id)
+	else:
+		all_skill_panel.clear_highlight()
+
 	equipment_panel.bind_loadout(_player.equipment)
 	actor_stats_panel.clear_preview()
 	actor_stats_panel.refresh()
@@ -143,6 +172,8 @@ func close() -> void:
 	if not menu_root.visible:
 		return
 	menu_root.visible = false
+	_pending_assign_skill = null
+	all_skill_panel.clear_highlight()
 	equipment_panel.clear_preview()
 	actor_stats_panel.clear_preview()
 	entry_info_panel.clear_info()
@@ -177,6 +208,8 @@ func _show_main_page(page: MainPage, focus_content: bool) -> void:
 	system_page.visible = page == MainPage.SYSTEM
 	equipment_panel.visible = page != MainPage.SKILLS
 	_pending_equip_item = null
+	_pending_assign_skill = null
+	all_skill_panel.clear_highlight()
 	entry_info_panel.clear_info()
 	refresh_player_stats()
 	if page == MainPage.SYSTEM:
@@ -231,7 +264,17 @@ func _navigate_horizontal_focus(
 					return true
 				return false
 		MainPage.SKILLS:
-			if skill_panel.skill_rows.has_row_focus(focus):
+			if all_skill_panel.has_row_focus(focus):
+				if direction > 0:
+					var cur_idx := all_skill_panel.get_focused_row_index()
+					if equipped_skill_panel.focus_row_at(cur_idx):
+						return true
+				return true
+			if equipped_skill_panel.has_row_focus(focus):
+				if direction < 0:
+					var cur_idx := equipped_skill_panel.get_focused_row_index()
+					if all_skill_panel.focus_row_at(cur_idx):
+						return true
 				return true
 		MainPage.SYSTEM:
 			return system_page.navigate_focus(Vector2i(direction, 0))
@@ -264,11 +307,16 @@ func _navigate_vertical_focus(
 			if equipment_panel.has_slot_focus(focus):
 				return false
 		MainPage.SKILLS:
-			if skill_panel.skill_rows.has_row_focus(focus):
-				if direction < 0 and skill_panel.skill_rows.is_first_row_focused():
+			if all_skill_panel.has_row_focus(focus):
+				if direction < 0 and all_skill_panel.skill_rows.is_first_row_focused():
 					_focus_main_tab()
 					return true
-				return skill_panel.skill_rows.navigate_focus(Vector2i(0, direction))
+				return all_skill_panel.skill_rows.navigate_focus(Vector2i(0, direction))
+			if equipped_skill_panel.has_row_focus(focus):
+				if direction < 0 and equipped_skill_panel.skill_rows.is_first_row_focused():
+					_focus_main_tab()
+					return true
+				return equipped_skill_panel.skill_rows.navigate_focus(Vector2i(0, direction))
 		MainPage.SYSTEM:
 			if system_page.navigate_focus(Vector2i(0, direction)):
 				return true
@@ -284,8 +332,9 @@ func _focus_current_page() -> void:
 		MainPage.INVENTORY:
 			category_buttons[_current_category].grab_focus()
 		MainPage.SKILLS:
-			if not skill_panel.skill_rows.focus_first_row():
-				skills_tab.grab_focus()
+			if not all_skill_panel.focus_first_row():
+				if not equipped_skill_panel.focus_first_row():
+					skills_tab.grab_focus()
 		MainPage.SYSTEM:
 			system_page.focus_first_control()
 
@@ -406,9 +455,68 @@ func _on_item_selected(item: ItemData) -> void:
 		category_buttons[_current_category].grab_focus()
 
 
-func _on_skill_focused(skill: SkillData) -> void:
-	actor_stats_panel.set_preview(skill)
-	entry_info_panel.display_skill(skill)
+func _on_all_skill_focused(skill: SkillData) -> void:
+	if skill != null:
+		actor_stats_panel.set_preview(skill)
+		entry_info_panel.display_skill(skill)
+	else:
+		actor_stats_panel.clear_preview()
+		entry_info_panel.clear_info()
+
+
+func _on_all_skill_selected(skill: SkillData) -> void:
+	if skill == null or _player == null:
+		return
+	_pending_assign_skill = skill
+	all_skill_panel.set_highlighted_skill(skill.id)
+	
+	var cur_slot := _player.get_equipped_slot(skill.id)
+	if cur_slot >= 0:
+		equipped_skill_panel.focus_row_at(cur_slot)
+	else:
+		var target_focus := 0
+		for i in range(_player.equipped_skills.size()):
+			if _player.equipped_skills[i] == null:
+				target_focus = i
+				break
+		equipped_skill_panel.focus_row_at(target_focus)
+
+
+func _on_equipped_slot_focused(_slot_index: int, skill: SkillData) -> void:
+	if skill != null:
+		actor_stats_panel.set_preview(skill)
+		entry_info_panel.display_skill(skill)
+	elif _pending_assign_skill != null:
+		actor_stats_panel.set_preview(_pending_assign_skill)
+		entry_info_panel.display_skill(_pending_assign_skill)
+	else:
+		actor_stats_panel.clear_preview()
+		entry_info_panel.clear_info()
+
+
+func _on_equipped_slot_selected(slot_index: int, skill: SkillData) -> void:
+	if _player == null:
+		return
+	if _pending_assign_skill != null:
+		var check := _player.can_equip_skill(_pending_assign_skill, slot_index)
+		if check.get("allowed", false):
+			var assigned_name := _pending_assign_skill.display_name
+			_player.equip_skill(_pending_assign_skill, slot_index)
+			EventBus.system_message_requested.emit("已将【%s】装备至槽位 %d！" % [assigned_name, slot_index + 1])
+			_pending_assign_skill = null
+			all_skill_panel.clear_highlight()
+			refresh_content()
+			equipped_skill_panel.focus_row_at(slot_index)
+		else:
+			var reason: String = check.get("reason", "无法装备该技能")
+			EventBus.system_message_requested.emit(reason)
+	else:
+		if skill != null:
+			var skill_name := skill.display_name
+			_player.unequip_skill(slot_index)
+			EventBus.system_message_requested.emit("已卸下槽位 %d 的技能【%s】！" % [slot_index + 1, skill_name])
+			refresh_content()
+			equipped_skill_panel.focus_row_at(slot_index)
 
 
 func _on_equipment_slot_focused(slot: int) -> void:

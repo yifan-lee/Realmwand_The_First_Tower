@@ -49,6 +49,7 @@ script = ExtResource("3_xohqs")
 id = &"Overload ATK"
 display_name = "进攻过载"
 description = "强力的一击，但是使用过后会虚弱一段时间"
+exclusive_group = &"overload"
 cooldown = 8
 costs = Array[ExtResource("1_j7wkf")]([SubResource("Resource_lv4pn"), SubResource("Resource_5b5ri"), SubResource("Resource_d2mf5"), SubResource("Resource_7q8mk")])
 effects = Array[ExtResource("2_kkxer")]([SubResource("Resource_c3esm"), SubResource("Resource_yv5s2")])

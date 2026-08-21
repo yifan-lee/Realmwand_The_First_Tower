@@ -79,6 +79,9 @@ func _process(delta: float) -> void:
 			if not is_active():
 				return
 		else:
+			if not _has_usable_player_skills():
+				_auto_skip_player_turn()
+				return
 			_state = BattleState.WAITING_FOR_PLAYER
 			_battle_ui.set_action_available(true)
 			_battle_ui.show_message("轮到你行动，战斗时间已暂停。")
@@ -141,13 +144,39 @@ func _load_actor_passives(actor: Node) -> void:
 	elif actor is Enemy and (actor as Enemy).enemy_data != null:
 		skills = (actor as Enemy).enemy_data.skills
 	elif actor is Player:
-		skills = (actor as Player).learned_skills
+		skills = (actor as Player).get_skills()
 
 	for skill: SkillData in skills:
 		if skill != null and skill.skill_type == SkillData.SkillType.PASSIVE:
 			for effect: ActionEffectData in skill.effects:
 				if effect.status_to_apply != null:
 					status_controller.apply_status(actor, effect.status_to_apply)
+
+
+func _has_usable_player_skills() -> bool:
+	if _player == null:
+		return false
+	var skills: Array[SkillData] = _player.get_skills()
+	for skill: SkillData in skills:
+		if skill == null or skill.skill_type == SkillData.SkillType.PASSIVE:
+			continue
+		if get_skill_cooldown(skill.id, false) > 0:
+			continue
+		var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
+		var mp_cost := _get_skill_cost(skill, ActionCostData.CostType.MP)
+		var fp_cost := _get_skill_cost(skill, ActionCostData.CostType.FP)
+		if _player.current_hp > hp_cost and _player.current_mp >= mp_cost and _player.current_fp >= fp_cost:
+			return true
+	return false
+
+
+func _auto_skip_player_turn() -> void:
+	EventBus.system_message_requested.emit("没有可用技能，行动跳过！")
+	_battle_ui.show_message("没有可用技能，行动跳过！")
+	_decrement_cooldowns(false)
+	status_controller.on_action_finished(_player)
+	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
+	_complete_player_action(false)
 
 
 func _on_battle_requested(enemy: Enemy, player: Player) -> void:

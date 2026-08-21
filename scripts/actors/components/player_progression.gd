@@ -6,12 +6,15 @@ const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
 signal level_up_available
 signal skill_learned(skill: SkillData)
 
+const MAX_EQUIPPED_SKILLS: int = 6
+
 var level: int = 1
 var experience: int = 0
 var unspent_stat_points: int = 0
 
 var learned_skills: Array[SkillData] = []
 var pending_learned_skills: Array[SkillData] = []
+var equipped_skills: Array[SkillData] = [null, null, null, null, null, null]
 
 var _player_data: PlayerData
 var _stats: PlayerStats
@@ -24,6 +27,10 @@ func initialize(data: PlayerData, stats: PlayerStats) -> void:
 	level = _player_data.starting_level
 	experience = _player_data.starting_experience
 	learned_skills = _player_data.starting_skills.duplicate()
+	equipped_skills = [null, null, null, null, null, null]
+	for skill: SkillData in _player_data.starting_skills:
+		if skill != null:
+			_try_auto_equip_skill(skill)
 
 
 func get_experience_for_next_level() -> int:
@@ -51,9 +58,7 @@ func add_experience(amount: int) -> void:
 		if _player_data.level_skills.has(level):
 			var new_skill: SkillData = _player_data.level_skills[level]
 			if not learned_skills.has(new_skill):
-				learned_skills.append(new_skill)
-				pending_learned_skills.append(new_skill)
-				skill_learned.emit(new_skill)
+				learn_skill(new_skill)
 
 	_stats.stats_changed.emit()
 
@@ -242,12 +247,16 @@ func learn_skill(skill: SkillData) -> bool:
 	if not has_skill(skill.id):
 		learned_skills.append(skill)
 		pending_learned_skills.append(skill)
+		_try_auto_equip_skill(skill)
 		skill_learned.emit(skill)
 		return true
 	return false
 
 
 func forget_skill(skill_id: StringName) -> bool:
+	var slot := get_equipped_slot(skill_id)
+	if slot >= 0:
+		unequip_skill(slot)
 	for i: int in range(learned_skills.size() - 1, -1, -1):
 		var skill := learned_skills[i]
 		if skill != null and skill.id == skill_id:
@@ -258,4 +267,80 @@ func forget_skill(skill_id: StringName) -> bool:
 					pending_learned_skills.remove_at(j)
 			return true
 	return false
+
+
+func can_equip_skill(skill: SkillData, target_slot: int) -> Dictionary:
+	if skill == null:
+		return {"allowed": false, "reason": "技能不存在"}
+	if not has_skill(skill.id):
+		return {"allowed": false, "reason": "尚未掌握该技能"}
+	if target_slot < 0 or target_slot >= MAX_EQUIPPED_SKILLS:
+		return {"allowed": false, "reason": "无效的技能槽位"}
+	
+	if not skill.exclusive_group.is_empty():
+		for i in range(MAX_EQUIPPED_SKILLS):
+			if i != target_slot and equipped_skills[i] != null:
+				if equipped_skills[i].exclusive_group == skill.exclusive_group and equipped_skills[i].id != skill.id:
+					return {
+						"allowed": false,
+						"reason": "过载技能冲突：已在【槽位 %d】携带【%s】，无法同时携带多个过载技能！" % [i + 1, equipped_skills[i].display_name]
+					}
+					
+	return {"allowed": true, "reason": ""}
+
+
+func equip_skill(skill: SkillData, target_slot: int) -> bool:
+	var check := can_equip_skill(skill, target_slot)
+	if not check.get("allowed", false):
+		return false
+	
+	var current_slot := get_equipped_slot(skill.id)
+	if current_slot >= 0 and current_slot != target_slot:
+		var displaced: SkillData = equipped_skills[target_slot]
+		equipped_skills[target_slot] = skill
+		equipped_skills[current_slot] = displaced
+	else:
+		equipped_skills[target_slot] = skill
+	return true
+
+
+func unequip_skill(target_slot: int) -> bool:
+	if target_slot < 0 or target_slot >= MAX_EQUIPPED_SKILLS:
+		return false
+	if equipped_skills[target_slot] == null:
+		return false
+	equipped_skills[target_slot] = null
+	return true
+
+
+func is_skill_equipped(skill_id: StringName) -> bool:
+	return get_equipped_slot(skill_id) >= 0
+
+
+func get_equipped_slot(skill_id: StringName) -> int:
+	for i in range(MAX_EQUIPPED_SKILLS):
+		if equipped_skills[i] != null and equipped_skills[i].id == skill_id:
+			return i
+	return -1
+
+
+func get_active_equipped_skills() -> Array[SkillData]:
+	var result: Array[SkillData] = []
+	for skill: SkillData in equipped_skills:
+		if skill != null:
+			result.append(skill)
+	return result
+
+
+func _try_auto_equip_skill(skill: SkillData) -> bool:
+	if skill == null or is_skill_equipped(skill.id):
+		return false
+	for i in range(MAX_EQUIPPED_SKILLS):
+		if equipped_skills[i] == null:
+			var check := can_equip_skill(skill, i)
+			if check.get("allowed", false):
+				equipped_skills[i] = skill
+				return true
+	return false
+
 

@@ -18,6 +18,7 @@ enum SkillType {
 @export var display_name: String = ""
 @export_multiline var description: String = ""
 @export var icon: Texture2D
+@export var exclusive_group: StringName = &""
 
 @export_group("Progression")
 @export_range(1, 99, 1) var unlock_level: int = 1
@@ -68,6 +69,8 @@ func get_concise_description() -> String:
 func get_details() -> Array[String]:
 	var result: Array[String] = []
 	result.append("类别：%s" % get_type_name())
+	if not exclusive_group.is_empty():
+		result.append("专属类型：%s (同类限带1个)" % exclusive_group)
 	if not description.is_empty():
 		result.append("说明：%s" % description)
 	
