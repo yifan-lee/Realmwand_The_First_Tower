@@ -7,11 +7,16 @@
 
 [sub_resource type="Resource" id="Resource_ktu67"]
 script = ExtResource("1_ia3im")
+category = 0
 target = 0
 resource_type = 3
 calc_method = 0
 value = 10.0
-is_free_action = true
+
+[sub_resource type="Resource" id="Resource_free_fp"]
+script = ExtResource("1_ia3im")
+category = 2
+special_type = 1
 
 [resource]
 script = ExtResource("1_uphl2")
@@ -22,4 +27,4 @@ icon = ExtResource("3_1o77e")
 world_texture = ExtResource("3_1o77e")
 usable_in_battle = true
 consumed_on_use = true
-effects = Array[ExtResource("1_ia3im")]([SubResource("Resource_ktu67")])
+effects = Array[ExtResource("1_ia3im")]([SubResource("Resource_ktu67"), SubResource("Resource_free_fp")])

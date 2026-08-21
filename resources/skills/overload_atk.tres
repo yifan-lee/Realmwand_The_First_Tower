@@ -17,7 +17,7 @@ value = 40.0
 [sub_resource type="Resource" id="Resource_d2mf5"]
 script = ExtResource("1_j7wkf")
 cost_type = 3
-value = 4.0
+value = 8.0
 metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
 [sub_resource type="Resource" id="Resource_7q8mk"]
@@ -36,12 +36,13 @@ duration_count = 2
 
 [sub_resource type="Resource" id="Resource_c3esm"]
 script = ExtResource("2_kkxer")
+category = 1
 target = 0
-resource_type = 0
 status_to_apply = SubResource("Resource_weak_status")
 
 [sub_resource type="Resource" id="Resource_yv5s2"]
 script = ExtResource("2_kkxer")
+category = 0
 value = 200.0
 
 [resource]
@@ -50,6 +51,5 @@ id = &"Overload ATK"
 display_name = "进攻过载"
 description = "强力的一击，但是使用过后会虚弱一段时间"
 exclusive_group = &"overload"
-cooldown = 8
 costs = Array[ExtResource("1_j7wkf")]([SubResource("Resource_lv4pn"), SubResource("Resource_5b5ri"), SubResource("Resource_d2mf5"), SubResource("Resource_7q8mk")])
 effects = Array[ExtResource("2_kkxer")]([SubResource("Resource_c3esm"), SubResource("Resource_yv5s2")])

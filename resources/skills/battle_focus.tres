@@ -21,8 +21,8 @@ duration_count = 2
 
 [sub_resource type="Resource" id="Resource_drfa4"]
 script = ExtResource("1_r5wxd")
+category = 1
 target = 0
-resource_type = 0
 status_to_apply = SubResource("Resource_focus_status")
 
 [resource]

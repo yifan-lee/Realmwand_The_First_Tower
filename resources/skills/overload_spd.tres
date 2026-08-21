@@ -18,9 +18,8 @@ trigger_interval = 4
 
 [sub_resource type="Resource" id="Resource_overload_spd_effect"]
 script = ExtResource("1_effect")
+category = 1
 target = 0
-resource_type = 0
-value = 0.0
 status_to_apply = SubResource("Resource_overload_spd_status")
 
 [resource]

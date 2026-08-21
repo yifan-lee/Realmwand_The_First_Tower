@@ -9,6 +9,11 @@ script = ExtResource("1_7llpx")
 cost_type = 2
 value = 20.0
 
+[sub_resource type="Resource" id="Resource_cd_overflow"]
+script = ExtResource("1_7llpx")
+cost_type = 3
+value = 1.0
+
 [sub_resource type="Resource" id="Resource_g6mqr"]
 script = ExtResource("1_7llpx")
 cost_type = 4
@@ -24,6 +29,5 @@ id = &"overflow"
 display_name = "湮灭"
 description = "伤害极高的技能，请及时打断"
 domain = 1
-cooldown = 1
-costs = Array[ExtResource("1_7llpx")]([SubResource("Resource_v7wxn"), SubResource("Resource_g6mqr")])
+costs = Array[ExtResource("1_7llpx")]([SubResource("Resource_v7wxn"), SubResource("Resource_cd_overflow"), SubResource("Resource_g6mqr")])
 effects = Array[ExtResource("2_rfug7")]([SubResource("Resource_7llpx")])

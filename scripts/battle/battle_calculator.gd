@@ -74,47 +74,50 @@ static func evaluate_skill_effects(
 				continue
 			var target_delta := preview.get_or_create_delta(target)
 			
-			# 1. 打断处理
-			if effect.is_interrupt:
-				if battle_manager != null and battle_manager.is_actor_casting(target):
-					target_delta.is_interrupted = true
-					preview.add_message("打断了吟唱。")
-				else:
-					preview.add_message("目标没有正在吟唱的技能。")
+			# 1. 特殊机制处理
+			if effect.category == ActionEffectData.EffectCategory.SPECIAL:
+				if effect.special_type == ActionEffectData.SpecialType.INTERRUPT:
+					if battle_manager != null and battle_manager.is_actor_casting(target):
+						target_delta.is_interrupted = true
+						preview.add_message("打断了吟唱。")
+					else:
+						preview.add_message("目标没有正在吟唱的技能。")
 
 			# 2. 即时资源结算
-			if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
-				var amount := _calculate_resource_amount(effect, caster, target, skill, battle_manager)
-				match effect.resource_type:
-					ActionEffectData.ResourceType.HP:
-						target_delta.hp_delta += amount
-						if amount < 0.0:
-							total_applied_damage += absf(amount)
-					ActionEffectData.ResourceType.MP:
-						target_delta.mp_delta += amount
-					ActionEffectData.ResourceType.FP:
-						target_delta.fp_delta += amount
-					ActionEffectData.ResourceType.SHIELD:
-						target_delta.shield_delta += amount
-						if amount > 0.0:
-							preview.add_message("获得了 %.0f 点护盾。" % amount)
+			elif effect.category == ActionEffectData.EffectCategory.RESOURCE:
+				if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
+					var amount := _calculate_resource_amount(effect, caster, target, skill, battle_manager)
+					match effect.resource_type:
+						ActionEffectData.ResourceType.HP:
+							target_delta.hp_delta += amount
+							if amount < 0.0:
+								total_applied_damage += absf(amount)
+						ActionEffectData.ResourceType.MP:
+							target_delta.mp_delta += amount
+						ActionEffectData.ResourceType.FP:
+							target_delta.fp_delta += amount
+						ActionEffectData.ResourceType.SHIELD:
+							target_delta.shield_delta += amount
+							if amount > 0.0:
+								preview.add_message("获得了 %.0f 点护盾。" % amount)
 
 			# 3. 施加状态预览
-			if effect.status_to_apply != null and battle_manager != null:
-				var status := effect.status_to_apply
-				match status.affected_stat:
-					StatusEffectData.StatType.ATK:
-						var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
-						target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
-					StatusEffectData.StatType.DEF:
-						var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
-						target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
-					StatusEffectData.StatType.SPD:
-						var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
-						target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
+			elif effect.category == ActionEffectData.EffectCategory.STATUS:
+				if effect.status_to_apply != null and battle_manager != null:
+					var status := effect.status_to_apply
+					match status.affected_stat:
+						StatusEffectData.StatType.ATK:
+							var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
+							target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
+						StatusEffectData.StatType.DEF:
+							var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
+							target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
+						StatusEffectData.StatType.SPD:
+							var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
+							target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
 
 		# 4. 自由动作处理
-		if effect.is_free_action and caster != null:
+		if effect.is_free_action() and caster != null:
 			var caster_delta := preview.get_or_create_delta(caster)
 			caster_delta.is_free_action = true
 
@@ -129,10 +132,13 @@ static func evaluate_item(
 	battle_manager: BattleManager
 ) -> BattleActionPreview:
 	var preview := BattleActionPreview.new()
-	if item == null or caster == null:
+	if item == null:
 		return preview
-		
+
 	for effect: ActionEffectData in item.effects:
+		if effect == null:
+			continue
+			
 		var effect_targets: Array[Node] = []
 		if effect.target == ActionEffectData.TargetType.SELF:
 			if caster != null:
@@ -153,45 +159,48 @@ static func evaluate_item(
 				continue
 			var target_delta := preview.get_or_create_delta(target)
 
-			# 1. 打断处理
-			if effect.is_interrupt:
-				if battle_manager != null and battle_manager.is_actor_casting(target):
-					target_delta.is_interrupted = true
-					preview.add_message("打断了吟唱。")
-				else:
-					preview.add_message("目标没有正在吟唱的技能。")
+			# 1. 特殊机制处理
+			if effect.category == ActionEffectData.EffectCategory.SPECIAL:
+				if effect.special_type == ActionEffectData.SpecialType.INTERRUPT:
+					if battle_manager != null and battle_manager.is_actor_casting(target):
+						target_delta.is_interrupted = true
+						preview.add_message("打断了吟唱。")
+					else:
+						preview.add_message("目标没有正在吟唱的技能。")
 
 			# 2. 即时资源结算
-			if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
-				var amount := _calculate_resource_amount(effect, caster, target, null, battle_manager)
-				match effect.resource_type:
-					ActionEffectData.ResourceType.HP:
-						target_delta.hp_delta += amount
-					ActionEffectData.ResourceType.MP:
-						target_delta.mp_delta += amount
-					ActionEffectData.ResourceType.FP:
-						target_delta.fp_delta += amount
-					ActionEffectData.ResourceType.SHIELD:
-						target_delta.shield_delta += amount
-						if amount > 0.0:
-							preview.add_message("获得了 %.0f 点护盾。" % amount)
+			elif effect.category == ActionEffectData.EffectCategory.RESOURCE:
+				if effect.resource_type != ActionEffectData.ResourceType.NONE and not is_zero_approx(effect.value):
+					var amount := _calculate_resource_amount(effect, caster, target, null, battle_manager)
+					match effect.resource_type:
+						ActionEffectData.ResourceType.HP:
+							target_delta.hp_delta += amount
+						ActionEffectData.ResourceType.MP:
+							target_delta.mp_delta += amount
+						ActionEffectData.ResourceType.FP:
+							target_delta.fp_delta += amount
+						ActionEffectData.ResourceType.SHIELD:
+							target_delta.shield_delta += amount
+							if amount > 0.0:
+								preview.add_message("获得了 %.0f 点护盾。" % amount)
 
 			# 3. 施加状态预览
-			if effect.status_to_apply != null and battle_manager != null:
-				var status := effect.status_to_apply
-				match status.affected_stat:
-					StatusEffectData.StatType.ATK:
-						var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
-						target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
-					StatusEffectData.StatType.DEF:
-						var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
-						target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
-					StatusEffectData.StatType.SPD:
-						var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
-						target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
+			elif effect.category == ActionEffectData.EffectCategory.STATUS:
+				if effect.status_to_apply != null and battle_manager != null:
+					var status := effect.status_to_apply
+					match status.affected_stat:
+						StatusEffectData.StatType.ATK:
+							var base_atk := battle_manager.get_actor_stat(target, StatusEffectData.StatType.ATK)
+							target_delta.atk_delta += FORMULAS.status_effect_delta(base_atk, status)
+						StatusEffectData.StatType.DEF:
+							var base_def := battle_manager.get_actor_stat(target, StatusEffectData.StatType.DEF)
+							target_delta.def_delta += FORMULAS.status_effect_delta(base_def, status)
+						StatusEffectData.StatType.SPD:
+							var base_spd := battle_manager.get_actor_stat(target, StatusEffectData.StatType.SPD)
+							target_delta.spd_delta += FORMULAS.status_effect_delta(base_spd, status)
 
 		# 4. 自由动作处理
-		if effect.is_free_action and caster != null:
+		if effect.is_free_action() and caster != null:
 			var caster_delta := preview.get_or_create_delta(caster)
 			caster_delta.is_free_action = true
 

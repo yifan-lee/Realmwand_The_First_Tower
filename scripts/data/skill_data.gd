@@ -7,13 +7,13 @@ enum TargetType {
 }
 
 enum ActivationType {
-	ACTIVE = 0,   ## 主动
-	PASSIVE = 1,  ## 被动
+	ACTIVE = 0, ## 主动
+	PASSIVE = 1, ## 被动
 }
 
 enum SkillDomain {
 	PHYSICAL = 0, ## 物理
-	MIND = 1,     ## 灵技 / 灵能
+	MIND = 1, ## 灵技 / 灵能
 	TACTICAL = 2, ## 变化
 }
 
@@ -30,7 +30,6 @@ enum SkillDomain {
 @export_group("Usage")
 @export var activation_type: ActivationType = ActivationType.ACTIVE
 @export var domain: SkillDomain = SkillDomain.PHYSICAL
-@export_range(0, 99, 1) var cooldown: int = 0
 @export var costs: Array[ActionCostData] = []
 @export var target_type: TargetType = TargetType.ENEMY
 
@@ -49,7 +48,7 @@ func get_activation_name() -> String:
 func get_domain_name() -> String:
 	match domain:
 		SkillDomain.MIND:
-			return "灵技" if activation_type == ActivationType.ACTIVE else "灵能"
+			return "灵技"
 		SkillDomain.TACTICAL:
 			return "变化"
 		_:
@@ -61,8 +60,6 @@ func get_type_name() -> String:
 
 
 func get_cooldown() -> int:
-	if cooldown > 0:
-		return cooldown
 	for cost: ActionCostData in costs:
 		if cost != null and cost.cost_type == ActionCostData.CostType.COOLDOWN:
 			return cost.get_cooldown()

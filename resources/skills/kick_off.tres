@@ -10,13 +10,19 @@ script = ExtResource("1_ibhqy")
 cost_type = 2
 value = 20.0
 
+[sub_resource type="Resource" id="Resource_cd_kick"]
+script = ExtResource("1_ibhqy")
+cost_type = 3
+value = 4.0
+
 [sub_resource type="Resource" id="Resource_3c7a8"]
 script = ExtResource("2_3c7a8")
-resource_type = 0
-is_interrupt = true
+category = 2
+special_type = 0
 
 [sub_resource type="Resource" id="Resource_137w6"]
 script = ExtResource("2_3c7a8")
+category = 0
 value = 10.0
 
 [resource]
@@ -24,6 +30,5 @@ script = ExtResource("3_vn8x5")
 id = &"kick_off"
 display_name = "打断"
 icon = ExtResource("3_3c7a8")
-cooldown = 4
-costs = Array[ExtResource("1_ibhqy")]([SubResource("Resource_k11ut")])
+costs = Array[ExtResource("1_ibhqy")]([SubResource("Resource_k11ut"), SubResource("Resource_cd_kick")])
 effects = Array[ExtResource("2_3c7a8")]([SubResource("Resource_3c7a8"), SubResource("Resource_137w6")])

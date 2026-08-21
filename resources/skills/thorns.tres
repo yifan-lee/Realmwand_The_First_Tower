@@ -20,9 +20,8 @@ trigger_type = 3
 
 [sub_resource type="Resource" id="Resource_thorns_effect"]
 script = ExtResource("1_effect")
+category = 1
 target = 0
-resource_type = 0
-value = 0.0
 status_to_apply = SubResource("Resource_thorns_status")
 
 [resource]
@@ -32,6 +31,5 @@ display_name = "刺甲"
 description = "受到物理攻击时对攻击者反弹伤害"
 icon = ExtResource("3_icon")
 activation_type = 1
-domain = 0
 target_type = 1
 effects = Array[ExtResource("1_effect")]([SubResource("Resource_thorns_effect")])
