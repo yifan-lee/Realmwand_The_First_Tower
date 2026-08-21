@@ -198,11 +198,9 @@ func handle_dialogue_option(index: int, ui: NpcInteractionUI, player: Player) ->
 
 				player.learn_skill(target_skill)
 
-				if forgotten_names.is_empty():
-					EventBus.system_message_requested.emit("成功领悟了新技能【%s】！" % target_skill.display_name)
-				else:
+				if not forgotten_names.is_empty():
 					var forgotten_str := "、".join(forgotten_names)
-					EventBus.system_message_requested.emit("遗忘了 %s，成功领悟了新技能【%s】！" % [forgotten_str, target_skill.display_name])
+					EventBus.system_message_requested.emit("已遗忘旧技能 %s" % forgotten_str)
 			else:
 				# 取消
 				ui.close()

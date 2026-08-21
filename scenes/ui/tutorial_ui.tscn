@@ -54,13 +54,13 @@ size_flags_horizontal = 3
 text = "教程提示"
 horizontal_alignment = 1
 
-[node name="MessageLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=1965801342]
+[node name="MessageLabel" type="RichTextLabel" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=948686049]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "这里显示教程内容。"
-horizontal_alignment = 1
-autowrap_mode = 3
+bbcode_enabled = true
+text = "[center]这里显示教程内容。[/center]"
+fit_content = true
 
 [node name="ContinueLabel" type="Label" parent="TutorialRoot/CenterContainer/Panel/Margin/Content" unique_id=742588336]
 layout_mode = 2

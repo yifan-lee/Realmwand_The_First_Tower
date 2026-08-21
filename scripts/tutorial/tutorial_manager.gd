@@ -56,6 +56,7 @@ func _load_tutorials() -> void:
 	var tut6 = preload("res://scripts/tutorial/tutorials/fp_item_tutorial.gd").new()
 	var tut7 = preload("res://scripts/tutorial/tutorials/interrupt_tutorial.gd").new()
 	var tut8 = preload("res://scripts/tutorial/tutorials/cast_time_tutorial.gd").new()
+	var tut9 = preload("res://scripts/tutorial/tutorials/skill_learned_tutorial.gd").new()
 	all_tutorials.append(tut1)
 	all_tutorials.append(tut2)
 	all_tutorials.append(tut3)
@@ -64,6 +65,7 @@ func _load_tutorials() -> void:
 	all_tutorials.append(tut6)
 	all_tutorials.append(tut7)
 	all_tutorials.append(tut8)
+	all_tutorials.append(tut9)
 	
 	for tut in all_tutorials:
 		tut.setup(self, _tutorial_ui)
@@ -77,7 +79,7 @@ func _on_game_event(event_name: StringName, event_data: Variant) -> void:
 		return
 		
 	for tut in all_tutorials:
-		if tut.tutorial_id in completed_tutorials:
+		if not (tut is SkillLearnedTutorial) and tut.tutorial_id in completed_tutorials:
 			continue
 		
 		if tut.should_trigger(event_name, event_data):
@@ -89,7 +91,7 @@ func _on_game_event(event_name: StringName, event_data: Variant) -> void:
 
 
 func _on_tutorial_completed(tutorial_id: StringName) -> void:
-	if not tutorial_id in completed_tutorials:
+	if tutorial_id != &"skill_learned_tutorial" and not tutorial_id in completed_tutorials:
 		completed_tutorials.append(tutorial_id)
 	active_tutorial = null
 	if _player != null:

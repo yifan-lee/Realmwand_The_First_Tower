@@ -5,7 +5,7 @@ signal confirmed
 
 @onready var tutorial_root: Control = $TutorialRoot
 @onready var prompt_container: Control = $TutorialRoot/CenterContainer
-@onready var message_label: Label = $TutorialRoot/CenterContainer/Panel/Margin/Content/MessageLabel
+@onready var message_label: RichTextLabel = $TutorialRoot/CenterContainer/Panel/Margin/Content/MessageLabel
 
 @onready var _default_anchor_left: float = prompt_container.anchor_left
 @onready var _default_anchor_top: float = prompt_container.anchor_top
@@ -28,7 +28,7 @@ func show_prompt(
 ) -> void:
 	_input_gate.reset_gate()
 	_restore_default_position()
-	message_label.text = message
+	message_label.text = "[center]%s[/center]" % message
 	_wait_for_confirmation = wait_for_confirmation
 	tutorial_root.visible = true
 
@@ -108,3 +108,6 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_wait_for_confirmation = false
 		confirmed.emit()
+	else:
+		# Block all other user inputs while the tutorial prompt modal is open
+		get_viewport().set_input_as_handled()
