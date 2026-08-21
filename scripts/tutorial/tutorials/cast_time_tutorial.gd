@@ -35,7 +35,7 @@ func start() -> void:
 		if target != null:
 			target.grab_focus()
 		
-	_ui.show_prompt_at("【数据攻击】是一个带有“吟唱时间”的技能。\n点击施放后它不会立刻生效，而是在ATB条退后一段距离后重新读条，等读条到达终点时才会真正打出伤害。\n吟唱期间会被具有打断效果的技能打断！", target, true)
+	_ui.show_prompt_at("【数据攻击】是一个带有“吟唱时间”的技能。\n点击施放后它不会立刻生效，而是在ATB条退后一段距离后重新读条，等读条到达终点时才会真正打出伤害。\n吟唱期间会被具有打断效果的技能打断！\n\n[color=#8EA3AA]按确认键继续[/color]", target, true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 

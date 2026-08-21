@@ -76,7 +76,7 @@ func _position_near_target(target_control: Control) -> void:
 	prompt_container.anchor_bottom = 0.0
 
 	var desired_position := target_position + Vector2(
-		-prompt_container.size.x * 0.5,
+		- prompt_container.size.x * 0.5,
 		target_vertical_gap
 	)
 	var viewport_size := get_viewport().get_visible_rect().size

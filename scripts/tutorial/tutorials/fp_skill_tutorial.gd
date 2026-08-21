@@ -40,7 +40,7 @@ func start() -> void:
 	if battle_ui != null and battle_ui.player_stats != null:
 		target = battle_ui.player_stats.fp_row
 		
-	_ui.show_prompt_at("这是你的 FP（专注），你会随着战斗的进行越来越专注，战斗结束之后会清零。\n部分技能会消耗 FP。现在你已经学会了需要 FP 的技能。", target, true)
+	_ui.show_prompt_at("这是你的 FP（专注），你会随着战斗的进行越来越专注，战斗结束之后会清零。\n部分技能会消耗 FP。现在你已经学会了需要 FP 的技能。\n\n[color=#8EA3AA]按确认键继续[/color]", target, true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 
@@ -61,7 +61,7 @@ func _on_ui_confirmed() -> void:
 			if battle_ui != null and battle_ui.skill_panel != null:
 				target = battle_ui.skill_panel.get_skill_row(&"hard_attack")
 			
-			_ui.show_prompt_at("【强力攻击】技能伤害很高，但会消耗 FP。", target, true)
+			_ui.show_prompt_at("【强力攻击】技能伤害很高，但会消耗 FP。\n\n[color=#8EA3AA]按确认键继续[/color]", target, true)
 			
 		Step.SHOW_SKILL:
 			current_step = Step.FINISH

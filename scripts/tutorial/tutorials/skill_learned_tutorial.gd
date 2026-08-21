@@ -30,7 +30,7 @@ func start() -> void:
 		complete()
 		return
 	
-	_ui.show_prompt("学会技能【%s】，在菜单界面查看。" % _current_skill.display_name, true)
+	_ui.show_prompt("学会技能【%s】，在菜单界面查看。\n\n[color=#8EA3AA]按确认键继续[/color]" % _current_skill.display_name, true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 

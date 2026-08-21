@@ -21,7 +21,7 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 
 func start() -> void:
 	var item_name: String = _current_item.display_name if _current_item != null else "新装备"
-	_ui.show_prompt("获得新装备【%s】！可在 ESC 菜单中查看并穿戴。" % item_name, true)
+	_ui.show_prompt("获得新装备【%s】！可在 ESC 菜单中查看并穿戴。\n\n[color=#8EA3AA]按确认键继续[/color]" % item_name, true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 

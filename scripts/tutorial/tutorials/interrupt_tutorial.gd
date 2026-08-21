@@ -22,7 +22,7 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 
 func start() -> void:
 	current_step = Step.INTRO
-	_ui.show_prompt("学会技能【打断】，[color=#ff4d4f]可以打断敌方的吟唱[/color]，在菜单界面查看。", true)
+	_ui.show_prompt("学会技能【打断】，[color=#ff4d4f]可以打断敌方的吟唱[/color]，在菜单界面查看。\n\n[color=#8EA3AA]按确认键继续[/color]", true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 
