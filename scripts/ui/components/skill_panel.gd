@@ -109,11 +109,11 @@ func refresh() -> void:
 			var trailing_text := ""
 
 			if skill != null:
-				row_text = "[槽位 %d] %s" % [i + 1, skill.display_name]
+				row_text = "%s" % [skill.display_name]
 				row_icon = skill.icon
 				row_tooltip = skill.description
 			else:
-				row_text = "[槽位 %d] <空槽位>" % [i + 1]
+				row_text = "<未装备技能>"
 				row_tooltip = "未装备技能"
 				row.modulate = Color(1.0, 1.0, 1.0, 0.6)
 
@@ -248,4 +248,3 @@ func _on_row_focused(entry: Resource, index: int) -> void:
 	else:
 		if skill != null:
 			skill_focused.emit(skill)
-

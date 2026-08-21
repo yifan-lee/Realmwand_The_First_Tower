@@ -275,7 +275,7 @@ func can_equip_skill(skill: SkillData, target_slot: int) -> Dictionary:
 	if not has_skill(skill.id):
 		return {"allowed": false, "reason": "尚未掌握该技能"}
 	if target_slot < 0 or target_slot >= MAX_EQUIPPED_SKILLS:
-		return {"allowed": false, "reason": "无效的技能槽位"}
+		return {"allowed": false, "reason": "无效的技能位置"}
 	
 	if not skill.exclusive_group.is_empty():
 		for i in range(MAX_EQUIPPED_SKILLS):
@@ -283,7 +283,7 @@ func can_equip_skill(skill: SkillData, target_slot: int) -> Dictionary:
 				if equipped_skills[i].exclusive_group == skill.exclusive_group and equipped_skills[i].id != skill.id:
 					return {
 						"allowed": false,
-						"reason": "过载技能冲突：已在【槽位 %d】携带【%s】，无法同时携带多个过载技能！" % [i + 1, equipped_skills[i].display_name]
+						"reason": "技能冲突：已携带【%s】，无法同时携带多个同类型技能！" % [equipped_skills[i].display_name]
 					}
 					
 	return {"allowed": true, "reason": ""}
@@ -342,5 +342,3 @@ func _try_auto_equip_skill(skill: SkillData) -> bool:
 				equipped_skills[i] = skill
 				return true
 	return false
-
-

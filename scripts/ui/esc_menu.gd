@@ -502,7 +502,7 @@ func _on_equipped_slot_selected(slot_index: int, skill: SkillData) -> void:
 		if check.get("allowed", false):
 			var assigned_name := _pending_assign_skill.display_name
 			_player.equip_skill(_pending_assign_skill, slot_index)
-			EventBus.system_message_requested.emit("已将【%s】装备至槽位 %d！" % [assigned_name, slot_index + 1])
+			EventBus.system_message_requested.emit("已装备技能【%s】！" % assigned_name)
 			_pending_assign_skill = null
 			all_skill_panel.clear_highlight()
 			refresh_content()
@@ -514,7 +514,7 @@ func _on_equipped_slot_selected(slot_index: int, skill: SkillData) -> void:
 		if skill != null:
 			var skill_name := skill.display_name
 			_player.unequip_skill(slot_index)
-			EventBus.system_message_requested.emit("已卸下槽位 %d 的技能【%s】！" % [slot_index + 1, skill_name])
+			EventBus.system_message_requested.emit("已卸下技能【%s】！" % [skill_name])
 			refresh_content()
 			equipped_skill_panel.focus_row_at(slot_index)
 
