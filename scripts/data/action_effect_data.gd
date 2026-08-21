@@ -95,7 +95,7 @@ func get_description() -> String:
 func _get_resource_name() -> String:
 	match resource_type:
 		ResourceType.HP: return "生命"
-		ResourceType.MP: return "魔力"
+		ResourceType.MP: return "灵能"
 		ResourceType.FP: return "专注"
 		ResourceType.SHIELD: return "护盾"
 	return "资源"

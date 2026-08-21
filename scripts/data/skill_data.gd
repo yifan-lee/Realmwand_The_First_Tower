@@ -8,7 +8,7 @@ enum TargetType {
 
 enum SkillType {
 	PHYSICAL,
-	MAGICAL,
+	MIND,
 	TRANSFORM,
 	PASSIVE,
 }
@@ -35,8 +35,8 @@ enum SkillType {
 
 func get_type_name() -> String:
 	match skill_type:
-		SkillType.MAGICAL:
-			return "魔法"
+		SkillType.MIND:
+			return "灵技"
 		SkillType.TRANSFORM:
 			return "变化"
 		SkillType.PASSIVE:

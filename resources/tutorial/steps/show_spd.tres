@@ -5,8 +5,7 @@
 [resource]
 script = ExtResource("1_66hc8")
 step_id = &"show_spd"
-prompt_text = "速度决定角色在战斗中的行动节奏。
-每100 / 速度 秒，玩家可以行动一次"
+prompt_text = "SPD（速度）决定行动条充能速度。当标记到达右侧即可行动！\n每次行动需要花费的时间大约是 200 / spd。"
 unlock_feature_id = &"spd"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"

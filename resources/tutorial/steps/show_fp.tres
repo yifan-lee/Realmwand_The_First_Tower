@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_mfk4g")
 step_id = &"show_fp"
-prompt_text = "这是专注值（FP），你会随着战斗的进行越来越专注，战斗结束之后会清零。部分技能会消耗 FP。现在你已经学会了需要 FP 的技能。"
+prompt_text = "这是你的 FP（专注），你会随着战斗的进行越来越专注，战斗结束之后会清零。部分技能会消耗 FP。现在你已经学会了需要 FP 的技能。"
 unlock_feature_id = &"fp"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"

@@ -32,9 +32,9 @@ enum EndCondition {
 enum TriggerType {
 	ON_ANY_ACTION,
 	ON_PHYSICAL_ATTACK,
-	ON_MAGICAL_ATTACK,
+	ON_MIND_ATTACK,
 	ON_TAKE_PHYSICAL_DAMAGE,
-	ON_TAKE_MAGICAL_DAMAGE,
+	ON_TAKE_MIND_DAMAGE,
 	ON_DEAL_DAMAGE,
 }
 
@@ -48,7 +48,7 @@ enum StackPolicy {
 
 enum SkillType {
 	PHYSICAL,
-	MAGICAL,
+	MIND,
 	TRANSFORM,
 	PASSIVE,
 }
@@ -86,12 +86,12 @@ enum SkillType {
 
 func get_stat_name() -> String:
 	match affected_stat:
-		StatType.ATK: return "攻击力"
-		StatType.DEF: return "防御力"
+		StatType.ATK: return "攻击"
+		StatType.DEF: return "防御"
 		StatType.SPD: return "速度"
 		StatType.SKILL_POWER: return "技能威力"
 		StatType.MAX_HP: return "最大生命"
-		StatType.MAX_MP: return "最大魔力"
+		StatType.MAX_MP: return "最大灵能"
 	return "属性"
 
 
@@ -100,7 +100,7 @@ func get_skill_type_name() -> String:
 		return ""
 	match target_skill_type:
 		SkillType.PHYSICAL: return "物理"
-		SkillType.MAGICAL: return "魔法"
+		SkillType.MIND: return "灵技"
 		SkillType.TRANSFORM: return "变化"
 		SkillType.PASSIVE: return "被动"
 	return ""
@@ -149,7 +149,7 @@ func get_formatted_description(remaining: int = -1, stacks: int = 1, remaining_t
 
 	# 反伤逻辑文本生成
 	if counter_damage_fixed > 0.0 or counter_damage_ratio > 0.0:
-		var target_type_str := "物理" if trigger_type == TriggerType.ON_TAKE_PHYSICAL_DAMAGE else ("魔法" if trigger_type == TriggerType.ON_TAKE_MAGICAL_DAMAGE else "")
+		var target_type_str := "物理" if trigger_type == TriggerType.ON_TAKE_PHYSICAL_DAMAGE else ("灵技" if trigger_type == TriggerType.ON_TAKE_MIND_DAMAGE else "")
 		var counter_desc := ""
 		if counter_damage_fixed > 0.0 and counter_damage_ratio > 0.0:
 			counter_desc = "受到%s攻击时，对攻击者反弹 %.0f 点固定伤害与 %.0f%% 受到的伤害" % [target_type_str, counter_damage_fixed, counter_damage_ratio * 100.0]

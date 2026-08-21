@@ -24,7 +24,7 @@ func get_description() -> String:
 		CostType.HP:
 			return "消耗生命：%.0f" % value
 		CostType.MP:
-			return "消耗魔力：%.0f" % value
+			return "消耗灵能：%.0f" % value
 		CostType.FP:
 			return "消耗专注：%.0f" % value
 		CostType.COOLDOWN:

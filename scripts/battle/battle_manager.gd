@@ -323,8 +323,8 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
 	if resolved_skill.skill_type == SkillData.SkillType.PHYSICAL:
 		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_PHYSICAL_ATTACK)
-	elif resolved_skill.skill_type == SkillData.SkillType.MAGICAL:
-		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_MAGICAL_ATTACK)
+	elif resolved_skill.skill_type == SkillData.SkillType.MIND:
+		status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_MIND_ATTACK)
 
 	var is_physical := (resolved_skill.skill_type == SkillData.SkillType.PHYSICAL)
 	_apply_preview(preview, resolved_skill.effects, false, is_physical)
@@ -361,8 +361,8 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 	var is_physical := (skill == null) or (skill.skill_type == SkillData.SkillType.PHYSICAL)
 	if is_physical:
 		status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_PHYSICAL_ATTACK)
-	elif skill != null and skill.skill_type == SkillData.SkillType.MAGICAL:
-		status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_MAGICAL_ATTACK)
+	elif skill != null and skill.skill_type == SkillData.SkillType.MIND:
+		status_controller.on_trigger_event(_enemy, StatusEffectData.TriggerType.ON_MIND_ATTACK)
 
 	if skill == null:
 		# Fallback to basic attack if no skill

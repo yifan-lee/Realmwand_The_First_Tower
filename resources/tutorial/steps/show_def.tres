@@ -5,8 +5,7 @@
 [resource]
 script = ExtResource("1_u33dy")
 step_id = &"show_def"
-prompt_text = "防御力可以减少你受到的伤害。
-伤害公式时：攻击力 * 技能威力 / 防御力"
+prompt_text = "DEF（防御）会影响你受到的伤害。\n伤害计算公式大约为：atk * 技能威力 / def"
 unlock_feature_id = &"def"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"

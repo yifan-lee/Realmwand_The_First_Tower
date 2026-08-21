@@ -82,7 +82,7 @@ func run_test(main: Node) -> void:
 	EventBus.game_event.emit(&"battle_started", null)
 	assert(tut_mgr.active_tutorial != null and tut_mgr.active_tutorial.tutorial_id == &"fp_skill_tutorial", "进入战斗应触发 fp_skill_tutorial")
 	assert(tut_ui.tutorial_root.visible == true, "FP 教程应弹出提示")
-	assert("专注值（FP）" in tut_ui.message_label.text, "FP 教程第一步应介绍专注值")
+	assert("FP（专注）" in tut_ui.message_label.text, "FP 教程第一步应介绍专注")
 	
 	# FP 教程 Step 1 确认
 	tut_ui._wait_for_confirmation = false

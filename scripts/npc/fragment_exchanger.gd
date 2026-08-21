@@ -69,8 +69,8 @@ func _build_trailing_texts() -> Array[String]:
 
 func _build_tooltips() -> Array[String]:
 	return [
-		"消耗红色碎片，永久提高攻击力。",
-		"消耗黄色碎片，永久提高防御力。",
+		"消耗红色碎片，永久提高攻击。",
+		"消耗黄色碎片，永久提高防御。",
 		"消耗蓝色碎片，永久提高速度。",
 	]
 

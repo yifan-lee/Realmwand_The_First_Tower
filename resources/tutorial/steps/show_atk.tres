@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_f3hyv")
 step_id = &"show_atk"
-prompt_text = "攻击力决定你对敌人造成的伤害。"
+prompt_text = "ATK（攻击）会影响你能造成的伤害。"
 unlock_feature_id = &"atk"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"

@@ -76,14 +76,14 @@ func display_item(item: ItemData) -> void:
 	if item is EquipmentData:
 		var equip := item as EquipmentData
 		if equip.max_hp_bonus != 0: details.append("最大生命: %+d" % int(equip.max_hp_bonus))
-		if equip.max_mp_bonus != 0: details.append("最大法力: %+d" % int(equip.max_mp_bonus))
-		if equip.atk_bonus != 0: details.append("物理攻击: %+d" % int(equip.atk_bonus))
-		if equip.def_bonus != 0: details.append("物理防御: %+d" % int(equip.def_bonus))
+		if equip.max_mp_bonus != 0: details.append("最大灵能: %+d" % int(equip.max_mp_bonus))
+		if equip.atk_bonus != 0: details.append("攻击: %+d" % int(equip.atk_bonus))
+		if equip.def_bonus != 0: details.append("防御: %+d" % int(equip.def_bonus))
 		if equip.spd_bonus != 0: details.append("速度: %+d" % int(equip.spd_bonus))
 	elif item != null and not item.effects.is_empty():
 		for effect in item.effects:
 			if effect != null:
-				var res_name = "生命" if effect.resource_type == ActionEffectData.ResourceType.HP else ("法力" if effect.resource_type == ActionEffectData.ResourceType.MP else "FP")
+				var res_name = "生命" if effect.resource_type == ActionEffectData.ResourceType.HP else ("灵能" if effect.resource_type == ActionEffectData.ResourceType.MP else "专注")
 				details.append("恢复%s: +%d" % [res_name, int(effect.value)])
 		
 	var view := EntryInfoViewData.new()

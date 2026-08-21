@@ -160,7 +160,7 @@ theme_override_constants/separation = 6
 custom_minimum_size = Vector2(52, 28)
 layout_mode = 2
 theme_type_variation = &"MpLabel"
-text = "魔力"
+text = "灵能"
 vertical_alignment = 1
 
 [node name="MpBar" type="ProgressBar" parent="MarginContainer/Content/Resources/MpRow" unique_id=38239767]

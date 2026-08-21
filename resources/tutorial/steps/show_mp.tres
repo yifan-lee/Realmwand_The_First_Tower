@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_atsak")
 step_id = &"show_mp"
-prompt_text = "这是魔力（MP），部分技能会消耗 MP。现在你已经学会了需要 MP 的技能。"
+prompt_text = "这是灵能（MP），部分技能会消耗 MP。现在你已经学会了需要 MP 的技能。"
 unlock_feature_id = &"mp"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"

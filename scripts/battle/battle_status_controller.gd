@@ -86,7 +86,7 @@ func on_damage_taken(victim: Node, attacker: Node, damage: float, is_physical: b
 		return counter_events
 
 	var list: Array[ActiveStatus] = _statuses[victim]
-	var expected_type := StatusEffectData.TriggerType.ON_TAKE_PHYSICAL_DAMAGE if is_physical else StatusEffectData.TriggerType.ON_TAKE_MAGICAL_DAMAGE
+	var expected_type := StatusEffectData.TriggerType.ON_TAKE_PHYSICAL_DAMAGE if is_physical else StatusEffectData.TriggerType.ON_TAKE_MIND_DAMAGE
 
 	for i in range(list.size() - 1, -1, -1):
 		var status := list[i]

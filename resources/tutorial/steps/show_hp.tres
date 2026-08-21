@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_xq1nl")
 step_id = &"show_hp"
-prompt_text = "生命值代表角色当前还能承受多少伤害。"
+prompt_text = "这是你的 HP（生命），代表角色当前还能承受多少伤害。"
 unlock_feature_id = &"hp"
 wait_for_confirmation = true
 metadata/_custom_type_script = "uid://cgci5684mnyy8"
