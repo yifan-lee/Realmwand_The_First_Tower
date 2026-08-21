@@ -9,9 +9,6 @@ signal closed
 
 enum Mode {CHOICES, DIALOGUE}
 
-const SUCCESS_COLOR := Color("#32FF7DFF")
-const ERROR_COLOR := Color("#FF4155FF")
-
 @export var option_row_scene: PackedScene
 
 @onready var interaction_root: Control = $InteractionRoot
@@ -124,7 +121,7 @@ func show_player_stat_preview(player: Player, stat_id: StringName = &"", amount:
 
 func show_transaction_result(success: bool, message: String) -> void:
 	feedback_label.text = message
-	feedback_label.modulate = SUCCESS_COLOR if success else ERROR_COLOR
+	feedback_label.modulate = UIColors.ACCENT_SUCCESS if success else UIColors.ACCENT_DANGER
 
 
 func show_entry_detail(entry: Variant) -> void:

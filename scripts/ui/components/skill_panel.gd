@@ -1,6 +1,8 @@
 class_name SkillPanel
 extends PanelContainer
 
+const UIColors = preload("res://scripts/shared/ui_colors.gd")
+
 enum Mode {
 	LIST,
 	SLOTS,
@@ -115,7 +117,7 @@ func refresh() -> void:
 			else:
 				row_text = "<未装备技能>"
 				row_tooltip = "未装备技能"
-				row.modulate = Color(1.0, 1.0, 1.0, 0.6)
+				row.modulate = UIColors.TEXT_TRANSLUCENT_60
 
 			row.setup(
 				skill,
@@ -139,14 +141,16 @@ func refresh() -> void:
 
 func set_highlighted_skill(skill_id: StringName) -> void:
 	_highlighted_skill_id = skill_id
-	_highlighted_index = -1
+	_apply_highlights()
+
+
+func set_highlighted_index(index: int) -> void:
+	_highlighted_index = index
 	_apply_highlights()
 
 
 func set_highlighted_slot(slot_index: int) -> void:
-	_highlighted_index = slot_index
-	_highlighted_skill_id = &""
-	_apply_highlights()
+	set_highlighted_index(slot_index)
 
 
 func clear_highlight() -> void:
@@ -167,9 +171,9 @@ func _apply_highlights() -> void:
 				is_highlighted = true
 
 		if is_highlighted:
-			row.self_modulate = Color("#ffe066")
+			row.self_modulate = UIColors.ACCENT_CYAN
 		else:
-			row.self_modulate = Color(1.0, 1.0, 1.0, 1.0)
+			row.self_modulate = UIColors.TEXT_WHITE
 
 
 func update_availability(usability_check: Callable, cd_check: Callable = Callable()) -> void:
@@ -181,7 +185,7 @@ func update_availability(usability_check: Callable, cd_check: Callable = Callabl
 				continue
 			var is_usable: bool = usability_check.call(skill)
 			rows[i].disabled = false
-			rows[i].modulate = Color(1.0, 1.0, 1.0, 1.0) if is_usable else Color(1.0, 1.0, 1.0, 0.5)
+			rows[i].modulate = UIColors.TEXT_WHITE if is_usable else UIColors.TEXT_TRANSLUCENT_60
 			var text = _build_row_text(skill)
 			if not cd_check.is_null():
 				var cd: int = cd_check.call(skill)

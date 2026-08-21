@@ -1,12 +1,6 @@
 class_name ActorStatsPanel
 extends PanelContainer
 
-const PREVIEW_LOSS_COLOR := Color("#FF4155FF")
-const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
-const PREVIEW_SHIELD_COLOR := Color("#00E5FFFF")
-const SHIELD_BAR_COLOR := Color("#45AAF2FF")
-const SHIELD_VALUE_COLOR := Color("#50C8FFFF")
-const VALUE_COLOR := Color("#D9E5E8FF")
 const BUFF_LABEL_SCENE := preload("res://scenes/ui/components/buff_label.tscn")
 const FEATURE_IDS: Array[StringName] = [
 	&"hp",
@@ -329,7 +323,7 @@ func _update_resource_bars() -> void:
 		var shield_width := _view_data.current_shield
 		hp_shield_segment.position = Vector2(hp_bar.size.x * shield_start / effective_hp_max, 2.0)
 		hp_shield_segment.size = Vector2(maxf(2.0, hp_bar.size.x * shield_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
-		hp_shield_segment.color = SHIELD_BAR_COLOR
+		hp_shield_segment.color = UIColors.SHIELD_BAR
 		hp_shield_segment.self_modulate = Color.WHITE
 		hp_shield_segment.visible = true
 	else:
@@ -343,7 +337,7 @@ func _update_resource_bars() -> void:
 			var preview_width := _view_data.current_shield_delta
 			hp_preview_segment.position = Vector2(hp_bar.size.x * preview_start / effective_hp_max, 2.0)
 			hp_preview_segment.size = Vector2(maxf(2.0, hp_bar.size.x * preview_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
-			hp_preview_segment.color = PREVIEW_SHIELD_COLOR
+			hp_preview_segment.color = UIColors.PREVIEW_SHIELD
 			var flash_tint := Color.WHITE
 			flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
 			hp_preview_segment.self_modulate = flash_tint
@@ -354,7 +348,7 @@ func _update_resource_bars() -> void:
 			var preview_width := absf(_view_data.current_shield_delta)
 			hp_preview_segment.position = Vector2(hp_bar.size.x * preview_start / effective_hp_max, 2.0)
 			hp_preview_segment.size = Vector2(maxf(2.0, hp_bar.size.x * preview_width / effective_hp_max), maxf(0.0, hp_bar.size.y - 4.0))
-			hp_preview_segment.color = PREVIEW_LOSS_COLOR
+			hp_preview_segment.color = UIColors.PREVIEW_LOSS
 			var flash_tint := Color.WHITE
 			flash_tint.a = lerpf(0.2, 1.0, _view_data.get_flash_pulse())
 			hp_preview_segment.self_modulate = flash_tint
@@ -404,7 +398,7 @@ func _update_preview_segment(
 	var segment_width := absf(preview_value - current_value)
 	segment.position = Vector2(bar.size.x * segment_start / maximum, 2.0)
 	segment.size = Vector2(maxf(2.0, bar.size.x * segment_width / maximum), maxf(0.0, bar.size.y - 4.0))
-	segment.color = PREVIEW_GAIN_COLOR if delta > 0.0 else PREVIEW_LOSS_COLOR
+	segment.color = UIColors.PREVIEW_GAIN if delta > 0.0 else UIColors.PREVIEW_LOSS
 	var flash_tint := Color("#FFFFFFFF")
 	flash_tint.a = lerpf(0.15, 1.0, _view_data.get_flash_pulse())
 	segment.self_modulate = flash_tint
@@ -431,21 +425,21 @@ func _format_hp_resource(
 	if not is_zero_approx(shield_delta):
 		if shield > 0.0:
 			var sign_str := "+" if shield_delta > 0 else ""
-			var delta_color: Color = PREVIEW_GAIN_COLOR if shield_delta > 0 else PREVIEW_LOSS_COLOR
+			var delta_color: Color = UIColors.PREVIEW_GAIN if shield_delta > 0 else UIColors.PREVIEW_LOSS
 			hp_str += " [color=#%s](%.0f [/color][color=#%s](%s%.0f)[/color][color=#%s])[/color]" % [
-				SHIELD_VALUE_COLOR.to_html(false),
+				UIColors.SHIELD_VALUE.to_html(false),
 				shield,
 				delta_color.to_html(false),
 				sign_str,
 				shield_delta,
-				SHIELD_VALUE_COLOR.to_html(false)
+				UIColors.SHIELD_VALUE.to_html(false)
 			]
 		else:
 			var sign_str := "+" if shield_delta > 0 else ""
-			var delta_color: Color = PREVIEW_GAIN_COLOR if shield_delta > 0 else PREVIEW_LOSS_COLOR
+			var delta_color: Color = UIColors.PREVIEW_GAIN if shield_delta > 0 else UIColors.PREVIEW_LOSS
 			hp_str += " [color=#%s](%s%.0f)[/color]" % [delta_color.to_html(false), sign_str, shield_delta]
 	elif shield > 0.0:
-		hp_str += " [color=#%s](%.0f)[/color]" % [SHIELD_VALUE_COLOR.to_html(false), shield]
+		hp_str += " [color=#%s](%.0f)[/color]" % [UIColors.SHIELD_VALUE.to_html(false), shield]
 
 	return "[right]%s / %s[/right]" % [
 		hp_str,
@@ -468,11 +462,11 @@ func _format_stat(
 	var rounded_delta: int = roundi(delta)
 
 	if rounded_delta == 0:
-		return "[color=#%s]%d[/color]" % [VALUE_COLOR.to_html(false), rounded_value]
+		return "[color=#%s]%d[/color]" % [UIColors.TEXT_MAIN.to_html(false), rounded_value]
 
-	var delta_color: Color = PREVIEW_GAIN_COLOR if rounded_delta > 0 else PREVIEW_LOSS_COLOR
+	var delta_color: Color = UIColors.PREVIEW_GAIN if rounded_delta > 0 else UIColors.PREVIEW_LOSS
 	return "[color=#%s]%d[/color] [color=#%s](%+d)[/color]" % [
-		VALUE_COLOR.to_html(false),
+		UIColors.TEXT_MAIN.to_html(false),
 		rounded_value,
 		delta_color.to_html(false),
 		rounded_delta,
@@ -484,22 +478,17 @@ func _format_float_stat(
 	delta: float
 ) -> String:
 	if is_zero_approx(delta):
-		return "[color=#%s]%.1f[/color]" % [VALUE_COLOR.to_html(false), value]
+		return "[color=#%s]%.1f[/color]" % [UIColors.TEXT_MAIN.to_html(false), value]
 
-	var delta_color: Color = PREVIEW_GAIN_COLOR if delta > 0 else PREVIEW_LOSS_COLOR
+	var delta_color: Color = UIColors.PREVIEW_GAIN if delta > 0 else UIColors.PREVIEW_LOSS
 	var sign_str := "+" if delta > 0 else ""
 	return "[color=#%s]%.1f[/color] [color=#%s](%s%.1f)[/color]" % [
-		VALUE_COLOR.to_html(false),
+		UIColors.TEXT_MAIN.to_html(false),
 		value,
 		delta_color.to_html(false),
 		sign_str,
 		delta,
 	]
-
-
-const BUFF_COLOR = Color("#55EFC4FF")
-const DEBUFF_COLOR = Color("#FF7675FF")
-const NEUTRAL_COLOR = Color("#DFE6E9FF")
 
 
 func _refresh_buffs(effects: Array[Dictionary]) -> void:
@@ -520,11 +509,11 @@ func _refresh_buffs(effects: Array[Dictionary]) -> void:
 			continue
 
 		var polarity_val: int = int(active.get(&"polarity", StatusEffectData.Polarity.BUFF))
-		var color: Color = BUFF_COLOR
+		var color: Color = UIColors.BUFF
 		if polarity_val == StatusEffectData.Polarity.DEBUFF:
-			color = DEBUFF_COLOR
+			color = UIColors.DEBUFF
 		elif polarity_val == StatusEffectData.Polarity.NEUTRAL:
-			color = NEUTRAL_COLOR
+			color = UIColors.NEUTRAL
 
 		var label := BUFF_LABEL_SCENE.instantiate() as Label
 		label.text = "%d. %s" % [buff_idx, text]

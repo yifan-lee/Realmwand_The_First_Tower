@@ -2,6 +2,7 @@ class_name BattleUI
 extends CanvasLayer
 
 const FORMULAS = preload("res://scripts/shared/game_formulas.gd")
+const UIColors = preload("res://scripts/shared/ui_colors.gd")
 
 signal skill_selected(skill: SkillData)
 signal item_selected(item: ItemData)
@@ -75,18 +76,18 @@ func _process(_delta: float) -> void:
 		var p_casting = _battle_manager.is_player_casting()
 		_player_casting_label.visible = p_casting
 		if p_casting:
-			player_atb_marker.modulate = Color("#80CCFFFF")
+			player_atb_marker.modulate = UIColors.ACCENT_CYAN
 			player_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
 		else:
-			player_atb_marker.modulate = Color("#FFFFFFFF")
+			player_atb_marker.modulate = UIColors.TEXT_WHITE
 			
 		var e_casting = _battle_manager.is_enemy_casting()
 		_enemy_casting_label.visible = e_casting
 		if e_casting:
-			enemy_atb_marker.modulate = Color("#FF6666FF")
+			enemy_atb_marker.modulate = UIColors.ACCENT_DANGER
 			enemy_atb_marker.modulate.a = (sin(time_sec * 10.0) + 1.0) * 0.25 + 0.5
 		else:
-			enemy_atb_marker.modulate = Color("#FFFFFFFF")
+			enemy_atb_marker.modulate = UIColors.TEXT_WHITE
 
 	if _player != null:
 		skill_panel.update_availability(_can_cast_skill, _get_skill_cd)

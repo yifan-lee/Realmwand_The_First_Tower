@@ -2,20 +2,32 @@
 
 [ext_resource type="FontFile" uid="uid://770tdjinfs33" path="res://assets/fonts/SourceHanSans-VF.ttf" id="1_u0iqd"]
 
+[sub_resource type="FontVariation" id="FontVariation_regular"]
+base_font = ExtResource("1_u0iqd")
+variation_opentype = {
+"wght": 500
+}
+
+[sub_resource type="FontVariation" id="FontVariation_title"]
+base_font = ExtResource("1_u0iqd")
+variation_opentype = {
+"wght": 600
+}
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg8i1"]
-bg_color = Color(0.14901961, 0.20392157, 0.22745098, 1)
+bg_color = Color(0.06666667, 0.101960786, 0.12156863, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.2901961, 0.3647059, 0.39607844, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+border_color = Color(0.17254902, 0.24313726, 0.27058825, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0iqd"]
-bg_color = Color(1, 0.25490198, 0.33333334, 1)
+bg_color = Color(0.9411765, 0.2901961, 0.3647059, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -32,26 +44,26 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.16078432, 0.22352941, 0.2509804, 0.6666667)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wpwwu"]
 content_margin_left = 12.0
 content_margin_top = 8.0
 content_margin_right = 12.0
 content_margin_bottom = 8.0
-bg_color = Color(0.16862746, 0.15294118, 0.13333334, 0.98039216)
+bg_color = Color(0.09019608, 0.21960784, 0.25882354, 0.98039216)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1, 0.60784316, 0.25882354, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+border_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ajqo"]
 content_margin_left = 12.0
@@ -63,11 +75,11 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.38431373, 0.9019608, 0.8980392, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+border_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gv1h"]
 content_margin_left = 12.0
@@ -80,10 +92,10 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.20784314, 0.2901961, 0.3254902, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2lyce"]
 content_margin_left = 14.0
@@ -91,53 +103,69 @@ content_margin_top = 12.0
 content_margin_right = 14.0
 content_margin_bottom = 12.0
 bg_color = Color(0.039215688, 0.07058824, 0.09019608, 0.9490196)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.35686275, 0.4392157, 0.47843137, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.20784314, 0.2901961, 0.3254902, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_large_menu"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.039215688, 0.07058824, 0.09019608, 0.9490196)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.20784314, 0.2901961, 0.3254902, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bn7xh"]
-bg_color = Color(1, 0.8039216, 0.19607843, 1)
+bg_color = Color(0.9098039, 0.745098, 0.227451, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3hnd"]
-bg_color = Color(1, 0.50980395, 0.1764706, 1)
+bg_color = Color(0.9490196, 0.5411765, 0.23921569, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i5qvf"]
-bg_color = Color(0.19607843, 1, 0.49019608, 1)
+bg_color = Color(0.27058825, 0.9019608, 0.5411765, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_41cvm"]
-bg_color = Color(0.6666667, 0.3529412, 1, 1)
+bg_color = Color(0.6509804, 0.41960785, 0.9098039, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5jow"]
-bg_color = Color(0.38431373, 0.9019608, 0.8980392, 1)
+bg_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r8lmt"]
-bg_color = Color(0, 0.9411765, 1, 1)
+bg_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -153,38 +181,39 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.20784314, 0.2901961, 0.3254902, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+border_color = Color(0.18039216, 0.2509804, 0.28235295, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jc7k8"]
 content_margin_left = 14.0
 content_margin_top = 8.0
 content_margin_right = 14.0
 content_margin_bottom = 8.0
-bg_color = Color(0.1254902, 0.1882353, 0.22352941, 0.9490196)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.44313726, 0.52156866, 0.5529412, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+bg_color = Color(0.08235294, 0.13333334, 0.16078432, 0.9490196)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.20784314, 0.2901961, 0.3254902, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_86rhs"]
 
 [resource]
-default_font = ExtResource("1_u0iqd")
+default_font = SubResource("FontVariation_regular")
 default_font_size = 20
 AtbProgressBar/base_type = &"ProgressBar"
 AtbProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 AtbProgressBar/styles/fill = SubResource("StyleBoxFlat_gg8i1")
 AtkLabel/base_type = &"Label"
-AtkLabel/colors/font_color = Color(1, 0.25490198, 0.33333334, 1)
+AtkLabel/colors/font_color = Color(0.9411765, 0.2901961, 0.3647059, 1)
+AtkLabel/fonts/font = SubResource("FontVariation_regular")
 AtkLabel/font_sizes/font_size = 20
 AtkProgressBar/base_type = &"ProgressBar"
 AtkProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -194,12 +223,14 @@ AtkProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 AtkProgressBar/styles/fill = SubResource("StyleBoxFlat_u0iqd")
 BuffLabel/base_type = &"Label"
 BuffLabel/colors/font_color = Color(0.85098, 0.89804, 0.9098, 1)
+BuffLabel/fonts/font = SubResource("FontVariation_regular")
 BuffLabel/font_sizes/font_size = 20
 Button/colors/font_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
 Button/colors/font_disabled_color = Color(0.39607844, 0.46666667, 0.49411765, 1)
-Button/colors/font_focus_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
-Button/colors/font_hover_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
-Button/colors/font_pressed_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
+Button/fonts/font = SubResource("FontVariation_regular")
 Button/font_sizes/font_size = 20
 Button/styles/disabled = SubResource("StyleBoxFlat_u7842")
 Button/styles/focus = SubResource("StyleBoxFlat_wpwwu")
@@ -208,10 +239,12 @@ Button/styles/normal = SubResource("StyleBoxFlat_4gv1h")
 Button/styles/pressed = SubResource("StyleBoxFlat_wpwwu")
 DarkLabel/base_type = &"Label"
 DarkLabel/colors/font_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
+DarkLabel/fonts/font = SubResource("FontVariation_regular")
 DarkPanelContainer/base_type = &"PanelContainer"
 DarkPanelContainer/styles/panel = SubResource("StyleBoxFlat_2lyce")
 DefLabel/base_type = &"Label"
-DefLabel/colors/font_color = Color(1, 0.8039216, 0.19607843, 1)
+DefLabel/colors/font_color = Color(0.9098039, 0.745098, 0.227451, 1)
+DefLabel/fonts/font = SubResource("FontVariation_regular")
 DefLabel/font_sizes/font_size = 20
 DefProgressBar/base_type = &"ProgressBar"
 DefProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -220,10 +253,12 @@ DefProgressBar/constants/outline_size = 1
 DefProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 DefProgressBar/styles/fill = SubResource("StyleBoxFlat_bn7xh")
 EquipmentSlotPreviewLabel/base_type = &"Label"
-EquipmentSlotPreviewLabel/colors/font_color = Color(1, 0.60784316, 0.25882354, 1)
+EquipmentSlotPreviewLabel/colors/font_color = Color(0.9490196, 0.5411765, 0.23921569, 1)
+EquipmentSlotPreviewLabel/fonts/font = SubResource("FontVariation_regular")
 EquipmentSlotPreviewLabel/font_sizes/font_size = 19
 FpLabel/base_type = &"Label"
-FpLabel/colors/font_color = Color(1, 0.50980395, 0.1764706, 1)
+FpLabel/colors/font_color = Color(0.9490196, 0.5411765, 0.23921569, 1)
+FpLabel/fonts/font = SubResource("FontVariation_regular")
 FpLabel/font_sizes/font_size = 20
 FpProgressBar/base_type = &"ProgressBar"
 FpProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -238,9 +273,11 @@ HSeparator/colors/separator = Color(0.20784314, 0.2901961, 0.3254902, 1)
 HSeparator/constants/separation = 1
 HeaderLabel/base_type = &"Label"
 HeaderLabel/colors/font_color = Color(0.91764706, 0.95686275, 0.9607843, 1)
+HeaderLabel/fonts/font = SubResource("FontVariation_title")
 HeaderLabel/font_sizes/font_size = 26
 HpLabel/base_type = &"Label"
-HpLabel/colors/font_color = Color(0.19607843, 1, 0.49019608, 1)
+HpLabel/colors/font_color = Color(0.27058825, 0.9019608, 0.5411765, 1)
+HpLabel/fonts/font = SubResource("FontVariation_regular")
 HpLabel/font_sizes/font_size = 20
 HpProgressBar/base_type = &"ProgressBar"
 HpProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -249,9 +286,11 @@ HpProgressBar/constants/outline_size = 1
 HpProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 HpProgressBar/styles/fill = SubResource("StyleBoxFlat_i5qvf")
 Label/colors/font_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
+Label/fonts/font = SubResource("FontVariation_regular")
 Label/font_sizes/font_size = 20
 MpLabel/base_type = &"Label"
-MpLabel/colors/font_color = Color(0.6666667, 0.3529412, 1, 1)
+MpLabel/colors/font_color = Color(0.6509804, 0.41960785, 0.9098039, 1)
+MpLabel/fonts/font = SubResource("FontVariation_regular")
 MpLabel/font_sizes/font_size = 20
 MpProgressBar/base_type = &"ProgressBar"
 MpProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -260,11 +299,14 @@ MpProgressBar/constants/outline_size = 1
 MpProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 MpProgressBar/styles/fill = SubResource("StyleBoxFlat_41cvm")
 MutedLabel/base_type = &"Label"
-MutedLabel/colors/font_color = Color(0.45882353, 0.53333336, 0.56078434, 1)
+MutedLabel/colors/font_color = Color(0.5568628, 0.6392157, 0.6666667, 1)
+MutedLabel/fonts/font = SubResource("FontVariation_regular")
+MutedLabel/font_sizes/font_size = 18
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_2lyce")
 PopupMenu/colors/font_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
-PopupMenu/colors/font_focus_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
-PopupMenu/colors/font_hover_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
+PopupMenu/colors/font_focus_color = Color(1, 1, 1, 1)
+PopupMenu/colors/font_hover_color = Color(1, 1, 1, 1)
+PopupMenu/fonts/font = SubResource("FontVariation_regular")
 PopupMenu/font_sizes/font_size = 20
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_wpwwu")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_2lyce")
@@ -272,16 +314,23 @@ ProgressBar/styles/background = SubResource("StyleBoxFlat_gg8i1")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_w5jow")
 RichTextLabel/colors/default_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
 RichTextLabel/constants/line_separation = 0
+RichTextLabel/fonts/normal_font = SubResource("FontVariation_regular")
+RichTextLabel/fonts/bold_font = SubResource("FontVariation_title")
+RichTextLabel/fonts/italics_font = SubResource("FontVariation_regular")
+RichTextLabel/fonts/bold_italics_font = SubResource("FontVariation_title")
+RichTextLabel/fonts/mono_font = SubResource("FontVariation_regular")
 RichTextLabel/font_sizes/bold_font_size = 20
 RichTextLabel/font_sizes/bold_italics_font_size = 20
 RichTextLabel/font_sizes/italics_font_size = 20
 RichTextLabel/font_sizes/mono_font_size = 20
 RichTextLabel/font_sizes/normal_font_size = 20
 SectionLabel/base_type = &"Label"
-SectionLabel/colors/font_color = Color(0.65882355, 0.73333335, 0.7529412, 1)
-SectionLabel/font_sizes/font_size = 19
+SectionLabel/colors/font_color = Color(0.5568628, 0.6392157, 0.6666667, 1)
+SectionLabel/fonts/font = SubResource("FontVariation_title")
+SectionLabel/font_sizes/font_size = 20
 SpdLabel/base_type = &"Label"
-SpdLabel/colors/font_color = Color(0, 0.9411765, 1, 1)
+SpdLabel/colors/font_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
+SpdLabel/fonts/font = SubResource("FontVariation_regular")
 SpdLabel/font_sizes/font_size = 20
 SpdProgressBar/base_type = &"ProgressBar"
 SpdProgressBar/colors/font_color = Color(0.0627451, 0.09411765, 0.10980392, 1)
@@ -294,6 +343,11 @@ StatPanelContainer/styles/panel = SubResource("StyleBoxFlat_wur2v")
 StatValueRichText/base_type = &"RichTextLabel"
 StatValueRichText/colors/default_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
 StatValueRichText/constants/line_separation = 0
+StatValueRichText/fonts/normal_font = SubResource("FontVariation_regular")
+StatValueRichText/fonts/bold_font = SubResource("FontVariation_title")
+StatValueRichText/fonts/italics_font = SubResource("FontVariation_regular")
+StatValueRichText/fonts/bold_italics_font = SubResource("FontVariation_title")
+StatValueRichText/fonts/mono_font = SubResource("FontVariation_regular")
 StatValueRichText/font_sizes/bold_font_size = 20
 StatValueRichText/font_sizes/bold_italics_font_size = 20
 StatValueRichText/font_sizes/italics_font_size = 20
@@ -304,14 +358,16 @@ TerminalHeaderPanel/styles/panel = SubResource("StyleBoxFlat_jc7k8")
 TerminalInsetPanel/base_type = &"PanelContainer"
 TerminalInsetPanel/styles/panel = SubResource("StyleBoxFlat_wur2v")
 TerminalPanel/base_type = &"PanelContainer"
-TerminalPanel/styles/panel = SubResource("StyleBoxFlat_2lyce")
+TerminalPanel/styles/panel = SubResource("StyleBoxFlat_large_menu")
 TerminalTabButton/base_type = &"Button"
-TerminalTabButton/colors/font_color = Color(0.6509804, 0.70980394, 0.7294118, 1)
-TerminalTabButton/colors/font_focus_color = Color(0.6509804, 0.70980394, 0.7294118, 1)
-TerminalTabButton/colors/font_hover_color = Color(0.6509804, 0.70980394, 0.7294118, 1)
-TerminalTabButton/colors/font_pressed_color = Color(0.6509804, 0.70980394, 0.7294118, 1)
+TerminalTabButton/colors/font_color = Color(0.5568628, 0.6392157, 0.6666667, 1)
+TerminalTabButton/colors/font_focus_color = Color(1, 1, 1, 1)
+TerminalTabButton/colors/font_hover_color = Color(1, 1, 1, 1)
+TerminalTabButton/colors/font_pressed_color = Color(0.1254902, 0.8509804, 0.9490196, 1)
+TerminalTabButton/fonts/font = SubResource("FontVariation_title")
+TerminalTabButton/font_sizes/font_size = 20
 TerminalTabButton/styles/focus = SubResource("StyleBoxFlat_wpwwu")
-TerminalTabButton/styles/hover = SubResource("StyleBoxFlat_jc7k8")
+TerminalTabButton/styles/hover = SubResource("StyleBoxFlat_6ajqo")
 TerminalTabButton/styles/normal = SubResource("StyleBoxFlat_jc7k8")
 TerminalTabButton/styles/pressed = SubResource("StyleBoxFlat_wpwwu")
 TransparentPanelContainer/base_type = &"PanelContainer"
@@ -321,3 +377,5 @@ VSeparator/colors/separator = Color(0.20784314, 0.2901961, 0.3254902, 1)
 VSeparator/constants/separation = 1
 ValueLabel/base_type = &"Label"
 ValueLabel/colors/font_color = Color(0.8509804, 0.8980392, 0.9098039, 1)
+ValueLabel/fonts/font = SubResource("FontVariation_regular")
+ValueLabel/font_sizes/font_size = 20

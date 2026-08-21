@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.019607844, 0.039215688, 0.050980393, 0.72156864)
+color = Color(0.019607844, 0.039215688, 0.050980393, 0.48)
 
 [node name="Center" type="CenterContainer" parent="BattleRoot/Backdrop" unique_id=125748345]
 layout_mode = 1
@@ -40,7 +40,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BattlePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center" unique_id=1082741989]
-custom_minimum_size = Vector2(1760, 900)
+custom_minimum_size = Vector2(1640, 840)
 layout_mode = 2
 theme_type_variation = &"TerminalPanel"
 
@@ -65,7 +65,7 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="PlayerStats" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/LeftColumn" unique_id=799998403 instance=ExtResource("2_elpkr")]
-custom_minimum_size = Vector2(510, 0)
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("2_keo60")
@@ -80,7 +80,7 @@ theme_type_variation = &"TerminalInsetPanel"
 script = ExtResource("6_yyma0")
 
 [node name="CenterColumn" type="VBoxContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody" unique_id=786186562]
-custom_minimum_size = Vector2(850, 0)
+custom_minimum_size = Vector2(680, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -239,7 +239,7 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="EnemyStats" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/RightColumn" unique_id=1015850872 instance=ExtResource("2_elpkr")]
-custom_minimum_size = Vector2(510, 0)
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("2_keo60")

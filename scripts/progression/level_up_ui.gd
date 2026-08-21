@@ -9,14 +9,6 @@ const STAT_DISPLAY_NAMES: Dictionary[StringName, String] = {
 	&"def": "防御",
 	&"spd": "速度",
 }
-const VALUE_COLOR := Color("#D9E5E8FF")
-const PREVIEW_GAIN_COLOR := Color("#32FF7DFF")
-const STAT_COLORS := {
-	&"atk": Color("#FF4155FF"),
-	&"def": Color("#FFCD32FF"),
-	&"spd": Color("#00F0FFFF"),
-}
-const GRID_EMPTY_COLOR := Color("#52656DFF")
 
 @onready var level_root: Control = $LevelRoot
 @onready var stats_panel: ActorStatsPanel = $LevelRoot/Backdrop/Center/Panel/Margin/Content/ActorStatsPanel
@@ -151,9 +143,9 @@ func _refresh_preview() -> void:
 		var stat_id := STAT_IDS[index]
 		var current_value := _get_current_stat(stat_id)
 		stat_displays[index].text = "[center][color=#%s]%s[/color] [color=#%s]%d[/color]%s[/center]" % [
-			STAT_COLORS[stat_id].to_html(false),
+			UIColors.get_stat_color(stat_id).to_html(false),
 			STAT_DISPLAY_NAMES[stat_id],
-			VALUE_COLOR.to_html(false),
+			UIColors.TEXT_MAIN.to_html(false),
 			roundi(current_value),
 			_format_delta(preview[stat_id] - current_value),
 		]
@@ -172,9 +164,9 @@ func _format_allocation_grid(stat_id: StringName) -> String:
 	var filled := _allocation[stat_id]
 	var total := _player.unspent_stat_points
 	return "[right][color=#%s]%s[/color][color=#%s]%s[/color][/right]" % [
-		STAT_COLORS[stat_id].to_html(false),
+		UIColors.get_stat_color(stat_id).to_html(false),
 		"■ ".repeat(filled),
-		GRID_EMPTY_COLOR.to_html(false),
+		UIColors.GRID_EMPTY.to_html(false),
 		"□ ".repeat(maxi(0, total - filled)),
 	]
 
@@ -183,7 +175,7 @@ func _format_delta(value: float) -> String:
 	if is_zero_approx(value):
 		return ""
 	var delta_text := "%+.1f" % value if not is_equal_approx(value, roundf(value)) else "%+d" % roundi(value)
-	return " [color=#%s](%s)[/color]" % [PREVIEW_GAIN_COLOR.to_html(false), delta_text]
+	return " [color=#%s](%s)[/color]" % [UIColors.PREVIEW_GAIN.to_html(false), delta_text]
 
 
 func _sync_focus() -> void:

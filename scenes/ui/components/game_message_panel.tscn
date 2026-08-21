@@ -5,7 +5,7 @@
 
 [node name="GameMessagePanel" type="PanelContainer" unique_id=1461547814]
 visible = false
-custom_minimum_size = Vector2(760, 100)
+custom_minimum_size = Vector2(560, 42)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2

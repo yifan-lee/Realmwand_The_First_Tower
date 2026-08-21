@@ -26,18 +26,17 @@ theme = ExtResource("4_ehshv")
 [node name="MessageArea" type="CenterContainer" parent="HudRoot" unique_id=1978331453]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = -160.0
-offset_right = -24.0
-offset_bottom = -24.0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 28.0
+offset_right = 320.0
+offset_bottom = 76.0
+mouse_filter = 2
 
 [node name="GameMessagePanel" parent="HudRoot/MessageArea" unique_id=1461547814 instance=ExtResource("3_el006")]
-custom_minimum_size = Vector2(820, 96)
+custom_minimum_size = Vector2(560, 42)
 layout_mode = 2
-theme_type_variation = &"TerminalPanel"
 
 [node name="StatsColumn" type="PanelContainer" parent="HudRoot" unique_id=1744338664]
 custom_minimum_size = Vector2(360, 0)
@@ -98,3 +97,4 @@ offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
+grow_vertical = 1
