@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://cmu2u1gw5emm4" path="res://resources/skills/data_attack.tres" id="4_4u8uc"]
 [ext_resource type="Resource" uid="uid://ccspfh0nkh62d" path="res://resources/skills/basic_attack.tres" id="4_dg3l6"]
 [ext_resource type="Resource" uid="uid://e2oxe3tk8a6e" path="res://resources/skills/kick_off.tres" id="5_hg3mk"]
+[ext_resource type="Resource" uid="uid://cuibj2mmw5lxq" path="res://resources/skills/mind_attack.tres" id="6_7qhhn"]
 
 [resource]
 script = ExtResource("1_1rjkp")
@@ -18,7 +19,8 @@ level_skills = Dictionary[int, ExtResource("3_2rsbh")]({
 2: ExtResource("2_2hacj"),
 3: ExtResource("3_4l82h"),
 4: ExtResource("4_4u8uc"),
-5: ExtResource("5_hg3mk")
+5: ExtResource("5_hg3mk"),
+6: ExtResource("6_7qhhn")
 })
 id = &"player"
 display_name = "TooTwo"

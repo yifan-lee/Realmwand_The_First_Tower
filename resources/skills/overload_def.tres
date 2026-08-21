@@ -25,7 +25,6 @@ metadata/_custom_type_script = "uid://bvntyhvoo7xa5"
 
 [sub_resource type="Resource" id="Resource_effect_shield"]
 script = ExtResource("2_effect")
-category = 0
 target = 0
 resource_type = 4
 calc_method = 2

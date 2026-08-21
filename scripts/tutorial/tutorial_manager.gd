@@ -36,6 +36,7 @@ func setup(
 	
 	if _esc_menu != null:
 		_esc_menu.opened.connect(func(): EventBus.game_event.emit(&"menu_opened", null))
+		_esc_menu.closed.connect(func(): EventBus.game_event.emit(&"menu_closed", null))
 		_esc_menu.inventory_panel.item_focused.connect(func(item): EventBus.game_event.emit(&"item_focused", item))
 		_esc_menu.inventory_panel.item_selected.connect(func(item): EventBus.game_event.emit(&"item_selected", item))
 		
@@ -57,6 +58,7 @@ func _load_tutorials() -> void:
 	var tut7 = preload("res://scripts/tutorial/tutorials/interrupt_tutorial.gd").new()
 	var tut8 = preload("res://scripts/tutorial/tutorials/cast_time_tutorial.gd").new()
 	var tut9 = preload("res://scripts/tutorial/tutorials/skill_learned_tutorial.gd").new()
+	var tut10 = preload("res://scripts/tutorial/tutorials/equipment_acquired_tutorial.gd").new()
 	all_tutorials.append(tut1)
 	all_tutorials.append(tut2)
 	all_tutorials.append(tut3)
@@ -66,6 +68,7 @@ func _load_tutorials() -> void:
 	all_tutorials.append(tut7)
 	all_tutorials.append(tut8)
 	all_tutorials.append(tut9)
+	all_tutorials.append(tut10)
 	
 	for tut in all_tutorials:
 		tut.setup(self, _tutorial_ui)
@@ -79,7 +82,7 @@ func _on_game_event(event_name: StringName, event_data: Variant) -> void:
 		return
 		
 	for tut in all_tutorials:
-		if not (tut is SkillLearnedTutorial) and tut.tutorial_id in completed_tutorials:
+		if tut.tutorial_id != &"skill_learned_tutorial" and tut.tutorial_id != &"equipment_acquired_tutorial" and tut.tutorial_id in completed_tutorials:
 			continue
 		
 		if tut.should_trigger(event_name, event_data):
@@ -91,7 +94,7 @@ func _on_game_event(event_name: StringName, event_data: Variant) -> void:
 
 
 func _on_tutorial_completed(tutorial_id: StringName) -> void:
-	if tutorial_id != &"skill_learned_tutorial" and not tutorial_id in completed_tutorials:
+	if tutorial_id != &"skill_learned_tutorial" and tutorial_id != &"equipment_acquired_tutorial" and not tutorial_id in completed_tutorials:
 		completed_tutorials.append(tutorial_id)
 	active_tutorial = null
 	if _player != null:

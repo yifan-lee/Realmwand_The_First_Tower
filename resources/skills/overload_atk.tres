@@ -42,7 +42,6 @@ status_to_apply = SubResource("Resource_weak_status")
 
 [sub_resource type="Resource" id="Resource_yv5s2"]
 script = ExtResource("2_kkxer")
-category = 0
 value = 200.0
 
 [resource]

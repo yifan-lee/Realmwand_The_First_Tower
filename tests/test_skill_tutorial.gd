@@ -103,4 +103,113 @@ func run_test(main: Node) -> void:
 	assert(tut_mgr.active_tutorial == null, "已记录完成的技能教程不应重复触发")
 	print("[PASS] 5. 重复触发防护验证通过")
 	
-	print("\n>>> 技能学习教程系统全部测试顺利通过！ <<<")
+	# 6. 验证首次获得装备：非阻塞分步引导（wait_for_confirmation == false）
+	tut_ui.hide_prompt()
+	tut_mgr.active_tutorial = null
+	var test_equip: EquipmentData = EquipmentData.new()
+	test_equip.id = &"test_sword"
+	test_equip.display_name = "测试铁剑"
+	test_equip.item_type = ItemData.ItemType.EQUIPMENT
+	test_equip.slot_type = EquipmentData.EquipmentSlotType.WEAPON
+	
+	EventBus.game_event.emit(&"item_added", test_equip)
+	assert(tut_mgr.active_tutorial != null and tut_mgr.active_tutorial.tutorial_id == &"equipment_tutorial", "首次获得装备应触发 equipment_tutorial")
+	assert(tut_ui.tutorial_root.visible == true, "应弹出装备提示")
+	assert(tut_ui._wait_for_confirmation == false, "装备指引第一步必须非阻塞（wait_for_confirmation == false）")
+	assert("按 ESC 键打开菜单" in tut_ui.message_label.text, "步骤1文案验证: " + tut_ui.message_label.text)
+	
+	# 步骤 2: 打开菜单
+	EventBus.game_event.emit(&"menu_opened", null)
+	assert(tut_ui._wait_for_confirmation == false, "装备指引第二步必须非阻塞")
+	assert("移动焦点到新获得的装备上" in tut_ui.message_label.text, "步骤2文案验证: " + tut_ui.message_label.text)
+	
+	# 步骤 3: 焦点移至装备
+	EventBus.game_event.emit(&"item_focused", test_equip)
+	assert(tut_ui._wait_for_confirmation == false, "装备指引第三步必须非阻塞")
+	assert("按下确认键即可穿戴该装备" in tut_ui.message_label.text, "步骤3文案验证: " + tut_ui.message_label.text)
+	
+	# 步骤 4: 穿戴装备完成
+	EventBus.game_event.emit(&"item_equipped", test_equip)
+	assert(tut_ui.tutorial_root.visible == false, "穿戴完成后教程应关闭")
+	assert(tut_mgr.completed_tutorials.has(&"equipment_tutorial"), "已完成列表应记录 equipment_tutorial")
+	print("[PASS] 6. 首次获得装备全流程非阻塞分步引导验证通过")
+	
+	# 7. 验证后续获得装备：模态通知弹窗（wait_for_confirmation == true）
+	tut_ui.hide_prompt()
+	tut_mgr.active_tutorial = null
+	var test_armor: EquipmentData = EquipmentData.new()
+	test_armor.id = &"test_shield"
+	test_armor.display_name = "合金重盾"
+	test_armor.item_type = ItemData.ItemType.EQUIPMENT
+	test_armor.slot_type = EquipmentData.EquipmentSlotType.CHEST
+	
+	EventBus.game_event.emit(&"item_added", test_armor)
+	assert(tut_mgr.active_tutorial != null and tut_mgr.active_tutorial.tutorial_id == &"equipment_acquired_tutorial", "后续获得装备应触发 equipment_acquired_tutorial")
+	assert(tut_ui.tutorial_root.visible == true, "应弹出装备获得通知")
+	assert(tut_ui._wait_for_confirmation == true, "后续装备获得通知必须为模态确认（wait_for_confirmation == true）")
+	assert("获得新装备【合金重盾】！可在 ESC 菜单中查看并穿戴。" in tut_ui.message_label.text, "通知文案验证: " + tut_ui.message_label.text)
+	
+	# 按确认键关闭通知
+	tut_ui._wait_for_confirmation = false
+	tut_ui.confirmed.emit()
+	assert(tut_ui.tutorial_root.visible == false, "确认后通知弹窗应立即关闭")
+	print("[PASS] 7. 后续获得装备简洁模态通知弹窗验证通过")
+	
+	# 8. 验证首次获得 HP 药水：非阻塞背包使用分步引导
+	tut_ui.hide_prompt()
+	tut_mgr.active_tutorial = null
+	var hp_potion: ItemData = ItemData.new()
+	hp_potion.id = &"hp_recovery_lv1"
+	hp_potion.display_name = "HP恢复药水"
+	hp_potion.item_type = ItemData.ItemType.CONSUMABLE
+	
+	EventBus.game_event.emit(&"item_added", hp_potion)
+	assert(tut_mgr.active_tutorial != null and tut_mgr.active_tutorial.tutorial_id == &"hp_item_tutorial", "首次获得HP药水应触发 hp_item_tutorial")
+	assert(tut_ui._wait_for_confirmation == false, "HP药水第一步必须非阻塞")
+	assert("按 ESC 键打开背包" in tut_ui.message_label.text, "HP药水步骤1文案: " + tut_ui.message_label.text)
+	
+	EventBus.game_event.emit(&"menu_opened", null)
+	assert(tut_ui._wait_for_confirmation == false, "HP药水第二步必须非阻塞")
+	assert("将焦点移动到药水上" in tut_ui.message_label.text, "HP药水步骤2文案: " + tut_ui.message_label.text)
+	
+	EventBus.game_event.emit(&"item_focused", hp_potion)
+	assert(tut_ui._wait_for_confirmation == false, "HP药水第三步必须非阻塞")
+	assert("在背包中使用该药水恢复生命" in tut_ui.message_label.text, "HP药水步骤3文案: " + tut_ui.message_label.text)
+	
+	EventBus.game_event.emit(&"item_selected", hp_potion)
+	assert(tut_ui.tutorial_root.visible == false, "使用后教程应关闭")
+	assert(tut_mgr.completed_tutorials.has(&"hp_item_tutorial"), "已完成列表应记录 hp_item_tutorial")
+	print("[PASS] 8. 首次获得 HP 药水背包使用分步引导验证通过")
+	
+	# 9. 验证首次获得 FP 药水：非阻塞打开背包 + 模态自由动作说明
+	tut_ui.hide_prompt()
+	tut_mgr.active_tutorial = null
+	var fp_potion: ItemData = ItemData.new()
+	fp_potion.id = &"fp_recovery_lv1"
+	fp_potion.display_name = "FP恢复药水"
+	fp_potion.item_type = ItemData.ItemType.CONSUMABLE
+	
+	EventBus.game_event.emit(&"item_added", fp_potion)
+	assert(tut_mgr.active_tutorial != null and tut_mgr.active_tutorial.tutorial_id == &"fp_item_tutorial", "首次获得FP药水应触发 fp_item_tutorial")
+	assert(tut_ui._wait_for_confirmation == false, "FP药水第一步必须非阻塞")
+	
+	EventBus.game_event.emit(&"menu_opened", null)
+	assert(tut_ui._wait_for_confirmation == true, "FP药水第二步自由动作说明必须为模态确认")
+	assert("Free Action" in tut_ui.message_label.text, "FP药水步骤2文案: " + tut_ui.message_label.text)
+	
+	tut_ui._wait_for_confirmation = false
+	tut_ui.confirmed.emit()
+	assert(tut_ui.tutorial_root.visible == false, "确认后FP药水教程应关闭")
+	assert(tut_mgr.completed_tutorials.has(&"fp_item_tutorial"), "已完成列表应记录 fp_item_tutorial")
+	print("[PASS] 9. 首次获得 FP 药水自由动作说明教学验证通过")
+	
+	# 10. 验证后续再次获得 HP/FP 药水：不再触发任何教程
+	tut_ui.hide_prompt()
+	tut_mgr.active_tutorial = null
+	EventBus.game_event.emit(&"item_added", hp_potion)
+	assert(tut_mgr.active_tutorial == null, "后续获得HP药水不应触发任何教程")
+	EventBus.game_event.emit(&"item_added", fp_potion)
+	assert(tut_mgr.active_tutorial == null, "后续获得FP药水不应触发任何教程")
+	print("[PASS] 10. 物品后续获取零打扰验证通过")
+	
+	print("\n>>> 技能/装备/物品教程系统全部测试顺利通过！ <<<")

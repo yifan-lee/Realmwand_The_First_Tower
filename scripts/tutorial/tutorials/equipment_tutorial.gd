@@ -24,7 +24,7 @@ func should_trigger(event_name: StringName, event_data: Variant) -> bool:
 
 func start() -> void:
 	current_step = Step.WAITING_FOR_MENU
-	_ui.show_prompt("获得了新装备！请按 ESC 键打开菜单。", true)
+	_ui.show_prompt("获得了新装备！请按 ESC 键打开菜单。", false)
 
 
 func handle_event(event_name: StringName, event_data: Variant) -> void:
@@ -32,15 +32,18 @@ func handle_event(event_name: StringName, event_data: Variant) -> void:
 		Step.WAITING_FOR_MENU:
 			if event_name == &"menu_opened":
 				current_step = Step.WAITING_FOR_FOCUS
-				_ui.show_prompt("请将鼠标移动或焦点移动到新获得的装备上。", true)
+				_ui.show_prompt("请将焦点移动到新获得的装备上。", false)
 		
 		Step.WAITING_FOR_FOCUS:
 			if event_name == &"item_focused":
 				var item: ItemData = event_data as ItemData
 				if item != null and item.item_type == ItemData.ItemType.EQUIPMENT:
 					current_step = Step.WAITING_FOR_EQUIP
-					_ui.show_prompt("按下确认键即可穿戴该装备。", true)
+					_ui.show_prompt("按下确认键即可穿戴该装备。", false)
+			elif event_name == &"menu_closed":
+				_ui.hide_prompt()
+				complete()
 					
 		Step.WAITING_FOR_EQUIP:
-			if event_name == &"item_equipped":
+			if event_name == &"item_equipped" or event_name == &"item_selected" or event_name == &"menu_closed":
 				complete()
