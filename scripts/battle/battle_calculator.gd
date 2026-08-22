@@ -79,7 +79,7 @@ static func evaluate_skill_effects(
 				if effect.special_type == ActionEffectData.SpecialType.INTERRUPT:
 					if battle_manager != null and battle_manager.is_actor_casting(target):
 						target_delta.is_interrupted = true
-						preview.add_message("打断了吟唱。")
+						preview.add_message("[color=#%s]打断了吟唱！[/color]" % UIColors.ACCENT_WARN.to_html(false))
 					else:
 						preview.add_message("目标没有正在吟唱的技能。")
 
@@ -99,7 +99,7 @@ static func evaluate_skill_effects(
 						ActionEffectData.ResourceType.SHIELD:
 							target_delta.shield_delta += amount
 							if amount > 0.0:
-								preview.add_message("获得了 %.0f 点护盾。" % amount)
+								preview.add_message("获得了 [color=#%s]%.0f[/color] 点护盾。" % [UIColors.SHIELD_VALUE.to_html(false), amount])
 
 			# 3. 施加状态预览
 			elif effect.category == ActionEffectData.EffectCategory.STATUS:
@@ -122,7 +122,7 @@ static func evaluate_skill_effects(
 			caster_delta.is_free_action = true
 
 	if total_applied_damage > 0.0:
-		preview.add_message("%s 造成了 %.0f 点伤害。" % [skill.display_name, total_applied_damage])
+		preview.add_message("造成了 [color=#%s]%.0f[/color] 点伤害。" % [UIColors.PREVIEW_LOSS.to_html(false), total_applied_damage])
 
 
 static func evaluate_item(
@@ -164,7 +164,7 @@ static func evaluate_item(
 				if effect.special_type == ActionEffectData.SpecialType.INTERRUPT:
 					if battle_manager != null and battle_manager.is_actor_casting(target):
 						target_delta.is_interrupted = true
-						preview.add_message("打断了吟唱。")
+						preview.add_message("[color=#%s]打断了吟唱！[/color]" % UIColors.ACCENT_WARN.to_html(false))
 					else:
 						preview.add_message("目标没有正在吟唱的技能。")
 
@@ -182,7 +182,7 @@ static func evaluate_item(
 						ActionEffectData.ResourceType.SHIELD:
 							target_delta.shield_delta += amount
 							if amount > 0.0:
-								preview.add_message("获得了 %.0f 点护盾。" % amount)
+								preview.add_message("获得了 [color=#%s]%.0f[/color] 点护盾。" % [UIColors.SHIELD_VALUE.to_html(false), amount])
 
 			# 3. 施加状态预览
 			elif effect.category == ActionEffectData.EffectCategory.STATUS:

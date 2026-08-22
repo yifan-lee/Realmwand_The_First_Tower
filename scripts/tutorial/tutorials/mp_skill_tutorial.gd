@@ -40,7 +40,7 @@ func start() -> void:
 	if battle_ui != null and battle_ui.player_stats != null:
 		target = battle_ui.player_stats.mp_row
 		
-	_ui.show_prompt_at("这是你的 MP（灵能），使用大部分灵能技能都需要消耗 MP。\n现在你已经学会了需要消耗 MP 的技能。\n\n[color=#8EA3AA]按确认键继续[/color]", target, true)
+	_ui.show_prompt_at("这是你的 MP（灵能）。\n使用大部分灵技都需要消耗 MP。\n现在你已经学会了需要消耗 MP 的技能。\n\n[color=#8EA3AA]按确认键继续[/color]", target, true)
 	if not _ui.confirmed.is_connected(_on_ui_confirmed):
 		_ui.confirmed.connect(_on_ui_confirmed)
 

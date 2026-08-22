@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://danbpnxmjbb50" path="res://scenes/ui/components/inventory_panel.tscn" id="4_keo60"]
 [ext_resource type="PackedScene" uid="uid://38fkrm33mmo4" path="res://scenes/ui/components/entry_info_panel.tscn" id="5_bgiko"]
 [ext_resource type="Script" uid="uid://bip0oodwwfc5o" path="res://scripts/ui/components/entry_info_panel.gd" id="6_yyma0"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/combat_message_panel.tscn" id="7_cmpnl"]
 
 [node name="BattleUI" type="CanvasLayer" unique_id=609410111]
 script = ExtResource("1_d43ay")
@@ -253,12 +254,17 @@ theme = ExtResource("2_keo60")
 theme_type_variation = &"TerminalInsetPanel"
 script = ExtResource("6_yyma0")
 
-[node name="MessagePanel" type="PanelContainer" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content" unique_id=566612400]
-custom_minimum_size = Vector2(0, 52)
-layout_mode = 2
-theme_type_variation = &"TerminalInsetPanel"
-
-[node name="Message" type="Label" parent="BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/MessagePanel" unique_id=1509085731]
-layout_mode = 2
-vertical_alignment = 1
-text_overrun_behavior = 3
+[node name="CombatMessagePanel" parent="BattleRoot" unique_id=566612400 instance=ExtResource("7_cmpnl")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -220.0
+offset_right = 340.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2

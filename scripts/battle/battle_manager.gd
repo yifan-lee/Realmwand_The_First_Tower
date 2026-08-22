@@ -126,7 +126,7 @@ func start_battle(enemy: Enemy, player: Player) -> void:
 	_load_passive_statuses()
 	_battle_ui.open(_player, _enemy, self)
 	_queue_enemy_next_skill()
-	_battle_ui.show_message("遭遇 %s，战斗开始。" % _enemy.enemy_data.display_name)
+	_battle_ui.show_message("遭遇 [color=#%s]%s[/color]，战斗开始！" % [UIColors.TEXT_TITLE.to_html(false), _enemy.enemy_data.display_name])
 	battle_started.emit(_enemy)
 
 
@@ -171,8 +171,7 @@ func _has_usable_player_skills() -> bool:
 
 
 func _auto_skip_player_turn() -> void:
-	EventBus.system_message_requested.emit("没有可用技能，行动跳过！")
-	_battle_ui.show_message("没有可用技能，行动跳过！")
+	_battle_ui.show_message("[color=#%s]没有可用技能，行动跳过！[/color]" % UIColors.ACCENT_WARN.to_html(false))
 	_decrement_cooldowns(false)
 	status_controller.on_action_finished(_player)
 	status_controller.on_trigger_event(_player, StatusEffectData.TriggerType.ON_ANY_ACTION)
@@ -195,7 +194,7 @@ func _on_skill_selected(skill: SkillData) -> void:
 	if _state != BattleState.WAITING_FOR_PLAYER or skill == null:
 		return
 	if get_skill_cooldown(skill.id, false) > 0:
-		_battle_ui.show_message("%s 仍在冷却。" % skill.display_name)
+		_battle_ui.show_message("[color=#%s]%s 仍在冷却。[/color]" % [UIColors.ACCENT_WARN.to_html(false), skill.display_name])
 		return
 		
 	var hp_cost := _get_skill_cost(skill, ActionCostData.CostType.HP)
@@ -205,7 +204,7 @@ func _on_skill_selected(skill: SkillData) -> void:
 	var cast_time := _get_skill_cost(skill, ActionCostData.CostType.CAST_TIME)
 
 	if _player.current_hp <= hp_cost or _player.current_mp < mp_cost or _player.current_fp < fp_cost:
-		_battle_ui.show_message("资源不足，无法施放 %s。" % skill.display_name)
+		_battle_ui.show_message("[color=#%s]资源不足，无法施放 %s。[/color]" % [UIColors.ACCENT_WARN.to_html(false), skill.display_name])
 		return
 
 	if hp_cost > 0: _player.change_hp(-hp_cost)
@@ -224,14 +223,14 @@ func _on_skill_selected(skill: SkillData) -> void:
 	_battle_ui.set_action_available(false)
 	_battle_ui.refresh_stats()
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
-	_battle_ui.show_message("%s 正在吟唱。" % skill.display_name)
+	_battle_ui.show_message("正在吟唱 [color=#%s]【%s】[/color]……" % [UIColors.ACCENT_CYAN.to_html(false), skill.display_name])
 
 
 func _on_item_selected(item: ItemData) -> void:
 	if _state != BattleState.WAITING_FOR_PLAYER or item == null:
 		return
 	if not item.usable_in_battle:
-		_battle_ui.show_message("这个物品不能在战斗中使用。")
+		_battle_ui.show_message("[color=#%s]这个物品不能在战斗中使用。[/color]" % UIColors.ACCENT_WARN.to_html(false))
 		return
 		
 	var preview = BattleCalculator.evaluate_item(item, _player, [_enemy], self)
@@ -249,7 +248,7 @@ func _on_item_selected(item: ItemData) -> void:
 	
 	if item.consumed_on_use:
 		_player.inventory.remove_item(item.id)
-	_battle_ui.show_message("使用了 %s。" % item.display_name)
+	_battle_ui.show_message("使用了 [color=#%s]【%s】[/color]。" % [UIColors.PREVIEW_GAIN.to_html(false), item.display_name])
 	
 	_complete_player_action(is_free_action)
 
@@ -289,7 +288,7 @@ func _begin_enemy_turn() -> void:
 	_enemy_atb = FORMULAS.calculate_atb_after_cast(cast_time)
 	_battle_ui.refresh_stats()
 	_battle_ui.set_atb(_player_atb, _enemy_atb)
-	_battle_ui.show_message("%s 正在吟唱 %s。" % [_enemy.enemy_data.display_name, skill.display_name])
+	_battle_ui.show_message("[color=#%s]%s[/color] 正在吟唱 [color=#%s]【%s】[/color]……" % [UIColors.TEXT_TITLE.to_html(false), _enemy.enemy_data.display_name, UIColors.ACCENT_WARN.to_html(false), skill.display_name])
 
 
 func _resolve_ready_enemy_turn() -> void:
@@ -329,9 +328,9 @@ func _release_player_skill(skill: SkillData = null) -> void:
 	var is_physical := (resolved_skill.domain == SkillData.SkillDomain.PHYSICAL)
 	_apply_preview(preview, resolved_skill.effects, false, is_physical)
 	
-	var message = "使用了 %s。" % resolved_skill.display_name
+	var message = "使用了 [color=#%s]【%s】[/color]。" % [UIColors.ACCENT_CYAN.to_html(false), resolved_skill.display_name]
 	for extra in preview.extra_messages:
-		message += " ； " + extra
+		message += " " + extra
 	_battle_ui.show_message(message)
 	
 	_complete_player_action(is_free_action)
@@ -378,16 +377,28 @@ func _resolve_enemy_attack(skill: SkillData) -> void:
 			var dmg: float = event.damage
 			_enemy.change_hp(-dmg)
 			var source_name: String = event.status_name if not event.status_name.is_empty() else "反伤"
-			counter_messages.append("【%s】对 %s 反弹了 %.0f 点伤害！" % [source_name, _enemy.enemy_data.display_name, dmg])
-		var msg_text := "%s 使用 %s，造成 %.0f 点伤害。" % [_enemy.enemy_data.display_name, skill_name, damage]
+			counter_messages.append("【%s】反弹了 [color=#%s]%.0f[/color] 点伤害！" % [source_name, UIColors.PREVIEW_LOSS.to_html(false), dmg])
+		var msg_text := "[color=#%s]%s[/color] 使用了 [color=#%s]【%s】[/color]，造成了 [color=#%s]%.0f[/color] 点伤害。" % [
+			UIColors.TEXT_TITLE.to_html(false),
+			_enemy.enemy_data.display_name,
+			UIColors.ACCENT_CYAN.to_html(false),
+			skill_name,
+			UIColors.PREVIEW_LOSS.to_html(false),
+			damage
+		]
 		for extra in counter_messages:
-			msg_text += " ； " + extra
+			msg_text += " " + extra
 		_battle_ui.show_message(msg_text)
 	else:
 		_apply_preview(preview, skill.effects, true, is_physical)
-		var message = "%s 使用了 %s。" % [_enemy.enemy_data.display_name, skill_name]
+		var message = "[color=#%s]%s[/color] 使用了 [color=#%s]【%s】[/color]。" % [
+			UIColors.TEXT_TITLE.to_html(false),
+			_enemy.enemy_data.display_name,
+			UIColors.ACCENT_CYAN.to_html(false),
+			skill_name
+		]
 		for extra in preview.extra_messages:
-			message += " ； " + extra
+			message += " " + extra
 		_battle_ui.show_message(message)
 	
 	var enemy_delta = preview.actor_deltas.get(_enemy, null)
@@ -438,8 +449,7 @@ func _apply_preview(preview: BattleActionPreview, effects_to_apply: Array[Action
 				var dmg: float = event.damage
 				caster.change_hp(-dmg)
 				var source_name: String = event.status_name if not event.status_name.is_empty() else "反伤"
-				var caster_name: String = "玩家" if caster == _player else (_enemy.enemy_data.display_name if _enemy.enemy_data else "敌人")
-				counter_messages.append("【%s】对 %s 反弹了 %.0f 点伤害！" % [source_name, caster_name, dmg])
+				counter_messages.append("【%s】反弹了 [color=#%s]%.0f[/color] 点伤害！" % [source_name, UIColors.PREVIEW_LOSS.to_html(false), dmg])
 
 	# Apply buff/debuff status data
 	for effect: ActionEffectData in effects_to_apply:
@@ -654,13 +664,13 @@ func is_actor_interrupted(actor: Node) -> bool:
 func _interrupt_actor(actor: Node) -> void:
 	if actor == _player:
 		if _player_casting_skill != null:
-			_battle_ui.show_message("%s 的吟唱被打断！" % _player.player_data.display_name)
+			_battle_ui.show_message("[color=#%s]%s 的吟唱被打断！[/color]" % [UIColors.ACCENT_DANGER.to_html(false), _player.player_data.display_name])
 			_player_casting_skill = null
 			_player_atb = 0.0
 			_battle_ui.set_atb(_player_atb, _enemy_atb)
 	elif actor == _enemy:
 		if _enemy_casting_skill != null:
-			_battle_ui.show_message("%s 的吟唱被打断！" % _enemy.enemy_data.display_name)
+			_battle_ui.show_message("[color=#%s]%s 的吟唱被打断！[/color]" % [UIColors.ACCENT_WARN.to_html(false), _enemy.enemy_data.display_name])
 			_enemy_casting_skill = null
 			_enemy_atb = 0.0
 			_battle_ui.set_atb(_player_atb, _enemy_atb)

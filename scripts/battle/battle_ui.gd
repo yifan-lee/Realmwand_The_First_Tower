@@ -29,7 +29,7 @@ enum ActionPage {
 @onready var skill_panel: SkillPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/SkillPanel
 @onready var inventory_panel: InventoryPanel = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/InventoryPanel
 @onready var escape_page: Control = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/BattleBody/CenterColumn/ActionBody/ListColumn/EscapePage
-@onready var message_label: Label = $BattleRoot/Backdrop/Center/BattlePanel/Margin/Content/MessagePanel/Message
+@onready var combat_message_panel: Control = $BattleRoot/CombatMessagePanel
 
 var _player: Player
 var _enemy: Enemy
@@ -167,11 +167,13 @@ func set_atb(player_value: float, enemy_value: float) -> void:
 
 
 func show_message(message: String) -> void:
-	message_label.text = message.replace("\n", " ； ")
+	if combat_message_panel != null:
+		combat_message_panel.push_message(message)
 
 
 func clear_message() -> void:
-	message_label.text = ""
+	if combat_message_panel != null:
+		combat_message_panel.clear_all()
 
 
 func refresh_base_battle_ui() -> void:

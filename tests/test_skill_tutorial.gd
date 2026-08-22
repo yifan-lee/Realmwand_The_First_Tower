@@ -13,7 +13,6 @@ func run_test(main: Node) -> void:
 	assert(tut_ui != null, "TutorialUI 必须存在")
 	assert(battle_manager != null, "BattleManager 必须存在")
 	
-	var basic_atk: SkillData = load("res://resources/skills/basic_attack.tres")
 	var ov_atk: SkillData = load("res://resources/skills/overload_atk.tres")
 	var kick_off: SkillData = load("res://resources/skills/kick_off.tres")
 	var hard_attack: SkillData = load("res://resources/skills/hard_attack.tres")
